@@ -1,7 +1,7 @@
 <header>
     <div class="container-fluid nav-bar d-flex align-items-center justify-content-between">
         <a href="">
-            <img src="{{ asset('assets/images/svgs/Group 1961.svg') }}" alt="">
+            <img src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
         </a>
         <nav class="d-flex align-items-center ">
             <ul class="d-flex align-items-center gap-4">
