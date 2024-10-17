@@ -1,0 +1,77 @@
+footer {
+    position: relative;
+    .footer-background {
+        position: absolute;
+        width: 100%;
+        object-fit: contain;
+        z-index: -1000;
+    }
+    .footer-info {
+        padding-top: 30px;
+        max-width: 60%;
+        .footer-head {
+            .logo-text {
+                h6 {
+                    color: #575150;
+                    font-weight: 400;
+                    margin-bottom: 0;
+                }
+                p {
+                    font-size: 12px;
+                    font-weight: 400;
+                }
+            }
+        }
+        .footer-body {
+            b {
+                font-size: 22px;
+                line-height: 28px;
+                color: #191a15;
+            }
+            p {
+                font-size: 14px;
+                font-weight: 400;
+                color: #575150;
+                line-height: 20px;
+            }
+        }
+        .cerificates {
+            .certificate {
+                width: 60%;
+                img {
+                    height: 70px;
+                    width: 70px;
+                    object-fit: contain;
+                }
+                p {
+                    font-size: 10px;
+                    font-weight: 400;
+                    line-height: 15px;
+                    color: #000;
+                    margin: 0;
+                }
+            }
+        }
+    }
+    .copywrite {
+        padding: 0 60px;
+        .copywrite-text {
+            border-top: 1px solid #2b3d51;
+            padding: 0 20px;
+            p {
+                font-size: 14px;
+                color: $secondary-color;
+                font-weight: 400;
+            }
+            .policy {
+                a {
+                    margin: 0 10px;
+                    font-size: 14px;
+                    color: $secondary-color;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+}
+
