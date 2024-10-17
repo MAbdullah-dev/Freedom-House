@@ -1,4 +1,3 @@
 <footer>
-    hello footer
-</footer>
 
+</footer>
