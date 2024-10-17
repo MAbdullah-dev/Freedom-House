@@ -20,53 +20,53 @@
                             <div>
                                 <b>Mental Health</b>
                                 <ul>
-                                    <li><a class="dropdown-item" href="#">Trauma Informed Care</a></li>
-                                    <li><a class="dropdown-item" href="#">Psychology</a></li>
-                                    <li><a class="dropdown-item" href="#">Art Therapy</a></li>
+                                    <li><a class="" href="#">Trauma Informed Care</a></li>
+                                    <li><a class="" href="#">Psychology</a></li>
+                                    <li><a class="" href="#">Art Therapy</a></li>
                                 </ul>
                             </div>
                             <div>
                                 <b>Creativity</b>
                                 <ul>
-                                    <li><a class="dropdown-item" href="#">Book Writing</a></li>
-                                    <li><a class="dropdown-item" href="#">Story Telling</a></li>
-                                    <li><a class="dropdown-item" href="#">Novel Writing</a></li>
+                                    <li><a class="" href="#">Book Writing</a></li>
+                                    <li><a class="" href="#">Story Telling</a></li>
+                                    <li><a class="" href="#">Novel Writing</a></li>
                                 </ul>
                             </div>
                             <div>
                                 <b>Creativity</b>
                                 <ul>
-                                    <li><a class="dropdown-item" href="#">Book Writing</a></li>
-                                    <li><a class="dropdown-item" href="#">Story Telling</a></li>
-                                    <li><a class="dropdown-item" href="#">Novel Writing</a></li>
+                                    <li><a class="" href="#">Book Writing</a></li>
+                                    <li><a class="" href="#">Story Telling</a></li>
+                                    <li><a class="" href="#">Novel Writing</a></li>
                                 </ul>
                             </div>
                             <div>
                                 <b>Stress Management</b>
                                 <ul>
-                                    <li><a class="dropdown-item" href="#">Anger Issue</a></li>
-                                    <li><a class="dropdown-item" href="#">Coaching</a></li>
-                                    <li><a class="dropdown-item" href="#">Sound Therapy</a></li>
-                                    <li><a class="dropdown-item" href="#">Mindfulness</a></li>
+                                    <li><a class="" href="#">Anger Issue</a></li>
+                                    <li><a class="" href="#">Coaching</a></li>
+                                    <li><a class="" href="#">Sound Therapy</a></li>
+                                    <li><a class="" href="#">Mindfulness</a></li>
                                 </ul>
                             </div>
                             <div>
                                 <b>Motivation</b>
                                 <ul>
-                                    <li><a class="dropdown-item" href="#">Goal Setting</a></li>
-                                    <li><a class="dropdown-item" href="#">Habits</a></li>
-                                    <li><a class="dropdown-item" href="#">Procrastination</a></li>
-                                    <li><a class="dropdown-item" href="#">Time Management</a></li>
+                                    <li><a class="" href="#">Goal Setting</a></li>
+                                    <li><a class="" href="#">Habits</a></li>
+                                    <li><a class="" href="#">Procrastination</a></li>
+                                    <li><a class="" href="#">Time Management</a></li>
                                 </ul>
                             </div>
 
                             <div>
                                 <b>Motivation</b>
                                 <ul>
-                                    <li><a class="dropdown-item" href="#">Goal Setting</a></li>
-                                    <li><a class="dropdown-item" href="#">Habits</a></li>
-                                    <li><a class="dropdown-item" href="#">Procrastination</a></li>
-                                    <li><a class="dropdown-item" href="#">Time Management</a></li>
+                                    <li><a class="" href="#">Goal Setting</a></li>
+                                    <li><a class="" href="#">Habits</a></li>
+                                    <li><a class="" href="#">Procrastination</a></li>
+                                    <li><a class="" href="#">Time Management</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
         </nav>
         <div class="nav-btn">
             <a class="button-secondary" href="#">Login</a>
-            <a class="button-primary" href="#">Register</a>
+            <a class="button-primary" href="/register">Register</a>
         </div>
     </div>
 </header>
