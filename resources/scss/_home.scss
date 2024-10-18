@@ -1,0 +1,189 @@
+.home {
+    .hero-section {
+        background-repeat: no-repeat; /* No repetition */
+        background-size: cover; /* Resize the background image to cover the entire container */
+        background-position: center;
+        background-attachment: fixed;
+        h3 {
+            font-size: 19px;
+            font-weight: 500;
+            line-height: 28px;
+            letter-spacing: 4px;
+            color: #fff;
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            padding: 10px 0;
+            width: 70%;
+            margin: 0 auto;
+            margin-top: 120px !important;
+            text-align: center;
+        }
+        h1 {
+            font-size: 63px;
+            font-weight: 700;
+            line-height: 75px;
+            color: #fff;
+        }
+        .hero-cta-btn {
+            a {
+                color: #fff;
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 28px;
+                letter-spacing: 1px;
+                line-height: 16px;
+                background: $primary-color;
+                padding: 18px;
+                margin-bottom: 150px;
+            }
+        }
+    }
+    .featured-content {
+        margin: 80px 0;
+        h2 {
+            font-size: 48px;
+            font-weight: 500;
+            line-height: 60px;
+            letter-spacing: 5%;
+            color: #1e1e1e;
+            margin-bottom: 60px;
+            span {
+                border-bottom: 4px solid $primary-color;
+            }
+        }
+        .featured-cards {
+            .card {
+                border-radius: 25px;
+                margin:40px 20px ;
+                border: none;
+                img {
+                    border-radius:5px ;
+                    object-fit: cover;
+                    padding: 15px;
+                }
+                .card-body {
+                    margin-bottom: 20px;
+                }
+                h5 {
+                    color: $primary-color;
+                    font-size: 18px;
+                    font-weight: 600;
+                    line-height: 28px;
+                    letter-spacing: 1px;
+                    padding: 10px 0;
+                }
+                p {
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 22px;
+                    color: #1E1E1E;
+                    margin-bottom: 40px !important;
+                }
+            }
+            .swiper-button-prev{
+                top: 22px;
+                left: 90%;
+                &::after{
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #fff;
+                    background-color: $primary-color;
+                    padding: 15px;
+                    border-radius: 50%;
+
+                }
+            }
+            .swiper-button-next{
+                top: 22px;
+                right: 40px;
+                margin-bottom: 10px;
+
+                &::after{
+                    font-weight: 900;
+                    font-size: 12px;
+                    color: #fff;
+                    background-color: $primary-color;
+                    padding: 15px;
+                    border-radius: 50%;
+
+                }
+            }
+        }
+    }
+    .Learning-Benefits {
+        .benifits {
+            max-width: 50%;
+            h6 {
+                color: $primary-color;
+            }
+            h2 {
+                font-size: 46px;
+                font-weight: 600;
+                line-height: 43px;
+                color: #161616;
+            }
+            p {
+                font-size: 16px;
+                line-height: 16px;
+                line-height: 30px;
+                color: #6b6b6b;
+            }
+            .sub-beifits {
+                img {
+                    width: 35px;
+                    height: 46px;
+                    object-fit: contain;
+                }
+                span {
+                    font-size: 18px;
+                    line-height: 34px;
+                    color: #2d2d2d;
+                    font-weight: 600;
+                }
+            }
+        }
+        .benifit-img {
+            max-width: 50%;
+            img {
+                width: 100%;
+                object-fit: contain;
+            }
+        }
+    }
+    .news-letter {
+        margin: 20px 0;
+        .row{
+            margin: 120px 0;
+        }
+        .news-letter-content {
+            h6 {
+                font-weight: 600;
+                font-size: 32px;
+                line-height: 34px;
+                letter-spacing: 3px;
+                color: #161616;
+            }
+            p {
+                font-weight: 400;
+                font-size: 20px;
+                line-height: 24px;
+                color: #000;
+            }
+            input{
+                background-color: #fff;
+                border: 1px solid #CED4DA;
+                border-radius: 4px;
+                padding: 10px;
+                &:focus-visible{
+                    outline: none;
+                }
+
+            }
+            button{
+                width: max-content;
+                margin: 0 auto;
+            }
+        }
+    }
+}
+

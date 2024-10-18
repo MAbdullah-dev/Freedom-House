@@ -1,12 +1,12 @@
 <header>
-    <div class="container-fluid nav-bar d-flex align-items-center justify-content-between">
+    <div class="container nav-bar d-flex align-items-center justify-content-between">
         <a href="">
             <img src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
         </a>
         <nav class="d-flex align-items-center ">
-            <ul class="d-flex align-items-center gap-4">
-                <li><a href="">Home</a></li>
-                <li><a href="">About us</a></li>
+            <ul class="d-flex align-items-center gap-3">
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li><a href="">About</a></li>
                 <li><a href="">Course Catalog</a></li>
                 <li><a href="">Event</a></li>
                 <li class="dropdown">
