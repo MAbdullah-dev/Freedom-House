@@ -1,0 +1,85 @@
+.register {
+    .container-fluid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        h1 {
+            position: relative;
+            display: inline-block;
+            padding: 28px 0px;
+            font-weight: 500;
+            font-size: 19px;
+            line-height: 28px;
+            letter-spacing: 4px;
+            text-align: center;
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0px; // Adjust distance from the text
+                left: 50%; // Position at the center
+                transform: translateX(-50%);
+                height: 2px;
+                background-color: #000; // Color of the line
+                width: 689px;
+                margin: 0 auto;
+            }
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0px; // Adjust distance from the text
+                left: 50%; // Position at the center
+                transform: translateX(-50%);
+                height: 2px;
+                background-color: #000; // Color of the line
+                width: 689px;
+                margin: 0 auto;
+            }
+        }
+        .register_text {
+            h2 {
+                padding-top: 54px;
+                font-size: 34px;
+                font-weight: 400;
+                line-height: 61px;
+            }
+            p {
+                font-size: 15px;
+                font-weight: 400;
+                line-height: 24px;
+                letter-spacing: 1px;
+            }
+        }
+
+        form {
+            .register_form {
+                h6 {
+                    font-size: 23px;
+                    font-weight: 700;
+                    line-height: 27px;
+                    letter-spacing: 1px;
+                    padding-top: 34px;
+                    padding-bottom: 39px;
+                }
+
+                .row {
+                    .col {
+                        label {
+                        }
+                        input {
+                            padding: 10px 20px; // Padding for better touch interaction
+                            border: 1px solid #00000099;
+                            outline: none;
+                            &:focus {
+                                // outline: none;
+                                box-shadow: none;
+                                // border-color: #ccc;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
