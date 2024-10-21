@@ -3,7 +3,7 @@
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>
             <h1 class="my-5">FREEDOM HOUSE UNIVERSITY</h1>
-            <div class="hero-cta-btn d-flex mt-2 gap-2">
+            <div class="hero-cta-btn d-flex mt-2 gap-2 flex-wrap">
                 <a href="#">Upcoming TRAINING</a>
                 <a href="#">REGISTRATION</a>
                 <a href="#">RESOURCE LIBRARY</a>
@@ -71,7 +71,7 @@
                     vitae at vestibulum habitasse morbi eu. Nunc nunc dui scelerisque sit condimentum</p>
                 <div class="sub-beifits">
                     <div class="row">
-                        <div class="col">
+                        <div class="col flex-wrap">
                             <div class="d-flex align-items-center gap-2 mb-4">
                                 <img src="{{ asset('assets/svgs/benifit-img-1.svg') }}" alt=""><span>Private
                                     Class</span>

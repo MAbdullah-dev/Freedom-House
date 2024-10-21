@@ -73,5 +73,29 @@ footer {
             }
         }
     }
+    @media (max-width: 1175px) {
+        .footer-info {
+            max-width: 100%;
+            .footer-map {
+                width: 100%;
+                img {
+                    max-width: 100%;
+                }
+            }
+            // .cerificates {
+            //     p {
+            //         max-width: 100;
+            //     }
+            // }
+        }
+    }
+    @media (max-width: 768px) {
+        .footer-info {
+            .cerificates {
+                .cerificate {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
-

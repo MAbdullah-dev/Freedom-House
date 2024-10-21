@@ -54,10 +54,10 @@
         .featured-cards {
             .card {
                 border-radius: 25px;
-                margin:40px 20px ;
+                margin: 40px 20px;
                 border: none;
                 img {
-                    border-radius:5px ;
+                    border-radius: 30px;
                     object-fit: cover;
                     padding: 15px;
                 }
@@ -76,36 +76,34 @@
                     font-size: 16px;
                     font-weight: 400;
                     line-height: 22px;
-                    color: #1E1E1E;
+                    color: #1e1e1e;
                     margin-bottom: 40px !important;
                 }
             }
-            .swiper-button-prev{
+            .swiper-button-prev {
                 top: 22px;
-                left: 90%;
-                &::after{
+                left: 91%;
+                &::after {
                     font-size: 12px;
                     font-weight: 700;
                     color: #fff;
                     background-color: $primary-color;
                     padding: 15px;
                     border-radius: 50%;
-
                 }
             }
-            .swiper-button-next{
+            .swiper-button-next {
                 top: 22px;
                 right: 40px;
                 margin-bottom: 10px;
 
-                &::after{
+                &::after {
                     font-weight: 900;
                     font-size: 12px;
                     color: #fff;
                     background-color: $primary-color;
                     padding: 15px;
                     border-radius: 50%;
-
                 }
             }
         }
@@ -152,7 +150,7 @@
     }
     .news-letter {
         margin: 20px 0;
-        .row{
+        .row {
             margin: 120px 0;
         }
         .news-letter-content {
@@ -169,21 +167,153 @@
                 line-height: 24px;
                 color: #000;
             }
-            input{
+            input {
                 background-color: #fff;
-                border: 1px solid #CED4DA;
+                border: 1px solid #ced4da;
                 border-radius: 4px;
                 padding: 10px;
-                &:focus-visible{
+                &:focus-visible {
                     outline: none;
                 }
-
             }
-            button{
+            button {
                 width: max-content;
                 margin: 0 auto;
             }
         }
     }
+    @media (max-width: 1400px) {
+        .featured-content {
+            .featured-cards {
+                .swiper-button-prev {
+                    left: 88%;
+                }
+            }
+        }
+    }
+    @media (max-width: 992px) {
+        .hero-section {
+            h1 {
+                font-size: 40px;
+            }
+            .hero-cta-btn {
+                a {
+                    margin-bottom: 50px;
+                }
+            }
+        }
+        .featured-content {
+            .featured-cards {
+                .swiper-button-prev {
+                    left: 80%;
+                }
+            }
+        }
+        .Learning-Benefits {
+            .benifits {
+                max-width: 100%;
+            }
+            .benifit-img {
+                max-width: 100%;
+            }
+        }
+    }
+    @media (max-width: 768px) {
+        .hero-section {
+            h3 {
+                font-size: 14px;
+            }
+            h1 {
+                font-size: 30px;
+            }
+            .hero-cta-btn {
+                a {
+                    margin-bottom: 20px;
+                    color: #fff;
+                    font-size: 10px;
+                    font-weight: 400;
+                    line-height: 10px;
+                    background: #104627;
+                    padding: 10px;
+                }
+            }
+        }
+        .featured-content {
+            .featured-cards {
+                .swiper-button-prev {
+                    left: 75%;
+                }
+            }
+        }
+        .Learning-Benefits {
+            .benifits {
+                h2 {
+                    font-size: 20px;
+                }
+                p{
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+                .sub-beifits{
+                    span{
+                        font-size: 11px;
+                    }
+                }
+            }
+        }
+        .news-letter{
+            .news-letter-content{
+                h6{
+                    font-size: 20px;
+                }
+                p{
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    @media (max-width: 576px) {
+        .hero-section {
+            h3 {
+                font-size: 10px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .hero-cta-btn {
+                a {
+                    margin-bottom: 20px;
+                }
+            }
+        }
+        .featured-content {
+            .featured-cards {
+                .card{
+                    .card-body {
+                        h5 {
+                            font-size: 16px;
+                        }
+                        p {
+                            font-size: 14px;
+                        }
+                    }
+                }
+                .swiper-button-prev {
+                    left: 75%;
+                }
+            }
+        }
+    }
+    @media (max-width: 450px) {
+        .featured-content {
+            h2{
+                font-size: 28px;
+            }
+            .featured-cards {
+                .swiper-button-prev {
+                    left: 65%;
+                }
+            }
+        }
+    }
 }
-
