@@ -9,11 +9,12 @@
         <nav class="d-none d-xl-flex align-items-center">
             <ul class="d-flex align-items-center gap-3">
                 <li><a href="{{ route('home') }}" wire:navigate>Home</a></li>
-                <li><a href="" wire:navigate>About</a></li>
+                <li><a href="{{ route('about-us') }}" wire:navigate>About</a></li>
                 <li><a href="{{ route('course.catalogue') }}" wire:navigate>Course Catalog</a></li>
                 <li><a href="" wire:navigate>Event</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="dropdownMenuLink" aria-haspopup="true" aria-expanded="false">
+                    <a href="#" class="dropdown-toggle" id="dropdownMenuLink" aria-haspopup="true"
+                        aria-expanded="false">
                         Categories
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -59,18 +60,20 @@
             </ul>
         </nav>
         <div class="nav-btn d-none d-xl-block">
-            <a class="button-secondary" href="#">Login</a>
-            <a class="button-primary" href="/register">Register</a>
+            <a class="button-secondary" href="{{ route('login') }}" wire:navigate>Login</a>
+            <a class="button-primary" href="{{ route('register') }}" wire:navigate>Register</a>
         </div>
     </div>
-    <div class="mobile-menu d-xl-none d-flex align-items-center justify-content-center flex-column gap-1" id="mobile-nav">
+    <div class="mobile-menu d-xl-none d-flex align-items-center justify-content-center flex-column gap-1"
+        id="mobile-nav">
         <ul class="align-items-center justify-content-center flex-column gap-2">
             <li><a href="{{ route('home') }}">Home</a></li>
             <li><a href="">About</a></li>
             <li><a href="">Course Catalog</a></li>
             <li><a href="">Event</a></li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" id="dropdownMenuLinkMobile" aria-haspopup="true" aria-expanded="false">
+                <a href="#" class="dropdown-toggle" id="dropdownMenuLinkMobile" aria-haspopup="true"
+                    aria-expanded="false">
                     Categories
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLinkMobile">
@@ -87,12 +90,11 @@
 </header>
 
 @push('js')
-<script>
-$(document).ready(function() {
-    $('#hamburger-icon').on('click', function() {
-        $('#mobile-nav').toggleClass('show');
-    });
-});
-
-</script>
+    <script>
+        $(document).ready(function() {
+            $('#hamburger-icon').on('click', function() {
+                $('#mobile-nav').toggleClass('show');
+            });
+        });
+    </script>
 @endpush
