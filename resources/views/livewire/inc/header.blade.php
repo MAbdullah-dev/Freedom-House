@@ -6,7 +6,7 @@
         <nav class="d-flex align-items-center ">
             <ul class="d-flex align-items-center gap-4">
                 <li><a href="">Home</a></li>
-                <li><a href="">About us</a></li>
+                <li><a href="/about-us">About us</a></li>
                 <li><a href="">Course Catalog</a></li>
                 <li><a href="">Event</a></li>
                 <li class="dropdown">
@@ -76,28 +76,27 @@
             </ul>
         </nav>
         <div class="nav-btn">
-            <a class="button-secondary" href="#">Login</a>
+            <a class="button-secondary" href="/login">Login</a>
             <a class="button-primary" href="/register">Register</a>
         </div>
     </div>
 </header>
 @push('js')
     <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const dropdownToggle = document.querySelector('.dropdown-toggle');
-    const dropdownMenu = document.querySelector('.dropdown-menu');
+        document.addEventListener("DOMContentLoaded", function() {
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
 
-    dropdownToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        dropdownMenu.classList.toggle('show');
-    });
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('show');
+            });
 
-    document.addEventListener('click', function(e) {
-        if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-            dropdownMenu.classList.remove('show');
-        }
-    });
-});
-
+            document.addEventListener('click', function(e) {
+                if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        });
     </script>
 @endpush

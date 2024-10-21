@@ -14,16 +14,8 @@
 @import "header";
 @import "footer";
 @import "register";
-
-<<<<<<< HEAD
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-}
-=======
->>>>>>> a14c345fac5d7137419b358403b8d5e2990366d7
+@import "login";
+@import "about-us.scss";
 
 ul {
     list-style: none;
@@ -32,8 +24,8 @@ ul {
 a {
     text-decoration: none;
 }
-.container-fluid {
-    padding: 0 3%;
+.container {
+    margin: 0 auto;
 }
 .button-primary {
     background: $primary-color;

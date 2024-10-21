@@ -1,6 +1,6 @@
-<footer >
+<footer>
     <img class="footer-background" src="{{ asset('assets/images/Shape.png') }}" alt="">
-    <div class="container-fluid d-flex flex-wrap">
+    <div class="container d-flex flex-wrap">
         <div class="footer-info w-100">
             <div class="footer-head d-flex align-items-center">
                 <img src="{{ asset('assets/svgs/footer_logo.svg') }}" alt="">
@@ -22,7 +22,8 @@
                 <div class="col-md-6">
                     <div class="certificate d-flex align-items-center gap-3">
                         <img src="{{ asset('assets/svgs/certificate_logo_1.svg') }}" alt="">
-                        <p>The NHSC badge is a way to recognize Health Service Corps (NHSC) clinicians who are serving in communities with significant health professional shortages.</p>
+                        <p>The NHSC badge is a way to recognize Health Service Corps (NHSC) clinicians who are serving
+                            in communities with significant health professional shortages.</p>
                     </div>
                 </div>
                 <div class="col-md-6">
