@@ -116,9 +116,8 @@
 
     </section>
 </div>
-@push('js')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
+@script
+<script type="text/javascript">
         const swiper = new Swiper('.swiper', {
             loop: true,
             grabCursor: true,
@@ -139,7 +138,5 @@
                 }
             }
         });
-    });
 </script>
-@endpush
-
+@endscript

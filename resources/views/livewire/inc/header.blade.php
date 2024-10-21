@@ -9,7 +9,7 @@
         <nav class="d-none d-xl-flex align-items-center">
             <ul class="d-flex align-items-center gap-3">
                 <li><a href="{{ route('home') }}" wire:navigate>Home</a></li>
-                <li><a href="" wire:navigate>About</a></li>
+                <li><a href="{{ route('about-us') }}" wire:navigate>About</a></li>
                 <li><a href="{{ route('course.catalogue') }}" wire:navigate>Course Catalog</a></li>
                 <li><a href="" wire:navigate>Event</a></li>
                 <li class="dropdown">

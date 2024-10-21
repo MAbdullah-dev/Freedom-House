@@ -63,6 +63,10 @@
                 }
                 .card-body {
                     margin-bottom: 20px;
+                    display: flex;
+                    flex-flow: column;
+                    min-height: 341px;
+                    justify-content: end;
                 }
                 h5 {
                     color: $primary-color;
@@ -250,23 +254,23 @@
                 h2 {
                     font-size: 20px;
                 }
-                p{
+                p {
                     font-size: 14px;
                     line-height: 20px;
                 }
-                .sub-beifits{
-                    span{
+                .sub-beifits {
+                    span {
                         font-size: 11px;
                     }
                 }
             }
         }
-        .news-letter{
-            .news-letter-content{
-                h6{
+        .news-letter {
+            .news-letter-content {
+                h6 {
                     font-size: 20px;
                 }
-                p{
+                p {
                     font-size: 14px;
                 }
             }
@@ -288,7 +292,7 @@
         }
         .featured-content {
             .featured-cards {
-                .card{
+                .card {
                     .card-body {
                         h5 {
                             font-size: 16px;
@@ -306,7 +310,7 @@
     }
     @media (max-width: 450px) {
         .featured-content {
-            h2{
+            h2 {
                 font-size: 28px;
             }
             .featured-cards {
