@@ -3,7 +3,7 @@
         background-image: url('{{ asset('assets/images/course.png') }}');
     }
 </style>
-<div class="course-catelogue">
+<div class="course-catalogue">
     <section class="course-catelogue-main">
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <h3>PROGRAMS WE OFFER</h3>
@@ -62,29 +62,30 @@
             </div>
         </div>
     </section>
-    <section class="course-catelogue">
+    <section class="course-catelogue pt-3">
         <div class="container">
-            <h4>Category</h4>
-            <button class=" d-xxl-none d-lg-block ms-auto offcanvas-filter" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            <button class="offcanvas-btn d-block ms-auto d-xxl-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                 <i class="fa-solid fa-sliders"></i>
             </button>
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="my-5">Category</h2>
+            <div class="filters d-flex justify-content-between align-items-center mb-4">
                 <!-- Search Input -->
                 <div class="input-group w-50 position-relative filter-search">
                     <div class="input-group-prepend">
                         <span class="input-group-text position-absolute" id="search-icon">
-                            <i class="fas fa-search"></i> <!-- FontAwesome icon for search -->
+                            <i class="fas fa-search"></i>
                         </span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="search-icon">
+                    <input type="text" class="form-control" placeholder="Search" aria-label="Search"
+                        aria-describedby="search-icon">
                 </div>
 
                 <!-- Sort Dropdown -->
                 <div class="dropdown">
-
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Course Title (z-a)
-                    </button>
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown link
+                    </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#">Course Title (a-z)</a>
                         <a class="dropdown-item" href="#">Course Title (z-a)</a>
@@ -97,12 +98,20 @@
             <!-- Offcanvas component -->
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasRightLabel">Offcanvas Right</h5>
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-
                 <div class="offcanvas-body">
                     <div class="filter">
+                        <!-- Search Input -->
+                        <div class="input-group position-relative filter-search">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text position-absolute" id="search-icon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Search" aria-label="Search"
+                                aria-describedby="search-icon">
+                        </div>
                         <ul class="my-4">
                             <h4>Category</h4>
                             <li>
@@ -140,14 +149,16 @@
                                 <label for="paid">Paid</label>
                             </li>
                         </ul>
-                        <button class="btn filter-btn" @click="clearFilters()"><i class="fa-solid fa-xmark"></i> Clear All Filters</button>
+                        <button class="btn filter-btn" @click="clearFilters()">
+                            <i class="fa-solid fa-xmark"></i> Clear All Filters
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-lg-3 d-xxl-block d-lg-none">
-                    <div class="filter">
+                <div class="col-xl-3 d-none d-xl-block">
+                    <div class="filter d-none d-xl-block">
                         <ul class="my-4">
                             <h4>Category</h4>
                             <li>
@@ -185,14 +196,15 @@
                                 <label for="paid">Paid</label>
                             </li>
                         </ul>
-                        <button class="btn filter-btn" @click="clearFilters()"><i class="fa-solid fa-xmark"></i> Clear All Filters</button>
+                        <button class="btn filter-btn" @click="clearFilters()">
+                            <i class="fa-solid fa-xmark"></i> Clear All Filters
+                        </button>
                     </div>
                 </div>
-
-                <div class="col-lg-9">
+                <div class="col-lg-12 col-xl-9">
                     <div class="row gy-4">
                         <!-- Repeat card structure for course cards -->
-                        <div class="col-md-6 col-lg-4">
+                        <div class="col-sm-6 col-lg-4 ">
                             <div class="card shadow">
                                 <div class="card-img-top">
                                     <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top" alt="...">
@@ -223,7 +235,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <p class="card-text">A recovery-oriented system of care is a network of clinical and nonclinical use recovery. While co…</p>
+                                    <p class="card-text">A recovery-oriented system of care is a network of clinical
+                                        and nonclinical use recovery. While co…
+                                    </p>
                                     <div class="post-details">
                                         <center>
                                             <span class="duration">2hr &nbsp;|&nbsp;</span>
@@ -240,42 +254,49 @@
             </div>
         </div>
     </section>
+    <div class="instructor-slider">
+        <div class="container">
+            <div class="inner">
+                <h2>POPULAR INSTRUCTORS</h2>
+                <livewire:courses-cards.instructor-cards />
+
+            </div>
+        </div>
+    </div>
+
+
 
 </div>
 
 </div>
 @script
-    <script type="text/javascript">
-        const swiper = new Swiper('.swiper', {
-            loop: true,
-            grabCursor: true,
-            // spaceBetween: 30,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+<script type="text/javascript">
+    const swiper = new Swiper('.swiper', {
+        loop: true,
+        grabCursor: true,
+        // spaceBetween: 30, // Adjust the spacing between slides
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            320: {
+                slidesPerView: 1,
+                spaceBetween: 0,
             },
-            breakpoints: {
-                // when window width is >= 320px
-                320: {
-                    slidesPerView: 1,
-                    spaceBetween: 0,
-                },
-                // when window width is >= 640px
-                640: {
-                    slidesPerView: 2,
-                    spaceBetween: 0,
-                },
-                // when window width is >= 1024px
-                1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 0,
-                },
-                // when window width is >= 1440px
-                1440: {
-                    slidesPerView: 4,
-                    spaceBetween: 0,
-                },
-            }
-        });
-    </script>
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 0,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 0,
+            },
+            1440: {
+                slidesPerView: 4,
+                spaceBetween: 0,
+            },
+        }
+    });
+</script>
 @endscript

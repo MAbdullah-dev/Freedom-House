@@ -1,4 +1,8 @@
 <div class="swiper">
+    <div class="arrows d-flex align-items-center justify-content-end gap-2">
+        <div class="swiper-button-prev position-relative"></div>
+        <div class="swiper-button-next position-relative"></div>
+    </div>
     <div class="swiper-wrapper">
         <div class="swiper-slide">
             <div class="card shadow">
@@ -220,7 +224,5 @@
             </div>
         </div>
     </div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
 </div>
 

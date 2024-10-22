@@ -1,7 +1,11 @@
-.course-catelogue {
+.course-catalogue {
 
     .card {
         border-radius: 25px;
+        &:hover {
+            transform: scale(1.05);
+            transition: all 0.3s ease-in-out;
+        }
         // margin: 50px 10px;
         // margin: 40px 20px;
         border: none;
@@ -20,10 +24,15 @@
                 right: 7px;
                 z-index: 10;
                 background-color: #fff;
-                color: $primary-color;
+                color: #104627;
                 padding: 12px;
                 border-radius: 50%;
                 filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.621));
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 &:hover {
                     background-color: $primary-color;
                     color: #fff;
@@ -95,28 +104,33 @@
         }
     }
     .swiper-button-prev {
-        top: 22px;
-        left: 91%;
+        margin: 0 !important;
+        top: 0;
+        top: 0;
+        left: 0;
+        width: unset;
         &::after {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             color: #fff;
-            background-color: $primary-color;
-            padding: 15px;
+            background-color: #104627;
+            padding: 15px 18px;
             border-radius: 50%;
         }
     }
     .swiper-button-next {
-        top: 22px;
-        right: 40px;
-        margin-bottom: 10px;
+        margin: 0 !important;
+        top: 0;
+        top: 0;
+        left: 0;
+        width: unset;
 
         &::after {
-            font-weight: 900;
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 700;
             color: #fff;
-            background-color: $primary-color;
-            padding: 15px;
+            background-color: #104627;
+            padding: 15px 18px;
             border-radius: 50%;
         }
     }
@@ -147,6 +161,21 @@
         }
     }
     .course-catelogue-list {
+        .nav-tabs{
+            border-bottom: 3px solid #DEE2E6;
+            .nav-link{
+                color: #6A6F73;
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                letter-spacing: 1px;
+                border: none;
+                &.active{
+                    color: #000;
+                    border-bottom: 3px solid #000;
+                }
+            }
+        }
         .tab-content {
             .card {
                 margin: 50px 10px;
@@ -154,6 +183,25 @@
         }
     }
     .course-catelogue {
+        h2{
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 38px;
+            color: #161616;
+            margin: 40px 0;
+        }
+        .offcanvas-btn{
+            padding: 15px;
+            background-color: white;
+            border: none;
+            border-radius: 50%;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.621));
+
+            i{
+                font-size: 20px;
+                color: $primary-color;
+            }
+        }
         .filter-search{
             input{
                 padding-left: 40px;
@@ -176,11 +224,25 @@
             ul{
                 padding: 0;
                 li{
+                    display: flex;
+                    align-items: center;
+                    input{
+                        width: 20px;
+                        height: 20px;
+                        accent-color: $primary-color;
+                        // appearance: none;
+                        &:focus{
+                            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.295));
+                            accent-color: $primary-color;
+                        }
+                    }
                     label{
                         font-size:16px ;
                         font-weight: 400;
                         line-height: 24px;
                         color: #212327;
+                        margin: 10px 0;
+
                     }
                 }
             }
@@ -192,12 +254,78 @@
             }
         }
     }
-    @media screen and (max-width: 1200px) {
-        .course-catelogue{
-            .filter{
-                display: none;
+    .instructor-slider{
+        h2{
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 38px;
+            color: #161616;
+            margin: 40px 0;
+
+        }
+        .instructor-card{
+            margin: 60px 5px;
+            // border-radius: 15px;
+            border: 1px solid  #D1D7DC;
+            ul{
+                padding: 10px;
+                margin: 0;
+                .instructor-img{
+                    img{
+                        height: 65px;
+                        width: 65px;
+                        object-fit: contain;
+                    }
+                }
+                .card-details{
+                    h5{
+                        font-size: 16px;
+                        font-weight: 700;
+                        line-height: 19px;
+                        color: #212327;
+                    }
+                    p{
+                        font-size: 14px;
+                        line-height: 16px;
+                        font-weight: 400;
+                        color: #2D2F31;
+                    }
+                    .instructor-rating{
+                        span{
+                         font-size: 14px;
+                         font-weight: 400;
+                         line-height: 14px;
+                         color:#4D3105 ;
+                        }
+                        .instructor-data{
+                            span{
+                                font-size: 12px;
+                                font-weight: 400;
+                                line-height: 14px;
+                                color: #2D2F31;
+                                strong{
+                                    font-size: 12px;
+                                    font-weight: 700;
+                                    line-height: 14px;
+                                    color: #2D2F31;
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         }
-
     }
+    @media screen and (max-width: 535px) {
+        .course-catelogue-main{
+            h3{
+                font-size: 15px;
+            }
+            h1{
+                font-size: 30px;
+            }
+        }
+    }
+
 }
