@@ -1,16 +1,137 @@
 .tutor-profile {
-    .tutor-profile-hero {
-        .inner {
-            border-radius: 6px;
-            overflow: hidden;
-            .hero-img {
-                height: 352px;
-                width: 100%;
-                background-position: center center;
-                background-repeat: no-repeat;
-                background-size: cover;
+    .card {
+        border-radius: 25px;
+        &:hover {
+            transform: scale(1.05);
+            transition: all 0.3s ease-in-out;
+        }
+        border: none;
+        .card-img-top {
+            position: relative;
+            img {
+                border-radius: 30px;
+                object-fit: cover;
+                padding: 10px;
+                max-width: 100%;
+                position: relative;
             }
-            .hero-overlay {
+            i {
+                position: absolute;
+                top: 9px;
+                right: 7px;
+                z-index: 10;
+                background-color: #fff;
+                color: #104627;
+                padding: 12px;
+                border-radius: 50%;
+                filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.621));
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                &:hover {
+                    background-color: $primary-color;
+                    color: #fff;
+                    cursor: pointer;
+                    transition: all 0.5s ease;
+                }
+            }
+        }
+        .card-body {
+            min-height: 400px;
+            display: flex;
+            flex-flow: column;
+            justify-content: space-around;
+            .tutor-meta-wrapper {
+                .tutor-data {
+                    img {
+                        height: 36px;
+                        width: 36px;
+                        object-fit: contain;
+                        border-radius: 50%;
+                    }
+                    small {
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: 19px;
+                        color: #757c8e;
+                    }
+                    span {
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 22px;
+                        color: #212327;
+                    }
+                }
+            }
+            .tutor-meta-icon {
+                .meta-icon {
+                    i {
+                        color: $secondary-color;
+                        font-size: 10px;
+                    }
+                    span {
+                        font-size: 12px;
+                        font-weight: 500;
+                        line-height: 19px;
+                        color: #212327;
+                    }
+                }
+            }
+        }
+        .post-details {
+            font-size: 13px;
+        }
+        h5 {
+            color: $primary-color;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 28px;
+            letter-spacing: 1px;
+            padding: 10px 0;
+        }
+        p {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            color: #1e1e1e;
+            // margin-bottom: 20px !important;
+        }
+    }
+    .banner {
+        .profile-details {
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            // height: ;
+        }
+        .profile {
+            margin-bottom: -50%;
+            border-radius: 10px;
+            border-radius: 10px;
+            img{
+                border: 10px solid #fff;
+                border-radius: 10px;
+                height: 275px;
+                width: 235px;
+                object-fit: cover;
+                object-position: center;
+                max-width: 100%;
+            }
+        }
+        .banner-image {
+            min-height: 360px;
+            background-position: center center;
+            display: flex;
+            flex-flow: column;
+            justify-content: end;
+            padding: 0 30px;
+            position: relative;
+            &::after {
+                content: "";
+                position: absolute;
                 left: 0;
                 right: 0;
                 bottom: 0;
@@ -22,42 +143,27 @@
             }
         }
     }
-    .tutor-profile {
-        .tutor-data {
-            position: relative;
-            bottom: 150px;
-            padding: 0 30px;
-            .profile-pic {
-                img {
+    .tutor-profile-content{
+        .profile-details-mobile{
+            .profile-details {
+                color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                // height: ;
+            }
+            .profile {
+                color: #757575 ;
+                // margin-bottom: -50%;
+                border-radius: 10px;
+                img{
+                    border: 10px solid #fff;
                     border-radius: 10px;
                     height: 275px;
                     width: 235px;
                     object-fit: cover;
-                    border: 8px solid #fff;
                     object-position: center;
-                }
-            }
-            .tutor-detail {
-                h3 {
-                    font-size: 20px;
-                    font-weight: 600;
-                    line-height: 28px;
-                    color: #fff;
-                }
-                span {
-                    font-size: 16px;
-                    line-height: 10px;
-                    color: #fff;
-                    font-weight: 400;
-                }
-            }
-            .ratings {
-                text-align: right;
-                span {
-                    font-size: 16px;
-                    line-height: 10px;
-                    color: #fff;
-                    font-weight: 400;
+                    max-width: 100%;
                 }
             }
         }
