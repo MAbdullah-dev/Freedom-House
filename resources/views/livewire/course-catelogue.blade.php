@@ -64,7 +64,7 @@
     </section>
     <section class="course-catelogue pt-3">
         <div class="container">
-            <button class="offcanvas-btn d-block ms-auto d-xxl-none" type="button" data-bs-toggle="offcanvas"
+            <button class="offcanvas-btn d-block ms-auto d-xl-none" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                 <i class="fa-solid fa-sliders"></i>
             </button>

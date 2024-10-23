@@ -1,0 +1,65 @@
+.tutor-profile {
+    .tutor-profile-hero {
+        .inner {
+            border-radius: 6px;
+            overflow: hidden;
+            .hero-img {
+                height: 352px;
+                width: 100%;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+            .hero-overlay {
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 70%;
+                background-image: linear-gradient(
+                    transparent,
+                    rgba(0, 0, 0, 0.6)
+                );
+            }
+        }
+    }
+    .tutor-profile {
+        .tutor-data {
+            position: relative;
+            bottom: 150px;
+            padding: 0 30px;
+            .profile-pic {
+                img {
+                    border-radius: 10px;
+                    height: 275px;
+                    width: 235px;
+                    object-fit: cover;
+                    border: 8px solid #fff;
+                    object-position: center;
+                }
+            }
+            .tutor-detail {
+                h3 {
+                    font-size: 20px;
+                    font-weight: 600;
+                    line-height: 28px;
+                    color: #fff;
+                }
+                span {
+                    font-size: 16px;
+                    line-height: 10px;
+                    color: #fff;
+                    font-weight: 400;
+                }
+            }
+            .ratings {
+                text-align: right;
+                span {
+                    font-size: 16px;
+                    line-height: 10px;
+                    color: #fff;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+}
