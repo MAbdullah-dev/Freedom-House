@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="footer-map">
-            {{-- <img src="{{ asset('assets/images/map_image.png') }}" alt=""> --}}
+           {{-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3229.6460339106516!2d-79.06218132525402!3d35.95562801485366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89acdd21927c4031%3A0x52f75dce3e86e216!2s104%20New%20Stateside%20Dr%2C%20Chapel%20Hill%2C%20NC%2027516!5e0!3m2!1sen!2sus!4v1701960492740!5m2!1sen!2sus" width="1000" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> --}}
         </div>
     </div>
     <div class="copywrite mt-3">

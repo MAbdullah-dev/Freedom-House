@@ -14,6 +14,10 @@
         <div class="container">
             <h2><span>FEATURED</span> TRAINING</h2>
             <div class="featured-cards swiper">
+                <div class="arrows d-flex align-items-center justify-content-end gap-2">
+                    <div class="swiper-button-prev position-relative"></div>
+                    <div class="swiper-button-next position-relative"></div>
+                </div>
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="card shadow">
@@ -69,8 +73,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
             </div>
         </div>
     </section>
@@ -131,30 +133,26 @@
 </div>
 @script
 <script type="text/javascript">
-        const swiper = new Swiper('.swiper', {
-            loop: true,
-            grabCursor: true,
-            spaceBetween: 30,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+    const swiper = new Swiper('.swiper', {
+        loop: true,
+        grabCursor: true,
+        spaceBetween: 30,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: 1
-                },
-                breakpoints: {
-                    0: {
-                        slidesPerView: 1
-                    },
-                    768: {
-                        slidesPerView: 2
-                    },
-                    1024: {
-                        slidesPerView: 3
-                    }
-                }
-            });
-        });
+            768: {
+                slidesPerView: 2
+            },
+            1024: {
+                slidesPerView: 3
+            }
+        }
+    });
 </script>
+
 @endscript

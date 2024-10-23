@@ -1,6 +1,7 @@
 header {
     padding: 10px 0;
 
+    // Mobile Menu
     .mobile-menu {
         opacity: 0;
         transform: translateY(-20px); // Adjust as needed for smooth effect
@@ -16,24 +17,80 @@ header {
             visibility: visible; // Allows interaction when shown
             height: auto; // Allows space when shown
         }
+
         ul {
-            li{
-                a{
+            li {
+                a {
                     color: $secondary-color;
+                }
+            }
+        }
+
+        // Mobile Menu Category Dropdown
+        .category-dropdown {
+            position: relative;
+
+            .menu-dropdown {
+                display: none;
+                padding: 30px;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+
+            &:hover .menu-dropdown {
+                display: block;
+                opacity: 1;
+            }
+
+            ul {
+                flex-flow: column;
+                padding: 0;
+
+                li {
+                    font-size: 14px;
+                    line-height: 20px;
+                    font-weight: 400;
                 }
             }
         }
     }
 
+    // Navbar
     .nav-bar {
         nav {
             ul {
                 display: flex;
+                width: max-content;
 
                 li {
                     position: relative;
-                    padding-top: 15px;
+                    padding: 10px 0;
 
+                    // Active link border bottom
+                    a {
+                        &.active {
+                            border-bottom: 3px solid $primary-color;
+                            padding: 10px 0;
+                        }
+                    }
+
+                    // Hover effect with after pseudo-element
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        width: 0%;
+                        height: 3px;
+                        background-color: $primary-color;
+                        transition: 0.3s ease-in-out;
+                    }
+
+                    &:hover::after {
+                        width: 100%;
+                    }
+
+                    // Anchor link styles
                     a {
                         color: $secondary-color;
                         font-weight: 400;
@@ -42,66 +99,39 @@ header {
                         letter-spacing: 0.5px;
                         text-decoration: none;
                     }
+                }
 
-                    .dropdown-menu {
+                // Navbar Category Dropdown
+                .category-dropdown {
+                    position: relative;
+
+                    .menu-dropdown {
                         display: none;
                         position: absolute;
-                        top: 100%;
-                        left: -240%;
-                        background: white;
-                        border: 1px solid #ccc;
-                        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                        z-index: 1000;
-                        padding: 34px 84px 48px 84px;
+                        background: #fff;
+                        padding: 30px;
+                        opacity: 0;
+                        transition: opacity 0.3s ease-in-out;
+                        min-width: 880px;
+                        right: -150px;
+                        top: 45px;
+                        box-shadow: 0 0 10px 0 #00000021;
+                        border-radius: 10px;
+                    }
 
-                        em {
-                            border-bottom: 4px solid $primary-color;
-                        }
+                    &:hover .menu-dropdown {
+                        display: block;
+                        opacity: 1;
+                    }
 
-                        &.show {
-                            display: block;
-                        }
+                    ul {
+                        flex-flow: column;
+                        padding: 0;
 
-                        em {
-                            font-size: 30px;
-                            font-weight: 500;
-                            line-height: 56.85px;
-                        }
-
-                        .dropdown-grid {
-                            display: grid;
-                            grid-template-columns: repeat(3, 1fr);
-                        }
-
-                        div {
-                            display: flex;
-                            flex-direction: column;
-
-                            b {
-                                font-size: 16px;
-                                font-weight: 600;
-                                color: #000;
-                                margin-bottom: 5px;
-                            }
-
-                            ul {
-                                list-style: outside;
-                                padding: 0;
-                                margin: 0;
-                                display: flex;
-                                flex-flow: column;
-
-                                li {
-                                    padding: 5px !important;
-
-                                    a {
-                                        color: $secondary-color;
-                                        font-size: 16px;
-                                        font-weight: 400;
-                                        line-height: 41.76px;
-                                    }
-                                }
-                            }
+                        li {
+                            font-size: 14px;
+                            line-height: 20px;
+                            font-weight: 400;
                         }
                     }
                 }
@@ -109,3 +139,136 @@ header {
         }
     }
 }
+
+// header {
+//     padding: 10px 0;
+
+//     .mobile-menu {
+//         opacity: 0;
+//         transform: translateY(-20px); // Adjust as needed for smooth effect
+//         transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; // Smooth transition
+//         visibility: hidden; // Prevents interaction when hidden
+//         height: 0; // Prevents space when hidden
+//         overflow: hidden; // Hides the content when not visible
+//         z-index: 1000; // Adjust z-index as needed
+
+//         &.show {
+//             opacity: 1;
+//             transform: translateY(0);
+//             visibility: visible; // Allows interaction when shown
+//             height: auto; // Allows space when shown
+//         }
+//         ul {
+//             li {
+//                 a {
+//                     color: $secondary-color;
+//                 }
+//             }
+//         }
+//     }
+
+//     .nav-bar {
+//         nav {
+//             ul {
+//                 display: flex;
+//                 width: max-content;
+
+//                 li {
+//                     position: relative;
+//                     padding: 10px 0;
+//                     a{
+//                         &.active{
+//                             border-bottom: 3px solid $primary-color;
+//                         }
+//                     }
+
+//                     &:after {
+//                         content: "";
+//                         content: "";
+//                         position: absolute;
+//                         left: 0;
+//                         bottom: 0;
+//                         width: 0%;
+//                         height: 3px;
+//                         background-color: $primary-color;
+//                         transition: 0.3s ease-in-out;
+//                     }
+//                     &:hover::after {
+//                         width: 100%;
+//                     }
+
+//                     a {
+//                         color: $secondary-color;
+//                         font-weight: 400;
+//                         font-size: 17px;
+//                         line-height: 27px;
+//                         letter-spacing: 0.5px;
+//                         text-decoration: none;
+//                     }
+//                 }
+//                 .category-dropdown {
+//                     position: relative;
+//                     .menu-dropdown {
+//                         display: none;
+//                         position: absolute;
+//                         background: #fff;
+//                         padding: 30px;
+//                         opacity: 0;
+//                         transition: opacity 0.3s ease-in-out;
+//                         min-width: 880px;
+//                         right: -150px;
+//                         top: 45px;
+//                         box-shadow: 0 0 10px 0 #00000021;
+//                         border-radius: 10px;
+//                     }
+
+//                     &:hover .menu-dropdown {
+//                         display: block;
+//                         opacity: 1;
+//                     }
+//                     ul {
+//                         flex-flow: column;
+//                         padding: 0;
+//                         li {
+//                             font-size: 14px;
+//                             line-height: 20px;
+//                             font-weight: 400;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+//     .mobile-menu {
+//         .category-dropdown {
+//             position: relative;
+//             .menu-dropdown {
+//                 display: none;
+//                 // position: absolute;
+//                 // background: #fff;
+//                 padding: 30px;
+//                 opacity: 0;
+//                 transition: opacity 0.3s ease-in-out;
+//                 // min-width: 880px;
+//                 // right: -150px;
+//                 // top: 45px;
+//                 // box-shadow: 0 0 10px 0 #00000021;
+//                 // border-radius: 10px;
+//             }
+
+//             &:hover .menu-dropdown {
+//                 display: block;
+//                 opacity: 1;
+//             }
+//             ul {
+//                 flex-flow: column;
+//                 padding: 0;
+//                 li {
+//                     font-size: 14px;
+//                     line-height: 20px;
+//                     font-weight: 400;
+//                 }
+//             }
+//         }
+//     }
+// }

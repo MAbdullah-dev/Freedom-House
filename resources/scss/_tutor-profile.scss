@@ -144,16 +144,16 @@
         }
     }
     .tutor-profile-content{
+
         .profile-details-mobile{
             .profile-details {
-                color: #fff;
+                color: #757575 ;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 // height: ;
             }
             .profile {
-                color: #757575 ;
                 // margin-bottom: -50%;
                 border-radius: 10px;
                 img{
@@ -166,6 +166,39 @@
                     max-width: 100%;
                 }
             }
+            .profile-details{
+                h3{
+                    color:#000;
+                }
+                p{
+                    span{
+                        color: #000;
+                    }
+                }
+            }
         }
+    }
+    @media screen and (max-width: 992px) {
+        .banner{
+            .row{
+                display: none;
+            }
+        }
+        .tutor-profile-content{
+            margin-top: -150px;
+        }
+
+    }
+    @media screen and (max-width: 576px) {
+        .tutor-profile-content{
+            .tutor-user-profile-content{
+                p{
+                    font-size: 12px;
+                    line-height: 20px;
+                    font-weight: 500;
+                }
+            }
+        }
+
     }
 }

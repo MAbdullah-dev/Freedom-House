@@ -34,7 +34,7 @@
         <div class="container">
             <div class="banner-image"
                 style="background-image: url('{{ asset('assets/images/tutor-profile-hero.jpg') }}'); background-size: cover">
-                <div class="row align-items-center z-1 d-none d-lg-block">
+                <div class="row align-items-center z-1 ">
                     <div class="col-lg-3">
                         <div class="profile">
                             <img src="{{ asset('assets/images/tutor-profile-image.jpg') }}" alt="">
@@ -64,7 +64,7 @@
             </div>
         </div>
     </section>
-    <section class="tutor-profile-content">
+    <section class="tutor-profile-content position-relative">
         <div class="container">
             <div class="inner">
                 <div class="row">
@@ -73,9 +73,9 @@
                             <div class="profile">
                                 <img src="{{ asset('assets/images/tutor-profile-image.jpg') }}" alt="">
                             </div>
-                            <div class="profile-details d-flex align-items-center justify-content-center flex-column">
+                            <div class="profile-details d-flex flex-column align-items-center justify-content-center">
                                 <div class="details-profile">
-                                    <h3>Niki Shafer</h3>
+                                    <h3 class="text-center">Niki Shafer</h3>
                                     <span>9 courses</span>
                                     <span>.</span>
                                     <span>48 students</span>
@@ -88,7 +88,7 @@
                                         <i class="fa-regular fa-star" style="color: #eea015;"></i>
                                         <i class="fa-regular fa-star" style="color: #eea015;"></i>
                                     </span>
-                                    <p>4.80 <span>(10.00)</span></p>
+                                    <p><span>4.80 </span>(10.00)</p>
                                 </div>
                             </div>
                         </div>

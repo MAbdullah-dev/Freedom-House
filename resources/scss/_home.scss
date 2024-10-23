@@ -85,8 +85,11 @@
                 }
             }
             .swiper-button-prev {
-                top: 22px;
-                left: 91%;
+                margin: 0 !important;
+                top: 0;
+                top: 0;
+                left: 0;
+                width: unset;
                 &::after {
                     font-size: 13px;
                     font-weight: 700;
@@ -97,9 +100,11 @@
                 }
             }
             .swiper-button-next {
-                top: 22px;
-                right: 40px;
-                margin-bottom: 10px;
+                margin: 0 !important;
+                top: 0;
+                top: 0;
+                left: 0;
+                width: unset;
 
                 &::after {
                     font-size: 13px;
@@ -186,15 +191,6 @@
             }
         }
     }
-    @media (max-width: 1400px) {
-        .featured-content {
-            .featured-cards {
-                .swiper-button-prev {
-                    left: 88%;
-                }
-            }
-        }
-    }
     @media (max-width: 992px) {
         .hero-section {
             h1 {
@@ -203,13 +199,6 @@
             .hero-cta-btn {
                 a {
                     margin-bottom: 50px;
-                }
-            }
-        }
-        .featured-content {
-            .featured-cards {
-                .swiper-button-prev {
-                    left: 80%;
                 }
             }
         }
@@ -239,13 +228,6 @@
                     line-height: 10px;
                     background: #104627;
                     padding: 10px;
-                }
-            }
-        }
-        .featured-content {
-            .featured-cards {
-                .swiper-button-prev {
-                    left: 75%;
                 }
             }
         }
@@ -302,9 +284,6 @@
                         }
                     }
                 }
-                .swiper-button-prev {
-                    left: 75%;
-                }
             }
         }
     }
@@ -312,11 +291,6 @@
         .featured-content {
             h2 {
                 font-size: 28px;
-            }
-            .featured-cards {
-                .swiper-button-prev {
-                    left: 65%;
-                }
             }
         }
     }
