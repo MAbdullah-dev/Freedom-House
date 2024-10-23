@@ -17,40 +17,53 @@
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top" alt="...">
+                            <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
+                                alt="...">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Recovery-Oriented System of Care</h5>
-                                <p class="card-text my-3">A recovery-oriented system of care is a network of clinical and nonclinical services and supports that sustain long-term, community-based substance use recovery. While co…</p>
+                                <p class="card-text my-3">A recovery-oriented system of care is a network of clinical
+                                    and nonclinical services and supports that sustain long-term, community-based
+                                    substance use recovery. While co…</p>
                                 <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
                             </div>
                         </div>
                     </div>
                     <div class="swiper-slide">
                         <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-2.png') }}" class="card-img-top" alt="...">
+                            <img src="{{ asset('assets/images/featured-card-2.png') }}" class="card-img-top"
+                                alt="...">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Maintaining Professional Boundaries</h5>
-                                <p class="card-text my-3">Maintaining Professional Boundaries is a training for helping professionals focusing on the importance of professional boundary setting, common types of boundary crossing.</p>
+                                <p class="card-text my-3">Maintaining Professional Boundaries is a training for helping
+                                    professionals focusing on the importance of professional boundary setting, common
+                                    types of boundary crossing.</p>
+                                <a class="button-primary mt-3" href="{{ route('course.details') }}" wire:navigate
+                                    class="btn btn-primary">Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="card shadow">
+                            <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top"
+                                alt="...">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Question. Persuade. Refer. Refer.</h5>
+                                <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on
+                                    suicide prevention techniques and conversation strategies. This training also
+                                    provides resources to help your.</p>
                                 <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
                             </div>
                         </div>
                     </div>
                     <div class="swiper-slide">
                         <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top" alt="...">
+                            <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top"
+                                alt="...">
                             <div class="card-body text-center">
                                 <h5 class="card-title">Question. Persuade. Refer. Refer.</h5>
-                                <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on suicide prevention techniques and conversation strategies. This training also provides resources to help your.</p>
-                                <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Question. Persuade. Refer. Refer.</h5>
-                                <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on suicide prevention techniques and conversation strategies. This training also provides resources to help your.</p>
+                                <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on
+                                    suicide prevention techniques and conversation strategies. This training also
+                                    provides resources to help your.</p>
                                 <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
                             </div>
                         </div>
@@ -130,13 +143,18 @@
                 0: {
                     slidesPerView: 1
                 },
-                768: {
-                    slidesPerView: 2
-                },
-                1024: {
-                    slidesPerView: 3
+                breakpoints: {
+                    0: {
+                        slidesPerView: 1
+                    },
+                    768: {
+                        slidesPerView: 2
+                    },
+                    1024: {
+                        slidesPerView: 3
+                    }
                 }
-            }
+            });
         });
 </script>
 @endscript

@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="footer-map">
-            <img src="{{ asset('assets/images/map_image.png') }}" alt="">
+            {{-- <img src="{{ asset('assets/images/map_image.png') }}" alt=""> --}}
         </div>
     </div>
     <div class="copywrite mt-3">
