@@ -1,0 +1,89 @@
+.dashboar-head{
+    .tutor-data{
+        border-bottom: 3px solid #B2B4B7;
+        .totor-info{
+            .tutor-avater {
+                max-width: 100%;
+                img{
+                    width: 96px;
+                    height: 96px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+                span{
+                    font-size: 20px;
+                    font-weight: 400;
+                    line-height: 32px
+                }
+                b{
+                    font-size: 24px;
+                    font-weight: 500;
+                    line-height: 38px;
+                    color: #212327;
+                }
+            }
+        }
+        .tutor-notification-request{
+            .offcanvas-btn{
+                border: 0;
+                background-color: #fff;
+                padding: 15px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease-in-out;
+                i{
+                    font-size:20px;
+                    color: $primary-color;
+                }
+                &:hover{
+                    background-color: $primary-color;
+                    i{
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+.dashboard-sidebar{
+    .sidebar{
+        // border-top: 3px solid #B2B4B7;
+        border-right:1px solid #B2B4B7 ;
+
+        ul{
+            padding: 0;
+            li{
+                a{
+                    color: $primary-color;
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 30px;
+                    padding: 8px 40px;
+                    border-radius: 5px 0 0 5px;
+                    &:hover{
+                        // color: #fff;
+                        background-color: rgb(33 35 39 / 6%);
+                    }
+                    &:first-child{
+                        margin-top: 10px;
+                    }
+                    i{
+                        margin-right: 10px;
+                    }
+                    &.active{
+                        background-color: $primary-color;
+                        color:#fff;
+                        i{
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.dashboard{
+    flex: 1;
+}
