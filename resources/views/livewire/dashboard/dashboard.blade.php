@@ -3,7 +3,7 @@
         <div class="inner">
             <div class="courses-info">
                 <h4 class="my-4">Dashboard</h4>
-                <div class="course-detail d-flex align-items-center justify-content-center gap-3">
+                <div class="course-detail d-flex align-items-center justify-content-center gap-3 flex-wrap">
                     <div class="course-box d-flex align-items-center justify-content-center flex-column">
                         <div class="course-box-icon">
                             <i class="fa-solid fa-book-open-reader"></i>

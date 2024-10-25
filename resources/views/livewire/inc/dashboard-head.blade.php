@@ -1,6 +1,6 @@
 <div class="dashboar-head">
 <div class="container">
-    <div class="inner d-flex align-items-center justify-content-between tutor-data">
+    <div class="inner d-flex align-items-center justify-content-between tutor-data flex-wrap">
         <div class="totor-info">
             <ul class="tutor-avater d-flex align-items-center gap-3">
                 <li><img src="{{ asset('assets/images/user.png') }}" alt=""></li>

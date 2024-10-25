@@ -19,7 +19,7 @@
     <livewire:inc.header />
     <livewire:inc.dashboard-head />
     <main>
-        <div class="container d-flex">
+        <div class="container d-flex dasboard-main">
             <livewire:inc.dashbord-sidebar />
             {{ $slot }}
         </div>
