@@ -4,6 +4,8 @@ use App\Livewire\CourseCatelogue;
 use App\Livewire\AboutUs;
 use App\Livewire\CourseDetails;
 use App\Livewire\Dashboard\Dashboard;
+use App\Livewire\Dashboard\HelpRequest;
+use App\Livewire\Dashboard\ViewEnrollments;
 use App\Livewire\Home as LivewireHome;
 use App\Livewire\Login;
 use App\Livewire\Register;
@@ -22,4 +24,6 @@ Route::get('/course/details', CourseDetails::class)->name('course.details');
 Route::get('/on-site_course/details', OnSiteCourseDetails::class)->name('onsite.course.details');
 // dashboard routes
 Route::get('/dashboard',Dashboard::class)->name('dashboard');
+Route::get('dashboard/help', HelpRequest::class)->name('dashboard.help');
+Route::get('/dashboard/enrollments', ViewEnrollments::class)->name('dashboard.enrollments');
 
