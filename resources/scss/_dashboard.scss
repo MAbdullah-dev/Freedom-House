@@ -1,20 +1,24 @@
 .dashboar-head {
     .tutor-data {
         border-bottom: 4px solid #b2b4b7;
+
         .totor-info {
             .tutor-avater {
                 max-width: 100%;
+
                 img {
                     width: 96px;
                     height: 96px;
                     object-fit: cover;
                     border-radius: 50%;
                 }
+
                 span {
                     font-size: 20px;
                     font-weight: 400;
                     line-height: 32px;
                 }
+
                 b {
                     font-size: 24px;
                     font-weight: 500;
@@ -23,6 +27,7 @@
                 }
             }
         }
+
         .tutor-notification-request {
             .offcanvas-btn {
                 border: 0;
@@ -33,12 +38,15 @@
                 align-items: center;
                 justify-content: center;
                 transition: all 0.3s ease-in-out;
+
                 i {
                     font-size: 20px;
                     color: $primary-color;
                 }
+
                 &:hover {
                     background-color: $primary-color;
+
                     i {
                         color: #fff;
                     }
@@ -47,11 +55,14 @@
         }
     }
 }
+
 .dashboard-sidebar {
     .sidebar {
         width: max-content;
+
         ul {
             padding: 0;
+
             li {
                 a {
                     color: $primary-color;
@@ -60,19 +71,23 @@
                     line-height: 30px;
                     padding: 8px 30px;
                     border-radius: 5px 0 0 5px;
+
                     &:hover {
-                        // color: #fff;
                         background-color: rgb(33 35 39 / 6%);
                     }
+
                     &:first-child {
                         margin-top: 10px;
                     }
+
                     i {
                         margin-right: 10px;
                     }
+
                     &.active {
                         background-color: $primary-color;
                         color: #fff;
+
                         i {
                             color: #fff;
                         }
@@ -82,13 +97,16 @@
         }
     }
 }
+
 .dashboard {
     border-left: 2px solid #b2b4b7;
+
     .course-detail {
         .course-box {
             border: 1px solid #cdcfd5;
             padding: 32px 100px;
             border-radius: 7px;
+
             .course-box-icon {
                 padding: 20px;
                 background-color: #e7ece9;
@@ -96,16 +114,19 @@
                 align-items: center;
                 justify-content: center;
                 border-radius: 50%;
+
                 i {
                     font-size: 26px;
                     color: $primary-color;
                 }
             }
+
             .number {
                 font-size: 32px;
                 line-height: 50px;
                 font-weight: 700;
             }
+
             span {
                 font-size: 14px;
                 font-weight: 400;
@@ -114,32 +135,38 @@
             }
         }
     }
+
     .course-progress {
         .inner {
             border: 1px solid #cdcfd5;
             border-radius: 5px;
+
             .progress-course-img {
                 img {
                     max-width: 100%;
                     object-fit: cover;
                 }
             }
+
             .progress-course-detail {
                 .progress-course-rating {
                     i {
                         margin-left: 4px;
                     }
                 }
+
                 h4 {
                     font-size: 20px;
                     line-height: 24px;
                     font-weight: 500;
                 }
+
                 .lessons-complete {
                     font-size: 14px;
                     font-weight: 400;
                     line-height: 22px;
                     color: #757c8e;
+
                     span {
                         font-size: 14px;
                         line-height: 22px;
@@ -148,16 +175,19 @@
                     }
                 }
             }
+
             .course-progress-bar {
                 progress {
                     width: 100%;
                 }
+
                 p {
                     margin: 0;
                     font-size: 14px;
                     line-height: 22px;
                     font-weight: 500;
                     color: #757c8e;
+
                     span {
                         color: #212327;
                     }
@@ -166,14 +196,18 @@
         }
     }
 }
+
 .help-request {
     border-left: 1px solid #b2b4b7;
+
     .help-request-alert {
         border: 1px solid #b2b4b7;
         border-radius: 6px;
+
         .help-request-content {
             background-color: #ececec;
             padding: 30px;
+
             .alert-text {
                 p {
                     margin: 0;
@@ -181,6 +215,7 @@
             }
         }
     }
+
     .helprequest-form {
         label {
             font-size: 16px;
@@ -188,10 +223,12 @@
             line-height: 24px;
             color: #232323;
         }
+
         .custom-file-input input[type="file"] {
-            display: none; /* Hide the real file input */
+            display: none; // Hide the real file input
         }
     }
+
     .help-request-review {
         .help-request-head {
             border: 1px solid #b2b4b7;
@@ -204,11 +241,13 @@
                 align-items: center;
                 justify-content: center;
                 border-radius: 50%;
+
                 i {
                     font-size: 26px;
                     color: $primary-color;
                 }
             }
+
             .input-group {
                 i {
                     color: #fff;
@@ -218,24 +257,26 @@
                 }
             }
         }
-        .help-request-body{
+
+        .help-request-body {
             border: 1px solid #b2b4b7;
             border-radius: 6px;
-            table{
-                tr{
-                    th{
+
+            table {
+                tr {
+                    th {
                         font-size: 14px;
                         line-height: 21px;
                         font-weight: 500;
-                        color:#2B2B2B ;
+                        color: #2B2B2B;
                     }
                 }
             }
         }
     }
 }
-.view-enrollments{
+
+.view-enrollments {
     border-left: 1px solid #b2b4b7;
     flex: 1;
-
 }

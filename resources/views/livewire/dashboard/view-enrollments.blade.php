@@ -1,7 +1,7 @@
 <div class="view-enrollments px-4">
     <section class="enrollments my-5 mx-4">
-        <div class="tutor-avator d-flex align-items-center gap-2">
-            <img src="{{ asset('assets/images/enrollemnt-profile.png') }}" alt="tutor" />
+        <div class="tutor-avator d-flex align-items-center gap-2 mb-5">
+            <img src="{{ asset('assets/images/enrollment-profile.png') }}" alt="tutor" />
             <h6>M Abdullah</h6>
         </div>
         <div class="row">
