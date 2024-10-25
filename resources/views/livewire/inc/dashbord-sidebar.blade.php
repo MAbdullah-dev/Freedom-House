@@ -4,23 +4,26 @@
             <ul>
                 <div>
                     <li class="nav-item">
-                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}" aria-current="page" href="#">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}"
+                            aria-current="page" href="{{ route('dashboard') }}">
                             <i class="fas fa-tachometer-alt"></i> Dashboard
                         </a>
                     </li>
                 </div>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.profile' ? 'active' : '' }}"
+                        href="{{ route('dashboard.profile') }}">
                         <i class="fas fa-user"></i> My Profile
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrolledCourses' ? 'active' : '' }}"
+                        href="{{ route('dashboard.enrolledCourses') }}">
                         <i class="fas fa-book"></i> Enrolled Courses
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                <li class="nav-item {{ Route::currentRouteName() == 'dashboard.wishlist' ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('dashboard.wishlist') }}">
                         <i class="fas fa-heart"></i> Wishlist
                     </a>
                 </li>
@@ -35,7 +38,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.settings' ? 'active' : '' }}"
+                        href="{{ route('dashboard.settings') }}">
                         <i class="fas fa-cog"></i> Settings
                     </a>
                 </li>
