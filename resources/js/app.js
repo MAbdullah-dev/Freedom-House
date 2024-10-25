@@ -1,4 +1,4 @@
-import './bootstrap';
+import "./bootstrap";
 
 flatpickr(".calendar-input", {
     dateFormat: "Y-m-d",
