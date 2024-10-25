@@ -1,4 +1,4 @@
-<div class="dashboard-sidebar">
+<div class="dashboard-sidebar" id="dashboard-sidebar">
     <div class="sidebar">
         <div class="nav d-flex flex-column">
             <ul>
@@ -8,17 +8,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == '' ? 'active' : '' }}" href="#" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.profile' ? 'active' : '' }}" href="{{ route('dashboard.profile') }}" wire:navigate>
                         <i class="fas fa-user"></i> My Profile
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == '' ? 'active' : '' }}" href="#" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrolledCourses' ? 'active' : '' }}" href="{{ route('dashboard.enrolledCourses') }}" wire:navigate>
                         <i class="fas fa-book"></i> Enrolled Courses
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == '' ? 'active' : '' }}" href="#" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.wishlist' ? 'active' : '' }}" href="{{ route('dashboard.wishlist') }}" wire:navigate>
                         <i class="fas fa-heart"></i> Wishlist
                     </a>
                 </li>
@@ -33,7 +33,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == '' ? 'active' : '' }}" href="#" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.settings' ? 'active' : '' }}" href="{{ route('dashboard.settings') }}" wire:navigate>
                         <i class="fas fa-cog"></i> Settings
                     </a>
                 </li>

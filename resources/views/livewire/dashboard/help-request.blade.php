@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-5">
                 <div class="help-img">
-                    <img src="{{ asset('assets/images/help-img.png') }}" alt="">
+                    <img class="w-100" src="{{ asset('assets/images/help-img.png') }}" alt="">
                 </div>
             </div>
         </div>
