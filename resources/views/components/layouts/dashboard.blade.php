@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +20,11 @@
     <livewire:inc.header />
     <livewire:inc.dashboard-head />
     <main>
-        <div class="container d-flex dasboard-main">
+        <div class="container d-flex dashboard-main">
             <livewire:inc.dashbord-sidebar />
             {{ $slot }}
         </div>
+        <livewire:inc.dashboard-footer />
     </main>
     <livewire:inc.footer />
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="

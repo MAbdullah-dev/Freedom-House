@@ -11,6 +11,7 @@ use App\Livewire\Dashboard\DashboardProfile;
 use App\Livewire\Dashboard\DashboardSettings;
 use App\Livewire\Dashboard\DashboardWishlist;
 use App\Livewire\Home as LivewireHome;
+use App\Livewire\Inc\DashboardFooter;
 use App\Livewire\Login;
 use App\Livewire\Register;
 use App\Livewire\TutorPrfile;
