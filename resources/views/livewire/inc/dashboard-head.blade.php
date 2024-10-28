@@ -6,7 +6,7 @@
                 <li><img src="{{ asset('assets/images/user.png') }}" alt=""></li>
                 <li>
                     <span>Hello</span>
-                    <b class="d-block">Abdulah AS Student</b>
+                    <b class="d-block">Abdullah AS Student</b>
                 </li>
             </ul>
         </div>
