@@ -1,5 +1,5 @@
 <footer>
-    <img class="footer-background" src="{{ asset('assets/images/Shape.png') }}" alt="">
+    <img class="footer-background" src="" alt="">
     <div class="container d-flex flex-wrap justify-content-between footer-container ">
         <div class="footer-info">
             <div class="d-flex align-items-center">

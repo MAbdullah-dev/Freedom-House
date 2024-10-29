@@ -2,8 +2,11 @@ import "./bootstrap";
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-document.addEventListener("DOMContentLoaded", function () {
+// Function to initialize the calendar
+function initCalendar() {
     const calendarEl = document.getElementById("calendar");
+    if (!calendarEl) return; // Exit if calendarEl does not exist
+
     const calendar = new Calendar(calendarEl, {
         plugins: [dayGridPlugin],
         initialView: "dayGridMonth",
@@ -36,27 +39,24 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
     calendar.render();
+}
 
-    // Toggle Filter Row
-    document.querySelector(".btn-filter").addEventListener("click", () => {
-        document
-            .querySelector(".calendar-additional-filters")
-            .classList.toggle("hidden");
-    });
+// Initialize calendar on Livewire load
+document.addEventListener("livewire:load", () => {
+    console.log("Livewire load");
+    initCalendar();
 });
 
-flatpickr(".calendar-input", {
-    dateFormat: "Y-m-d",
-    altInput: true,
-    altFormat: "F j, Y",
-    defaultDate: new Date(),
+// Listen for the calendarInitialized event to reinitialize the calendar if needed
+window.addEventListener("calendarInitialized", () => {
+    console.log("Re-initializing calendar on Livewire update");
+    initCalendar();
 });
 
-flatpickr("#calendar-input", {
-    mode: "range",
-    dateFormat: "Y-m-d",
-    altInput: true,
-    altFormat: "F j, Y",
-    minDate: "2024-01-01",
-    maxDate: "2030-12-31",
+
+// Toggle Filter Row
+document.querySelector(".btn-filter").addEventListener("click", () => {
+    document
+        .querySelector(".calendar-additional-filters")
+        .classList.toggle("hidden");
 });

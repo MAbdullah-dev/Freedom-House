@@ -36,7 +36,7 @@
     </section>
 </div>
 
-
+@script
 <script>
     document.querySelectorAll('.dropdown-item').forEach(function(item) {
         item.addEventListener('click', function(event) {
@@ -59,4 +59,15 @@
             }
         });
     });
+
+    flatpickr("#calendar-input", {
+    mode: "range",
+    dateFormat: "Y-m-d",
+    altInput: true,
+    altFormat: "F j, Y",
+    minDate: "2024-01-01",
+    maxDate: "2030-12-31",
+});
+
 </script>
+@endscript
