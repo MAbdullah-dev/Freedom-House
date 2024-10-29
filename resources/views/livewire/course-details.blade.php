@@ -132,9 +132,18 @@
 </div>
 
 
-
+@script
 <script>
     document.querySelector('.filter-btn').addEventListener('click', function() {
         document.querySelector('.filter-row').classList.toggle('show');
     });
+
+    flatpickr(".calendar-input", {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "F j, Y",
+        defaultDate: new Date(),
+    });
+
 </script>
+@endscript
