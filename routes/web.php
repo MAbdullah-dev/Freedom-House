@@ -16,6 +16,7 @@ use App\Livewire\Login;
 use App\Livewire\Register;
 use App\Livewire\TutorPrfile;
 use App\Livewire\OnSiteCourseDetails;
+use App\Livewire\EventCalendar;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,6 +28,7 @@ Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/tutor/profile',TutorPrfile::class)->name('tutor.profile');
 Route::get('/course/details', CourseDetails::class)->name('course.details');
 Route::get('/on-site_course/details', OnSiteCourseDetails::class)->name('onsite.course.details');
+Route::get('/calendar', EventCalendar::class)->name('calendar');
 // dashboard routes
 Route::get('/dashboard',Dashboard::class)->name('dashboard');
 Route::get('dashboard/help', HelpRequest::class)->name('dashboard.help');

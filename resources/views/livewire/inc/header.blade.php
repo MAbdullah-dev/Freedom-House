@@ -14,8 +14,9 @@
                         href="{{ route('about-us') }}" wire:navigate>About</a></li>
                 <li><a class="{{ Route::currentRouteName() == 'course.catalogue' ? 'active' : '' }}"
                         href="{{ route('course.catalogue') }}" wire:navigate>Course Catalog</a></li>
-                <li><a class="{{ Route::currentRouteName() == '' ? 'active' : '' }}" href=""
-                        wire:navigate>Event</a></li>
+                <li><a class="{{ Route::currentRouteName() == 'calendar' ? 'active' : '' }}"
+                        href="{{ route('calendar') }}" wire:navigate>Class
+                        Calendar</a></li>
                 <li class="category-dropdown ">
                     <a href="#">Category</a>
                     <div class="menu-dropdown">
@@ -68,7 +69,7 @@
             <li><a href="{{ route('home') }}">Home</a></li>
             <li><a href="">About</a></li>
             <li><a href="">Course Catalog</a></li>
-            <li><a href="">Event</a></li>
+            <li><a href="{{ route('calendar') }}">Classes Calendar</a></li>
             <li class="category-dropdown ">
                 <a href="#">Category</a>
                 <div class="menu-dropdown">
