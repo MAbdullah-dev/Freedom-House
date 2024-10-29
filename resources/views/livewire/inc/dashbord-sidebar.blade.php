@@ -3,37 +3,71 @@
         <div class="nav d-flex flex-column">
             <ul>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}" aria-current="page" href="{{ route('dashboard') }}" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}" aria-current="page"
+                        href="{{ route('dashboard') }}" wire:navigate>
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.profile' ? 'active' : '' }}" href="{{ route('dashboard.profile') }}" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.profile' ? 'active' : '' }}"
+                        href="{{ route('dashboard.profile') }}" wire:navigate>
                         <i class="fas fa-user"></i> My Profile
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrolledCourses' ? 'active' : '' }}" href="{{ route('dashboard.enrolledCourses') }}" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrolledCourses' ? 'active' : '' }}"
+                        href="{{ route('dashboard.enrolledCourses') }}" wire:navigate>
                         <i class="fas fa-book"></i> Enrolled Courses
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.wishlist' ? 'active' : '' }}" href="{{ route('dashboard.wishlist') }}" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.wishlist' ? 'active' : '' }}"
+                        href="{{ route('dashboard.wishlist') }}" wire:navigate>
                         <i class="fas fa-heart"></i> Wishlist
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help' ? 'active' : '' }}" href="{{ route('dashboard.help') }}" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help' ? 'active' : '' }}"
+                        href="{{ route('dashboard.help') }}" wire:navigate>
                         <i class="fas fa-question-circle"></i> Help Request
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrollments' ? 'active' : '' }}" href="{{ route('dashboard.enrollments') }}" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrollments' ? 'active' : '' }}"
+                        href="{{ route('dashboard.enrollments') }}" wire:navigate>
                         <i class="fas fa-list"></i> View Enrollments
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.settings' ? 'active' : '' }}" href="{{ route('dashboard.settings') }}" wire:navigate>
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.scehedule-classes' ? 'active' : '' }}"
+                        href="{{ route('dashboard.scehedule-classes') }}" wire:navigate>
+                        <i class="fa-solid fa-list"></i> Schedule Classes
+                    </a>
+                </li>
+                <li class="tutor-dashboard-menu-divider-header">
+                    Instructor
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.mycourses' ? 'active' : '' }}"
+                        href="{{ route('dashboard.mycourses') }}" wire:navigate>
+                        <i class="fa-solid fa-rocket"></i> My Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.announcements' ? 'active' : '' }}"
+                        href="{{ route('dashboard.announcements') }}" wire:navigate>
+                        <i class="fa-solid fa-bullhorn"></i> Announcements
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.analytics' ? 'active' : '' }}"
+                        href="{{ route('dashboard.analytics') }}" wire:navigate>
+                        <i class="fa-solid fa-book"></i> Course Analytics
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.settings' ? 'active' : '' }}"
+                        href="{{ route('dashboard.settings') }}" wire:navigate>
                         <i class="fas fa-cog"></i> Settings
                     </a>
                 </li>
