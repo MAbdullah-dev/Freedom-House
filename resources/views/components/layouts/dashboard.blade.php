@@ -10,7 +10,7 @@
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+    <script src="https://cdn.tiny.cloud/1/5iv0e4vx3nzuwf3ya5c4epexxpn19n8bs4mnku7wvh2598qz/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     @livewireStyles
     <title>{{ $title ?? 'Page Title' }}</title>

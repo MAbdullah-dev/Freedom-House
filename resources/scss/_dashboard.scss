@@ -1,9 +1,9 @@
-.dashboar-head {
+.dashboard-head {
     .tutor-data {
         border-bottom: 1px solid #b2b4b7;
 
-        .totor-info {
-            .tutor-avater {
+        .tutor-info {
+            .tutor-avatar {
                 max-width: 100%;
 
                 img {
@@ -129,6 +129,40 @@
             }
         }
     }
+    .tutor-course-info{
+        .course-box {
+            border: 1px solid #cdcfd5;
+            padding: 32px 200px;
+            border-radius: 7px;
+
+            .course-box-icon {
+                padding: 20px;
+                background-color: #e7ece9;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+
+                i {
+                    font-size: 26px;
+                    color: $primary-color;
+                }
+            }
+
+            .number {
+                font-size: 32px;
+                line-height: 50px;
+                font-weight: 700;
+            }
+
+            span {
+                font-size: 14px;
+                font-weight: 400;
+                line-height: 20px;
+                color: #41454f;
+            }
+        }
+    }
 
     .course-progress {
         .inner {
@@ -188,6 +222,12 @@
                     }
                 }
             }
+        }
+    }
+    .tutor-course-detail{
+        table{
+            border: 1px solid #cdcfd5;
+            border-radius: 6px;
         }
     }
 }
@@ -274,12 +314,6 @@
     border-left: 1px solid #b2b4b7;
     flex: 1;
     padding: 16px;
-
-    // Responsive adjustments
-    @media (max-width: 768px) {
-        padding: 8px;
-    }
-
     .enrollments {
         // Adjust margins
         margin: 0;
@@ -488,32 +522,6 @@
                 .dropdown-item {
                     font-size: 12px;
                     padding: 6px;
-                }
-            }
-        }
-    }
-
-    @media (max-width: 576px) {
-        .enrollments {
-            .tutor-avatar {
-                h6 {
-                    font-size: 16px;
-                }
-            }
-
-            .calendar-input {
-                font-size: 12px;
-            }
-
-            .dropdown {
-                .btn-outline-secondary {
-                    font-size: 12px;
-                }
-
-                .dropdown-menu {
-                    .dropdown-item {
-                        font-size: 12px;
-                    }
                 }
             }
         }
@@ -982,6 +990,36 @@
             }
         }
     }
+    .password {
+        input {
+            max-width: 652px;
+            border: 0.7px solid #00000037 !important;
+            // border-radius: 5px;
+        }
+    }
+    .social-profile {
+        label {
+            font-size: 16px;
+            font-weight: 400;
+            color: #212327;
+            display: flex;
+            align-items: center;
+
+            i {
+                color: #1a1b1e;
+                font-size: 18px;
+                margin-right: 8px; // Space between icon and text
+            }
+        }
+
+        input.form-control {
+            font-size: 16px;
+            color: #6c757d;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px 12px;
+        }
+    }
 }
 .tutor-dashboard-footer-mobile {
     display: none;
@@ -1022,10 +1060,15 @@
                 width: 100%;
             }
         }
+        .tutor-course-info{
+            .course-box {
+                width: 100%;
+            }
+        }
     }
+
     .helprequest-form {
         .button-primary {
-            padding: 12px 20px !important;
             margin-left: 0 !important;
         }
     }
@@ -1042,6 +1085,47 @@
     }
     .button-secondary {
         padding: 12px 22px !important;
+    }
+}
+@media (max-width: 576px) {
+    .enrollments {
+        .tutor-avatar {
+            h6 {
+                font-size: 16px;
+            }
+        }
+
+        .calendar-input {
+            font-size: 12px;
+        }
+
+        .dropdown {
+            .btn-outline-secondary {
+                font-size: 12px;
+            }
+
+            .dropdown-menu {
+                .dropdown-item {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+    .dashboard-head{
+        .tutor-info {
+            .tutor-avatar {
+                img {
+                    width: 50px;
+                    height: 50px;
+                }
+                li {
+                    b {
+                        font-size: 16px !important;
+                        line-height: 26px !important;
+                    }
+                }
+            }
+        }
     }
 }
 @media screen and (max-width: 456px) {
@@ -1049,135 +1133,8 @@
         padding: 5px !important;
     }
 }
-.tutor-dashboard-footer-mobile {
-    display: none;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #fff;
-    padding: 10px;
-    box-shadow: 0px 0px 16px rgba(176, 182, 209, 0.180862);
-    z-index: 9999999;
-}
-@media (max-width: 768px) {
-    .dashboard,
-    .wishlist,
-    .settings,
-    .course-section,
-    .help-request,
-    .profile,
-    .view-enrollments {
-        border: none;
-    }
-    .dashboard-main {
-        flex-direction: column;
-    }
-    .dashboard-sidebar {
-        display: none;
-    }
-    .dashboard-sidebar {
-        &.visible {
-            display: block;
-            margin: 0 auto;
-        }
-    }
-    .courses-info-section {
-        .course-detail {
-            .course-box {
-                width: 100%;
-            }
-        }
-    }
-    .helprequest-form {
-        .button-primary {
-            padding: 12px 20px !important;
-            margin-left: 0 !important;
-        }
-    }
-    .tutor-dashboard-footer-mobile {
-        display: block;
-    }
-    .dashboar-head {
-        .tutor-notification-request {
-            margin-left: 90px;
-        }
-    }
-    .button-primary {
-        padding: 12px 22px !important;
-    }
+@media screen and (max-width: 320px) {
     .button-secondary {
-        padding: 12px 22px !important;
-    }
-}
-@media screen and (max-width: 456px) {
-    .help-request-alert {
-        padding: 5px !important;
-    }
-}
-.tutor-dashboard-footer-mobile {
-    display: none;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #fff;
-    padding: 10px;
-    box-shadow: 0px 0px 16px rgba(176, 182, 209, 0.180862);
-    z-index: 9999999;
-}
-@media (max-width: 768px) {
-    .dashboard,
-    .wishlist,
-    .settings,
-    .course-section,
-    .help-request,
-    .profile,
-    .view-enrollments {
-        border: none;
-    }
-    .dashboard-main {
-        flex-direction: column;
-    }
-    .dashboard-sidebar {
-        display: none;
-    }
-    .dashboard-sidebar {
-        &.visible {
-            display: block;
-            margin: 0 auto;
-        }
-    }
-    .courses-info-section {
-        .course-detail {
-            .course-box {
-                width: 100%;
-            }
-        }
-    }
-    .helprequest-form {
-        .button-primary {
-            padding: 12px 20px !important;
-            margin-left: 0 !important;
-        }
-    }
-    .tutor-dashboard-footer-mobile {
-        display: block;
-    }
-    .dashboar-head {
-        .tutor-notification-request {
-            margin-left: 90px;
-        }
-    }
-    .button-primary {
-        padding: 12px 22px !important;
-    }
-    .button-secondary {
-        padding: 12px 22px !important;
-    }
-}
-@media screen and (max-width: 456px) {
-    .help-request-alert {
         padding: 5px !important;
     }
 }
