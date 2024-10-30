@@ -60,6 +60,7 @@
                 padding: 10px 15px;
                 position: relative;
                 transition: color 0.3s;
+                cursor: pointer;
 
                 &.active {
                     border-bottom: 2px solid $primary-color;
@@ -86,7 +87,6 @@
             &.fade-out {
                 animation: fadeOut 0.5s forwards;
                 visibility: hidden;
-                /* Hide the element after fade out */
             }
         }
     }
@@ -270,4 +270,324 @@
         }
     }
 
+}
+.popular-courses {
+    .popular-courses-inner {
+        padding: 0 40px;
+
+        h3 {
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 32px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+        }
+    }
+
+    .card {
+        border-radius: 8px;
+        max-width: 954px;
+        margin: 0 auto;
+
+        .card-body {
+            .table {
+                width: 100%;
+                table-layout: fixed;
+                overflow-x: auto;
+                display: block;
+
+                .table-header {
+                    th {
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 25px;
+                        color: #41454f;
+                        padding: 16px;
+                        border-bottom: 1px solid #b2b4b7;
+
+                        &:first-child {
+                            min-width: 500px;
+                            width: 60%;
+                        }
+
+                        &:nth-child(2),
+                        &:nth-child(3) {
+                            min-width: 132px;
+                            width: 15%;
+                            text-align: center;
+                        }
+
+                        &:last-child {
+                            min-width: 80px;
+                            width: 10%;
+                            text-align: right;
+                        }
+                    }
+                }
+
+                tbody {
+                    tr {
+                        border-bottom: 1px solid #b2b4b7;
+                        td {
+                            padding: 16px;
+                            font-size: 14px;
+                            color: #41454f;
+                            border-bottom: none;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+
+                            &:first-child {
+                                font-size: 16px;
+                                font-weight: 500;
+                                line-height: 26px;
+                                color: #212327;
+
+                                .course-meta {
+                                    font-size: 13px;
+                                    color: #8c939d;
+                                    margin-top: 4px;
+                                }
+                            }
+
+                            &.text-center {
+                                text-align: center;
+                            }
+
+                            &:last-child {
+                                display: flex;
+                                gap: 8px;
+                                align-items: center;
+                                justify-content: flex-end;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .btn-outline-secondary {
+        color: #28a745;
+        border-color: #546c64;
+        padding: 10px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.3s, border-color 0.3s;
+
+        &:hover {
+            background-color: #e2f5e8;
+            color: #1e7e34;
+        }
+
+        svg {
+            width: 16px;
+            height: 16px;
+            margin-left: 4px;
+            color: inherit;
+        }
+    }
+}
+.statements-tab {
+    .filters {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 100%;
+
+        @media (min-width: 768px) {
+            flex-direction: row;
+        }
+
+        .dropdown,
+        .date-input {
+            flex-grow: 1;
+            flex-basis: 0;
+            min-width: 250px;
+            margin-bottom: 16px;
+
+            @media (min-width: 768px) {
+                margin-bottom: 0;
+            }
+        }
+
+        .dropdown {
+            .dropdown-toggle {
+                width: 100%;
+                border: 1px solid #cdcfd5;
+                border-radius: 6px;
+                background-color: transparent;
+                padding: 6px 12px;
+            }
+
+            .dropdown-menu {
+                width: max-content !important;
+                input {
+                    margin-bottom: 8px;
+                    width: 100%;
+                }
+            }
+        }
+
+        .date-input {
+            input {
+                width: 100%;
+            }
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+    }
+
+    .statements-table {
+        min-width: 954px;
+        font-size: 14px;
+
+        thead th {
+            background-color: #f1f1f1;
+            font-weight: 700;
+            color: #333;
+            padding: 12px;
+        }
+
+        tbody {
+            tr {
+                td {
+                    padding: 16px;
+                    vertical-align: top;
+
+                    .statement-info {
+                        span {
+                            font-size: 12px;
+                        }
+
+                        h4 {
+                            display: block;
+                            font-size: 16px;
+                            font-weight: 500;
+                            line-height: 25.6px;
+                        }
+
+                        a {
+                            font-size: 13px;
+                            color: #007bff;
+                            text-decoration: none;
+                        }
+                    }
+
+                    .earnings,
+                    .admin-gets {
+                        strong {
+                            display: block;
+                            font-size: 14px;
+                            color: #333;
+                        }
+
+                        small {
+                            font-size: 12px;
+                            color: #888;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.students-tab {
+    .filters {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+        width: 100%;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
+
+        .form-control {
+            border: 1px solid #cdcfd5;
+            border-radius: 6px;
+            background-color: transparent;
+            padding: 6px 12px;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+        .dropdown {
+            flex-grow: 1;
+
+            .dropdown-toggle {
+                width: 100%;
+                border: 1px solid #cdcfd5;
+                border-radius: 6px;
+                background-color: transparent;
+                padding: 6px 12px;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+
+            .dropdown-menu {
+                width: max-content !important;
+
+                input[type="text"] {
+                    margin-bottom: 8px;
+                    width: 100%;
+                    box-shadow: none !important;
+                    outline: none !important;
+                }
+            }
+        }
+
+        .date-input {
+            flex-grow: 1;
+
+            input[type="date"] {
+                box-shadow: none !important;
+                outline: none !important;
+            }
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+    }
+    .table-responsive {
+        .students-table {
+            min-width: 754px;
+            font-size: 14px;
+
+            thead th {
+                background-color: #f1f1f1;
+                font-weight: 700;
+                color: #333;
+                padding: 12px;
+            }
+
+            tbody tr td {
+                padding: 16px;
+                vertical-align: middle;
+
+                .student-info {
+                    .profile-pic {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                    }
+
+                    strong {
+                        font-size: 15px;
+                    }
+
+                    small {
+                        font-size: 12px;
+                        color: #888;
+                    }
+                }
+            }
+        }
+    }
 }
