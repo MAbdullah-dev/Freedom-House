@@ -2,6 +2,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -11,8 +12,37 @@
     from {
         opacity: 1;
     }
+
     to {
         opacity: 0;
+    }
+}
+
+.table {
+    border: 1px solid #CDCFD5;
+    border-radius: 10px;
+
+    thead {
+        tr {
+
+            th {
+
+                background-color: #F4F6F9;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 25px;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 25px;
+            }
+        }
     }
 }
 
@@ -55,11 +85,13 @@
 
             &.fade-out {
                 animation: fadeOut 0.5s forwards;
-                visibility: hidden; /* Hide the element after fade out */
+                visibility: hidden;
+                /* Hide the element after fade out */
             }
         }
     }
 }
+
 .overview {
     .overview-boxes {
         .overview-box {
@@ -95,13 +127,147 @@
             }
         }
     }
-    .most-papularCourses-table{
-        .table{
+
+    .most-papularCourses-table {
+        // .table {
+        //     border: 1px solid #CDCFD5;
+        //     border-radius: 10px;
+        //     thead {
+        //         tr {
+
+        //             th {
+
+        //                 background-color: #F4F6F9;
+        //                 font-size: 14px;
+        //                 font-weight: 500;
+        //                 line-height: 25px;
+        //             }
+        //         }
+        //     }
+        //     tbody{
+        //         tr{
+        //             td{
+        //                 font-size: 16px;
+        //                 font-weight: 400;
+        //                 line-height: 25px;
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
+    .Review-table {
+        .table {
             border: 1px solid #CDCFD5;
-            border-radius: 10px;
-            thead{
-                background-color: #F4F6F9;
+
+            // border-radius: 10px;
+            tbody {
+                tr {
+                    border-bottom: 1px solid #CDCFD5;
+
+                    td {
+                        border: none;
+
+                        .review-text {
+                            font-size: 16px;
+                            font-weight: 400;
+                            line-height: 25px;
+                            color: #757C8E;
+                        }
+
+                        .course-text {
+                            span {
+                                font-size: 12px;
+                                font-weight: 400;
+                            }
+
+                            font-size: 14px;
+                            font-weight: 500;
+                            line-height: 22px;
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+.earnings {
+    .earnings-detail {
+        gap: 20px; // Space between boxes
+        margin-top: 20px;
+
+        .earning-box {
+            width: 280px; // Consistent box width
+            padding: 20px;
+            border: 1px solid #cdcfd5;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Light shadow for depth
+            text-align: center;
+
+            .earning-box-icon {
+                padding: 15px;
+                background-color: #e7ece9;
+                border-radius: 50%;
+                margin-bottom: 15px;
+
+                i {
+                    font-size: 26px;
+                    color: #274c3b;
+                }
+            }
+
+            .dolors {
+                font-size: 24px;
+                font-weight: bold;
+                color: #000;
+                margin-bottom: 8px;
+            }
+
+            span {
+                font-size: 14px;
+                font-weight: normal;
+                color: #41454f;
+            }
+        }
+    }
+}
+
+.export {
+    .export-content {
+        background-color: #F6F8FD;
+        border-radius: 10px;
+        padding: 20px;
+
+        h4 {
+            font-size: 34px;
+            font-weight: 500;
+            line-height: 38px;
+            color: #212327;
+        }
+
+        p {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 25px;
+            color: #41454F;
+        }
+
+        img {
+            object-fit: contain;
+            max-width: 100%; /* Ensures image is responsive */
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .earnings {
+        .earnings-detail {
+            .earning-box {
+                width: 100%;
+            }
+        }
+    }
+
 }
