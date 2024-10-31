@@ -5,6 +5,7 @@ use App\Livewire\AboutUs;
 use App\Livewire\CourseDetails;
 use App\Livewire\Dashboard\Announcements;
 use App\Livewire\Dashboard\CourseAnalytics;
+use App\Livewire\Dashboard\CreateCourse;
 use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\HelpRequest;
 use App\Livewire\Dashboard\ViewEnrollments;
@@ -46,5 +47,4 @@ Route::get('/dashboard/mycourses',MyCourses::class)->name('dashboard.mycourses')
 Route::get('/dashboard/announcements',Announcements::class)->name('dashboard.announcements');
 Route::get('/dashboard/course-analytics',CourseAnalytics::class)->name('dashboard.analytics');
 Route::get('/dashboard/scehedule-classes',ScheduleClasses::class)->name('dashboard.scehedule-classes');
-
-
+Route::get('/dashboard/create-course',CreateCourse::class)->name('dashboard.create-course');
