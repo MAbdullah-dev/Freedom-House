@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-6 text-center">
                 <div class="export-img">
-                    <img src="{{ asset('assets/images/export-im.png') }}" alt="Export Image">
+                    <img src="{{ asset('assets/images/Export-cvs-img.png') }}" alt="Export Image">
                 </div>
             </div>
         </div>
