@@ -226,10 +226,172 @@
 
         img {
             object-fit: contain;
-            max-width: 100%; /* Ensures image is responsive */
+            max-width: 100%;
+            /* Ensures image is responsive */
         }
     }
 }
+
+.course-details {
+    border-left: 1px solid #DCDFE5;
+
+    .back-link {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22px;
+        color: #757C8E;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .course-header {
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #333;
+            font-weight: 500;
+
+            span {
+                font-size: 14px;
+                color: #666;
+            }
+        }
+    }
+
+    .enrollment-section {
+        h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .bulk-action {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+
+            .form-select {
+                width: 150px;
+            }
+
+            // .apply-btn {
+            //     padding: 5px 15px;
+            //     background-color: #007bff;
+            //     color: #fff;
+            //     border: none;
+            //     border-radius: 4px;
+
+            //     &:hover {
+            //         background-color: #0056b3;
+            //     }
+            // }
+        }
+
+        .tabs {
+            border-bottom: 1px solid #DCDFE5;
+
+            // padding-bottom: 20px;
+            .nav-item {
+                .nav-link {
+                    border: none;
+                    outline: none;
+                    color: #000;
+                    padding: 10px 15px;
+                    position: relative;
+                    transition: color 0.3s;
+                    cursor: pointer;
+                    padding-bottom: 25px;
+
+                    &.active {
+                        border-bottom: 2px solid $primary-color;
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+            thead {
+                background-color: #f8f9fa;
+
+                th {
+                    padding: 10px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    text-align: left;
+                    border-bottom: 1px solid #dee2e6;
+                    color: #41454F;
+
+                    input[type="checkbox"] {
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        padding: 10px;
+                        font-size: 14px;
+                        border-bottom: 1px solid #dee2e6;
+                        font-size: 16px;
+                        font-weight: 500;
+                        line-height: 25px;
+
+                        a {
+                            // color: #007bff;
+                            // text-decoration: none;
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+
+                        i {
+                            color: #757C8E;
+                            font-size: 16px;
+                            // margin: 0 16px;
+                        }
+
+                        .badge {
+                            padding: 5px 10px;
+                            font-size: 12px;
+                            border-radius: 12px;
+
+                            &-incomplete {
+                                background-color: #ffefef;
+                                color: #ff4d4f;
+                            }
+
+                            &-approved {
+                                background-color: #e9f7ef;
+                                color: #28a745;
+                            }
+                        }
+
+                        small {
+                            display: block;
+                            font-size: 12px;
+                            color: #6c757d;
+                        }
+                    }
+
+                    &:hover {
+                        background-color: #f1f1f1;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 
 @media screen and (max-width: 768px) {
     .earnings {
@@ -240,6 +402,7 @@
         }
     }
 }
+
 .popular-courses {
     .popular-courses-inner {
         padding: 0 40px;
@@ -297,6 +460,7 @@
                 tbody {
                     tr {
                         border-bottom: 1px solid #b2b4b7;
+
                         td {
                             padding: 16px;
                             font-size: 14px;
@@ -357,6 +521,7 @@
         }
     }
 }
+
 .statements-tab {
     .filters {
         display: flex;
@@ -391,6 +556,7 @@
 
             .dropdown-menu {
                 width: max-content !important;
+
                 input {
                     margin-bottom: 8px;
                     width: 100%;
@@ -464,6 +630,7 @@
         }
     }
 }
+
 .students-tab {
     .filters {
         display: flex;
@@ -524,6 +691,7 @@
             margin-bottom: 8px;
         }
     }
+
     .table-responsive {
         .students-table {
             min-width: 754px;

@@ -5,10 +5,10 @@
             <h6>M Abdullah</h6>
         </div>
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-6">
                 <input type="text" class="mb-3" id="calendar-input" placeholder="Select date" />
             </div>
-            <div class="col-md-5">
+            <div class="col-md-3">
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button"
                         id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -29,45 +29,48 @@
                     </ul>
                 </div>
             </div>
+            <div class="col-md-3">
+                <button type="button" class="button-primary" data-bs-toggle="modal" data-bs-target="#create-class"><i
+                        class="fa-solid fa-plus"></i> New Event</button>
+            </div>
         </div>
         <div class="no-enrollment-img d-flex justify-content-center align-content-center mt-5">
             <img src="{{ asset('assets/images/no-enrollment.png') }}" alt="no-enrollment" />
         </div>
     </section>
-</div>
+    <!-- Bootstrap Modal for Form -->
+    <livewire:dashboard.class-form />
+    @script
+        <script>
+            document.querySelectorAll('.dropdown-item').forEach(function(item) {
+                item.addEventListener('click', function(event) {
+                    // Get the selected timezone text
+                    const selectedTimezone = event.target.textContent;
 
-@script
-<script>
-    document.querySelectorAll('.dropdown-item').forEach(function(item) {
-        item.addEventListener('click', function(event) {
-            // Get the selected timezone text
-            const selectedTimezone = event.target.textContent;
+                    // Update the button text with the selected timezone
+                    document.getElementById('selected-timezone').textContent = selectedTimezone;
+                });
+            });
+            document.getElementById('timezoneSearchInput').addEventListener('keyup', function() {
+                var filter = this.value.toLowerCase();
+                var items = document.querySelectorAll('#timezoneList .dropdown-item');
 
-            // Update the button text with the selected timezone
-            document.getElementById('selected-timezone').textContent = selectedTimezone;
-        });
-    });
-    document.getElementById('timezoneSearchInput').addEventListener('keyup', function() {
-        var filter = this.value.toLowerCase();
-        var items = document.querySelectorAll('#timezoneList .dropdown-item');
+                items.forEach(function(item) {
+                    if (item.textContent.toLowerCase().indexOf(filter) > -1) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
 
-        items.forEach(function(item) {
-            if (item.textContent.toLowerCase().indexOf(filter) > -1) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    });
-
-    flatpickr("#calendar-input", {
-    mode: "range",
-    dateFormat: "Y-m-d",
-    altInput: true,
-    altFormat: "F j, Y",
-    minDate: "2024-01-01",
-    maxDate: "2030-12-31",
-});
-
-</script>
-@endscript
+            flatpickr("#calendar-input", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "F j, Y",
+                minDate: "2024-01-01",
+                maxDate: "2030-12-31",
+            });
+        </script>
+    @endscript
