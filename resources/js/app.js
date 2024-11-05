@@ -2,10 +2,9 @@ import "./bootstrap";
 import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-// Function to initialize the calendar
 function initCalendar() {
     const calendarEl = document.getElementById("calendar");
-    if (!calendarEl) return; // Exit if calendarEl does not exist
+    if (!calendarEl) return;
 
     const calendar = new Calendar(calendarEl, {
         plugins: [dayGridPlugin],
@@ -52,7 +51,6 @@ window.addEventListener("calendarInitialized", () => {
     console.log("Re-initializing calendar on Livewire update");
     initCalendar();
 });
-
 
 // Toggle Filter Row
 document.querySelector(".btn-filter").addEventListener("click", () => {

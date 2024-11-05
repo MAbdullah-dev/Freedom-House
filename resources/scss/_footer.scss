@@ -1,7 +1,6 @@
 footer {
     position: relative;
     padding: 40px 20px;
-    background-color: #f8f9fa; // Adjust background as needed
 
     .footer-background {
         position: absolute;
@@ -10,77 +9,100 @@ footer {
         z-index: -1;
     }
 
-    .footer-info {
-    flex: 1;
-    padding-right: 20px;
-}
-
-.footer-map {
-    flex: 1;
-    text-align: right;
-
-    iframe {
-        width: 100%;
-        height: 400px;
-        max-width: 700px;
-        border: 0;
-    }
-}
-
-.certificates {
-    .certificate {
-        img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-        }
-    }
-
-    p {
-        font-size: 12px;
-        color: #000;
-    }
-}
-
-.copywrite {
-    border-top: 1px solid #2b3d51;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.copywrite-text {
-    p,
-    .policy a {
-        font-size: 14px;
-        color: #575150;
-    }
-}
-
-.policy {
-    a {
-        margin: 0 15px;
-        text-decoration: none;
-        color: #000;
-    }
-}
-
-@media (max-width: 768px) {
     .footer-container {
-        flex-direction: column;
-        .footer-map {
-            iframe {
-                max-width: 100%;
-                height: 400px;
-            }
-            text-align: center;
-            margin-top: 20px;
-        }
+        padding: 0;
+    }
 
-        .footer-info {
-            padding-right: 0;
-            text-align: center;
+    .footer-map {
+        iframe {
+            width: 100%;
+            height: 300px;
+            max-width: 700px;
+            border: 0;
         }
     }
-}
 
+    .certificates {
+        .certificate {
+            img {
+                width: 60px;
+                height: 60px;
+                object-fit: contain;
+            }
+        }
+
+        p {
+            font-size: 12px;
+            color: #000;
+            max-width: 242px;
+        }
+    }
+
+    .footer-body {
+        b {
+            font-size: 22px;
+            color: #191a15;
+            line-height: 27px;
+        }
+
+        .nav.flex-column {
+            margin-top: 25px;
+            li {
+                font-size: 14px;
+                color: #333;
+
+                a {
+                    color: #41463e;
+                    text-decoration: none;
+
+                    &:hover {
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+    }
+
+    .copywrite {
+        border-top: 1px solid #2b3d51;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .copywrite-text {
+        p,
+        .policy a {
+            font-size: 14px;
+            color: #575150;
+        }
+    }
+
+    .policy {
+        a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #000;
+            &:hover {
+                color: $primary-color;
+            }
+        }
+    }
+
+    //     @media (max-width: 768px) {
+    //         .footer-container {
+    //             .row {
+    //                 flex-direction: column;
+    //                 align-items: center;
+    //                 text-align: center;
+
+    //                 .footer-map {
+    //                     iframe {
+    //                         max-width: 100%;
+    //                         height: 300px;
+    //                     }
+    //                     margin-top: 20px;
+    //                 }
+    //             }
+    //         }
+    //     }
 }
