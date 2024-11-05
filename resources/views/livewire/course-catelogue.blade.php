@@ -66,7 +66,7 @@
         <div class="container">
             <div class="d-flex align-items-center justify-content-between">
                 <h2 class="my-5">Category</h2>
-                <button class="offcanvas-btn d-block ms-auto d-xl-none" type="button" data-bs-toggle="offcanvas"
+                <button class="offcanvas-btn d-block d-flex d-xl-none" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                     <i class="fa-solid fa-sliders"></i>
                 </button>
