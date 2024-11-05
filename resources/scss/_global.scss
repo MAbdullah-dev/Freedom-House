@@ -39,3 +39,52 @@ a {
     border-radius: 5px;
     padding: 12px 47px;
 }
+.news-letter {
+    margin: 20px 0;
+    .row {
+        margin: 120px 0;
+    }
+    .news-letter-content {
+        h6 {
+            font-weight: 600;
+            font-size: 32px;
+            line-height: 34px;
+            letter-spacing: 3px;
+            color: #161616;
+        }
+        p {
+            font-weight: 400;
+            font-size: 20px;
+            line-height: 24px;
+            color: #000;
+        }
+        input {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 10px;
+            &:focus-visible {
+                outline: none;
+            }
+        }
+        button {
+            width: max-content;
+            margin: 0 auto;
+        }
+    }
+}
+@media screen and (max-width: 768px) {
+    .news-letter {
+        .row{
+            margin: 60px 0;
+            .news-letter-content {
+                h6 {
+                    font-size: 20px;
+                }
+                p {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}

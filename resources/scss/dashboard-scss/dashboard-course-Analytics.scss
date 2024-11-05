@@ -337,6 +337,12 @@
             tbody {
                 tr {
                     td {
+                        input{
+                            accent-color: $primary-color;
+                            background-color: $primary-color;
+                            width: 20px;
+                            height: 20px;
+                        }
                         padding: 10px;
                         font-size: 14px;
                         border-bottom: 1px solid #dee2e6;

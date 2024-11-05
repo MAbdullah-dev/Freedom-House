@@ -39,7 +39,7 @@
                 <option>Cancel</option>
                 <option>Delete</option>
             </select>
-            <button class="btn button-secondary">Apply</button>
+            <button class="button-secondary">Apply</button>
         </div>
         <div class="table-responsive mt-3">
             <template x-if="tab === 'all'">
