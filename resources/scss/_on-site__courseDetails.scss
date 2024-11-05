@@ -6,7 +6,7 @@
             rgba(0, 0, 0, 0.68) 0%,
             rgba(0, 0, 0, 0.68) 100%
         );
-        padding: 120px 0;
+        padding: 50px 0 200px 0px;
 
         .container {
             .inner {
@@ -18,22 +18,26 @@
                     color: #fff;
                     border-top: 2px solid #fff;
                     border-bottom: 2px solid #fff;
-                    padding: 10px 0;
-                    width: 70%;
+                    padding: 20px 0;
                     margin: 0 auto;
+                    max-width: 690px;
+                    text-transform: uppercase;
                 }
 
                 .onsite-course-title {
+                    margin-top: 70px;
                     font-size: 60px;
                     font-weight: 700;
-                    line-height: 73px;
+                    line-height: 70px;
                     color: #fff;
+                    text-transform: uppercase;
+                    max-width: 1280px;
                 }
 
                 .onsite-course-subdescription {
-                    font-size: 16px;
+                    font-size: 20px;
                     font-weight: 400;
-                    line-height: 29px;
+                    line-height: 1.2;
                     letter-spacing: 1px;
                     color: #fff;
                 }
@@ -57,6 +61,9 @@
             .inner {
                 display: flex;
                 justify-content: space-between;
+                border: 1px solid #cdcfd5;
+                border-radius: 5px;
+                padding: 10px;
 
                 .onsite-course-details {
                     flex: 1;
@@ -182,65 +189,9 @@
                 }
 
                 .course-details__widget {
-                    h3 {
-                        font-size: 20px;
-                        line-height: 32px;
-                        font-weight: 500;
-                    }
-
-                    ul {
-                        list-style-type: disc !important;
-
-                        li {
-                            color: #212327;
-                            font-weight: 400;
-                            line-height: 25.6px;
-                            font-size: 16px;
-                            max-width: 600px;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .onsite-newsletter-section {
-        margin: 80px 0;
-        padding: 40px;
-        text-align: center;
-
-        .container {
-            .inner {
-                .onsite-subscribe-text {
-                    h2 {
-                        font-size: 2rem;
-                        margin-bottom: 10px;
-                    }
-
-                    p {
-                        font-size: 1rem;
-                        color: #777;
-                    }
-                }
-
-                .onsite-newsletter-form {
-                    margin-top: 20px;
-
-                    .onsite-email-input {
-                        padding: 10px;
-                        width: 300px;
-                        border: 1px solid #ccc;
-                        border-radius: 5px;
-                        margin-right: 10px;
-                    }
-
-                    .onsite-subscribe-button {
-                        padding: 10px 20px;
-                        background-color: $primary-color;
-                        color: #fff;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
+                    img {
+                        width: 50vw;
+                        min-width: 300px;
                     }
                 }
             }
@@ -248,7 +199,17 @@
     }
 
     // Media Queries for Responsive Design
+    @media (max-width: 1280px) {
+        .onsite-course-info {
+            margin-top: -90px !important;
+            margin: 0px 20px;
+        }
+    }
     @media (max-width: 768px) {
+        .onsite-course-title {
+            font-size: 40px !important;
+            line-height: 1.2 !important;
+        }
         .onsite-course-info {
             padding: 15px;
 
@@ -265,39 +226,18 @@
                 }
             }
         }
-
-        .onsite-newsletter-section {
-            padding: 20px;
-
-            .onsite-newsletter-form {
-                .onsite-email-input {
-                    width: 100%;
-                    margin-bottom: 10px;
-                }
-
-                .onsite-subscribe-button {
-                    width: 100%;
-                }
-            }
-        }
     }
 
     @media (max-width: 576px) {
-        .onsite-course-title {
-            font-size: 40px !important;
-            line-height: 50px;
-        }
-
-        .onsite-course-subdescription {
-            font-size: 14px;
-            line-height: 24px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .onsite-course-title {
-            font-size: 32px !important;
-            line-height: 50px;
+        .onsite-course-header {
+            padding-bottom: 130px !important;
+            .onsite-course-title {
+                font-size: 32px !important;
+            }
+            .onsite-course-subdescription {
+                font-size: 14px !important;
+                line-height: 1.2 !important;
+            }
         }
     }
 }
