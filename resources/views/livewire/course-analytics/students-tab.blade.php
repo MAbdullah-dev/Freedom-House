@@ -12,10 +12,10 @@
             </button>
             <ul class="dropdown-menu p-3 w-100" aria-labelledby="coursesDropdown">
                 <input type="text" class="form-control mb-2" placeholder="Search courses..." />
-                <li><a class="dropdown-item" href="#">Understanding Personality Disorders</a></li>
-                <li><a class="dropdown-item" href="#">Maintain Professional Boundaries</a></li>
-                <li><a class="dropdown-item" href="#">Clinical Documentation</a></li>
-                <li><a class="dropdown-item" href="#">Mental Health Basics</a></li>
+                <li>Understanding Personality Disorders</li>
+                <li>Maintain Professional Boundaries</li>
+                <li>Clinical Documentation</li>
+                <li>Mental Health Basics</li>
             </ul>
         </div>
         <div class="date-input flex-grow-1">

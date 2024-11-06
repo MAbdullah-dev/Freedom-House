@@ -18,31 +18,31 @@
     }
 }
 
-.table {
-    border: 1px solid #cdcfd5;
-    border-radius: 10px;
+// .table {
+//     border: 1px solid #cdcfd5;
+//     border-radius: 10px;
 
-    thead {
-        tr {
-            th {
-                background-color: #f4f6f9;
-                font-size: 14px;
-                font-weight: 500;
-                line-height: 25px;
-            }
-        }
-    }
+//     thead {
+//         tr {
+//             th {
+//                 background-color: #f4f6f9;
+//                 font-size: 14px;
+//                 font-weight: 500;
+//                 line-height: 25px;
+//             }
+//         }
+//     }
 
-    tbody {
-        tr {
-            td {
-                font-size: 16px;
-                font-weight: 400;
-                line-height: 25px;
-            }
-        }
-    }
-}
+//     tbody {
+//         tr {
+//             td {
+//                 font-size: 16px;
+//                 font-weight: 400;
+//                 line-height: 25px;
+//             }
+//         }
+//     }
+// }
 
 .course-analytics {
     border-left: 1px solid #b2b4b7;
@@ -125,35 +125,39 @@
             }
         }
     }
-
+    .most-popular-courses-table {
+        h4 {
+            color: #212327;
+            font-size: 20px;
+        }
+    }
     .Review-table {
-        .table {
-            border: 1px solid #cdcfd5;
-
-            // border-radius: 10px;
-            tbody {
-                tr {
-                    border-bottom: 1px solid #cdcfd5;
-
-                    td {
-                        border: none;
-
-                        .review-text {
-                            font-size: 16px;
-                            font-weight: 400;
-                            line-height: 25px;
-                            color: #757c8e;
-                        }
-
-                        .course-text {
-                            span {
-                                font-size: 12px;
+        h4 {
+            color: #212327;
+            font-size: 20px;
+        }
+        .card-table {
+            .table {
+                tbody {
+                    tr {
+                        td {
+                            .course-feedback {
+                                font-size: 16px;
                                 font-weight: 400;
+                                line-height: 25px;
+                                color: #757c8e;
                             }
 
-                            font-size: 14px;
-                            font-weight: 500;
-                            line-height: 22px;
+                            .course-name {
+                                span {
+                                    font-size: 12px;
+                                    font-weight: 400;
+                                }
+
+                                font-size: 14px;
+                                font-weight: 500;
+                                line-height: 22px;
+                            }
                         }
                     }
                 }
@@ -233,13 +237,13 @@
 }
 
 .course-details {
-    border-left: 1px solid #DCDFE5;
+    border-left: 1px solid #dcdfe5;
 
     .back-link {
         font-size: 16px;
         font-weight: 400;
         line-height: 22px;
-        color: #757C8E;
+        color: #757c8e;
         &:hover {
             text-decoration: underline;
         }
@@ -291,7 +295,7 @@
         }
 
         .tabs {
-            border-bottom: 1px solid #DCDFE5;
+            border-bottom: 1px solid #dcdfe5;
 
             // padding-bottom: 20px;
             .nav-item {
@@ -326,7 +330,7 @@
                     font-weight: 600;
                     text-align: left;
                     border-bottom: 1px solid #dee2e6;
-                    color: #41454F;
+                    color: #41454f;
 
                     input[type="checkbox"] {
                         cursor: pointer;
@@ -337,7 +341,7 @@
             tbody {
                 tr {
                     td {
-                        input{
+                        input {
                             accent-color: $primary-color;
                             background-color: $primary-color;
                             width: 20px;
@@ -360,7 +364,7 @@
                         }
 
                         i {
-                            color: #757C8E;
+                            color: #757c8e;
                             font-size: 16px;
                             // margin: 0 16px;
                         }
@@ -395,9 +399,7 @@
             }
         }
     }
-
 }
-
 
 @media screen and (max-width: 768px) {
     .earnings {
@@ -582,53 +584,58 @@
         }
     }
 
-    .statements-table {
-        min-width: 954px;
-        font-size: 14px;
+    .table-responsive {
+        .statements-table {
+            min-width: 954px;
+            font-size: 14px;
+            border: 1px solid #cdcfd5;
 
-        thead th {
-            background-color: #f1f1f1;
-            font-weight: 700;
-            color: #333;
-            padding: 12px;
-        }
+            thead th {
+                background-color: #f1f1f1;
+                font-weight: 700;
+                color: #333;
+                padding: 12px;
+                border-bottom: 1px solid #cdcfd5;
+            }
 
-        tbody {
-            tr {
-                td {
-                    padding: 16px;
-                    vertical-align: top;
+            tbody {
+                tr {
+                    td {
+                        padding: 16px;
+                        vertical-align: top;
+                        border-bottom: 1px solid #cdcfd5;
 
-                    .statement-info {
-                        span {
-                            font-size: 12px;
+                        .statement-info {
+                            span {
+                                font-size: 12px;
+                            }
+
+                            h4 {
+                                display: block;
+                                font-size: 16px;
+                                font-weight: 500;
+                                line-height: 25.6px;
+                            }
+
+                            a {
+                                font-size: 13px;
+                                color: #007bff;
+                                text-decoration: none;
+                            }
                         }
 
-                        h4 {
-                            display: block;
-                            font-size: 16px;
-                            font-weight: 500;
-                            line-height: 25.6px;
-                        }
+                        .earnings,
+                        .admin-gets {
+                            strong {
+                                display: block;
+                                font-size: 14px;
+                                color: #333;
+                            }
 
-                        a {
-                            font-size: 13px;
-                            color: #007bff;
-                            text-decoration: none;
-                        }
-                    }
-
-                    .earnings,
-                    .admin-gets {
-                        strong {
-                            display: block;
-                            font-size: 14px;
-                            color: #333;
-                        }
-
-                        small {
-                            font-size: 12px;
-                            color: #888;
+                            small {
+                                font-size: 12px;
+                                color: #888;
+                            }
                         }
                     }
                 }
@@ -702,6 +709,7 @@
         .students-table {
             min-width: 754px;
             font-size: 14px;
+            border: 1px solid #cdcfd5;
 
             thead th {
                 background-color: #f1f1f1;

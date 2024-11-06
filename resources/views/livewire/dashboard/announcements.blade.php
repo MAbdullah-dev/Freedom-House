@@ -33,7 +33,8 @@
                     <ul class="dropdown-menu p-3 w-100" id="courseList" aria-labelledby="courseDropdown">
                         <div class="input-group mb-2 position-relative">
                             <i class="fas fa-search position-absolute" aria-hidden="true"></i>
-                            <input type="text" class="form-control" id="courseSearchInput" placeholder="Search courses..." />
+                            <input type="text" class="form-control" id="courseSearchInput"
+                                placeholder="Search courses..." />
                         </div>
                         <li><a class="dropdown-item" href="#">Understanding Personality Disorders</a></li>
                         <li><a class="dropdown-item" href="#">Maintain Professional Boundaries</a></li>
@@ -45,12 +46,13 @@
             <div class="col-3">
                 <div class="dropdown flex-grow-1">
                     <label for="sortOrder" class="form-label">Sort Order</label>
-                    <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
-                        id="sortOrderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center"
+                        type="button" id="sortOrderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         DESC
                     </button>
                     <ul class="dropdown-menu p-3 w-100" aria-labelledby="sortOrderDropdown">
-                        <input type="text" class="form-control mb-2" id="sortOrderSearchInput" placeholder="Search sort order..." />
+                        <input type="text" class="form-control mb-2" id="sortOrderSearchInput"
+                            placeholder="Search sort order..." />
                         <li><a class="dropdown-item" href="#">ASC</a></li>
                         <li><a class="dropdown-item" href="#">DESC</a></li>
                     </ul>
@@ -69,73 +71,75 @@
             // ['date' => '2023-05-01', 'message' => 'Announcement 1'],
             // ['date' => '2023-05-02', 'message' => 'Announcement 2'],
             // ['date' => '2023-05-03', 'message' => 'Announcement 3'],
-        ])
+        ]);
     @endphp
     <div class="announcment-table mt-5">
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Announcment</th>
-              </tr>
-            </thead>
-            <tbody>
-                @if($announcements->isEmpty()) <!-- Check if the announcements collection is empty -->
+        <div class="card-table">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td colspan="2" class="text-center">
-                            <img src="{{ asset('assets/images/announcment.png') }}" alt="No Announcements" />
-                        </td>
+                        <th scope="col">Date</th>
+                        <th scope="col">Announcment</th>
                     </tr>
-                @else
-                    @foreach($announcements as $announcement) <!-- Assuming you have an announcements collection -->
-                    <tr>
-                        <td>{{ $announcement['date'] }}</td>
-                        <td>{{ $announcement['message'] }}</td>
-                    </tr>
-                    @endforeach
-                @endif
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                    @if ($announcements->isEmpty())
+                        <!-- Check if the announcements collection is empty -->
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <img src="{{ asset('assets/images/announcment.png') }}" alt="No Announcements" />
+                            </td>
+                        </tr>
+                    @else
+                        @foreach ($announcements as $announcement)
+                            <!-- Assuming you have an announcements collection -->
+                            <tr>
+                                <td>{{ $announcement['date'] }}</td>
+                                <td>{{ $announcement['message'] }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
 @script
-<script>
-    $(document).ready(function() {
-        // Search functionality for courses dropdown
-        $('#courseSearchInput').on('input', function() {
-            var searchTerm = $(this).val().toLowerCase();
-            $('#courseList li').each(function() {
-                var courseName = $(this).text().toLowerCase();
-                if (courseName.includes(searchTerm)) {
-                    $(this).show(); // Show the course if it matches
-                } else {
-                    $(this).hide(); // Hide the course if it doesn't match
-                }
+    <script>
+        $(document).ready(function() {
+            // Search functionality for courses dropdown
+            $('#courseSearchInput').on('input', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                $('#courseList li').each(function() {
+                    var courseName = $(this).text().toLowerCase();
+                    if (courseName.includes(searchTerm)) {
+                        $(this).show(); // Show the course if it matches
+                    } else {
+                        $(this).hide(); // Hide the course if it doesn't match
+                    }
+                });
+            });
+
+            // Search functionality for sort order dropdown
+            $('#sortOrderSearchInput').on('input', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                $('#sortOrderDropdown .dropdown-menu li').each(function() {
+                    var sortOrderName = $(this).text().toLowerCase();
+                    if (sortOrderName.includes(searchTerm)) {
+                        $(this).show(); // Show the sort option if it matches
+                    } else {
+                        $(this).hide(); // Hide the sort option if it doesn't match
+                    }
+                });
             });
         });
 
-        // Search functionality for sort order dropdown
-        $('#sortOrderSearchInput').on('input', function() {
-            var searchTerm = $(this).val().toLowerCase();
-            $('#sortOrderDropdown .dropdown-menu li').each(function() {
-                var sortOrderName = $(this).text().toLowerCase();
-                if (sortOrderName.includes(searchTerm)) {
-                    $(this).show(); // Show the sort option if it matches
-                } else {
-                    $(this).hide(); // Hide the sort option if it doesn't match
-                }
-            });
+        // Initialize Flatpickr
+        flatpickr("#calendar-input-students-tab", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
         });
-    });
-
-    // Initialize Flatpickr
-    flatpickr("#calendar-input-students-tab", {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "F j, Y",
-    });
-</script>
+    </script>
 @endscript
-
-
-
