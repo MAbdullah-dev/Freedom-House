@@ -1,8 +1,8 @@
 <div class="announcements px-4">
     <section class="announcement-card py-3 my-3">
-        <div class="row align-content-center justify-content-center">
-            <div class="col-7">
-                <ul class="d-flex align-items-center gap-3">
+        <div class="d-flex flex-wrap align-content-center justify-content-center">
+            <div class="col-md-7">
+                <ul class="d-flex align-items-center gap-3 w-100 flex-wrap">
                     <li>
                         <div class="announcement-icon d-flex align-items-center justify-content-center">
                             <i class="fa-solid fa-bullhorn"></i>
@@ -16,14 +16,14 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-5 d-flex justify-content-center align-items-center">
+            <div class="col-md-5 d-flex justify-content-center align-items-center">
                 <button class="button-primary">Add new Announcement</button>
             </div>
         </div>
     </section>
     <section class="filter-courses">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6">
                 <label for="courses" class="form-label">Courses</label>
                 <div class="dropdown">
                     <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center"
@@ -42,7 +42,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="dropdown flex-grow-1">
                     <label for="sortOrder" class="form-label">Sort Order</label>
                     <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
@@ -56,7 +56,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="date-input flex-grow-1">
                     <label for="date" class="form-label">Date</label>
                     <input type="date" class="form-control" id="calendar-input-students-tab" placeholder="Y-M-d" />

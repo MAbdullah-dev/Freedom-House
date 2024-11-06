@@ -84,7 +84,20 @@
                 </div>
 
                 <!-- Sort Dropdown -->
-                <div class="dropdown">
+                <div class="dropdown ">
+                    <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
+                        id="sortOrderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Release Date(Newest first)
+                    </button>
+                    <ul class="dropdown-menu p-3 w-100" aria-labelledby="sortOrderDropdown">
+                        <input type="text" class="form-control mb-2" id="sortOrderSearchInput" placeholder="Search sort order..." />
+                        <li><a class="dropdown-item" href="#">Course Title (a-z)</a></li>
+                        <li><a class="dropdown-item" href="#">Course Title (z-a)</a></li>
+                        <li><a class="dropdown-item" href="#">Date (Newest)</a></li>
+                        <li><a class="dropdown-item" href="#">Date (Oldest)</a></li>
+                    </ul>
+                </div>
+                {{-- <div class="dropdown">
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Dropdown link
                     </a>
@@ -94,7 +107,7 @@
                         <a class="dropdown-item" href="#">Date (Newest)</a>
                         <a class="dropdown-item" href="#">Date (Oldest)</a>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Offcanvas component -->

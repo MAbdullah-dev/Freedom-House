@@ -91,56 +91,60 @@
     <section class="tutor-course-detail py-3 mt-3">
         <div class="inner">
             <h4>My Courses</h4>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Course Name</th>
-                        <th scope="col">Enrolled</th>
-                        <th scope="col">Rating</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>The Complete Web Development Bootcamp</td>
-                        <td>3</td>
-                        <td>
-                            <span>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>The Complete Web Development Bootcamp</td>
-                        <td>3</td>
-                        <td>
-                            <span>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>The Complete Web Development Bootcamp</td>
-                        <td>3</td>
-                        <td>
-                            <span>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card-table">
+
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col">Course Name</th>
+                            <th scope="col">Enrolled</th>
+                            <th scope="col">Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>The Complete Web Development Bootcamp</td>
+                            <td>3</td>
+                            <td>
+                                <span>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The Complete Web Development Bootcamp</td>
+                            <td>3</td>
+                            <td>
+                                <span>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>The Complete Web Development Bootcamp</td>
+                            <td>3</td>
+                            <td>
+                                <span>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </section>
 </div>
