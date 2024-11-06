@@ -24,18 +24,10 @@
                     <div class="col d-flex flex-column py-3 gap-3">
                         <button class="button-primary">Register</button>
 
-                        <button class="button-secondary"><svg width="32" height="28" viewBox="0 0 32 28"
-                                fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15.2618 1.3335H1.97607V13.3335H15.2618V1.3335Z" fill="#F25022" />
-                                <path d="M15.2618 14.6665H1.97607V26.6665H15.2618V14.6665Z" fill="#00A4EF" />
-                                <path d="M30.0238 1.3335H16.738V13.3335H30.0238V1.3335Z" fill="#7FBA00" />
-                                <path d="M30.0238 14.6665H16.738V26.6665H30.0238V14.6665Z" fill="#FFB900" />
-                            </svg>
-                            <span class="ms-2">
-                                Sign in with Microsoft
-                            </span>
+                        <button class="button-secondary">
+                            <img src="{{asset('assets/svgs/microsift-icon.svg')}}" alt="">
+                            <span class="ms-2">continue with Microsoft</span>
                         </button>
-
                     </div>
                 </div>
             </div>

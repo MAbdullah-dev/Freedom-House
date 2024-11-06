@@ -67,11 +67,41 @@
         }
     }
     .announcment-table{
+        overflow-x: scroll;
         border-radius: 6px;
         table{
             thead{
                 td{
                     background-color:#F4F6F9 ;
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 768px) {
+        .announcement-card {
+            // border: 1px solid #00000040;
+            // border-radius: 6px;
+
+            .announcement-icon {
+                padding: 20px;
+                border-radius: 50%;
+                background-color: #E7ECE9;
+
+                i {
+                    font-size: 24px;
+                    color: $primary-color;
+                }
+            }
+
+            .announcement-text {
+                span {
+                    font-size: 12px;
+                    font-weight: 400;
+                }
+
+                p {
+                    font-size: 14px;
+                    font-weight: 400;
                 }
             }
         }

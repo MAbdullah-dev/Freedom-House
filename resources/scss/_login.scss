@@ -50,6 +50,11 @@
                         line-height: 24px;
                         letter-spacing: -0.015em;
                         color: $primary-color-v1;
+                        img{
+                            display: inline-block;
+                            height: 24px;
+                            width: 24px;
+                        }
                     }
                     margin-bottom: 55px;
                 }
@@ -59,6 +64,21 @@
                         font-size: 12px;
                         font-weight: 500;
                         line-height: 20px;
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 600px) {
+        form {
+            width: 100% !important;
+            .login_form {
+                .d-flex {
+                    .button-primary {
+                        font-size: 12px !important;
+                    }
+                    .button-secondary {
+                        font-size: 12px !important;
                     }
                 }
             }
