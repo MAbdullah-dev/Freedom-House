@@ -130,37 +130,6 @@
             }
         }
     }
-    .tutor-course-detail {
-        .card-table {
-            border: 1px solid #cdcfd5;
-            border-radius: 6px;
-            border-bottom: none !important;
-        }
-        table {
-            border: none !important;
-            thead {
-                th {
-                    padding: 9px 16px;
-                    font-size: 14px;
-                    line-height: 1.8;
-                    font-weight: 500;
-                    white-space: nowrap;
-                    color: #41454f;
-                }
-            }
-            tbody {
-                tr {
-                    border-bottom: 1px solid #cdcfd5;
-                    td {
-                        padding: 16px;
-                        font-size: 16px;
-                        line-height: 1.6;
-                        font-weight: 500;
-                    }
-                }
-            }
-        }
-    }
     @media screen and (max-width: 1400px) {
         .tutor-course-info {
             .course-box {

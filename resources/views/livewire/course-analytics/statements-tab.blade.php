@@ -9,10 +9,10 @@
                 </button>
                 <ul class="dropdown-menu p-3 w-100" aria-labelledby="coursesDropdown">
                     <input type="text" class="form-control mb-2" placeholder="Search courses..." />
-                    <li><a class="dropdown-item" href="#">Understanding Personality Disorders</a></li>
-                    <li><a class="dropdown-item" href="#">Maintain Professional Boundaries</a></li>
-                    <li><a class="dropdown-item" href="#">Clinical Documentation</a></li>
-                    <li><a class="dropdown-item" href="#">Mental Health Basics</a></li>
+                    <li>Understanding Personality Disorders</li>
+                    <li>Maintain Professional Boundaries</li>
+                    <li>Clinical Documentation</li>
+                    <li>Mental Health Basics</li>
                 </ul>
             </div>
         </div>
@@ -24,7 +24,7 @@
 
     <!-- Table -->
     <div class="table-responsive">
-        <table class="table statements-table">
+        <table class="table table-borderless statements-table">
             <thead>
                 <tr>
                     <th>Statement Info</th>
@@ -38,13 +38,13 @@
                         <div class="statement-info">
                             <span class="text-muted">Wc-checkout-draft · 2024-09-18</span><br />
                             <h4>Understanding Personality Disorders</h4><br />
-                            <a href="#" class="text-primary">Order ID: #1147</a>
+                            <a href="#" class="text-secondary">Order ID: #1147</a>
                         </div>
                     </td>
                     <td>
                         <div class="earnings">
                             <strong>$0.00</strong><br />
-                            <small class="text-muted">0.00% of $10.00</small>
+                            <small class="text-secondary">0.00% of $10.00</small>
                         </div>
                     </td>
                     <td>
