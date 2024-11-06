@@ -59,7 +59,7 @@
     <section class="course-progress py-2">
         <h4 class="my-5">In Progress Course</h4>
         <div class="progress-wrapper py-2">
-            <div class="inner">
+            <div class="inner p-2">
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="progress-course-img">

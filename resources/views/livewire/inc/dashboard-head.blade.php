@@ -10,12 +10,20 @@
                 </li>
             </ul>
         </div>
-        <div class="tutor-notification-request d-flex">
+        <div class="tutor-notification-request d-flex gap-2">
             <button class="offcanvas-btn" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
             <i class="fa-solid fa-bell"></i>
             </button>
             <button class="button-secondary" >became a instructor</button>
+        </div>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              .....
+            </div>
         </div>
     </div>
 </div>

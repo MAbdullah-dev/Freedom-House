@@ -1,5 +1,4 @@
 @media (max-width: 768px) {
-
     .dashboard,
     .wishlist,
     .settings,
@@ -9,35 +8,25 @@
     .view-enrollments {
         border: none;
     }
-
     .dashboard-main {
         flex-direction: column;
     }
-
     .dashboard-sidebar {
-        // display: none;
-        opacity: 0;
-        height: 0;
-        margin: 0 auto;
-        transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out;
+        display: none;
     }
-
     .dashboard-sidebar {
         &.visible {
-            opacity: 1;
-            height: auto;
+            display: block;
             margin: 0 auto;
         }
     }
-
     .courses-info-section {
         .course-detail {
             .course-box {
                 width: 100%;
             }
         }
-
-        .tutor-course-info {
+        .tutor-course-info{
             .course-box {
                 width: 100%;
             }
@@ -49,26 +38,21 @@
             margin-left: 0 !important;
         }
     }
-
     .tutor-dashboard-footer-mobile {
         display: block;
     }
-
     .dashboar-head {
         .tutor-notification-request {
             margin-left: 90px;
         }
     }
-
     .button-primary {
         padding: 12px 22px !important;
     }
-
     .button-secondary {
         padding: 12px 22px !important;
     }
 }
-
 @media (max-width: 576px) {
     .enrollments {
         .tutor-avatar {
@@ -93,15 +77,13 @@
             }
         }
     }
-
-    .dashboard-head {
+    .dashboard-head{
         .tutor-info {
             .tutor-avatar {
                 img {
                     width: 50px;
                     height: 50px;
                 }
-
                 li {
                     b {
                         font-size: 16px !important;
@@ -112,13 +94,11 @@
         }
     }
 }
-
 @media screen and (max-width: 456px) {
     .help-request-alert {
         padding: 5px !important;
     }
 }
-
 @media screen and (max-width: 320px) {
     .button-secondary {
         padding: 5px !important;
