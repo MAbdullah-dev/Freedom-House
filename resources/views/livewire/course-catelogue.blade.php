@@ -97,17 +97,6 @@
                         <li><a class="dropdown-item" href="#">Date (Oldest)</a></li>
                     </ul>
                 </div>
-                {{-- <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown link
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Course Title (a-z)</a>
-                        <a class="dropdown-item" href="#">Course Title (z-a)</a>
-                        <a class="dropdown-item" href="#">Date (Newest)</a>
-                        <a class="dropdown-item" href="#">Date (Oldest)</a>
-                    </div>
-                </div> --}}
             </div>
 
             <!-- Offcanvas component -->

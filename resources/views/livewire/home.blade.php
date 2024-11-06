@@ -28,7 +28,9 @@
                                 <p class="card-text my-3">A recovery-oriented system of care is a network of clinical
                                     and nonclinical services and supports that sustain long-term, community-based
                                     substance use recovery. While co…</p>
-                                <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
+                                <div class="card-btn">
+                                    <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -41,8 +43,10 @@
                                 <p class="card-text my-3">Maintaining Professional Boundaries is a training for helping
                                     professionals focusing on the importance of professional boundary setting, common
                                     types of boundary crossing.</p>
-                                <a class="button-primary mt-3" href="{{ route('course.details') }}" wire:navigate
-                                    class="btn btn-primary">Learn more</a>
+                                <div class="card--btn">
+                                    <a class="button-primary mt-3" href="{{ route('course.details') }}" wire:navigate
+                                        class="btn btn-primary">Learn more</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -55,7 +59,9 @@
                                 <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on
                                     suicide prevention techniques and conversation strategies. This training also
                                     provides resources to help your.</p>
-                                <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
+                                <div class="card-btn">
+                                    <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -68,7 +74,9 @@
                                 <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on
                                     suicide prevention techniques and conversation strategies. This training also
                                     provides resources to help your.</p>
-                                <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
+                                <div class="card-btn">
+                                    <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
+                                </div>
                             </div>
                         </div>
                     </div>

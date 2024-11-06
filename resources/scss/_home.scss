@@ -1,9 +1,12 @@
 .home {
     .hero-section {
-        background-repeat: no-repeat; /* No repetition */
-        background-size: cover; /* Resize the background image to cover the entire container */
+        background-repeat: no-repeat;
+        /* No repetition */
+        background-size: cover;
+        /* Resize the background image to cover the entire container */
         background-position: center;
         background-attachment: fixed;
+
         h3 {
             font-size: 19px;
             font-weight: 500;
@@ -18,12 +21,14 @@
             margin-top: 120px !important;
             text-align: center;
         }
+
         h1 {
             font-size: 63px;
             font-weight: 700;
             line-height: 75px;
             color: #fff;
         }
+
         .hero-cta-btn {
             a {
                 color: #fff;
@@ -38,8 +43,10 @@
             }
         }
     }
+
     .featured-content {
         margin: 80px 0;
+
         h2 {
             font-size: 48px;
             font-weight: 500;
@@ -47,20 +54,35 @@
             letter-spacing: 5%;
             color: #1e1e1e;
             margin-bottom: 60px;
+            position: relative;
+
+            &::before {
+                content: "";
+                height: 8px;
+                width: 90px;
+                position: absolute;
+                left: 0;
+                bottom: -5px;
+                background-color: #F4461F;
+            }
             span {
-                border-bottom: 4px solid $primary-color;
+
+                // border-bottom: 4px solid $primary-color;
             }
         }
+
         .featured-cards {
             .card {
                 border-radius: 25px;
                 margin: 40px 20px;
                 border: none;
+
                 img {
                     border-radius: 30px;
                     object-fit: cover;
                     padding: 15px;
                 }
+
                 .card-body {
                     margin-bottom: 20px;
                     display: flex;
@@ -68,6 +90,7 @@
                     min-height: 341px;
                     justify-content: end;
                 }
+
                 h5 {
                     color: $primary-color;
                     font-size: 18px;
@@ -76,6 +99,7 @@
                     letter-spacing: 1px;
                     padding: 10px 0;
                 }
+
                 p {
                     font-size: 16px;
                     font-weight: 400;
@@ -84,12 +108,14 @@
                     margin-bottom: 40px !important;
                 }
             }
+
             .swiper-button-prev {
                 margin: 0 !important;
                 top: 0;
                 top: 0;
                 left: 0;
                 width: unset;
+
                 &::after {
                     font-size: 13px;
                     font-weight: 700;
@@ -99,6 +125,7 @@
                     border-radius: 50%;
                 }
             }
+
             .swiper-button-next {
                 margin: 0 !important;
                 top: 0;
@@ -117,30 +144,36 @@
             }
         }
     }
+
     .Learning-Benefits {
         .benifits {
             max-width: 50%;
+
             h6 {
                 color: $primary-color;
             }
+
             h2 {
                 font-size: 46px;
                 font-weight: 600;
                 line-height: 43px;
                 color: #161616;
             }
+
             p {
                 font-size: 16px;
                 line-height: 16px;
                 line-height: 30px;
                 color: #6b6b6b;
             }
+
             .sub-beifits {
                 img {
                     width: 35px;
                     height: 46px;
                     object-fit: contain;
                 }
+
                 span {
                     font-size: 18px;
                     line-height: 34px;
@@ -149,14 +182,17 @@
                 }
             }
         }
+
         .benifit-img {
             max-width: 50%;
+
             img {
                 width: 100%;
                 object-fit: contain;
             }
         }
     }
+
     // .news-letter {
     //     margin: 20px 0;
     //     .row {
@@ -196,29 +232,35 @@
             h1 {
                 font-size: 40px;
             }
+
             .hero-cta-btn {
                 a {
                     margin-bottom: 50px;
                 }
             }
         }
+
         .Learning-Benefits {
             .benifits {
                 max-width: 100%;
             }
+
             .benifit-img {
                 max-width: 100%;
             }
         }
     }
+
     @media (max-width: 768px) {
         .hero-section {
             h3 {
                 font-size: 14px;
             }
+
             h1 {
                 font-size: 30px;
             }
+
             .hero-cta-btn {
                 a {
                     margin-bottom: 20px;
@@ -231,15 +273,18 @@
                 }
             }
         }
+
         .Learning-Benefits {
             .benifits {
                 h2 {
                     font-size: 20px;
                 }
+
                 p {
                     font-size: 14px;
                     line-height: 20px;
                 }
+
                 .sub-beifits {
                     span {
                         font-size: 11px;
@@ -247,6 +292,7 @@
                 }
             }
         }
+
         // .news-letter {
         //     .news-letter-content {
         //         h6 {
@@ -258,20 +304,24 @@
         //     }
         // }
     }
+
     @media (max-width: 576px) {
         .hero-section {
             h3 {
                 font-size: 10px;
             }
+
             h1 {
                 font-size: 20px;
             }
+
             .hero-cta-btn {
                 a {
                     margin-bottom: 20px;
                 }
             }
         }
+
         .featured-content {
             .featured-cards {
                 .card {
@@ -279,6 +329,7 @@
                         h5 {
                             font-size: 16px;
                         }
+
                         p {
                             font-size: 14px;
                         }
@@ -287,6 +338,7 @@
             }
         }
     }
+
     @media (max-width: 450px) {
         .featured-content {
             h2 {
