@@ -2,9 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CourseInstructor extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'course_id',
+        'tutor_id'
+    ];
+
+    public $timestamps = false;
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function tutor()
+    {
+        return $this->belongsTo(Tutor::class);
+    }
 }

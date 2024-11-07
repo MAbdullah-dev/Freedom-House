@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('token');
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('expires_at');
+            $table->timestamps();
         });
     }
 
