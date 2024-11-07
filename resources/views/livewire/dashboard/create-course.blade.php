@@ -1,14 +1,14 @@
-<div class="create-course-main">
+<div class="create-course-main" x-data="{ courseTitle: '', description: '', category: '', file: null, instructors: [] }">
     <header class="custom-header">
         <div class="container-fluid px-5">
             <div class="header-wrapper d-flex justify-content-between align-items-center mb-2">
                 <img src="{{ asset('assets/svgs/Brand-NameHeader.png.svg') }}" alt="Logo" class="logo">
                 <div class="actions">
-                    <button type="submit" class="btn button-draft custom-draft-button">
+                    <button type="button" class="btn button-draft custom-draft-button" @click="$dispatch('save-draft', { courseTitle, description, category, file, instructors })">
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
                     </button>
-                    <button type="submit" class="btn button-preview me-2 custom-preview-button">Preview</button>
-                    <button type="submit" class="btn button-submit custom-submit-button">Submit</button>
+                    <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button>
+                    <button type="button" class="btn button-submit custom-submit-button" @click="$dispatch('submit-course', { courseTitle, description, category, file, instructors })">Submit</button>
                     <a href="" class="custom-close-link ms-1">
                         <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
                     </a>
@@ -18,7 +18,7 @@
     </header>
 
     <div class="container my-5">
-        <form>
+        <form wire:submit.prevent="submitCourse">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="accordion" id="courseAccordion">
@@ -38,26 +38,23 @@
                                         <!-- Course Title -->
                                         <div class="mb-3">
                                             <label for="courseTitle" class="form-label">Course Title</label>
-                                            <input type="text" class="form-control" id="courseTitle"
-                                                placeholder="New Course">
+                                            <input type="text" class="form-control" id="courseTitle" x-model="courseTitle" placeholder="New Course">
                                         </div>
                                         <!-- Description -->
                                         <div class="mb-3">
                                             <label for="description" class="form-label">Description</label>
-                                            <textarea class="form-control" id="description" rows="4" placeholder="Enter Description"></textarea>
+                                            <textarea class="form-control" id="description" rows="4" x-model="description" placeholder="Enter Description"></textarea>
                                         </div>
                                         <!-- Category Dropdown -->
                                         <label class="mt-3 mb-1" for="course_category">Choose a Category</label>
                                         <div class="dropdown">
-                                            <input type="text" id="course_category"
-                                                class="form-control dropdown-toggle"
-                                                placeholder="Search Course Category" data-bs-toggle="dropdown"
+                                            <input type="text" id="course_category" class="form-control dropdown-toggle"
+                                                x-model="category" placeholder="Search Course Category" data-bs-toggle="dropdown"
                                                 aria-expanded="false" autocomplete="off">
                                             <ul class="dropdown-menu w-100" aria-labelledby="course_category">
-                                                <li><button class="dropdown-item" type="button">Ethics</button></li>
-                                                <li><button class="dropdown-item" type="button">Featured</button></li>
-                                                <li><button class="dropdown-item" type="button">Mental Health</button>
-                                                </li>
+                                                <li><button class="dropdown-item" type="button" @click="category = 'Ethics'">Ethics</button></li>
+                                                <li><button class="dropdown-item" type="button" @click="category = 'Featured'">Featured</button></li>
+                                                <li><button class="dropdown-item" type="button" @click="category = 'Mental Health'">Mental Health</button></li>
                                             </ul>
                                         </div>
                                         <!-- Course Thumbnail -->
@@ -65,17 +62,15 @@
                                             <div class="col-md-4">
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3" id="thumbnailPreview">
-                                                    <img src="{{ asset('assets/images/dummy-course-img.png') }}"
-                                                        style="width: 250px; height: 150px" alt="Course Thumbnail"
-                                                        id="previewImage">
+                                                    <img :src="file ? URL.createObjectURL(file) : '{{ asset('assets/images/dummy-course-img.png') }}'"
+                                                         style="width: 250px; height: 150px" alt="Course Thumbnail" id="previewImage">
                                                 </div>
                                             </div>
                                             <div class="col-md-5 d-flex flex-column justify-content-center">
                                                 <p class="mb-1 text-secondary">Size: 700x430 pixels</p>
                                                 <p class="mb-2 text-secondary">File Support: JPG, PNG</p>
-                                                <input type="file" id="imageUpload" accept="image/*"
-                                                    style="display: none;">
-                                                <a class="btn btn-success" id="uploadButton">
+                                                <input type="file" id="imageUpload" accept="image/*" style="display: none;" @change="file = $event.target.files[0]">
+                                                <a class="btn btn-success" @click="$refs.imageUpload.click()">
                                                     <i class="bi bi-upload me-1"></i> Upload Image
                                                 </a>
                                             </div>
@@ -112,15 +107,13 @@
                                     Instructors
                                 </button>
                             </h2>
-                            <div id="collapseInstructors" class="accordion-collapse collapse"
-                                aria-labelledby="add_instructors">
+                            <div id="collapseInstructors" class="accordion-collapse collapse" aria-labelledby="add_instructors">
                                 <div class="accordion-body">
                                     <div class="mb-3">
                                         <div class="instructor-card">
                                             <div class="instructor-card-wrapper my-3 d-flex align-items-center">
                                                 <div class="instructor-avatar">
-                                                    <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}"
-                                                        alt="Autumn Green" class="avatar-image">
+                                                    <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}" alt="Autumn Green" class="avatar-image">
                                                 </div>
                                                 <div class="instructor-info">
                                                     <div class="instructor-header">
@@ -133,7 +126,7 @@
                                                 </div>
                                             </div>
                                             <div class="add-instructor-btn">
-                                                <button class="button-secondary">Add Instructor</button>
+                                                <button type="button" class="button-secondary" @click="instructors.push('Autumn Green')">Add Instructor</button>
                                             </div>
                                         </div>
                                     </div>
@@ -175,10 +168,8 @@
                                             autocomplete="off">
                                         <ul class="dropdown-menu w-100" aria-labelledby="course_tags">
                                             <li><button class="dropdown-item" type="button">Training</button></li>
-                                            <li><button class="dropdown-item" type="button">Substance Abuse
-                                                    Training</button></li>
-                                            <li><button class="dropdown-item" type="button">Mental Health First
-                                                    Aid</button></li>
+                                            <li><button class="dropdown-item" type="button">Substance Abuse Training</button></li>
+                                            <li><button class="dropdown-item" type="button">Mental Health First Aid</button></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -208,46 +199,14 @@
 </div>
 
 <script>
-    // Script to handle dropdown value selection
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', event => {
-            const inputField = event.target.closest('.dropdown').querySelector('input');
-            inputField.value = event.target.textContent.trim().replace(/\s+/g, ' ');
+    // This handles the Alpine.js components
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('courseStore', {
+            courseTitle: '',
+            description: '',
+            category: '',
+            file: null,
+            instructors: []
         });
-    });
-
-    // Handle the upload image button click
-    document.getElementById('uploadButton').addEventListener('click', function() {
-        document.getElementById('imageUpload').click();
-    });
-
-    // Preview uploaded image
-    document.getElementById('imageUpload').addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('previewImage').src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Implement search functionality for dropdown
-    document.getElementById('course_category').addEventListener('input', function() {
-        const filter = this.value.toLowerCase();
-        const items = this.nextElementSibling.querySelectorAll('.dropdown-item');
-
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(filter) ? '' : 'none';
-        });
-    });
-
-    // Initialize TinyMCE
-    tinymce.init({
-        selector: '#description',
-        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed formatpainter advtable advcode',
-        toolbar: 'undo redo | bold italic underline strikethrough | link image media table checklist numlist bullist | removeformat',
     });
 </script>
