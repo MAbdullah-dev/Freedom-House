@@ -5,10 +5,10 @@
             <h6>M Abdullah</h6>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-xl-6 mb-3">
                 <input type="text" class="mb-3" id="calendar-input" placeholder="Select date" />
             </div>
-            <div class="col-md-3">
+            <div class="col-xl-3 mb-3">
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button"
                         id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -29,8 +29,8 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-3">
-                <button type="button" class="button-primary" data-bs-toggle="modal" data-bs-target="#create-class"><i
+            <div class="col-xl-3 mb-3">
+                <button type="button" class="button-primary w-100" data-bs-toggle="modal" data-bs-target="#create-class"><i
                         class="fa-solid fa-plus"></i> New Event</button>
             </div>
         </div>

@@ -39,6 +39,9 @@
                 box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
             }
         }
+        button{
+            width: max-content;
+        }
 
         // Timezone Dropdown
         .dropdown {
@@ -187,53 +190,53 @@
         }
     }
 
-    #multiStepForm {
+    // #multiStepForm {
 
-        input,
-        textarea,
-        select {
-            box-shadow: none;
-            outline: none;
+    //     input,
+    //     textarea,
+    //     select {
+    //         box-shadow: none;
+    //         outline: none;
 
-            &:focus {
-                border: 1px solid #dee2e6;
-            }
+    //         &:focus {
+    //             border: 1px solid #dee2e6;
+    //         }
 
-            option {
-                background-color: transparent;
-                color: #212529;
+    //         option {
+    //             background-color: transparent;
+    //             color: #212529;
 
-                &:hover {
-                    background-color: #f0ad4e;
-                    /* Replace with desired color */
-                    color: #fff;
-                    /* Optional: change text color */
-                }
+    //             &:hover {
+    //                 background-color: #f0ad4e;
+    //                 /* Replace with desired color */
+    //                 color: #fff;
+    //                 /* Optional: change text color */
+    //             }
 
-                // &:focus {
-                //     background-color: #4caf50 !important;
+    //             // &:focus {
+    //             //     background-color: #4caf50 !important;
 
-                // }
-            }
-        }
+    //             // }
+    //         }
+    //     }
 
-        .dropdown {
-            .dropdown-toggle {
-                width: 100%;
-                border: 1px solid #cdcfd5;
-                border-radius: 6px;
-                background-color: transparent;
-                padding: 6px 12px;
-            }
+    //     .dropdown {
+    //         .dropdown-toggle {
+    //             width: 100%;
+    //             border: 1px solid #cdcfd5;
+    //             border-radius: 6px;
+    //             background-color: transparent;
+    //             padding: 6px 12px;
+    //         }
 
-            .dropdown-menu {
-                input {
-                    margin-bottom: 8px;
-                    width: 100%;
-                }
-            }
-        }
-    }
+    //         .dropdown-menu {
+    //             input {
+    //                 margin-bottom: 8px;
+    //                 width: 100%;
+    //             }
+    //         }
+    //     }
+    // }
 
     // Responsive adjustments
     @media (max-width: 992px) {
