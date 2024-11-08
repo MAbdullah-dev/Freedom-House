@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tutors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->text('bio')->nullable();
             $table->string('specialization')->nullable();
             $table->enum('preferred_teaching_method', ['online', 'in-person'])->nullable();

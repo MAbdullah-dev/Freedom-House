@@ -11,9 +11,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="icon" href="{{ asset('assets/images/fav-icon.png') }}" type="image/png">
-
-    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     @livewireStyles
+    @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     <title>{{ $title ?? 'Page Title' }}</title>
 </head>
 
@@ -23,6 +22,7 @@
         {{ $slot }}
     </main>
     <livewire:inc.footer />
+
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

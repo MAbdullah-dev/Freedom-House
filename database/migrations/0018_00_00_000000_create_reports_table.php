@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('class_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->boolean('attended');
             $table->timestamp('join_time')->nullable();
             $table->timestamp('leave_time')->nullable();

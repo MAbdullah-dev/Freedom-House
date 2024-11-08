@@ -17,6 +17,7 @@ use App\Livewire\Dashboard\DashboardSettings;
 use App\Livewire\Dashboard\DashboardWishlist;
 use App\Livewire\Dashboard\MyCourses;
 use App\Livewire\Dashboard\ScheduleClasses;
+use App\Livewire\Dashboard\Tags;
 use App\Livewire\Home as LivewireHome;
 use App\Livewire\Inc\DashboardFooter;
 use App\Livewire\Login;
@@ -52,3 +53,4 @@ Route::get('/dashboard/scehedule-classes',ScheduleClasses::class)->name('dashboa
 Route::get('/dashboard/create-course',CreateCourse::class)->name('dashboard.create-course');
 Route::get('/dashboard/course/details',CourseDetail::class)->name('dashboard.course.details');
 Route::get('dashboard/categories',Category::class)->name('dashboard.categories');
+Route::get('dashboard/tags',Tags::class)->name('dashboard.tags');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('analytics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->integer('total_classes');
             $table->integer('total_bookings');
             $table->integer('total_revenue');
