@@ -17,10 +17,6 @@ class CourseRating extends Model
         'is_rated',
     ];
 
-    /**
-     * Relationship to Course.
-     * A CourseRating is associated with a Course.
-     */
     public function course()
     {
         return $this->belongsTo(Course::class);

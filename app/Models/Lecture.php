@@ -9,7 +9,7 @@ class Lecture extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['class_id', 'file_path'];
+    protected $fillable = ['class_id', 'vimeo_url'];
 
     public function class()
     {

@@ -9,10 +9,16 @@ class TutorFile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tutor_id', 'file'];
+    protected $fillable = [
+        'tutor_id',
+        'file',
+        'type', 
+    ];
 
     public function tutor()
     {
-        return $this->belongsTo(User::class, 'tutor_id');
+        return $this->belongsTo(User::class, 'tutor_id')->whereHas('roles', function ($query) {
+            $query->where('name', 'Tutor'); 
+        });
     }
 }

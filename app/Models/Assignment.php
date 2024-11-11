@@ -16,25 +16,19 @@ class Assignment extends Model
         'file_path',
     ];
 
-    /**
-     * Get the user who created the assignment.
-     */
+    
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * The classes that this assignment belongs to.
-     */
+    
     public function classes()
     {
         return $this->belongsToMany(Classe::class, 'assignment_class')->withTimestamps();
     }
 
-    /**
-     * Get the submissions for the assignment.
-     */
+   
     public function submissions()
     {
         return $this->hasMany(AssignmentSubmission::class);

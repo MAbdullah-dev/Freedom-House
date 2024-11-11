@@ -10,15 +10,15 @@ class PasswordReset extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'email',
         'token',
-        'expires_at'
+        'created_at'
     ];
 
     public $timestamps = false;
-
-    public function user()
+    
+    public function getCreatedAtColumn()
     {
-        return $this->belongsTo(User::class);
+        return 'created_at';
     }
 }

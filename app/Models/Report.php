@@ -10,21 +10,21 @@ class Report extends Model
     use HasFactory;
 
     protected $fillable = [
-        'reportable_id',
-        'reportable_type',
+        'class_id',
         'user_id',
-        'reason',
-        'status'
+        'attended',
+        'join_time',
+        'leave_time',
+        'watch_time',
     ];
 
-    /**
-     * Get the owning reportable model.
-     */
-    public function reportable()
+ 
+    public function class()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Classe::class);
     }
 
+   
     public function user()
     {
         return $this->belongsTo(User::class);

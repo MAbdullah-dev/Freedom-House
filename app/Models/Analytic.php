@@ -21,7 +21,7 @@ class Analytic extends Model
         'data' => 'json'
     ];
 
-
+   
     public function entity()
     {
         return $this->morphTo();

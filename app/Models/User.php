@@ -15,8 +15,6 @@ class User extends Model
         'email',
         'first_name',
         'last_name',
-        'password',
-        'role',
         'pfp',
         'cover_photo',
         'bio',
@@ -24,6 +22,8 @@ class User extends Model
         'is_verified',
         'microsoft_id'
     ];
+
+    protected $hidden = ['password', 'remember_token'];
 
     public function roles()
     {
@@ -59,8 +59,29 @@ class User extends Model
     {
         return $this->hasMany(Review::class);
     }
+
     public function assignmentSubmissions()
     {
         return $this->hasMany(AssignmentSubmission::class);
+    }
+
+    public function calendarEvents()
+    {
+        return $this->hasMany(CalendarEvent::class);
+    }
+
+    public function helpRequests()
+    {
+        return $this->hasMany(Request::class);
+    }
+
+    public function quizSubmissions()
+    {
+        return $this->hasMany(QuizSubmission::class);
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
     }
 }
