@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('assignment_submissions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade'); // Assignment being submitted
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // User submitting the assignment
-            $table->string('file_path')->nullable(); // Path to the submitted file
-            $table->enum('grade', ['A', 'B', 'C', 'D', 'E', 'F'])->nullable(); // Grade for the submission
-            $table->boolean('is_graded')->default(false); // Whether the submission has been graded
+            $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('file_path')->nullable();
+            $table->enum('grade', ['A', 'B', 'C', 'D', 'E', 'F'])->nullable();
+            $table->boolean('is_graded')->default(false);
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tutor_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tutor_id')->constrained('tutors')->onDelete('cascade');
+            $table->foreignId('tutor_id')->constrained('tutors')->onDelete('cascade')->cascadeOnUpdate();
             $table->string('file_path');
             $table->enum('preferred_teaching_method', ['certificate','resume', 'license', 'others'])->nullable();
             $table->timestamps();

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assignment_classes', function (Blueprint $table) {
           $table->id();
-          $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade');
+          $table->foreignId('assignment_id')->constrained('assignments')->onDelete('cascade')->cascadeOnUpdate();
           $table->foreignId('user_id')->constrained()->onDelete('cascade');
           $table->string('file_path')->nullable();
           $table->enum('grade', ['A', 'B', 'C', 'D', 'F'])->nullable();

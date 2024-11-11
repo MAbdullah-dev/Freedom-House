@@ -11,7 +11,7 @@ return new class extends Migration
     {
        Schema::create('analytics', function (Blueprint $table) {
     $table->id();
-    $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+    $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
     $table->string('event');  
     $table->string('entity_type');
     $table->unsignedBigInteger('entity_id'); 

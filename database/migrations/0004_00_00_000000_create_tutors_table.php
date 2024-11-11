@@ -17,6 +17,10 @@ return new class extends Migration
             $table->text('bio');
             $table->string('specialization');
             $table->enum('preferred_teaching_method', ['online', 'in-person']);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
+            $table->text('bio')->nullable();
+            $table->string('specialization')->nullable();
+            $table->enum('preferred_teaching_method', ['online', 'in-person'])->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });

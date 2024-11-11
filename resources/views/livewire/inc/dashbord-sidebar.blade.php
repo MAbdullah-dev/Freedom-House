@@ -66,6 +66,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.categories' ? 'active' : '' }}"
+                        href="{{ route('dashboard.categories') }}" wire:navigate>
+                        <i class="fa-solid fa-table-list"></i> categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tags' ? 'active' : '' }}"
+                        href="{{ route('dashboard.tags') }}" wire:navigate>
+                        <i class="fa-solid fa-tag"></i> Tags
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.settings' ? 'active' : '' }}"
                         href="{{ route('dashboard.settings') }}" wire:navigate>
                         <i class="fas fa-cog"></i> Settings

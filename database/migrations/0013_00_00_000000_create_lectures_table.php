@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('lectures', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
+            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade')->cascadeOnUpdate();
             $table->string('vimeo_url');
             $table->timestamp('uploaded_at')->useCurrent();
             $table->timestamps();

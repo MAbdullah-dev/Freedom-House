@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
              $table->id();
-             $table->foreignId('class_id')->constrained()->onDelete('cascade');
-             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+             $table->foreignId('class_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
              $table->boolean('attended')->default(false);  
              $table->timestamp('join_time')->nullable();  // virtual team classes
              $table->timestamp('leave_time')->nullable(); // virtual team classes
