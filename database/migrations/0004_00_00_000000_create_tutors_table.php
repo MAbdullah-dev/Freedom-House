@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('tutors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('bio')->nullable();
-            $table->string('specialization')->nullable();
-            $table->enum('preferred_teaching_method', ['online', 'in-person'])->nullable();
+            $table->text('bio');
+            $table->string('specialization');
+            $table->enum('preferred_teaching_method', ['online', 'in-person']);
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });

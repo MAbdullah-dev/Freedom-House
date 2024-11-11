@@ -21,7 +21,10 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->text('bio')->nullable();
             $table->string('password');
-            $table->text('pfp')->nullable();
+            $table->string('pfp')->nullable();
+            $table->string('cover_photo')->nullable();
+            $table->boolean('is_verified')->default(false);
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
