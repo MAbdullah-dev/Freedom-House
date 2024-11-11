@@ -11,7 +11,6 @@ class Tags extends Component
     use LivewireAlert;
 
     public $name;
-    public $tags; // Add this property to store the list of tags
     public $search = '';
     public $tagIdBeingDeleted = null;
     public $tagIdBeingUpdated = null;
@@ -22,13 +21,11 @@ class Tags extends Component
 
     public function mount()
     {
-        $this->tags = Tag::all();
-        $this->refreshTagList(); // Populate tags on component load
+        $this->refreshTagList();
     }
 
     public function refreshTagList()
     {
-        // Update the tags list based on the search input
         $this->tags = Tag::where('name', 'like', '%' . $this->search . '%')->get();
     }
 
@@ -43,7 +40,6 @@ class Tags extends Component
 
     public function updatedSearch()
     {
-        // Refresh tags list whenever search input is updated
         $this->refreshTagList();
     }
 
@@ -54,7 +50,7 @@ class Tags extends Component
 
     public function destroyTag()
     {
-        Tag::find($this->tagIdBeingDeleted)->delete();
+        Tag::findOrFail($this->tagIdBeingDeleted)->delete();
         $this->alert('success', 'Tag deleted successfully.');
         $this->reset('tagIdBeingDeleted');
         $this->refreshTagList();
@@ -80,16 +76,18 @@ class Tags extends Component
         $this->alert('success', 'Tag updated successfully.');
         $this->reset(['tagIdBeingUpdated', 'name']);
         $this->refreshTagList();
-
-        $this->dispatch('close-modal'); // Close modal after update
+        $this->dispatch('close-modal');
     }
 
     public function closeModal()
     {
         $this->reset(['tagIdBeingDeleted', 'tagIdBeingUpdated', 'name']);
     }
+
     public function render()
     {
-        return view('livewire.dashboard.tags')->layout('components.layouts.dashboard');
+        return view('livewire.dashboard.tags', [
+            'tags' => Tag::where('name', 'like', '%' . $this->search . '%')->get(),
+        ])->layout('components.layouts.dashboard');
     }
 }
