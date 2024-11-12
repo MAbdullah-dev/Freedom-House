@@ -6,7 +6,10 @@
             <p>We have the best specialists in your region. Quality and professionalism is our slogan</p>
         </div>
 
-        <form wire:submit.prevent="register" class="form w-75 w-lg-50 w-md-75 w-sm-100 mx-auto">
+        <form wire:submit.prevent="register" style="position: relative" class="form w-75 w-lg-50 w-md-75 w-sm-100 mx-auto">
+            <div wire:loading wire:target="register" class="loading-spinner">
+                <div class="spinner"></div>
+            </div>
             <div class="register_form">
                 <h6 class="text-center">Your Information</h6>
                 @if (session('success'))

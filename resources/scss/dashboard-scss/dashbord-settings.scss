@@ -130,36 +130,23 @@
                 opacity: 1;
                 transform: translateX(-50%) scale(1.1);
             }
-
-            .dropdown-menu {
-                top: 100%; /* Opens downward */
-                left: 50%;
-                transform: translateX(-50%);
-                min-width: 120px;
-                background-color: rgba(0, 0, 0, 0.8);
-                color: #fff;
-                border-radius: 6px;
-                padding: 5px 0;
-                box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            }
         }
 
-        /* Dropdown Menu */
-        .dropdown-menu {
-            position: absolute;
-            top: 100%; /* Ensures the dropdown opens downward */
-            left: 50%;
-            transform: translateX(-50%);
-            min-width: 120px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            border-radius: 6px;
-            padding: 5px 0;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
+        // .dropdown-menu {
+        //     position: absolute;
+        //     top: 100%;
+        //     left: 50%;
+        //     transform: translateX(-50%);
+        //     min-width: 120px;
+        //     background-color: rgba(0, 0, 0, 0.8);
+        //     color: #fff;
+        //     border-radius: 6px;
+        //     padding: 5px 0;
+        //     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        //     opacity: 0;
+        //     visibility: hidden;
+        //     transition: opacity 0.3s ease, visibility 0.3s ease;
+        // }
 
         .profile-photo-wrapper:hover .dropdown-menu {
             opacity: 1;

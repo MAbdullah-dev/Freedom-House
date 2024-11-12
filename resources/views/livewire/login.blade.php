@@ -4,8 +4,11 @@
 
 
 
-        <form wire:submit.prevent="login" class="form w-50">
+        <form wire:submit.prevent="login" class="form position-relative w-50">
             <div class="login_form">
+                <div wire:loading wire:target="login" class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
                 @if (session()->has('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}

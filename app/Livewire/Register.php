@@ -18,6 +18,7 @@ class Register extends Component
 
    public function register()
 {
+    // dd(request()->all());
     $this->validate([
         'first_name' => 'required|string|max:50',
         'last_name' => 'required|string|max:50',
@@ -51,7 +52,8 @@ class Register extends Component
         DB::commit();
 
         session()->flash('success', 'Registration successful! Please check your email to verify your account.');
-        return redirect()->route('login');
+         $this->resetForm();
+        // return redirect()->route('login');
     } catch (\Exception $e) {
         DB::rollBack();
         session()->flash('error', 'Something went wrong. Please try again.');
@@ -64,6 +66,11 @@ class Register extends Component
         $verificationUrl = route('verify.email', ['token' => $user->verification_token]);
         Mail::to($user->email)->send(new EmailVerificationMail($verificationUrl));
     }
+private function resetForm()
+{
+    $this->reset(['first_name', 'last_name', 'email', 'phone', 'password', 'confirm_password']);
+}
+
 
     public function render()
     {

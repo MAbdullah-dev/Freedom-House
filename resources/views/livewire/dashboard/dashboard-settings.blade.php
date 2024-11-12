@@ -27,7 +27,7 @@
                 @if ($user->cover_photo)
                     <img src="{{ asset('storage/' . $user->cover_photo) }}" class="cover-photo" alt="Cover Photo">
                 @else
-                    <img src="{{ asset('assets/images/cover-photo.png') }}" class="cover-photo" alt="Cover Photo">
+                    <img src="{{ asset('assets/images/dummy-cover-photo.jpg') }}" class="cover-photo" alt="Cover Photo">
                 @endif
 
                 <!-- Update Cover Photo Button -->
@@ -49,17 +49,18 @@
             </div>
 
             <!-- Profile Photo Section -->
-            <div class="profile-photo-wrapper position-relative d-inline-block">
-                @if ($user->profile_photo)
-                    <img src="{{ asset('storage/' . $user->profile_photo) }}" class="profile-photo rounded-circle"
-                        alt="Profile Photo">
-                @else
-                    <img src="{{ asset('assets/images/image (1).png') }}" class="profile-photo rounded-circle"
-                        alt="Profile Photo">
-                @endif
-
-                <!-- Camera Button with Dropdown -->
-                <div class="dropdown position-absolute" style="bottom: 5px; right: 5px;">
+            <div>
+                <div class="profile-photo-wrapper d-inline-block">
+                    @if ($user->profile_photo)
+                        <img src="{{ asset('storage/' . $user->profile_photo) }}" class="profile-photo rounded-circle"
+                            alt="Profile Photo">
+                    @else
+                        <img src="{{ asset('assets/images/dummy-profile-photo.png') }}"
+                            class="profile-photo rounded-circle" alt="Profile Photo">
+                    @endif
+                    <!-- Camera Button with Dropdown -->
+                </div>
+                <div class="dropdown">
                     <button class="btn btn-light btn-circle" id="profileDropdown" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="fas fa-camera"></i>
