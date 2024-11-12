@@ -47,10 +47,8 @@
 
                 .row {
                     .col {
-                        label {
-                        }
                         input {
-                            padding: 10px 20px; // Padding for better touch interaction
+                            padding: 10px 20px;
                             border: 1px solid #00000099;
                             outline: none;
                             &:focus {
@@ -90,33 +88,31 @@
             }
         }
         @media screen and (max-width: 600px) {
-            .register_text{
-                h2{
+            .register_text {
+                h2 {
                     font-size: 18px;
                 }
-                p{
+                p {
                     font-size: 12px;
                 }
             }
             form {
-                    .d-flex {
-                        .button-primary {
-                            font-size: 14px !important;
-                        }
-                        .button-secondary {
-                            font-size: 14px !important;
-                            padding: 10px !important;
-                            img{
-                                height: 24px;
-                                width: 24px;
-                                display: inline-block;
-                            }
-
-                        }
-                        margin-bottom: 55px;
+                .d-flex {
+                    .button-primary {
+                        font-size: 14px !important;
                     }
+                    .button-secondary {
+                        font-size: 14px !important;
+                        padding: 10px !important;
+                        img {
+                            height: 24px;
+                            width: 24px;
+                            display: inline-block;
+                        }
+                    }
+                    margin-bottom: 55px;
                 }
             }
         }
     }
-
+}

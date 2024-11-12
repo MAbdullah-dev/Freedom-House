@@ -1,3 +1,6 @@
+<?php
+// dd(Auth::check());
+?>
 <header>
     <div class="container nav-bar d-flex align-items-center justify-content-between">
         <a href="">
@@ -59,22 +62,28 @@
             </ul>
         </nav>
         <div class="nav-btn d-flex align-items-center gap-2 mx-2">
-            <a class="button-secondary" href="{{ route('login') }}" wire:navigate>Login</a>
-            <a class="button-primary" href="{{ route('register') }}" wire:navigate>Register</a>
+            <div class="nav-btn mb-4 d-flex gap-2">
+                @if (Auth::check())
+                    <button wire:click="logout" class="btn btn-danger">Logout</button>
+                @else
+                    <a class="button-secondary" href="{{ route('login') }}" wire:navigate>Login</a>
+                    <a class="button-primary" href="{{ route('register') }}" wire:navigate>Register</a>
+                @endif
+            </div>
         </div>
     </div>
     <div class="mobile-menu align-items-start justify-content-start d-xl-none d-flex flex-column gap-1 px-2"
         id="mobile-nav">
         <ul class="align-items-center justify-content-center flex-column gap-3">
             <li><a class="{{ Route::currentRouteName() == 'home' ? 'active' : '' }}" href="{{ route('home') }}"
-                wire:navigate>Home</a></li>
-        <li><a class="{{ Route::currentRouteName() == 'about-us' ? 'active' : '' }}"
-                href="{{ route('about-us') }}" wire:navigate>About</a></li>
-        <li><a class="{{ Route::currentRouteName() == 'course.catalogue' ? 'active' : '' }}"
-                href="{{ route('course.catalogue') }}" wire:navigate>Course Catalog</a></li>
-        <li><a class="{{ Route::currentRouteName() == 'calendar' ? 'active' : '' }}"
-                href="{{ route('calendar') }}" wire:navigate>Class
-                Calendar</a></li>
+                    wire:navigate>Home</a></li>
+            <li><a class="{{ Route::currentRouteName() == 'about-us' ? 'active' : '' }}"
+                    href="{{ route('about-us') }}" wire:navigate>About</a></li>
+            <li><a class="{{ Route::currentRouteName() == 'course.catalogue' ? 'active' : '' }}"
+                    href="{{ route('course.catalogue') }}" wire:navigate>Course Catalog</a></li>
+            <li><a class="{{ Route::currentRouteName() == 'calendar' ? 'active' : '' }}"
+                    href="{{ route('calendar') }}" wire:navigate>Class
+                    Calendar</a></li>
             <li class="category-dropdown ">
                 <a href="#">Category <i class="fa-solid fa-angle-down fa-xs"></i></a>
                 <div class="menu-dropdown">
@@ -116,9 +125,14 @@
             </li>
         </ul>
         <div class="nav-btn mb-4 d-flex gap-2">
-            <a class="text-danger" href="#">Login</a>
-            <a class="button-primary" href="/register">Register</a>
+            @if (Auth::check())
+                <button wire:click="logout" class="button-primary">Logout</button>
+            @else
+                <a class="text-danger" href="{{ asset('/login') }}">Login</a>
+                <a class="button-primary" href="{{ asset('/register') }}">Register</a>
+            @endif
         </div>
+
     </div>
 </header>
 

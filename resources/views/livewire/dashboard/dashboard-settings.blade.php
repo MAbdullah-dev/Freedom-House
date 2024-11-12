@@ -1,3 +1,6 @@
+<?php
+// dd(session()->all());
+?>
 <div class="settings px-5 mb-5">
     <h2 class="my-4">Settings</h2>
     <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
@@ -17,84 +20,99 @@
 
     <div class="tab-content">
         <!-- Profile Tab -->
+
         <div id="profile" class="tab-pane fade show active" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="cover-photo-wrapper">
-                <img src="{{ asset('assets/images/cover-photo.png') }}" class="cover-photo" alt="Cover Photo">
-                <i class="fa fa-trash delete-cover-photo"></i>
-            </div>
-            <div class="profile-photo-wrapper">
-                <img src="{{ asset('assets/images/image (1).png') }}" class="profile-photo" alt="Profile Photo">
-                <i class="fa fa-trash delete-profile-photo"></i>
+            <!-- Cover Photo Section -->
+            <div class="cover-photo-wrapper position-relative">
+                @if ($user->cover_photo)
+                    <img src="{{ asset('storage/' . $user->cover_photo) }}" class="cover-photo" alt="Cover Photo">
+                @else
+                    <img src="{{ asset('assets/images/cover-photo.png') }}" class="cover-photo" alt="Cover Photo">
+                @endif
+
+                <!-- Update Cover Photo Button -->
+                <label for="coverPhotoUpload" class="btn btn-success btn-sm position-absolute"
+                    style="bottom: 10px; right: 10px;">
+                    <i class="fas fa-upload"></i> Update Cover Photo
+                </label>
+                <input type="file" id="coverPhotoUpload" wire:model="coverPhoto" class="file-input d-none"
+                    accept="image/*">
+
+                <!-- Delete Cover Photo Button -->
+                <button type="button" wire:click="deleteCoverPhoto" class="btn btn-danger btn-sm position-absolute"
+                    style="top: 10px; right: 10px;">
+                    <i class="fas fa-trash"></i>
+                </button>
+                @error('coverPhoto')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
-            <form>
+            <!-- Profile Photo Section -->
+            <div class="profile-photo-wrapper position-relative d-inline-block">
+                @if ($user->profile_photo)
+                    <img src="{{ asset('storage/' . $user->profile_photo) }}" class="profile-photo rounded-circle"
+                        alt="Profile Photo">
+                @else
+                    <img src="{{ asset('assets/images/image (1).png') }}" class="profile-photo rounded-circle"
+                        alt="Profile Photo">
+                @endif
+
+                <!-- Camera Button with Dropdown -->
+                <div class="dropdown position-absolute" style="bottom: 5px; right: 5px;">
+                    <button class="btn btn-light btn-circle" id="profileDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <li>
+                            <label for="profilePhotoUpload" class="dropdown-item">
+                                <i class="fas fa-upload"></i> Upload Photo
+                            </label>
+                            <input type="file" id="profilePhotoUpload" wire:model="profilePhoto"
+                                class="file-input d-none" accept="image/*">
+                        </li>
+                        <li>
+                            <button type="button" wire:click="deleteProfilePhoto" class="dropdown-item text-danger">
+                                <i class="fas fa-trash"></i> Delete Photo
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                @error('profilePhoto')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Update Profile Form -->
+            <form wire:submit.prevent="updateProfile" class="mt-4">
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="firstName">First Name</label>
-                        <input type="text" class="form-control" id="firstName">
+                        <input type="text" class="form-control" id="firstName" wire:model="firstName">
                     </div>
                     <div class="col-md-6">
                         <label for="lastName">Last Name</label>
-                        <input type="text" class="form-control" id="lastName">
+                        <input type="text" class="form-control" id="lastName" wire:model="lastName">
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="form-row mt-3">
                     <div class="col-md-6">
                         <label for="userName">User Name</label>
-                        <input type="text" class="form-control" id="userName">
+                        <input type="text" class="form-control" id="userName" wire:model="userName">
                     </div>
                     <div class="col-md-6">
                         <label for="phoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="phoneNumber">
+                        <input type="text" class="form-control" id="phone" wire:model="phone">
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mt-3">
                     <label for="bio">Bio</label>
-                    <script>
-                        tinymce.init({
-                          selector: '#bio',
-                          plugins: [
-                            // Core editing features
-                            'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-                            // Your account includes a free trial of TinyMCE premium features
-                            // Try the most popular premium features until Nov 11, 2024:
-                            'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
-                            // Early access to document converters
-                            'importword', 'exportword', 'exportpdf'
-                          ],
-                          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-                          tinycomments_mode: 'embedded',
-                          tinycomments_author: 'Author name',
-                          mergetags_list: [
-                            { value: 'First.Name', title: 'First Name' },
-                            { value: 'Email', title: 'Email' },
-                          ],
-                          ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
-                          exportpdf_converter_options: { 'format': 'Letter', 'margin_top': '1in', 'margin_right': '1in', 'margin_bottom': '1in', 'margin_left': '1in' },
-                          exportword_converter_options: { 'document': { 'size': 'Letter' } },
-                          importword_converter_options: { 'formatting': { 'styles': 'inline', 'resets': 'inline',	'defaults': 'inline', } },
-                        });
-                      </script>
-
-                    <textarea id="bio" class="form-control"></textarea>
+                    <textarea id="bio" class="form-control" wire:model="bio"></textarea>
                 </div>
-
-                <div class="form-group">
-                    <label for="displayName">Display name publicly as</label>
-                    <select class="form-control" id="displayName">
-                        <option>Display name publicly as</option>
-                        <option>Bilal Khalid</option>
-                        <option>Bilalkajaja</option>
-                        <option>As Student</option>
-                    </select>
-                </div>
-                <p class="public-name-info">
-                    The display name is shown in all public fields, such as the author name, instructor name, student
-                    name, and name that will be printed on the certificate.
-                </p>
-                <button type="submit" class="button-primary">Update Profile</button>
+                <button type="submit" class="btn button-primary mt-3">Update Profile</button>
             </form>
         </div>
 
@@ -104,7 +122,8 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="currentPassword">current password</label>
-                        <input type="password" id="currentPassword" class="form-control" placeholder="current password">
+                        <input type="password" id="currentPassword" class="form-control"
+                            placeholder="current password">
                     </div>
                     <div class="form-group">
                         <label for="currentPassword">New password</label>
@@ -112,7 +131,8 @@
                     </div>
                     <div class="form-group">
                         <label for="currentPassword">current password</label>
-                        <input type="password" id="currentPassword" class="form-control" placeholder="confirm new password">
+                        <input type="password" id="currentPassword" class="form-control"
+                            placeholder="confirm new password">
                     </div>
                 </div>
                 <input type="submit" class="button-primary" value="Reset Password">
@@ -120,54 +140,55 @@
         </div>
 
         <!-- Social Profile Tab -->
-        <div id="social-profile" class="social-profile tab-pane fade" role="tabpanel" aria-labelledby="social-profile-tab">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="facebook" class="d-flex align-items-center">
-                            <i class="fa-brands fa-facebook-f me-2"></i> Facebook
-                        </label>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <input type="url" class="form-control" id="facebook" placeholder="http://facebook.com/username">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="twitter" class="d-flex align-items-center">
-                            <i class="fa-brands fa-twitter me-2"></i> Twitter
-                        </label>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <input type="url" class="form-control" id="twitter" placeholder="http://twitter.com/username">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="linkedin" class="d-flex align-items-center">
-                            <i class="fa-brands fa-linkedin me-2"></i> Linkedin
-                        </label>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <input type="url" class="form-control" id="linkedin" placeholder="http://linkedin.com/username">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="website" class="d-flex align-items-center">
-                            <i class="fa-solid fa-globe me-2"></i> Website
-                        </label>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <input type="url" class="form-control" id="website" placeholder="http://example.com">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="github" class="d-flex align-items-center">
-                            <i class="fa-brands fa-github me-2"></i> Github
-                        </label>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <input type="url" class="form-control" id="github" placeholder="http://github.com/username">
-                    </div>
+        <div id="social-profile" class="social-profile tab-pane fade" role="tabpanel"
+            aria-labelledby="social-profile-tab">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="facebook" class="d-flex align-items-center">
+                        <i class="fa-brands fa-facebook-f me-2"></i> Facebook
+                    </label>
                 </div>
+                <div class="col-md-6 mb-3">
+                    <input type="url" class="form-control" id="facebook"
+                        placeholder="http://facebook.com/username">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="twitter" class="d-flex align-items-center">
+                        <i class="fa-brands fa-twitter me-2"></i> Twitter
+                    </label>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <input type="url" class="form-control" id="twitter"
+                        placeholder="http://twitter.com/username">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="linkedin" class="d-flex align-items-center">
+                        <i class="fa-brands fa-linkedin me-2"></i> Linkedin
+                    </label>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <input type="url" class="form-control" id="linkedin"
+                        placeholder="http://linkedin.com/username">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="website" class="d-flex align-items-center">
+                        <i class="fa-solid fa-globe me-2"></i> Website
+                    </label>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <input type="url" class="form-control" id="website" placeholder="http://example.com">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="github" class="d-flex align-items-center">
+                        <i class="fa-brands fa-github me-2"></i> Github
+                    </label>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <input type="url" class="form-control" id="github"
+                        placeholder="http://github.com/username">
+                </div>
+            </div>
         </div>
 
     </div>
 </div>
-<!-- Place the first <script> tag in your HTML's <head> -->
-
-
-    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->

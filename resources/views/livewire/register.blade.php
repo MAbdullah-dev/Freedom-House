@@ -6,59 +6,77 @@
             <p>We have the best specialists in your region. Quality and professionalism is our slogan</p>
         </div>
 
-        <form action="" class="form w-75 w-lg-50 w-md-75 w-sm-100 mx-auto">
+        <form wire:submit.prevent="register" class="form w-75 w-lg-50 w-md-75 w-sm-100 mx-auto">
             <div class="register_form">
                 <h6 class="text-center">Your Information</h6>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
                 <div class="row pt-3">
                     <div class="col-12 col-md-6">
                         <label for="first_name">First Name</label>
-                        <input class="form-control" type="text" name="first_name" required>
+                        <input wire:model="first_name" class="form-control" type="text" name="first_name">
+                        @error('first_name')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="col-12 col-md-6">
                         <label for="last_name">Last Name</label>
-                        <input class="form-control" type="text" name="last_name" required>
+                        <input wire:model="last_name" class="form-control" type="text" name="last_name">
+                        @error('last_name')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12 col-md-6">
                         <label for="email">Email</label>
-                        <input class="form-control" type="email" name="email" required>
+                        <input wire:model="email" class="form-control" type="email" name="email">
+                        @error('email')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="col-12 col-md-6">
                         <label for="phone">Phone</label>
-                        <input class="form-control" type="tel" name="phone" required>
+                        <input wire:model="phone" class="form-control" type="tel" name="phone">
+                        @error('phone')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12 col-md-6">
                         <label for="password">Password</label>
-                        <input class="form-control" type="password" name="password" required>
+                        <input wire:model="password" class="form-control" type="password" name="password">
+                        @error('password')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="col-12 col-md-6">
                         <label for="confirm_password">Re-type Password</label>
-                        <input class="form-control" type="password" name="confirm_password" required>
+                        <input wire:model="confirm_password" class="form-control" type="password"
+                            name="confirm_password">
+                        @error('confirm_password')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="row pt-3">
                     <div class="col-12">
-                        <label for="role">Select Role</label>
-                        <select class="form-select" id="role" name="role" required>
-                            <option selected disabled>Choose...</option>
-                            <option value="2">Instructor</option>
-                            <option value="1">Learner</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col-12">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="terms" required>
-                            <label class="form-check-label ms-2">I agree with the Terms and Conditions</label>
+                        <div>
+                            <label>By signing up, I agree with the website's Terms and Conditions</label>
                         </div>
                     </div>
                 </div>

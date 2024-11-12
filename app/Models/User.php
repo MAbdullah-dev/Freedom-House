@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, SoftDeletes;
 
@@ -15,19 +19,25 @@ class User extends Model
         'email',
         'first_name',
         'last_name',
+        'password',
         'pfp',
         'cover_photo',
         'bio',
         'phone',
-        'is_verified',
-        'microsoft_id'
+        'microsoft_id',
+        'verification_token',
+        'email_verified_at'
     ];
 
     protected $hidden = ['password', 'remember_token'];
 
+      public function hasVerifiedEmail()
+    {
+        return !is_null($this->email_verified_at);
+    }
     public function roles()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class, 'roles_users');
     }
 
     public function courses()

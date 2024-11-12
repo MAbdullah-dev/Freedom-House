@@ -13,18 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username', 50)->unique();
             $table->string('email', 100)->unique();
             $table->string('microsoft_id', 255)->nullable();
             $table->boolean('microsoft_account')->default(false);
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('username')->nullable();
+            $table->string('phone')->unique();
             $table->text('bio')->nullable();
             $table->string('password');
             $table->string('pfp')->nullable();
             $table->string('cover_photo')->nullable();
-            $table->boolean('is_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('verification_token', 100)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

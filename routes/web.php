@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmailVerificationController;
 use App\Livewire\CourseCatelogue;
 use App\Livewire\AboutUs;
 use App\Livewire\CourseAnalytics\CourseDetail;
@@ -29,9 +30,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', LivewireHome::class)->name('home');
+
 Route::get('/register', Register::class)->name('register');
-Route::get('/course/catalogue', CourseCatelogue::class)->name('course.catalogue');
+Route::get('/verify-email/{token}', [EmailVerificationController::class, 'verify'])->name('verify.email');
 Route::get('/login', Login::class)->name('login');
+
+Route::get('/course/catalogue', CourseCatelogue::class)->name('course.catalogue');
 Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/tutor/profile',TutorPrfile::class)->name('tutor.profile');
 Route::get('/course/details', CourseDetails::class)->name('course.details');
