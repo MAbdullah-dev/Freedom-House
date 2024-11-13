@@ -35,6 +35,7 @@ Route::get('/register', Register::class)->name('register');
 Route::get('/verify-email/{token}', [EmailVerificationController::class, 'verify'])->name('verify.email');
 Route::get('/login', Login::class)->name('login');
 
+
 Route::get('/course/catalogue', CourseCatelogue::class)->name('course.catalogue');
 Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/tutor/profile',TutorPrfile::class)->name('tutor.profile');

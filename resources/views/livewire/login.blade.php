@@ -1,9 +1,6 @@
 <section class="login">
     <div class="container-fluid">
         <h1>Login</h1>
-
-
-
         <form wire:submit.prevent="login" class="form position-relative w-50">
             <div class="login_form">
                 <div wire:loading wire:target="login" class="loading-spinner">
