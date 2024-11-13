@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('title')->unique();
             $table->text('description');
             $table->string('thumbnail');
             $table->string('video_url');
             $table->text('learning_outcomes');
-            $table->text('requirements');
             $table->text('target_audience');
+            $table->text('requirements');
             $table->boolean('is_published')->default(false);
             $table->timestamps();
             $table->softDeletes();

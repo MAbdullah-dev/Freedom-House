@@ -14,6 +14,7 @@ class Tags extends Component
     public $search = '';
     public $tagIdBeingDeleted = null;
     public $tagIdBeingUpdated = null;
+    public $tags;
 
     protected $rules = [
         'name' => 'required|string|max:255|unique:tags,name',

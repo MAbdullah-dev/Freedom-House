@@ -18,7 +18,7 @@
 
     <!-- Search Tag Section -->
     <section class="tag-search mt-5 position-relative">
-        <input type="text" wire:model.debounce.500ms="search" placeholder="Search tags" class="form-control w-100" />
+        <input type="text" wire:model.live="search" placeholder="Search tags" class="form-control w-100" />
         <i class="fa-solid fa-magnifying-glass position-absolute"></i>
     </section>
 

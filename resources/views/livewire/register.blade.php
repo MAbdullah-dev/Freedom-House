@@ -12,18 +12,6 @@
             </div>
             <div class="register_form">
                 <h6 class="text-center">Your Information</h6>
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
                 <div class="row pt-3">
                     <div class="col-12 col-md-6">
                         <label for="first_name">First Name</label>

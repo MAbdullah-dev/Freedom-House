@@ -1,5 +1,8 @@
 .create-course-main {
+
+
     // Header section
+
     header.custom-header {
         position: sticky;
         top: 0;
@@ -15,6 +18,7 @@
                 .actions {
                     display: flex;
                     align-items: center;
+
                     .btn {
                         font-size: 16px;
                         font-weight: 400;
@@ -66,11 +70,23 @@
 
         form {
             .row {
+
                 // Main content area
                 .col-lg-8 {
                     .accordion {
+                        input[type="file"] {
+                            display: none; // Hide the real file input
+                        }
+
+                        .tag-select {
+                            span {
+                                width: 100% !important;
+                            }
+                        }
+
                         .accordion-item {
                             border: none !important;
+
                             h2.accordion-header {
                                 button.accordion-button {
                                     padding: 20px 40px 20px 0 !important;
@@ -146,6 +162,7 @@
                                     }
                                 }
                             }
+
                             // h2.accordion-header {
                             //     button.accordion-button {
                             //         // Video button styles
@@ -164,11 +181,13 @@
                                             border: 1px solid #cdcfd5;
                                             padding: 14px;
                                             border-radius: 5px;
+
                                             .instructor-avatar {
                                                 .avatar-image {
                                                     border-radius: 50%;
                                                 }
                                             }
+
                                             .instructor-info {
                                                 .instructor-header {
                                                     .instructor-name {
@@ -176,12 +195,14 @@
                                                         font-weight: 500;
                                                         line-height: 22px;
                                                     }
+
                                                     .instructor-badge {
                                                         font-size: 14px;
                                                         font-weight: 500;
                                                         line-height: 23px;
                                                     }
                                                 }
+
                                                 .instructor-email {
                                                     font-size: 10px;
                                                     font-weight: 500;
@@ -205,6 +226,7 @@
                                         font-weight: 500;
                                         line-height: 26px;
                                     }
+
                                     textarea {
                                         box-shadow: none;
 
@@ -269,11 +291,13 @@
 // Responsive adjustments
 @media (max-width: 768px) {
     .create-course-main {
+
         // Header section
         header.custom-header {
             .container-fluid {
                 .header-wrapper {
                     justify-content: flex-end !important;
+
                     .logo {
                         display: none;
                     }

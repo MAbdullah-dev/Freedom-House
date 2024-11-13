@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tutor extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'user_id', 
-        'bio', 
-        'specialization', 
-        'preferred_teaching_method', 
+        'user_id',
+        'bio',
+        'specialization',
+        'preferred_teaching_method',
         'is_verified',
     ];
 

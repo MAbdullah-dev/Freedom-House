@@ -11,8 +11,15 @@ class Course extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'title', 'thumbnail', 'description', 'timeline', 'category_id',
-        'is_published', 'context', 'tags', 'requirement_instruction'
+        'user_id',
+        'title',
+        'description',
+        'thumbnail',
+        'video_url',
+        'learning_outcomes',
+        'target_audience',
+        'requirements',
+        'is_published',
     ];
 
     public function instructors()
@@ -27,12 +34,12 @@ class Course extends Model
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'course_tags');
     }
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'category_courses');
     }
 
     public function ratings()

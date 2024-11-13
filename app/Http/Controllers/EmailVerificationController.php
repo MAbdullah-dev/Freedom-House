@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class EmailVerificationController extends Controller
 {
@@ -11,7 +13,8 @@ class EmailVerificationController extends Controller
         $user = User::where('verification_token', $token)->first();
 
         if (!$user) {
-            return redirect()->route('login')->with('error', 'Invalid or expired verification link.');
+            Session::flash('error', 'Invalid or expired verification link.');
+            return redirect()->route('login');
         }
 
         $user->update([
@@ -19,6 +22,7 @@ class EmailVerificationController extends Controller
             'verification_token' => null,
         ]);
 
-        return redirect()->route('login')->with('success', 'Your email has been verified! You can now log in.');
+        Session::flash('success', 'Your email has been verified! You can now log in.');
+        return redirect()->route('login');
     }
 }

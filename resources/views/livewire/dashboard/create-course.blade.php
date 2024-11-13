@@ -1,14 +1,15 @@
-<div class="create-course-main" x-data="{ courseTitle: '', description: '', category: '', file: null, instructors: [] }">
+<div class="create-course-main">
     <header class="custom-header">
         <div class="container-fluid px-5">
             <div class="header-wrapper d-flex justify-content-between align-items-center mb-2">
                 <img src="{{ asset('assets/svgs/Brand-NameHeader.png.svg') }}" alt="Logo" class="logo">
                 <div class="actions">
-                    <button type="button" class="btn button-draft custom-draft-button" @click="$dispatch('save-draft', { courseTitle, description, category, file, instructors })">
+                    <button type="button" class="btn button-draft custom-draft-button">
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
                     </button>
                     <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button>
-                    <button type="button" class="btn button-submit custom-submit-button" @click="$dispatch('submit-course', { courseTitle, description, category, file, instructors })">Submit</button>
+                    <button type="submit" class="btn button-submit custom-submit-button"
+                        wire:click="submitCourse">Submit</button>
                     <a href="" class="custom-close-link ms-1">
                         <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
                     </a>
@@ -37,42 +38,57 @@
                                     <div class="course-main-content mb-4">
                                         <!-- Course Title -->
                                         <div class="mb-3">
-                                            <label for="courseTitle" class="form-label">Course Title</label>
-                                            <input type="text" class="form-control" id="courseTitle" x-model="courseTitle" placeholder="New Course">
+                                            <label for="courseTitle">Course Title</label>
+                                            <input type="text" wire:model="courseTitle" class="form-control"
+                                                id="courseTitle" required>
+                                            @error('courseTitle')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <!-- Description -->
                                         <div class="mb-3">
-                                            <label for="description" class="form-label">Description</label>
-                                            <textarea class="form-control" id="description" rows="4" x-model="description" placeholder="Enter Description"></textarea>
+                                            <label for="description">Description</label>
+                                            <textarea wire:model="description" class="form-select" id="description" required></textarea>
+                                            @error('description')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
-                                        <!-- Category Dropdown -->
-                                        <label class="mt-3 mb-1" for="course_category">Choose a Category</label>
-                                        <div class="dropdown">
-                                            <input type="text" id="course_category" class="form-control dropdown-toggle"
-                                                x-model="category" placeholder="Search Course Category" data-bs-toggle="dropdown"
-                                                aria-expanded="false" autocomplete="off">
-                                            <ul class="dropdown-menu w-100" aria-labelledby="course_category">
-                                                <li><button class="dropdown-item" type="button" @click="category = 'Ethics'">Ethics</button></li>
-                                                <li><button class="dropdown-item" type="button" @click="category = 'Featured'">Featured</button></li>
-                                                <li><button class="dropdown-item" type="button" @click="category = 'Mental Health'">Mental Health</button></li>
-                                            </ul>
+                                        <div wire:ignore>
+                                            <!-- Category Dropdown -->
+                                            <label for="category">Categories</label>
+                                            <select wire:model.defer="category" class="form-control" id="category"
+                                                multiple required>
+                                                @foreach ($categorylist as $category)
+                                                    <option value='{{ $category->id }}'>{{ $category->category_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('category')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <!-- Course Thumbnail -->
                                         <div class="row mt-4 align-items-center justify-content-between">
                                             <div class="col-md-4">
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
-                                                <div class="image-placeholder mb-3" id="thumbnailPreview">
-                                                    <img :src="file ? URL.createObjectURL(file) : '{{ asset('assets/images/dummy-course-img.png') }}'"
-                                                         style="width: 250px; height: 150px" alt="Course Thumbnail" id="previewImage">
+                                                <div class="image-placeholder mb-3">
+                                                    <!-- Display the uploaded image or fallback to a placeholder image -->
+                                                    <img src="{{ $file ? $file->temporaryUrl() : asset('assets/images/dummy-course-img.png') }}"
+                                                        style="width: 250px; height: 150px" alt="Course Thumbnail"
+                                                        id="previewImage">
                                                 </div>
                                             </div>
                                             <div class="col-md-5 d-flex flex-column justify-content-center">
                                                 <p class="mb-1 text-secondary">Size: 700x430 pixels</p>
                                                 <p class="mb-2 text-secondary">File Support: JPG, PNG</p>
-                                                <input type="file" id="imageUpload" accept="image/*" style="display: none;" @change="file = $event.target.files[0]">
-                                                <a class="btn btn-success" @click="$refs.imageUpload.click()">
+                                                <!-- Input for file upload -->
+                                                <label for="file-upload" class="custom-file-upload button-primary mt-3">
                                                     <i class="bi bi-upload me-1"></i> Upload Image
-                                                </a>
+                                                </label>
+                                                <input wire:model="file" id="file-upload" type="file" />
+                                                @error('file')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -92,7 +108,8 @@
                                 <div class="accordion-body">
                                     <div class="mb-3">
                                         <label for="videoUpload" class="form-label">Upload Video URL</label>
-                                        <input type="url" class="form-control" id="videoUpload">
+                                        <input type="url" class="form-control" id="videoUpload"
+                                            wire:model="videoUrl">
                                     </div>
                                 </div>
                             </div>
@@ -107,13 +124,15 @@
                                     Instructors
                                 </button>
                             </h2>
-                            <div id="collapseInstructors" class="accordion-collapse collapse" aria-labelledby="add_instructors">
+                            <div id="collapseInstructors" class="accordion-collapse collapse"
+                                aria-labelledby="add_instructors">
                                 <div class="accordion-body">
                                     <div class="mb-3">
                                         <div class="instructor-card">
                                             <div class="instructor-card-wrapper my-3 d-flex align-items-center">
                                                 <div class="instructor-avatar">
-                                                    <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}" alt="Autumn Green" class="avatar-image">
+                                                    <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}"
+                                                        alt="Autumn Green" class="avatar-image">
                                                 </div>
                                                 <div class="instructor-info">
                                                     <div class="instructor-header">
@@ -126,7 +145,8 @@
                                                 </div>
                                             </div>
                                             <div class="add-instructor-btn">
-                                                <button type="button" class="button-secondary" @click="instructors.push('Autumn Green')">Add Instructor</button>
+                                                <button type="button" class="button-secondary"
+                                                    wire:click="addInstructor('Autumn Green')">Add Instructor</button>
                                             </div>
                                         </div>
                                     </div>
@@ -146,36 +166,54 @@
                             <div id="collapseAdditional_Data" class="accordion-collapse collapse"
                                 aria-labelledby="add_Additional_Data">
                                 <div class="accordion-body">
+                                    <!-- What Will I Learn? Textarea -->
                                     <div class="mb-3">
-                                        <label for="">What Will I Learn?</label>
-                                        <textarea type="text" placeholder="Write here the course benefits (One per line)" class="form-control"></textarea>
+                                        <label for="learnDetails">What Will I Learn?</label>
+                                        <textarea wire:model="learnDetails" class="form-control" id="learnDetails"
+                                            placeholder="Write here the course benefits (One per line)"></textarea>
+                                        @error('learnDetails')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
+
+                                    <!-- Targeted Audience Textarea -->
                                     <div class="mb-3">
-                                        <label for="">Targeted Audience</label>
-                                        <textarea type="text"
-                                            placeholder="Specify the target audience that will benefit the most from the course. (One line per target audience)"
-                                            class="form-control"></textarea>
+                                        <label for="audienceDetails">Targeted Audience</label>
+                                        <textarea wire:model="audienceDetails" class="form-control" id="audienceDetails"
+                                            placeholder="Specify the target audience that will benefit the most from the course. (One line per target audience)"></textarea>
+                                        @error('audienceDetails')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
+
+                                    <!-- Requirements/Instructions Textarea -->
                                     <div class="mb-3">
-                                        <label for="">Requirements/Instructions</label>
-                                        <textarea type="text"
-                                            placeholder="Additional requirements or special instructions for the students. (One per line)"
-                                            class="form-control"></textarea>
+                                        <label for="requirements">Requirements/Instructions</label>
+                                        <textarea wire:model="requirements" class="form-control" id="requirements"
+                                            placeholder="Additional requirements or special instructions for the students. (One per line)"></textarea>
+                                        @error('requirements')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
-                                    <div class="dropdown">
-                                        <input type="text" id="course_tags" class="form-control dropdown-toggle"
-                                            placeholder="Course Tags" data-bs-toggle="dropdown" aria-expanded="false"
-                                            autocomplete="off">
-                                        <ul class="dropdown-menu w-100" aria-labelledby="course_tags">
-                                            <li><button class="dropdown-item" type="button">Training</button></li>
-                                            <li><button class="dropdown-item" type="button">Substance Abuse Training</button></li>
-                                            <li><button class="dropdown-item" type="button">Mental Health First Aid</button></li>
-                                        </ul>
+
+                                    <!-- Tags Select2 Dropdown -->
+                                    <div wire:ignore>
+                                        <label for="tags">Tags</label>
+                                        <div class="w-100">
+                                            <select wire:model.defer="tags" class="form-control select2 w-100"
+                                                id="tags" multiple required>
+                                                @foreach ($tagslist as $tag)
+                                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('tags')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -197,16 +235,11 @@
         </form>
     </div>
 </div>
-
-<script>
-    // This handles the Alpine.js components
-    document.addEventListener('alpine:init', () => {
-        Alpine.store('courseStore', {
-            courseTitle: '',
-            description: '',
-            category: '',
-            file: null,
-            instructors: []
+@script
+    <script>
+        $(document).ready(function() {
+            $('#category,#tags').select2();
+            // $('#tags').select2();
         });
-    });
-</script>
+    </script>
+@endscript
