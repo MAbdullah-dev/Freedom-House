@@ -25,22 +25,22 @@ class CreateCourse extends Component
     public $audienceDetails;
     public $requirements;
 
-    public $tagslist;
-    public $categorylist;
-    public $tutorList;
+    public $tagslist = [];
+    public $categorylist = [];
+    public $tutorList = [];
 
     protected $rules = [
-        'courseTitle' => 'required|string|max:255',
+        'courseTitle' => 'required|string|max:255|unique:courses,title',
         'description' => 'required|string',
-        'category' => 'required|array',
-        'category.*' => 'exists:categories,id',
-        'tags' => 'nullable|array',
-        'tags.*' => 'exists:tags,id',
-        'file' => 'required|image|max:1024',
+        'category' => 'required',
+        'category.*' => 'required|exists:categories,id',
+        'tags' => 'required|array',
+        'tags.*' => 'required|exists:tags,id',
+        'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
         'videoUrl' => 'required|url',
         'learnDetails' => 'required|string',
-        'audienceDetails' => 'nullable|string',
-        'requirements' => 'nullable|string',
+        'audienceDetails' => 'required|string',
+        'requirements' => 'required|string',
     ];
 
     public function mount()
@@ -65,7 +65,7 @@ class CreateCourse extends Component
 
         // Create a new course record
         $course = Course::create([
-            'user_id' => auth()->id(), // Set to the logged-in user
+            'user_id' => 1,
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
@@ -78,10 +78,10 @@ class CreateCourse extends Component
 
         // Attach categories and tags to the course
         $course->categories()->attach($this->category);
-        $course->tags()->sync($this->tags);
+        $course->tags()->attach($this->tags);
 
         // Reset form fields after submission
-        $this->reset();
+        $this->reset(['courseTitle', 'description', 'category', 'tags', 'file', 'videoUrl', 'learnDetails', 'audienceDetails', 'requirements']);
 
         // Show a success message
         $this->alert('success', 'Course created successfully!');
@@ -89,9 +89,6 @@ class CreateCourse extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.create-course', [
-            'categorylist' => $this->categorylist,
-            'tagslist' => $this->tagslist,
-        ])->layout('components.layouts.createCourse');
+        return view('livewire.dashboard.create-course')->layout('components.layouts.createCourse');
     }
 }

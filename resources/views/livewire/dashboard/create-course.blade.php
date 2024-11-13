@@ -19,7 +19,7 @@
     </header>
 
     <div class="container my-5">
-        <form wire:submit.prevent="submitCourse">
+        <form>
             <div class="row">
                 <div class="col-lg-8">
                     <div class="accordion" id="courseAccordion">
@@ -53,11 +53,10 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div wire:ignore>
+                                        <label for="category">Categories</label>
+                                        <div wire:ignore class="d-flex align-items-center select-wrapper">
                                             <!-- Category Dropdown -->
-                                            <label for="category">Categories</label>
-                                            <select wire:model.defer="category" class="form-control" id="category"
-                                                multiple required>
+                                            <select class="form-control" id="category" multiple required>
                                                 @foreach ($categorylist as $category)
                                                     <option value='{{ $category->id }}'>{{ $category->category_name }}
                                                     </option>
@@ -110,6 +109,9 @@
                                         <label for="videoUpload" class="form-label">Upload Video URL</label>
                                         <input type="url" class="form-control" id="videoUpload"
                                             wire:model="videoUrl">
+                                        @error('videoUrl')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -197,16 +199,13 @@
                                     </div>
 
                                     <!-- Tags Select2 Dropdown -->
-                                    <div wire:ignore>
-                                        <label for="tags">Tags</label>
-                                        <div class="w-100">
-                                            <select wire:model.defer="tags" class="form-control select2 w-100"
-                                                id="tags" multiple required>
-                                                @foreach ($tagslist as $tag)
-                                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <label for="tags" class="me-2">Tags:</label>
+                                    <div wire:ignore class="d-flex align-items-center select-wrapper">
+                                        <select class="form-control select2 w-100" id="tags" multiple required>
+                                            @foreach ($tagslist as $tag)
+                                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                            @endforeach
+                                        </select>
                                         @error('tags')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -216,7 +215,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Course Upload Tips -->
                 <div class="col-lg-4">
                     <div class="card p-3 mb-3 custom-upload-tips-card">
@@ -238,8 +236,19 @@
 @script
     <script>
         $(document).ready(function() {
-            $('#category,#tags').select2();
-            // $('#tags').select2();
+            // Initialize Select2 on the category and tags dropdowns
+            $('#category, #tags').select2();
+
+            // Handle change events for category and tags
+            $('#category').on('change', function() {
+                let data = $(this).val(); // Get the selected values
+                @this.set('category', data); // Set Livewire category model
+            });
+
+            $('#tags').on('change', function() {
+                let data = $(this).val(); // Get the selected values
+                @this.set('tags', data); // Set Livewire tags model
+            });
         });
     </script>
 @endscript

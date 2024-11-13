@@ -284,6 +284,13 @@
                     }
                 }
             }
+
+            .select-wrapper {
+
+                &>span {
+                    width: 100% !important;
+                }
+            }
         }
     }
 }
