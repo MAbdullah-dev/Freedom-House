@@ -13,17 +13,27 @@
                         </p>
                     </div>
                 </div>
-                <form action="" class="mt-5 helprequest-form">
+                <form wire:submit.prevent="createRequest" enctype="multipart/form-data" class="mt-5 helprequest-form">
                     <label for="subject" class="mt-4 mb-3"> subject</label>
-                    <input type="text" class="form-control" id="subject" name="subject"
+                    <input type="text" class="form-control" id="subject" wire:model="subject" name="subject"
                         placeholder="e.g I have an issue in my course video">
+                    @error('subject')
+                        <h6 class="text-danger">{{ $message }}</h6>
+                    @enderror
                     <label for="Description" class="my-3">Description</label>
-                    <textarea name="Description" class="form-control" id="Description" cols="30" rows="10"></textarea>
+                    <textarea name="request_detail" wire:model="request_detail" class="form-control" id="Description" cols="30"
+                        rows="10"></textarea>
+                    @error('request_detail')
+                        <h6 class="text-danger">{{ $message }}</h6>
+                    @enderror
                     <div class="custom-file-input">
-                        <label for="file-upload" class="custom-file-upload button-secondary mt-3">
+                        <label for="file-upload" class="custom-file-upload  button-secondary mt-3">
                             Attach File
                         </label>
-                        <input id="file-upload" type="file" />
+                        <input id="file-upload" wire:model="request_img" type="file" />
+                        @error('request_img')
+                            <h6 class="text-danger">{{ $message }}</h6>
+                        @enderror
                     </div>
                     <div class="text-center">
 
@@ -55,7 +65,7 @@
                 <div class="col-md-5">
                     <div class="input-group d-flex align-items-center justify-content-end gap-2 position-relative">
                         <input type="text" class="form-control" placeholder="Search">
-                        <i class="fa-solid fa-magnifying-glass position-absolute" ></i>
+                        <i class="fa-solid fa-magnifying-glass position-absolute"></i>
                     </div>
                 </div>
             </div>
@@ -63,17 +73,31 @@
         <div class="help-request-body mb-5">
             <table class="table">
                 <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Subject</th>
-                    <th scope="col">Created</th>
-                    <th scope="col">Last Activity</th>
-                    <th scope="col">Status</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Last Activity</th>
+                        <th scope="col">Status</th>
+                    </tr>
                 </thead>
                 <tbody>
+                    @forelse($requests as $key => $request)
+                        <tr>
+                            <th scope="row">{{ $key + 1 }}</th>
+                            <td>{{ $request->subject }}</td>
+                            <td>{{ $request->created_at->format('Y-m-d H:i') }}</td>
+                            <td>{{ $request->updated_at->diffForHumans() }}</td>
+                            <td>{{ $request->status ?? 'Pending' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No help requests found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
-              </table>
+            </table>
         </div>
+
     </section>
 </div>
