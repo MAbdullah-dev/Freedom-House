@@ -1,13 +1,16 @@
 <?php
+
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class DashboardSettings extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, LivewireAlert;
 
     public $user;
     public $coverPhoto;
@@ -17,7 +20,6 @@ class DashboardSettings extends Component
     public $userName;
     public $phone;
     public $bio;
-    public $displayName;
 
     public function mount()
     {
@@ -27,10 +29,8 @@ class DashboardSettings extends Component
         $this->userName = $this->user->username;
         $this->phone = $this->user->phone;
         $this->bio = $this->user->bio;
-        $this->displayName = $this->user->display_name;
     }
 
-    // Update the profile information
     public function updateProfile()
     {
         $this->validate([
@@ -39,35 +39,51 @@ class DashboardSettings extends Component
             'userName' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string',
-            'displayName' => 'nullable|string',
-            'coverPhoto' => 'nullable|image|max:1024', // 1MB max for cover photo
-            'profilePhoto' => 'nullable|image|max:1024', // 1MB max for profile photo
+            'coverPhoto' => 'nullable|image|max:1024',
+            'profilePhoto' => 'nullable|image|max:1024',
         ]);
 
-        // If cover photo is uploaded, save it
         if ($this->coverPhoto) {
             $coverPhotoPath = $this->coverPhoto->store('cover_photos', 'public');
             $this->user->cover_photo = $coverPhotoPath;
         }
 
-        // If profile photo is uploaded, save it
         if ($this->profilePhoto) {
-            $profilePhotoPath = $this->profilePhoto->store('profile_photos', 'public');
-            $this->user->profile_photo = $profilePhotoPath;
+            $profilePhotoPath = $this->profilePhoto->store('pfps', 'public');
+            $this->user->pfp = $profilePhotoPath;
         }
 
-        // Update the user's profile information
         $this->user->first_name = $this->firstName;
         $this->user->last_name = $this->lastName;
         $this->user->username = $this->userName;
-        $this->user->phone_number = $this->phoneNumber;
+        $this->user->phone = $this->phone;
         $this->user->bio = $this->bio;
-        $this->user->display_name = $this->displayName;
 
-        // Save the updated user data
         $this->user->save();
 
-        session()->flash('message', 'Profile updated successfully!');
+        $this->alert('success', 'Profile updated successfully!');
+    }
+
+    public function deleteCoverPhoto()
+    {
+        if ($this->user->cover_photo) {
+            Storage::disk('public')->delete($this->user->cover_photo);
+            $this->user->cover_photo = null;
+            $this->user->save();
+
+            $this->alert('success', 'Cover photo deleted successfully!');
+        }
+    }
+
+    public function deleteProfilePhoto()
+    {
+        if ($this->user->pfp) {
+            Storage::disk('public')->delete($this->user->pfp);
+            $this->user->pfp = null;
+            $this->user->save();
+
+            $this->alert('success', 'Profile photo deleted successfully!');
+        }
     }
 
     public function render()

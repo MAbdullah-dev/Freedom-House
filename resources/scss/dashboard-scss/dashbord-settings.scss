@@ -39,55 +39,48 @@
             }
         }
 
-        /* Cover photo wrapper */
+        // /* Cover photo wrapper */
         .cover-photo-wrapper {
             position: relative;
-            overflow: hidden;
+            // overflow: hidden;
 
             .cover-photo {
                 width: 100%;
                 border-radius: 10px;
                 max-height: 300px;
+                min-height: 200px;
                 object-fit: cover;
                 transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
             }
 
             .delete-cover-photo,
             .update-cover-photo {
-                position: absolute;
-                background-color: rgba(0, 0, 0, 0.6);
-                color: #fff;
-                border-radius: 50%;
-                padding: 12px;
-                font-size: 1.2rem;
-                cursor: pointer;
-                opacity: 0;
                 transition: opacity 0.3s ease, transform 0.3s ease;
             }
 
             .update-cover-photo {
-                bottom: 10px;
-                right: 10px;
+                // bottom: 10px;
+                // right: 10px;
             }
 
             .delete-cover-photo {
-                top: 10px;
-                right: 10px;
+                // top: 10px;
+                // right: 10px;
             }
 
             &:hover .cover-photo {
-                transform: scale(1.05);
+                transform: scale(1.02);
                 filter: brightness(0.9);
             }
 
             &:hover .delete-cover-photo,
             &:hover .update-cover-photo {
                 opacity: 1;
-                transform: scale(1.1);
+                transform: scale(1.02s);
             }
         }
 
-        /* Profile photo wrapper */
+        // /* Profile photo wrapper */
         .profile-photo-wrapper {
             position: relative;
             display: inline-block;
@@ -107,50 +100,19 @@
             }
 
             .delete-profile-photo {
-                position: absolute;
-                bottom: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: rgba(0, 0, 0, 0.6);
-                color: #fff;
-                border-radius: 50%;
-                padding: 8px;
-                font-size: 1rem;
-                cursor: pointer;
-                opacity: 0;
-                transition: opacity 0.3s ease, transform 0.3s ease;
             }
 
             &:hover .profile-photo {
-                transform: scale(1.05);
-                filter: brightness(0.9);
             }
 
             &:hover .delete-profile-photo {
-                opacity: 1;
-                transform: translateX(-50%) scale(1.1);
             }
         }
 
-        // .dropdown-menu {
-        //     position: absolute;
-        //     top: 100%;
-        //     left: 50%;
-        //     transform: translateX(-50%);
-        //     min-width: 120px;
-        //     background-color: rgba(0, 0, 0, 0.8);
-        //     color: #fff;
-        //     border-radius: 6px;
-        //     padding: 5px 0;
-        //     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-        //     opacity: 0;
-        //     visibility: hidden;
-        //     transition: opacity 0.3s ease, visibility 0.3s ease;
-        // }
+        .dropdown-menu {
+        }
 
         .profile-photo-wrapper:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
         }
 
         form {
@@ -226,27 +188,27 @@
         padding: 0 1rem;
 
         .tab-content {
-            .cover-photo-wrapper,
-            .profile-photo-wrapper {
-                .cover-photo {
-                    min-height: 200px;
-                }
-            }
+            // .cover-photo-wrapper,
+            // .profile-photo-wrapper {
+            //     .cover-photo {
+            //         min-height: 200px;
+            //     }
+            // }
 
-            .profile-photo-wrapper {
-                margin: 0 auto;
-                display: flex;
-                margin-top: -50px;
-                justify-content: center;
+            // .profile-photo-wrapper {
+            //     margin: 0 auto;
+            //     display: flex;
+            //     margin-top: -50px;
+            //     justify-content: center;
 
-                .profile-photo {
-                    width: 120px;
-                    height: 120px;
-                }
-                .btn-sm i + span {
-                    display: none;
-                }
-            }
+            //     .profile-photo {
+            //         width: 120px;
+            //         height: 120px;
+            //     }
+            //     .btn-sm i + span {
+            //         display: none;
+            //     }
+            // }
 
             form {
                 .form-row {

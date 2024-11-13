@@ -22,37 +22,35 @@
         <!-- Profile Tab -->
 
         <div id="profile" class="tab-pane fade show active" role="tabpanel" aria-labelledby="profile-tab">
-            <!-- Cover Photo Section -->
+            {{-- Cover Photo Section --}}
             <div class="cover-photo-wrapper position-relative">
-                @if ($user->cover_photo)
+                @if ($coverPhoto)
+                    <img src="{{ $coverPhoto->temporaryUrl() }}" class="cover-photo" alt="Cover Photo">
+                @elseif ($user->cover_photo)
                     <img src="{{ asset('storage/' . $user->cover_photo) }}" class="cover-photo" alt="Cover Photo">
                 @else
                     <img src="{{ asset('assets/images/dummy-cover-photo.jpg') }}" class="cover-photo" alt="Cover Photo">
                 @endif
-
-                <!-- Update Cover Photo Button -->
+                <button type="button" wire:click="deleteCoverPhoto" class="btn btn-danger btn-sm position-absolute"
+                    style="top: 10px; right: 10px;">
+                    <i class="fas fa-trash"></i>
+                </button>
                 <label for="coverPhotoUpload" class="btn btn-success btn-sm position-absolute"
                     style="bottom: 10px; right: 10px;">
                     <i class="fas fa-upload"></i> Update Cover Photo
                 </label>
                 <input type="file" id="coverPhotoUpload" wire:model="coverPhoto" class="file-input d-none"
                     accept="image/*">
-
-                <!-- Delete Cover Photo Button -->
-                <button type="button" wire:click="deleteCoverPhoto" class="btn btn-danger btn-sm position-absolute"
-                    style="top: 10px; right: 10px;">
-                    <i class="fas fa-trash"></i>
-                </button>
-                @error('coverPhoto')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
             </div>
 
             <!-- Profile Photo Section -->
             <div>
                 <div class="profile-photo-wrapper d-inline-block">
-                    @if ($user->profile_photo)
-                        <img src="{{ asset('storage/' . $user->profile_photo) }}" class="profile-photo rounded-circle"
+                    @if ($profilePhoto)
+                        <img src="{{ $profilePhoto->temporaryUrl() }}" class="profile-photo rounded-circle"
+                            alt="Profile Photo">
+                    @elseif ($user->pfp)
+                        <img src="{{ asset('storage/' . $user->pfp) }}" class="profile-photo rounded-circle"
                             alt="Profile Photo">
                     @else
                         <img src="{{ asset('assets/images/dummy-profile-photo.png') }}"
@@ -104,7 +102,7 @@
                         <input type="text" class="form-control" id="userName" wire:model="userName">
                     </div>
                     <div class="col-md-6">
-                        <label for="phoneNumber">Phone Number</label>
+                        <label for="phone">Phone Number</label>
                         <input type="text" class="form-control" id="phone" wire:model="phone">
                     </div>
                 </div>
