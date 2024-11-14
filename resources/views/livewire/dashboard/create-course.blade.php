@@ -17,11 +17,21 @@
             </div>
         </div>
     </header>
-
+    <!-- Loader Overlay -->
+    <div id="loaderOverlay" wire:loading.class="d-flex" wire:loading wire:target="submitCourse"
+        class="d-none align-items-center justify-content-center">
+        <div class="overlay-bg"></div>
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
     <div class="container my-5">
         <form>
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-8" style="position: relative" class="form w-75 w-lg-50 w-md-75 w-sm-100 mx-auto">
+                    <div wire:loading wire:target="submitCourse" class="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
                     <div class="accordion" id="courseAccordion">
                         <!-- Course Info Accordion Item -->
                         <div class="accordion-item">
@@ -62,10 +72,10 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @error('category')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
                                         </div>
+                                        @error('category')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                         <!-- Course Thumbnail -->
                                         <div class="row mt-4 align-items-center justify-content-between">
                                             <div class="col-md-4">
@@ -80,6 +90,13 @@
                                             <div class="col-md-5 d-flex flex-column justify-content-center">
                                                 <p class="mb-1 text-secondary">Size: 700x430 pixels</p>
                                                 <p class="mb-2 text-secondary">File Support: JPG, PNG</p>
+
+                                                <!-- Loader spinner that shows when the file is being uploaded -->
+                                                <div wire:loading wire:target="file" class="spinner-border text-success"
+                                                    role="status">
+                                                    <span class="visually-hidden">Uploading...</span>
+                                                </div>
+
                                                 <!-- Input for file upload -->
                                                 <label for="file-upload" class="custom-file-upload button-primary mt-3">
                                                     <i class="bi bi-upload me-1"></i> Upload Image
@@ -90,6 +107,7 @@
                                                 @enderror
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -99,16 +117,18 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingVideo">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseVideo" aria-expanded="false" aria-controls="collapseVideo">
+                                    data-bs-target="#collapseVideo" aria-expanded="false"
+                                    aria-controls="collapseVideo">
                                     Video
                                 </button>
                             </h2>
-                            <div id="collapseVideo" class="accordion-collapse collapse" aria-labelledby="headingVideo">
+                            <div id="collapseVideo" class="accordion-collapse collapse"
+                                aria-labelledby="headingVideo">
                                 <div class="accordion-body">
                                     <div class="mb-3">
                                         <label for="videoUpload" class="form-label">Upload Video URL</label>
                                         <input type="url" class="form-control" id="videoUpload"
-                                            wire:model="videoUrl">
+                                            wire:model="videoUrl" placeholder="https://example.com/video.mp4">
                                         @error('videoUrl')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -126,30 +146,51 @@
                                     Instructors
                                 </button>
                             </h2>
-                            <div id="collapseInstructors" class="accordion-collapse collapse"
+                            <div id="collapseInstructors" class="accordion-collapse collapse show"
                                 aria-labelledby="add_instructors">
                                 <div class="accordion-body">
                                     <div class="mb-3">
                                         <div class="instructor-card">
-                                            <div class="instructor-card-wrapper my-3 d-flex align-items-center">
-                                                <div class="instructor-avatar">
-                                                    <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}"
-                                                        alt="Autumn Green" class="avatar-image">
+
+                                            <div class="" id="instructorDropdown">
+                                                <div wire:ignore class="d-flex align-items-center select-wrapper my-2">
+                                                    <select class="form-control" id="tutorSelect" multiple
+                                                        wire:model="tutors" required>
+                                                        @foreach ($tutorList as $tutor)
+                                                            <option value="{{ $tutor->id }}"
+                                                                @if (Auth::user()->id == $tutor->id) disabled @endif>
+                                                                {{ $tutor->user->email }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
-                                                <div class="instructor-info">
-                                                    <div class="instructor-header">
-                                                        <span class="instructor-name">Autumn Green</span>
-                                                        <img src="https://freedomhousetraining.org/wp-content/plugins/tutor-pro/addons/tutor-multi-instructors/assets/images/crown.svg"
-                                                            alt="Instructor Badge" class="instructor-badge">
-                                                    </div>
-                                                    <div class="instructor-email">Autumn.g@freedomhouserecovery.org
-                                                    </div>
-                                                </div>
+                                                @error('category')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
-                                            <div class="add-instructor-btn">
+                                            {{-- <div class="add-instructor-btn">
                                                 <button type="button" class="button-secondary"
-                                                    wire:click="addInstructor('Autumn Green')">Add Instructor</button>
-                                            </div>
+                                                    id="addInstructorBtn">Add Instructor</button>
+                                            </div> --}}
+                                            @foreach ($selectedTutors as $tutor)
+                                                <div class="instructor-card-wrapper my-3 d-flex align-items-center">
+                                                    <div class="instructor-avatar">
+                                                        <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}"
+                                                            alt="Autumn Green" class="avatar-image">
+                                                    </div>
+                                                    <div class="instructor-info">
+                                                        <div class="instructor-header">
+                                                            <span
+                                                                class="instructor-name">{{ $tutor->user->first_name }}
+                                                                {{ $tutor->user->last_name }}</span>
+                                                            <img src="https://freedomhousetraining.org/wp-content/plugins/tutor-pro/addons/tutor-multi-instructors/assets/images/crown.svg"
+                                                                alt="Instructor Badge" class="instructor-badge">
+                                                        </div>
+                                                        <div class="instructor-email">{{ $tutor->user->email }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -159,13 +200,13 @@
                         <!-- Additional Data -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="add_Additional_Data">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseAdditional_Data" aria-expanded="false"
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseAdditional_Data" aria-expanded="true"
                                     aria-controls="collapseAdditional_Data">
                                     Additional Data
                                 </button>
                             </h2>
-                            <div id="collapseAdditional_Data" class="accordion-collapse collapse"
+                            <div id="collapseAdditional_Data" class="accordion-collapse collapse show"
                                 aria-labelledby="add_Additional_Data">
                                 <div class="accordion-body">
                                     <!-- What Will I Learn? Textarea -->
@@ -206,10 +247,10 @@
                                                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('tags')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
                                     </div>
+                                    @error('tags')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -236,8 +277,13 @@
 @script
     <script>
         $(document).ready(function() {
-            // Initialize Select2 on the category and tags dropdowns
-            $('#category, #tags').select2();
+            // Initialize Select2 on the category, tags, and tutorSelect dropdowns
+            $('#category, #tags, #tutorSelect').select2({
+                placeholder: 'Select options',
+                allowClear: true,
+                multiple: true,
+                closeOnSelect: false
+            });
 
             // Handle change events for category and tags
             $('#category').on('change', function() {
@@ -249,6 +295,21 @@
                 let data = $(this).val(); // Get the selected values
                 @this.set('tags', data); // Set Livewire tags model
             });
+
+            $('#tutorSelect').on('change', function() {
+                let data = $(this).val(); // Get the selected values
+                @this.set('tutors', data); // Set Livewire tutors model
+            });
+
+            // Listen for Livewire dispatch event 'clearSelect2' to clear Select2 fields
+            Livewire.on('clearSelect2', () => {
+                $('#category, #tags, #tutorSelect').val(null).trigger('change');
+            });
+
+            // Toggle the visibility of the instructor dropdown when the button is clicked
+            // $('#addInstructorBtn').on('click', function() {
+            //     $('#instructorDropdown').toggleClass('d-none');
+            // });
         });
     </script>
 @endscript

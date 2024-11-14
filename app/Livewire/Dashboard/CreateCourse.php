@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Tutor;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -19,11 +20,13 @@ class CreateCourse extends Component
     public $description;
     public $category = [];
     public $tags = [];
+    public $tutors = [];
     public $file;
     public $videoUrl;
     public $learnDetails;
     public $audienceDetails;
     public $requirements;
+    public $selectedTutors = [];
 
     public $tagslist = [];
     public $categorylist = [];
@@ -32,8 +35,8 @@ class CreateCourse extends Component
     protected $rules = [
         'courseTitle' => 'required|string|max:255|unique:courses,title',
         'description' => 'required|string',
-        'category' => 'required',
-        'category.*' => 'required|exists:categories,id',
+        'category' => '',
+        'category.*' => 'exists:categories,id',
         'tags' => 'required|array',
         'tags.*' => 'required|exists:tags,id',
         'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
@@ -47,7 +50,25 @@ class CreateCourse extends Component
     {
         $this->categorylist = Category::all();
         $this->tagslist = Tag::all();
-        $this->tutorList = Tutor::all();
+        $this->tutorList = Tutor::with('user')->get();
+
+        // Set the logged-in tutor's ID as always selected
+        $authTutorId = Auth::user()->id;
+        $this->tutors = [$authTutorId];
+        $this->selectedTutors = Tutor::with('user')->where('id', $authTutorId)->get();
+    }
+
+    public function updatedTutors($value)
+    {
+        $authTutorId = Auth::user()->id;
+
+        // Ensure the authenticated user's tutor ID is always selected
+        if (!in_array($authTutorId, $this->tutors)) {
+            $this->tutors[] = $authTutorId;
+        }
+
+        // Update the selected tutors list
+        $this->selectedTutors = Tutor::with('user')->whereIn('id', $this->tutors)->get();
     }
 
     protected function uploadThumbnail()
@@ -57,15 +78,12 @@ class CreateCourse extends Component
 
     public function submitCourse()
     {
-        // Validate input
         $this->validate();
 
-        // Handle file upload
         $filePath = $this->uploadThumbnail();
 
-        // Create a new course record
         $course = Course::create([
-            'user_id' => 1,
+            'user_id' => Auth::user()->id,
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
@@ -76,15 +94,17 @@ class CreateCourse extends Component
             'is_published' => false,
         ]);
 
-        // Attach categories and tags to the course
         $course->categories()->attach($this->category);
         $course->tags()->attach($this->tags);
+        $course->instructors()->attach($this->tutors);
 
-        // Reset form fields after submission
-        $this->reset(['courseTitle', 'description', 'category', 'tags', 'file', 'videoUrl', 'learnDetails', 'audienceDetails', 'requirements']);
+        $this->reset();
+        $this->reset('selectedTutors');
 
-        // Show a success message
-        $this->alert('success', 'Course created successfully!');
+        $this->dispatch('clearSelect2');
+
+        $this->alert('success', 'Course created successfully.');
+        $this->redirect('/dashboard/mycourses');
     }
 
     public function render()
