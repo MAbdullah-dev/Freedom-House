@@ -11,8 +11,7 @@ class TutorFile extends Model
 
     protected $fillable = [
         'tutor_id',
-        'file',
-        'type', 
+        'file_path',
     ];
 
     public function tutor()

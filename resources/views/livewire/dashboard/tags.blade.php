@@ -40,12 +40,14 @@
                             <td>{{ $tag->id }}</td>
                             <td>{{ $tag->name }}</td>
                             <td>
-                                <a href="#" wire:click.prevent="confirmUpdate({{ $tag->id }})" data-bs-toggle="modal" data-bs-target="#updateTagModal">
+                                <a href="#" wire:click.prevent="confirmUpdate({{ $tag->id }})"
+                                    data-bs-toggle="modal" data-bs-target="#updateTagModal">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
                             <td>
-                                <a href="#" wire:click.prevent="confirmDelete({{ $tag->id }})" data-bs-toggle="modal" data-bs-target="#deleteTagModal">
+                                <a href="#" wire:click.prevent="confirmDelete({{ $tag->id }})"
+                                    data-bs-toggle="modal" data-bs-target="#deleteTagModal">
                                     <i class="fas fa-trash text-danger"></i>
                                 </a>
                             </td>
@@ -63,7 +65,8 @@
                 <form wire:submit.prevent="updateTag">
                     <div class="modal-header">
                         <h5 class="modal-title">Update Tag</h5>
-                        <button type="button" class="btn-close" wire:click="closeModal" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" wire:click="closeModal"
+                            data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <input type="text" wire:model="name" class="form-control" />
@@ -72,7 +75,8 @@
                         @enderror
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" wire:click="closeModal" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" wire:click="closeModal"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
@@ -93,7 +97,8 @@
                         Are you sure you want to delete this tag?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" wire:click="closeModal" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" wire:click="closeModal"
+                            data-bs-dismiss="modal">Close</button>
                         <button data-bs-dismiss="modal" type="submit" class="btn btn-danger">Yes, Delete</button>
                     </div>
                 </form>
@@ -105,7 +110,6 @@
 @push('js')
     <script>
         window.addEventListener('close-modal', event => {
-            console.log('close modal');
             $('#deleteTagModal').modal('hide');
             $('#updateTagModal').modal('hide');
         });

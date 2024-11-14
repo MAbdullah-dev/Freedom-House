@@ -37,7 +37,8 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'roles_users');
+        return $this->belongsToMany(Role::class, 'roles_users')
+                ->select('roles.id');
     }
 
     public function courses()
@@ -59,6 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function tutor()
+{
+    return $this->hasOne(Tutor::class);
+}
 
     public function tutorFiles()
     {

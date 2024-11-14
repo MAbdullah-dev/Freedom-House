@@ -27,20 +27,20 @@ class Login extends Component
             if ($user->hasVerifiedEmail()) {
                 Auth::login($user);
 
-                session([
-                    'user_id' => $user->id,
-                    'role_id' => $user->roles()->wherePivot('user_id', $user->id)->first()->pivot->role_id,
-                ]);
+               session([
+                         'user_id' => $user->id,
+                         'role_ids' => $user->roles()->pluck('id')->toArray(),                
+                       ]);
+
 
                 return redirect()->route('dashboard.settings');
             } else {
                 $this->alert('warning', 'Please verify your email address before logging in.');
-                // session()->flash('error', 'Please verify your email address before logging in.');
+                
                 return;
             }
         }
 
-        // session()->flash('error', 'Invalid email or password. Please try again.');
         $this->alert('warning', 'Invalid email or password. Please try again.');
     }
 
