@@ -106,20 +106,24 @@
                         }
 
 
-                        // Hover effect for anchor tags
-                        &:hover {
-                            background-color: rgba(16, 70, 39, 0.111);
 
-                            // Change color of icon on hover
-                            i {
+                        // Hover effect for anchor tags
+
+                    }
+
+                    .edit-link {
+                        i {
+                            &:hover {
                                 color: #8eb555;
                             }
                         }
                     }
 
-                    .edit-link {
+                    .delete-link {
                         i {
-                            margin: 5px;
+                            &:hover {
+                                color: red;
+                            }
                         }
                     }
                 }

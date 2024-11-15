@@ -6,13 +6,17 @@ use App\Models\Course;
 use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class MyCourses extends Component
 {
+    use LivewireAlert;
+
     public $publishedCourses;
     public $pendingCourses;
     public $draftedCourses;
     public $loggedInUser;
+    public $courseId;
 
     public function mount()
     {
@@ -34,6 +38,36 @@ class MyCourses extends Component
             ->where('is_published', false)
             ->where('is_drafted', true)
             ->get();
+    }
+    public function refreshCoursedata()
+    {
+        $this->publishedCourses = Course::where('user_id', Auth::id())
+            ->where('is_published', true)
+            ->where('is_drafted', false)
+            ->get();
+
+        $this->pendingCourses = Course::where('user_id', Auth::id())
+            ->where('is_published', false)
+            ->where('is_drafted', false)
+            ->get();
+
+        $this->draftedCourses = Course::where('user_id', Auth::id())
+            ->where('is_published', false)
+            ->where('is_drafted', true)
+            ->get();
+    }
+    public function confirmDelete($id)
+    {
+        $this->courseId = $id;
+    }
+    public function destroyCourse()
+    {
+        Course::findOrFail($this->courseId)->delete();
+        $this->alert('success', 'Course deleted successfully.');
+        $this->reset(['courseId']);
+        $this->dispatch('close-modal'); // Close modal after deletion
+
+        $this->refreshCoursedata();
     }
 
     public function render()
