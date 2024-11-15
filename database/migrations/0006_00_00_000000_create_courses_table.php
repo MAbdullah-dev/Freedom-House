@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('target_audience');
             $table->text('requirements');
             $table->boolean('is_published')->default(false);
+            $table->boolean('is_drafted')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

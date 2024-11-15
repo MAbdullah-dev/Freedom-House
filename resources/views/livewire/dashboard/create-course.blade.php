@@ -4,12 +4,18 @@
             <div class="header-wrapper d-flex justify-content-between align-items-center mb-2">
                 <img src="{{ asset('assets/svgs/Brand-NameHeader.png.svg') }}" alt="Logo" class="logo">
                 <div class="actions">
-                    <button type="button" class="btn button-draft custom-draft-button">
+                    <button type="button" class="btn button-draft custom-draft-button" wire:click="saveAsDraft">
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
                     </button>
                     <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button>
-                    <button type="submit" class="btn button-submit custom-submit-button"
-                        wire:click="submitCourse">Submit</button>
+                    <button type="submit" class="btn button-submit custom-submit-button" wire:click="submitCourse"
+                        wire:loading.attr="disabled">
+                        <span wire:loading wire:target="submitCourse" class="spinner-border spinner-border-sm"
+                            aria-hidden="true"></span>
+                        <span wire:loading.remove wire:target="submitCourse">Submit</span>
+                        <span wire:loading wire:target="submitCourse">Loading...</span>
+                    </button>
+
                     <a href="" class="custom-close-link ms-1">
                         <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
                     </a>
@@ -58,7 +64,7 @@
                                         <!-- Description -->
                                         <div class="mb-3">
                                             <label for="description">Description</label>
-                                            <textarea wire:model="description" class="form-select" id="description" required></textarea>
+                                            <textarea wire:model="description" class="form-control" id="description" required></textarea>
                                             @error('description')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -279,7 +285,7 @@
         $(document).ready(function() {
             // Initialize Select2 on the category, tags, and tutorSelect dropdowns
             $('#category, #tags, #tutorSelect').select2({
-                placeholder: 'Select options',
+                // placeholder: 'Select options',
                 allowClear: true,
                 multiple: true,
                 closeOnSelect: false

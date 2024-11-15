@@ -19,6 +19,7 @@ class Course extends Model
         'learning_outcomes',
         'target_audience',
         'requirements',
+        'is_drafted',
         'is_published',
     ];
 

@@ -13,8 +13,7 @@ use Livewire\WithFileUploads;
 
 class CreateCourse extends Component
 {
-    use WithFileUploads;
-    use LivewireAlert;
+    use WithFileUploads, LivewireAlert;
 
     public $courseTitle;
     public $description;
@@ -35,10 +34,10 @@ class CreateCourse extends Component
     protected $rules = [
         'courseTitle' => 'required|string|max:255|unique:courses,title',
         'description' => 'required|string',
-        'category' => '',
+        'category' => 'array|min:1',
         'category.*' => 'exists:categories,id',
-        'tags' => 'required|array',
-        'tags.*' => 'required|exists:tags,id',
+        'tags' => 'required|array|min:1',
+        'tags.*' => 'exists:tags,id',
         'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
         'videoUrl' => 'required|url',
         'learnDetails' => 'required|string',
@@ -52,38 +51,59 @@ class CreateCourse extends Component
         $this->tagslist = Tag::all();
         $this->tutorList = Tutor::with('user')->get();
 
-        // Set the logged-in tutor's ID as always selected
-        $authTutorId = Auth::user()->id;
-        $this->tutors = [$authTutorId];
-        $this->selectedTutors = Tutor::with('user')->where('id', $authTutorId)->get();
+        // Ensure logged-in tutor is preselected
+        $authTutor = Tutor::where('user_id', Auth::id())->first();
+        if ($authTutor) {
+            $this->tutors = [$authTutor->id];
+            $this->selectedTutors = [$authTutor];
+        }
     }
 
     public function updatedTutors($value)
     {
-        $authTutorId = Auth::user()->id;
+        $authTutor = Tutor::where('user_id', Auth::id())->first();
 
-        // Ensure the authenticated user's tutor ID is always selected
-        if (!in_array($authTutorId, $this->tutors)) {
-            $this->tutors[] = $authTutorId;
+        // Ensure authenticated tutor remains selected
+        if ($authTutor && !in_array($authTutor->id, $this->tutors)) {
+            $this->tutors[] = $authTutor->id;
         }
 
-        // Update the selected tutors list
-        $this->selectedTutors = Tutor::with('user')->whereIn('id', $this->tutors)->get();
+        // Update selected tutors list
+        $this->selectedTutors = Tutor::with('user')
+            ->whereIn('id', array_unique($this->tutors))
+            ->get();
     }
 
     protected function uploadThumbnail()
     {
-        return $this->file ? $this->file->store('uploads', 'public') : null;
+        try {
+            return $this->file ? $this->file->store('uploads', 'public') : null;
+        } catch (\Exception $e) {
+            $this->alert('error', 'Failed to upload file: ' . $e->getMessage());
+            return null;
+        }
     }
 
     public function submitCourse()
     {
+        $this->createCourse(true);
+    }
+
+    public function saveAsDraft()
+    {
+        $this->createCourse(false);
+    }
+
+    protected function createCourse(bool $isPublished)
+    {
         $this->validate();
 
+        // Upload the thumbnail
         $filePath = $this->uploadThumbnail();
 
+        // Create the course
         $course = Course::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
@@ -91,20 +111,23 @@ class CreateCourse extends Component
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
-            'is_published' => false,
+            'is_drafted' => !$isPublished,
+            'is_published' => $isPublished,
         ]);
 
+        // Attach related data
         $course->categories()->attach($this->category);
         $course->tags()->attach($this->tags);
         $course->instructors()->attach($this->tutors);
 
+        // Reset form and notify user
         $this->reset();
         $this->reset('selectedTutors');
-
         $this->dispatch('clearSelect2');
-
         $this->alert('success', 'Course created successfully.');
-        $this->redirect('/dashboard/mycourses');
+
+        // Redirect to my courses page
+        $this->redirect(route('dashboard.mycourses'));
     }
 
     public function render()
