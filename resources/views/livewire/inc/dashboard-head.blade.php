@@ -11,6 +11,11 @@
                 </ul>
             </div>
             <div class="tutor-notification-request d-flex gap-2">
+                <button class="offcanvas-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                    aria-controls="offcanvasRight">
+                    <i class="fa-solid fa-bell"></i>
+                </button>
+
                 @php
                     $roleIds = auth()->user()->roles->pluck('id')->toArray();
                     $isTutorVerified = auth()->user()->tutor->is_verified ?? null;
@@ -31,6 +36,15 @@
                         Become an Instructor
                     </button>
                 @endif
+            </div>
+        </div>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                .....
             </div>
         </div>
     </div>
