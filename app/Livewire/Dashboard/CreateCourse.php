@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Tutor;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -19,35 +20,55 @@ class CreateCourse extends Component
     public $description;
     public $category = [];
     public $tags = [];
+    public $tutors = [];
     public $file;
     public $videoUrl;
     public $learnDetails;
     public $audienceDetails;
     public $requirements;
+    public $selectedTutors = [];
 
-    public $tagslist;
-    public $categorylist;
-    public $tutorList;
+    public $tagslist = [];
+    public $categorylist = [];
+    public $tutorList = [];
 
     protected $rules = [
-        'courseTitle' => 'required|string|max:255',
+        'courseTitle' => 'required|string|max:255|unique:courses,title',
         'description' => 'required|string',
-        'category' => 'required|array',
+        'category' => '',
         'category.*' => 'exists:categories,id',
-        'tags' => 'nullable|array',
-        'tags.*' => 'exists:tags,id',
-        'file' => 'required|image|max:1024',
+        'tags' => 'required|array',
+        'tags.*' => 'required|exists:tags,id',
+        'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
         'videoUrl' => 'required|url',
         'learnDetails' => 'required|string',
-        'audienceDetails' => 'nullable|string',
-        'requirements' => 'nullable|string',
+        'audienceDetails' => 'required|string',
+        'requirements' => 'required|string',
     ];
 
     public function mount()
     {
         $this->categorylist = Category::all();
         $this->tagslist = Tag::all();
-        $this->tutorList = Tutor::all();
+        $this->tutorList = Tutor::with('user')->get();
+
+        // Set the logged-in tutor's ID as always selected
+        $authTutorId = Auth::user()->id;
+        $this->tutors = [$authTutorId];
+        $this->selectedTutors = Tutor::with('user')->where('id', $authTutorId)->get();
+    }
+
+    public function updatedTutors($value)
+    {
+        $authTutorId = Auth::user()->id;
+
+        // Ensure the authenticated user's tutor ID is always selected
+        if (!in_array($authTutorId, $this->tutors)) {
+            $this->tutors[] = $authTutorId;
+        }
+
+        // Update the selected tutors list
+        $this->selectedTutors = Tutor::with('user')->whereIn('id', $this->tutors)->get();
     }
 
     protected function uploadThumbnail()
@@ -57,15 +78,12 @@ class CreateCourse extends Component
 
     public function submitCourse()
     {
-        // Validate input
         $this->validate();
 
-        // Handle file upload
         $filePath = $this->uploadThumbnail();
 
-        // Create a new course record
         $course = Course::create([
-            'user_id' => auth()->id(), // Set to the logged-in user
+            'user_id' => Auth::user()->id,
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
@@ -76,22 +94,21 @@ class CreateCourse extends Component
             'is_published' => false,
         ]);
 
-        // Attach categories and tags to the course
         $course->categories()->attach($this->category);
-        $course->tags()->sync($this->tags);
+        $course->tags()->attach($this->tags);
+        $course->instructors()->attach($this->tutors);
 
-        // Reset form fields after submission
         $this->reset();
+        $this->reset('selectedTutors');
 
-        // Show a success message
-        $this->alert('success', 'Course created successfully!');
+        $this->dispatch('clearSelect2');
+
+        $this->alert('success', 'Course created successfully.');
+        $this->redirect('/dashboard/mycourses');
     }
 
     public function render()
     {
-        return view('livewire.dashboard.create-course', [
-            'categorylist' => $this->categorylist,
-            'tagslist' => $this->tagslist,
-        ])->layout('components.layouts.createCourse');
+        return view('livewire.dashboard.create-course')->layout('components.layouts.createCourse');
     }
 }
