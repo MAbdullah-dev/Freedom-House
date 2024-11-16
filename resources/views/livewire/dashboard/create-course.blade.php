@@ -169,7 +169,7 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                @error('category')
+                                                @error('tutors')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
