@@ -27,20 +27,20 @@
                         <a class="nav-link" :class="{ 'active': tab === 'trending' }"
                             @click="tab = 'trending'">Trending</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" :class="{ 'active': tab === 'onsite' }" @click="tab = 'onsite'">Onsite</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" :class="{ 'active': tab === 'virtual' }"
                             @click="tab = 'virtual'">Virtual</a>
-                    </li>
+                    </li> --}}
                 </ul>
 
                 <!-- Tab Content -->
                 <div class="tab-content mt-4">
                     <!-- Most Popular Tab -->
                     <div x-show="tab === 'mostPopular'">
-                        <livewire:courses-cards.most-papular-cards />
+                        <livewire:courses-cards.most-popular-cards />
                     </div>
                     <!-- New Tab -->
                     <div x-show="tab === 'new'">
@@ -50,27 +50,21 @@
                     <div x-show="tab === 'trending'">
                         <livewire:courses-cards.trending-cards />
                     </div>
-                    <!-- Onsite Tab -->
+                    {{-- <!-- Onsite Tab -->
                     <div x-show="tab === 'onsite'">
                         <livewire:courses-cards.onsite-cards />
                     </div>
                     <!-- Virtual Tab -->
                     <div x-show="tab === 'virtual'">
                         <livewire:courses-cards.virtual-cards />
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
     </section>
     <section class="course-catelogue pt-3">
         <div class="container">
-            <div class="d-flex align-items-center justify-content-between">
-                <h2 class="my-5">Category</h2>
-                <button class="offcanvas-btn d-block d-flex d-xl-none" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                    <i class="fa-solid fa-sliders"></i>
-                </button>
-            </div>
+            <h2 class="my-5">Category</h2>
             <div class="filters d-flex justify-content-between align-items-center mb-4">
                 <!-- Search Input -->
                 <div class="input-group w-50 position-relative filter-search">
@@ -79,12 +73,15 @@
                             <i class="fas fa-search"></i>
                         </span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Search"
-                        aria-describedby="search-icon">
+                    <input type="text" placeholder="Search courses by title..." wire:model.debounce.300ms="search"
+                        class="form-control mb-3" />
                 </div>
-
+                <button class="offcanvas-btn d-block d-flex d-xl-none" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
                 <!-- Sort Dropdown -->
-                <div class="dropdown ">
+                {{-- <div class="dropdown ">
                     <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
                         id="sortOrderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Release Date(Newest first)
@@ -96,13 +93,15 @@
                         <li><a class="dropdown-item" href="#">Date (Newest)</a></li>
                         <li><a class="dropdown-item" href="#">Date (Oldest)</a></li>
                     </ul>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Offcanvas component -->
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <div class="filter">
@@ -131,28 +130,6 @@
                                 <label for="substance-use">Substance Use Disorder</label>
                             </li>
                         </ul>
-                        <ul class="my-4">
-                            <h4>Course Type</h4>
-                            <li>
-                                <input type="checkbox" id="on-site">
-                                <label for="on-site">Onsite/In Person</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="virtual">
-                                <label for="virtual">Virtual</label>
-                            </li>
-                        </ul>
-                        <ul class="list-unstyled my-4">
-                            <h4>Price</h4>
-                            <li>
-                                <input type="checkbox" id="free">
-                                <label for="free">Free</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="paid">
-                                <label for="paid">Paid</label>
-                            </li>
-                        </ul>
                         <button class="btn filter-btn" @click="clearFilters()">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters
                         </button>
@@ -178,7 +155,7 @@
                                 <label for="substance-use">Substance Use Disorder</label>
                             </li>
                         </ul>
-                        <ul class="my-4">
+                        {{-- <ul class="my-4">
                             <h4>Course Type</h4>
                             <li>
                                 <input type="checkbox" id="on-site">
@@ -188,8 +165,8 @@
                                 <input type="checkbox" id="virtual">
                                 <label for="virtual">Virtual</label>
                             </li>
-                        </ul>
-                        <ul class="list-unstyled my-4">
+                        </ul> --}}
+                        {{-- <ul class="list-unstyled my-4">
                             <h4>Price</h4>
                             <li>
                                 <input type="checkbox" id="free">
@@ -199,7 +176,7 @@
                                 <input type="checkbox" id="paid">
                                 <label for="paid">Paid</label>
                             </li>
-                        </ul>
+                        </ul> --}}
                         <button class="btn filter-btn" @click="clearFilters()">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters
                         </button>
@@ -207,52 +184,55 @@
                 </div>
                 <div class="col-lg-12 col-xl-9">
                     <div class="row gy-4">
-                        <!-- Repeat card structure for course cards -->
-                        <div class="col-sm-6 col-lg-4 ">
-                            <div class="card shadow">
-                                <div class="card-img-top">
-                                    <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top" alt="...">
-                                    <i class="fa-regular fa-bookmark"></i>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Recovery-Oriented System of Care</h5>
-                                    <div class="tutor-ratings d-flex align-items-center gap-1">
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                        @foreach ($courses as $item)
+                            <div class="col-sm-6 col-lg-4 ">
+                                <div class="card shadow">
+                                    <div class="card-img-top">
+                                        <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                                            class="card-img-top" alt="...">
+                                        <i class="fa-regular fa-bookmark"></i>
                                     </div>
-                                    <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
-                                        <div class="tutor-data d-flex align-items-center gap-1">
-                                            <img src="{{ asset('assets/images/created_by.png') }}" alt="">
-                                            <small>by</small><span>Autumn Green</span>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $item->title }}</h5>
+                                        <div class="tutor-ratings d-flex align-items-center gap-1">
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
                                         </div>
-                                        <div class="tutor-meta-icon d-flex align-items-center gap-2">
-                                            <div class="meta-icon d-flex align-items-center">
-                                                <i class="fa-regular fa-user" style="color: #757c8e;"></i>
-                                                <span>11</span>
+                                        <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
+                                            <div class="tutor-data d-flex align-items-center gap-1">
+                                                <img src="{{ asset('assets/images/created_by.png') }}" alt="">
+                                                <small>by</small><span>{{ $item->user->first_name }}
+                                                    {{ $item->user->last_name }}</span>
                                             </div>
-                                            <div class="meta-icon d-flex align-items-center">
-                                                <i class="fa-regular fa-clock" style="color: #757c8e;"></i>
-                                                <span>2h</span>
+                                            <div class="tutor-meta-icon d-flex align-items-center gap-2">
+                                                {{-- <div class="meta-icon d-flex align-items-center">
+                                                    <i class="fa-regular fa-user" style="color: #757c8e;"></i>
+                                                    <span>11</span>
+                                                </div> --}}
+                                                {{-- <div class="meta-icon d-flex align-items-center">
+                                                    <i class="fa-regular fa-clock" style="color: #757c8e;"></i>
+                                                    <span>2h</span>
+                                                </div> --}}
                                             </div>
                                         </div>
+                                        <p class="card-text">{{ $item->description }}
+                                        </p>
+                                        <div class="post-details">
+                                            <div>
+                                                {{-- <span class="duration">2hr &nbsp;|&nbsp;</span> --}}
+                                                <span class="date">Published:
+                                                    {{ $item->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                        <a class="button-primary mt-3 d-block w-100 text-center" href="#">More
+                                            Details...</a>
                                     </div>
-                                    <p class="card-text">A recovery-oriented system of care is a network of clinical
-                                        and nonclinical use recovery. While co…
-                                    </p>
-                                    <div class="post-details">
-                                        <center>
-                                            <span class="duration">2hr &nbsp;|&nbsp;</span>
-                                            <span class="date">Publish date: May 24 2024</span>
-                                        </center>
-                                    </div>
-                                    <a class="button-primary mt-3 d-block w-100 text-center" href="#">More Details...</a>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Repeat card structure for additional course cards -->
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -274,33 +254,33 @@
 
 </div>
 @script
-<script type="text/javascript">
-    const swiper = new Swiper('.swiper', {
-        loop: true,
-        grabCursor: true,
-        // spaceBetween: 30, // Adjust the spacing between slides
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-            320: {
-                slidesPerView: 1,
-                spaceBetween: 0,
+    <script type="text/javascript">
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            grabCursor: true,
+            // spaceBetween: 30, // Adjust the spacing between slides
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
-            768: {
-                slidesPerView: 2,
-                spaceBetween: 0,
-            },
-            1024: {
-                slidesPerView: 3,
-                spaceBetween: 0,
-            },
-            1440: {
-                slidesPerView: 4,
-                spaceBetween: 0,
-            },
-        }
-    });
-</script>
+            breakpoints: {
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 0,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 0,
+                },
+                1440: {
+                    slidesPerView: 4,
+                    spaceBetween: 0,
+                },
+            }
+        });
+    </script>
 @endscript
