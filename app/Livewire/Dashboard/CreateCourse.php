@@ -54,7 +54,7 @@ class CreateCourse extends Component
         // Ensure logged-in tutor is preselected
         $authTutor = Tutor::where('user_id', Auth::id())->first();
         if ($authTutor) {
-            $this->tutors = [$authTutor->user_id];
+            $this->tutors = [$authTutor->id];
             $this->selectedTutors = [$authTutor];
         }
         // dd(Auth::user()->first_name);
@@ -65,8 +65,8 @@ class CreateCourse extends Component
         $authTutor = Tutor::where('user_id', Auth::id())->first();
 
         // Ensure authenticated tutor remains selected
-        if ($authTutor && !in_array($authTutor->user_id, $this->tutors)) {
-            $this->tutors[] = $authTutor->user_id;
+        if ($authTutor && !in_array($authTutor->id, $this->tutors)) {
+            $this->tutors[] = $authTutor->id;
         }
 
         // Update selected tutors list

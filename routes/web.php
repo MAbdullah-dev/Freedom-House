@@ -38,24 +38,24 @@ Route::get('/login', Login::class)->name('login');
 
 Route::get('/course/catalogue', CourseCatelogue::class)->name('course.catalogue');
 Route::get('/about-us', AboutUs::class)->name('about-us');
-Route::get('/tutor/profile',TutorPrfile::class)->name('tutor.profile');
+Route::get('/tutor/profile', TutorPrfile::class)->name('tutor.profile');
 Route::get('/course/details', CourseDetails::class)->name('course.details');
 Route::get('/on-site_course/details', OnSiteCourseDetails::class)->name('onsite.course.details');
 Route::get('/calendar', EventCalendar::class)->name('calendar');
 // dashboard routes
-Route::get('/dashboard',Dashboard::class)->name('dashboard');
+Route::get('/dashboard', Dashboard::class)->name('dashboard');
 Route::get('dashboard/help', HelpRequest::class)->name('dashboard.help');
 Route::get('/dashboard/enrollments', ViewEnrollments::class)->name('dashboard.enrollments');
-Route::get('/dashboard/profile',DashboardProfile::class)->name('dashboard.profile');
-Route::get('/dashboard/wishlist',DashboardWishlist::class)->name('dashboard.wishlist');
-Route::get('/dashboard/enrolled-courses',DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
-Route::get('/dashboard/settings',DashboardSettings::class)->name('dashboard.settings');
+Route::get('/dashboard/profile', DashboardProfile::class)->name('dashboard.profile');
+Route::get('/dashboard/wishlist', DashboardWishlist::class)->name('dashboard.wishlist');
+Route::get('/dashboard/enrolled-courses', DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
+Route::get('/dashboard/settings', DashboardSettings::class)->name('dashboard.settings');
 
-Route::get('/dashboard/mycourses',MyCourses::class)->name('dashboard.mycourses');
-Route::get('/dashboard/announcements',Announcements::class)->name('dashboard.announcements');
-Route::get('/dashboard/course-analytics',CourseAnalytics::class)->name('dashboard.analytics');
-Route::get('/dashboard/scehedule-classes',ScheduleClasses::class)->name('dashboard.scehedule-classes');
-Route::get('/dashboard/create-course',CreateCourse::class)->name('dashboard.create-course');
-Route::get('/dashboard/course/details',CourseDetail::class)->name('dashboard.course.details');
-Route::get('dashboard/categories',Category::class)->name('dashboard.categories');
-Route::get('dashboard/tags',Tags::class)->name('dashboard.tags');
+Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses');
+Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
+Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
+Route::get('/dashboard/scehedule-classes', ScheduleClasses::class)->name('dashboard.scehedule-classes');
+Route::get('/dashboard/create-course', CreateCourse::class)->name('dashboard.create-course');
+Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.course.details');
+Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
+Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
