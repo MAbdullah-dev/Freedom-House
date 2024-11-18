@@ -23,6 +23,13 @@ class Course extends Model
         'is_published',
     ];
 
+
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+
+
     public function instructors()
     {
         return $this->belongsToMany(User::class, 'course_instructors');

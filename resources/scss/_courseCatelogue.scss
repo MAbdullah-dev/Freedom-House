@@ -1,5 +1,4 @@
 .course-catalogue {
-
     .card {
         border-radius: 25px;
 
@@ -185,10 +184,11 @@
 
     .course-catelogue-list {
         .nav-tabs {
-            border-bottom: 3px solid #DEE2E6;
+            border-bottom: 3px solid #dee2e6;
+            cursor: pointer;
 
             .nav-link {
-                color: #6A6F73;
+                color: #6a6f73;
                 font-size: 16px;
                 font-weight: 700;
                 line-height: 24px;
@@ -262,7 +262,6 @@
                 line-height: 30px;
                 font-weight: 500;
                 color: #212327;
-
             }
 
             ul {
@@ -280,7 +279,9 @@
 
                         // appearance: none;
                         &:focus {
-                            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.295));
+                            filter: drop-shadow(
+                                2px 4px 6px rgba(0, 0, 0, 0.295)
+                            );
                             accent-color: $primary-color;
                         }
                     }
@@ -291,7 +292,6 @@
                         line-height: 24px;
                         color: #212327;
                         margin: 10px 0;
-
                     }
                 }
             }
@@ -312,13 +312,12 @@
             line-height: 38px;
             color: #161616;
             margin: 40px 0;
-
         }
 
         .instructor-card {
             margin: 60px 5px;
             // border-radius: 15px;
-            border: 1px solid #D1D7DC;
+            border: 1px solid #d1d7dc;
 
             ul {
                 padding: 10px;
@@ -344,7 +343,7 @@
                         font-size: 14px;
                         line-height: 16px;
                         font-weight: 400;
-                        color: #2D2F31;
+                        color: #2d2f31;
                     }
 
                     .instructor-rating {
@@ -352,7 +351,7 @@
                             font-size: 14px;
                             font-weight: 400;
                             line-height: 14px;
-                            color: #4D3105;
+                            color: #4d3105;
                         }
 
                         .instructor-data {
@@ -360,18 +359,17 @@
                                 font-size: 12px;
                                 font-weight: 400;
                                 line-height: 14px;
-                                color: #2D2F31;
+                                color: #2d2f31;
 
                                 strong {
                                     font-size: 12px;
                                     font-weight: 700;
                                     line-height: 14px;
-                                    color: #2D2F31;
+                                    color: #2d2f31;
                                 }
                             }
                         }
                     }
-
                 }
             }
         }
@@ -399,5 +397,4 @@
             }
         }
     }
-
 }

@@ -84,7 +84,7 @@
                 </div>
 
                 <!-- Sort Dropdown -->
-                <div class="dropdown ">
+                {{-- <div class="dropdown ">
                     <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
                         id="sortOrderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         Release Date(Newest first)
@@ -96,13 +96,15 @@
                         <li><a class="dropdown-item" href="#">Date (Newest)</a></li>
                         <li><a class="dropdown-item" href="#">Date (Oldest)</a></li>
                     </ul>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Offcanvas component -->
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            {{-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
                     <div class="filter">
@@ -158,7 +160,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="row">
                 <div class="col-xl-3 d-none d-xl-block">
@@ -178,7 +180,7 @@
                                 <label for="substance-use">Substance Use Disorder</label>
                             </li>
                         </ul>
-                        <ul class="my-4">
+                        {{-- <ul class="my-4">
                             <h4>Course Type</h4>
                             <li>
                                 <input type="checkbox" id="on-site">
@@ -188,8 +190,8 @@
                                 <input type="checkbox" id="virtual">
                                 <label for="virtual">Virtual</label>
                             </li>
-                        </ul>
-                        <ul class="list-unstyled my-4">
+                        </ul> --}}
+                        {{-- <ul class="list-unstyled my-4">
                             <h4>Price</h4>
                             <li>
                                 <input type="checkbox" id="free">
@@ -199,7 +201,7 @@
                                 <input type="checkbox" id="paid">
                                 <label for="paid">Paid</label>
                             </li>
-                        </ul>
+                        </ul> --}}
                         <button class="btn filter-btn" @click="clearFilters()">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters
                         </button>
@@ -207,52 +209,55 @@
                 </div>
                 <div class="col-lg-12 col-xl-9">
                     <div class="row gy-4">
-                        <!-- Repeat card structure for course cards -->
-                        <div class="col-sm-6 col-lg-4 ">
-                            <div class="card shadow">
-                                <div class="card-img-top">
-                                    <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top" alt="...">
-                                    <i class="fa-regular fa-bookmark"></i>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Recovery-Oriented System of Care</h5>
-                                    <div class="tutor-ratings d-flex align-items-center gap-1">
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                        @foreach ($allCourses as $item)
+                            <div class="col-sm-6 col-lg-4 ">
+                                <div class="card shadow">
+                                    <div class="card-img-top">
+                                        <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
+                                            alt="...">
+                                        <i class="fa-regular fa-bookmark"></i>
                                     </div>
-                                    <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
-                                        <div class="tutor-data d-flex align-items-center gap-1">
-                                            <img src="{{ asset('assets/images/created_by.png') }}" alt="">
-                                            <small>by</small><span>Autumn Green</span>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $item->title }}</h5>
+                                        <div class="tutor-ratings d-flex align-items-center gap-1">
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
                                         </div>
-                                        <div class="tutor-meta-icon d-flex align-items-center gap-2">
-                                            <div class="meta-icon d-flex align-items-center">
-                                                <i class="fa-regular fa-user" style="color: #757c8e;"></i>
-                                                <span>11</span>
+                                        <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
+                                            <div class="tutor-data d-flex align-items-center gap-1">
+                                                <img src="{{ asset('assets/images/created_by.png') }}" alt="">
+                                                <small>by</small><span>{{ $item->user->first_name }}
+                                                    {{ $item->user->last_name }}</span>
                                             </div>
-                                            <div class="meta-icon d-flex align-items-center">
-                                                <i class="fa-regular fa-clock" style="color: #757c8e;"></i>
-                                                <span>2h</span>
+                                            <div class="tutor-meta-icon d-flex align-items-center gap-2">
+                                                {{-- <div class="meta-icon d-flex align-items-center">
+                                                    <i class="fa-regular fa-user" style="color: #757c8e;"></i>
+                                                    <span>11</span>
+                                                </div> --}}
+                                                {{-- <div class="meta-icon d-flex align-items-center">
+                                                    <i class="fa-regular fa-clock" style="color: #757c8e;"></i>
+                                                    <span>2h</span>
+                                                </div> --}}
                                             </div>
                                         </div>
+                                        <p class="card-text">{{ $item->description }}
+                                        </p>
+                                        <div class="post-details">
+                                            <div>
+                                                {{-- <span class="duration">2hr &nbsp;|&nbsp;</span> --}}
+                                                <span class="date">Publish date:
+                                                    {{ $item->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                        <a class="button-primary mt-3 d-block w-100 text-center" href="#">More
+                                            Details...</a>
                                     </div>
-                                    <p class="card-text">A recovery-oriented system of care is a network of clinical
-                                        and nonclinical use recovery. While co…
-                                    </p>
-                                    <div class="post-details">
-                                        <center>
-                                            <span class="duration">2hr &nbsp;|&nbsp;</span>
-                                            <span class="date">Publish date: May 24 2024</span>
-                                        </center>
-                                    </div>
-                                    <a class="button-primary mt-3 d-block w-100 text-center" href="#">More Details...</a>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Repeat card structure for additional course cards -->
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -274,33 +279,33 @@
 
 </div>
 @script
-<script type="text/javascript">
-    const swiper = new Swiper('.swiper', {
-        loop: true,
-        grabCursor: true,
-        // spaceBetween: 30, // Adjust the spacing between slides
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-            320: {
-                slidesPerView: 1,
-                spaceBetween: 0,
+    <script type="text/javascript">
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            grabCursor: true,
+            // spaceBetween: 30, // Adjust the spacing between slides
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
-            768: {
-                slidesPerView: 2,
-                spaceBetween: 0,
-            },
-            1024: {
-                slidesPerView: 3,
-                spaceBetween: 0,
-            },
-            1440: {
-                slidesPerView: 4,
-                spaceBetween: 0,
-            },
-        }
-    });
-</script>
+            breakpoints: {
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 0,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 0,
+                },
+                1440: {
+                    slidesPerView: 4,
+                    spaceBetween: 0,
+                },
+            }
+        });
+    </script>
 @endscript
