@@ -248,7 +248,7 @@
                                         <div class="post-details">
                                             <div>
                                                 {{-- <span class="duration">2hr &nbsp;|&nbsp;</span> --}}
-                                                <span class="date">Publish date:
+                                                <span class="date">Published:
                                                     {{ $item->created_at->diffForHumans() }}</span>
                                             </div>
                                         </div>
