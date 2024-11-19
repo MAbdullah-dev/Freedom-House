@@ -2,13 +2,7 @@
 
     <section class="event-calendar">
         <div class="container">
-            <!-- Calendar Header with Navigation, Filters, and Search -->
             <div class="calendar-header d-flex align-items-center mb-3">
-                {{-- <button class="btn btn-outline-primary me-2">Today</button>
-                <button class="btn btn-outline-secondary btn-nav me-2"><i class="fas fa-chevron-left"></i></button>
-                <div class="calendar-title fw-bold fs-5">October 2024</div>
-                <button class="btn btn-outline-secondary btn-nav ms-2"><i class="fas fa-chevron-right"></i></button> --}}
-
                 <div class="ms-auto d-flex align-items-center">
                     <input type="text" class="form-control search-bar me-2" placeholder="🔍 Search">
                     <button class="btn btn-outline-secondary btn-filter">Filters <i
@@ -64,7 +58,7 @@
     </section>
 
     <!-- Event Modal -->
-    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -84,6 +78,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
-

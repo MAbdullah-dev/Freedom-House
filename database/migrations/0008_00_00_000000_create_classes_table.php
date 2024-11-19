@@ -14,15 +14,19 @@ return new class extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->nullable()->constrained('courses')->onDelete('cascade')->cascadeOnUpdate();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->string('title');
             $table->text('description');
-            $table->integer('capacity');
+            $table->integer('capacity')->nullable();
             $table->boolean('visibility');
             $table->enum('class_type', ['onsite', 'virtual', 'recorded']);
             $table->string('teams_link')->nullable();
             $table->string('onsite_address')->nullable();
-            $table->string('cerficate_template')->nullable();
+            $table->string('recorded_video_url')->nullable();
+            $table->enum('is_paid', ['free', 'paid'])->default('free');
+            $table->decimal('price', 8, 2)->nullable();
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
+            $table->integer('max_students')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

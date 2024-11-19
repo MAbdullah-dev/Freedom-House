@@ -39,7 +39,7 @@
                 box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
             }
         }
-        button{
+        button {
             width: max-content;
         }
 
@@ -279,10 +279,11 @@
                 outline: none;
                 background: none;
                 transition: none;
+                cursor: pointer;
 
                 &:hover,
                 &:focus {
-                    color: $primary-color; // Define $primary-color in your SCSS
+                    color: $primary-color;
                     background: none;
                     box-shadow: none;
                     border-bottom: none;
@@ -334,5 +335,4 @@
             opacity: 0;
         }
     }
-
 }

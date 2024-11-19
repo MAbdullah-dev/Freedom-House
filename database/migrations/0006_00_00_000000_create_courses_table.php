@@ -23,6 +23,9 @@ return new class extends Migration
             $table->text('requirements');
             $table->boolean('is_published')->default(false);
             $table->boolean('is_drafted')->default(false);
+            $table->string('cerficate_template')->nullable();
+            $table->boolean('is_certified')->default(false);
+            $table->boolean('is_completed')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

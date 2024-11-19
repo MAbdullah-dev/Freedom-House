@@ -1,137 +1,186 @@
 <!-- Modal -->
-<div class="modal fade" id="create-class" tabindex="-1" aria-labelledby="createClassLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Make modal larger if needed -->
+<div class="modal fade" wire:ignore.self id="create-class" tabindex="-1" aria-labelledby="createClassEventLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="createClassLabel">Create Class</h5>
+                <h5 class="modal-title" id="createClassEventLabel">
+                    {{ $type === 'class' ? 'Create Class' : 'Create Event' }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" x-data="{ tab: 'details', classType: '', isPaid: '' }">
+            <div class="modal-body">
+                <form wire:submit.prevent="submit" class="form">
+                    <!-- Select Type (Class or Event) -->
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Select Type</label>
+                        <select wire:model="type" id="type" class="form-select" wire:change="dispatchTypeChanged">
+                            <option value="class">Class</option>
+                            <option value="event">Event</option>
+                        </select>
+                        @error('type')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
-                <!-- Tab Navigation -->
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" :class="{ 'active': tab === 'details' }" @click="tab = 'details'">Details</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" :class="{ 'active': tab === 'schedule' }" @click="tab = 'schedule'">Schedule</a>
-                    </li>
-                </ul>
-
-                <!-- Tab Content -->
-                <div class="tab-content mt-4">
-
-                    <!-- Details Tab -->
-                    <div x-show="tab === 'details'">
+                    <!-- Course Name (Only shown if type is 'class') -->
+                    @if ($type === 'class')
                         <div class="mb-3">
                             <label for="course" class="form-label">Course Name</label>
-                            <select id="course" class="form-select">
+                            <select id="course" wire:model="course_id" class="form-select">
                                 <option value="">Select Course</option>
-                                <option value="course1">Course 1</option>
-                                <option value="course2">Course 2</option>
+                                @foreach ($courses as $course)
+                                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                @endforeach
                             </select>
+                            @error('course_id')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
+                    @endif
 
-                        <div class="mb-3">
-                            <label for="classTitle" class="form-label">Class Title</label>
-                            <input type="text" id="classTitle" class="form-control" placeholder="Enter Class Title">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="classDescription" class="form-label">Class Description</label>
-                            <textarea id="classDescription" class="form-control" placeholder="Enter Class Description"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="classType" class="form-label">Class Type</label>
-                            <select id="classType" x-model="classType" class="form-select">
-                                <option value="">Select Type</option>
-                                <option value="virtual">Virtual</option>
-                                <option value="recorded">Recorded</option>
-                                <option value="onsite">Onsite</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="isPaid" class="form-label">Free or Paid</label>
-                            <select id="isPaid" x-model="isPaid" class="form-select">
-                                <option value="free">Free</option>
-                                <option value="paid">Paid</option>
-                            </select>
-                        </div>
-
-                        <!-- Show Price Input if Paid -->
-                        <div class="mb-3" x-show="isPaid === 'paid'">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="number" id="price" class="form-control" placeholder="Enter Price">
-                        </div>
-
-                        <button type="button" class="btn btn-primary mt-3" @click="tab = 'schedule'">Next</button>
+                    <!-- Title -->
+                    <div class="mb-3">
+                        <label for="title"
+                            class="form-label">{{ $type === 'class' ? 'Class Title' : 'Event Title' }}</label>
+                        <input wire:model="title" id="title" class="form-control" type="text"
+                            placeholder="Enter Title">
+                        @error('title')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
-                    <!-- Schedule Tab -->
-                    <div x-show="tab === 'schedule'">
-                        <div class="mb-3">
-                            <label for="startDateTime" class="form-label">Start Date & Time</label>
-                            <input type="datetime-local" id="startDateTime" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="endDateTime" class="form-label">End Date & Time</label>
-                            <input type="datetime-local" id="endDateTime" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="maxStudents" class="form-label">Maximum Students</label>
-                            <input type="number" id="maxStudents" class="form-control" placeholder="Enter Max Students">
-                            <small class="form-text text-muted">Leave blank for no limit.</small>
-                        </div>
-
-                        <!-- Recorded Class Fields -->
-                        <template x-if="classType === 'recorded'">
-                            <div>
-                                <div class="mb-3">
-                                    <label for="videoLink" class="form-label">Video Link</label>
-                                    <input type="url" id="videoLink" class="form-control" placeholder="Enter Video Link">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="quizLink" class="form-label">Quiz Link (Optional)</label>
-                                    <input type="url" id="quizLink" class="form-control" placeholder="Enter Quiz Link">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="assignmentLink" class="form-label">Assignment Link (Optional)</label>
-                                    <input type="url" id="assignmentLink" class="form-control" placeholder="Enter Assignment Link">
-                                </div>
-                            </div>
-                        </template>
-
-                        <!-- Virtual Class Field -->
-                        <template x-if="classType === 'virtual'">
-                            <div class="mb-3">
-                                <label for="teamsLink" class="form-label">Teams Link</label>
-                                <input type="url" id="teamsLink" class="form-control" placeholder="Enter Teams Link or Auto-generate">
-                            </div>
-                        </template>
-
-                        <!-- Onsite Class Field -->
-                        <template x-if="classType === 'onsite'">
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" id="address" class="form-control" placeholder="Enter Address">
-                            </div>
-                        </template>
-
-                        <button type="button" class="btn btn-secondary mt-3" @click="tab = 'details'">Back</button>
-                        <button type="button" class="btn btn-primary mt-3">Save</button>
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="description"
+                            class="form-label">{{ $type === 'class' ? 'Class Description' : 'Event Description' }}</label>
+                        <textarea wire:model="description" id="description" class="form-control" placeholder="Enter Description"></textarea>
+                        @error('description')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
-                </div>
-            </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <!-- Event/Class Type (Onsite, Virtual, Recorded) -->
+                    <div class="mb-3">
+                        <label for="classType"
+                            class="form-label">{{ $type === 'class' ? 'Class Type' : 'Event Type' }}</label>
+                        <select wire:model="class_type" id="classType" class="form-select"
+                            wire:change="dispatchClassTypeChanged">
+                            <option value="onsite">Onsite</option>
+                            <option value="virtual">Virtual</option>
+                            <option value="recorded">Recorded</option>
+                        </select>
+                        @error('class_type')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Teams Link (Visible only if type is Virtual) -->
+                    @if ($class_type === 'virtual')
+                        <div class="mb-3">
+                            <label for="teamsLink" class="form-label">Teams Link</label>
+                            <input wire:model="teams_link" id="teamsLink" class="form-control" type="url"
+                                placeholder="Enter Teams Link">
+                            @error('teams_link')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    @endif
+
+                    <!-- Onsite Address (Visible only if type is Onsite) -->
+                    @if ($class_type === 'onsite')
+                        <div class="mb-3">
+                            <label for="onsiteAddress" class="form-label">Onsite Address</label>
+                            <input wire:model="onsite_address" id="onsiteAddress" class="form-control" type="url"
+                                placeholder="Enter Onsite Address">
+                            @error('onsite_address')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    @endif
+
+                    <!-- Recorded Video URL (Visible only if type is Recorded) -->
+                    @if ($class_type === 'recorded')
+                        <div class="mb-3">
+                            <label for="recordedVideoUrl" class="form-label">Recorded Video URL</label>
+                            <input wire:model="recorded_video_url" id="recordedVideoUrl" class="form-control"
+                                type="url" placeholder="Enter Recorded Video URL">
+                            @error('recorded_video_url')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    @endif
+
+                    <!-- Paid/Free -->
+                    <div class="mb-3">
+                        <label for="isPaid"
+                            class="form-label">{{ $type === 'class' ? 'Class Payment Status' : 'Event Payment Status' }}</label>
+                        <select wire:model="is_paid" id="isPaid" class="form-select"
+                            wire:change="dispatchIsPaidChanged">
+                            <option value="free">Free</option>
+                            <option value="paid">Paid</option>
+                        </select>
+                        @error('is_paid')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Price (Visible only if Paid) -->
+                    @if ($is_paid === 'paid')
+                        <div class="mb-3">
+                            <label for="price"
+                                class="form-label">{{ $type === 'class' ? 'Class Price' : 'Event Price' }}</label>
+                            <input wire:model="price" id="price" class="form-control" type="number"
+                                placeholder="Enter Price">
+                            @error('price')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    @endif
+
+                    <!-- Capacity -->
+                    <div class="mb-3">
+                        <label for="capacity"
+                            class="form-label">{{ $type === 'class' ? 'Class Capacity' : 'Event Capacity' }}</label>
+                        <input wire:model="capacity" id="capacity" class="form-control" type="number"
+                            placeholder="Enter Capacity">
+                        @error('capacity')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- Start Date -->
+                    <div class="mb-3">
+                        <label for="startDate"
+                            class="form-label">{{ $type === 'class' ? 'Class Start Date' : 'Event Start Date' }}</label>
+                        <input wire:model="start_date" id="startDate" class="form-control" type="datetime-local">
+                        @error('start_date')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="mb-3">
+                        <label for="endDate"
+                            class="form-label">{{ $type === 'class' ? 'Class End Date' : 'Event End Date' }}</label>
+                        <input wire:model="end_date" id="endDate" class="form-control" type="datetime-local">
+                        @error('end_date')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <button type="submit"
+                        class="btn btn-primary mt-3">{{ $type === 'class' ? 'Create Class' : 'Create Event' }}</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
 
+@push('js')
+    <script>
+        window.addEventListener('closeModal', event => {
+            $('#create-class').modal('hide');
+        });
+    </script>
+@endpush

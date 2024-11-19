@@ -13,7 +13,7 @@
                     <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button"
                         id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-globe icon"></i>
-                        <span id="selected-timezone">-04:00</span> <!-- This span will show the selected timezone -->
+                        <span id="selected-timezone">-04:00</span>
                     </button>
                     <ul class="dropdown-menu custom-dropdown-menu w-100" id="timezoneList"
                         aria-labelledby="dropdownMenuButton">
@@ -30,24 +30,21 @@
                 </div>
             </div>
             <div class="col-xl-3 mb-3">
-                <button type="button" class="button-primary w-100" data-bs-toggle="modal" data-bs-target="#create-class"><i
-                        class="fa-solid fa-plus"></i> New Event</button>
+                <button type="button" class="button-primary w-100" data-bs-toggle="modal"
+                    data-bs-target="#create-class"><i class="fa-solid fa-plus"></i> New Class/Event</button>
             </div>
         </div>
         <div class="no-enrollment-img d-flex justify-content-center align-content-center mt-5">
             <img src="{{ asset('assets/images/no-enrollment.png') }}" alt="no-enrollment" />
         </div>
     </section>
-    <!-- Bootstrap Modal for Form -->
     <livewire:dashboard.class-form />
     @script
         <script>
             document.querySelectorAll('.dropdown-item').forEach(function(item) {
                 item.addEventListener('click', function(event) {
-                    // Get the selected timezone text
                     const selectedTimezone = event.target.textContent;
 
-                    // Update the button text with the selected timezone
                     document.getElementById('selected-timezone').textContent = selectedTimezone;
                 });
             });

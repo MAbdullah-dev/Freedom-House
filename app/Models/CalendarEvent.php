@@ -11,7 +11,7 @@ class CalendarEvent extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id',
+        'user_id',  
         'event_title',
         'start_time',
         'end_time',

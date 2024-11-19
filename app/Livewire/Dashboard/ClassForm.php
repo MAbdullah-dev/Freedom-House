@@ -1,73 +1,118 @@
 <?php
-
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
+use App\Models\Course;
+use App\Models\Classe;
+use App\Models\Events;
+use Illuminate\Support\Facades\Auth;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class ClassForm extends Component
 {
-    public $courseName;
-    public $classTitle;
-    public $classDescription;
-    public $classType;
-    public $isPaid;
-    public $price;
-    public $startDate;
-    public $endDate;
-    public $maxStudents;
-    public $videoLink;
-    public $quiz;
-    public $assignment;
-    public $teamsLink;
-    public $address;
+    use LivewireAlert;
 
-    public $currentTab = 1;
+    public $type = 'class';
+    public $course_id, $title, $description, $class_type = 'onsite', $teams_link, $onsite_address, $is_paid = 'free';
+    public $price = 0, $capacity, $visibility = 1, $start_date, $end_date, $recorded_video_url;
+    public $courses = [];
 
     protected $rules = [
-        'courseName' => 'required',
-        'classTitle' => 'required|string|max:255',
-        'classDescription' => 'required|string',
-        'classType' => 'required',
-        'isPaid' => 'required',
-        'price' => 'nullable|numeric',
-        'startDate' => 'required|date',
-        'endDate' => 'required|date|after:startDate',
-        'maxStudents' => 'nullable|integer',
-        'videoLink' => 'nullable|url',
-        'teamsLink' => 'nullable|url',
-        'address' => 'nullable|string|max:255',
+        'type' => 'required|in:class,event',
+        'course_id' => 'nullable|exists:courses,id',
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'class_type' => 'required_if:type,class|in:onsite,virtual,recorded',
+        'teams_link' => 'nullable|url',
+        'onsite_address' => 'nullable|required_if:class_type,onsite|string|max:255',
+        'recorded_video_url' => 'nullable|required_if:class_type,recorded|url',
+        'is_paid' => 'required|in:free,paid',
+        'price' => 'nullable|required_if:is_paid,paid|numeric',
+        'capacity' => 'required|integer|min:1',
+        'start_date' => 'required|date|after_or_equal:today',
+        'end_date' => 'required|date|after:start_date',
     ];
 
-    public function updatedIsPaid($value)
+    public function mount()
     {
-        if ($value == 'free') {
-            $this->price = null;
+        $this->courses = Course::all();
+    }
+
+    public function dispatchClassTypeChanged()
+    {
+        if ($this->class_type === 'onsite') {
+            $this->reset(['teams_link', 'recorded_video_url']);
+        } elseif ($this->class_type === 'virtual') {
+            $this->reset(['onsite_address', 'recorded_video_url']);
+        } elseif ($this->class_type === 'recorded') {
+            $this->reset(['teams_link', 'onsite_address']);
         }
     }
 
-    public function updatedClassType($value)
+    public function dispatchTypeChanged()
     {
-        // Reset fields when class type changes
-        $this->videoLink = null;
-        $this->teamsLink = null;
-        $this->address = null;
+        $this->dispatch('refreshComponent');
     }
 
-    public function nextStep()
+    public function dispatchIsPaidChanged()
     {
-        $this->currentTab = 2;
-    }
-
-    public function prevStep()
-    {
-        $this->currentTab = 1;
+        $this->dispatch('refreshComponent');
     }
 
     public function submit()
     {
         $this->validate();
 
-        // Handle form submission logic here
+        if ($this->type === 'class') {
+            $this->createClass();
+        } else {
+            $this->createEvent();
+        }
+
+        $this->reset();
+    }
+
+    private function createClass()
+    {
+        Classe::create([
+            'title' => $this->title,
+            'description' => $this->description,
+            'course_id' => $this->course_id,
+            'class_type' => $this->class_type,
+            'teams_link' => $this->teams_link,
+            'onsite_address' => $this->onsite_address,
+            'recorded_video_url' => $this->recorded_video_url,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'capacity' => $this->capacity,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'visibility' => $this->visibility,
+        ]);
+        $this->dispatch('closeModal');
+        $this->alert('success', 'Class created successfully!');
+    }
+
+    private function createEvent()
+    {
+
+        $userId = Auth::id();
+        Events::create([
+        'title' => $this->title,
+        'description' => $this->description,
+        'user_id' => $userId,
+        'class_type' => $this->class_type,
+        'teams_link' => $this->teams_link,
+        'onsite_address' => $this->onsite_address,
+        'recorded_video_url' => $this->recorded_video_url,
+        'is_paid' => $this->is_paid,
+        'price' => $this->price,
+        'capacity' => $this->capacity,
+        'start_date' => $this->start_date,
+        'end_date' => $this->end_date,
+    ]);
+        $this->dispatch('closeModal');
+        $this->alert('success', 'Event created successfully!');
     }
 
     public function render()

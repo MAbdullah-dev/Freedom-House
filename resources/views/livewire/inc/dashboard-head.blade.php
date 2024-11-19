@@ -24,7 +24,7 @@
                 @if (in_array(2, $roleIds))
                     @if ($isTutorVerified)
                         <button type="button" class="button-secondary"
-                            onclick="location.href='{{ route('dashboard.create-course') }}'">
+                            onclick="location.href='{{ route('dashboard.create.course') }}'">
                             Create Course
                         </button>
                     @else

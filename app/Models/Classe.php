@@ -11,9 +11,20 @@ class Classe extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'course_id', 'title', 'description', 'capacity', 'visibility', 'class_type',
-        'teams_link', 'onsite_address'
-    ];
+    'course_id',
+    'user_id',
+    'title',
+    'description',
+    'capacity',
+    'visibility',
+    'class_type',
+    'teams_link',
+    'onsite_address',
+    'is_paid',
+    'price',
+    'start_date',
+    'end_date'
+];
 
     public function course()
     {

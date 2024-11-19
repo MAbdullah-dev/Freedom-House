@@ -44,7 +44,8 @@
                             <div class="card-footer d-flex justify-content-between align-items-center">
                                 <p>Price: <span>{{ $publishedCourse->price ?? 'Free' }}</span></p>
                                 <p>
-                                    <a href="#" class="edit-link">
+                                    <a href="{{ route('dashboard.create.course', ['courseId' => $publishedCourse->id]) }}"
+                                        class="edit-link">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
                                     <a href="#" class="delete-link" data-bs-toggle="modal"

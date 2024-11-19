@@ -12,7 +12,8 @@
                         wire:loading.attr="disabled">
                         <span wire:loading wire:target="submitCourse" class="spinner-border spinner-border-sm"
                             aria-hidden="true"></span>
-                        <span wire:loading.remove wire:target="submitCourse">Submit</span>
+                        <span wire:loading.remove
+                            wire:target="submitCourse">{{ $courseId ? 'Update Course' : 'Create Course' }}</span>
                         <span wire:loading wire:target="submitCourse">Loading...</span>
                     </button>
 
