@@ -11,47 +11,40 @@ class MostPopularCards extends Component
 {
     public $mostPopularCourses;
 
-    // Fetch courses and their wishlist state
     public function mount()
     {
+        $this->loadMostPopularCourses();
+    }
+
+    public function loadMostPopularCourses()
+    {
         $this->mostPopularCourses = Course::with(['user', 'instructors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->get();
-
-        // Attach wishlist status to each course
-        foreach ($this->mostPopularCourses as $course) {
-            $course->wishlist = Wishlist::where('user_id', Auth::id())
-                ->where('course_id', $course->id)
-                ->exists();
-        }
     }
 
-    // Function to toggle course wishlist
     public function toggleWishlist($courseId)
     {
-        $userId = Auth::id();
+        $user = Auth::user();
 
-        // Check if the course is already in the wishlist
-        $wishlist = Wishlist::where('user_id', $userId)->where('course_id', $courseId)->first();
-
-        if ($wishlist) {
-            // Remove the course from the wishlist
-            $wishlist->delete();
-        } else {
-            // Add the course to the wishlist
-            Wishlist::create([
-                'user_id' => $userId,
-                'course_id' => $courseId,
-            ]);
+        if (!$user) {
+            session()->flash('error', 'You need to log in to manage your wishlist.');
+            return;
         }
 
-        // Update the wishlist state for the course
-        $this->mostPopularCourses = Course::with(['user', 'instructors'])
-            ->where('is_published', true)
-            ->where('is_drafted', false)
-            ->get();
+        // Toggle wishlist status
+        if ($user->wishlist()->where('course_id', $courseId)->exists()) {
+            $user->wishlist()->detach($courseId); // Remove from wishlist
+        } else {
+            $user->wishlist()->attach($courseId); // Add to wishlist
+        }
+
+        // Reload the most popular courses to reflect changes
+        $this->loadMostPopularCourses();
     }
+
+
 
     public function render()
     {

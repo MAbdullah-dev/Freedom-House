@@ -8,6 +8,7 @@ use App\Livewire\CourseDetails;
 use App\Livewire\Dashboard\Announcements;
 use App\Livewire\Dashboard\Category;
 use App\Livewire\Dashboard\CourseAnalytics;
+use App\Livewire\Dashboard\CoursesRequest;
 use App\Livewire\Dashboard\CreateCourse;
 use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\HelpRequest;
@@ -58,5 +59,6 @@ Route::get('/dashboard/scehedule-classes', ScheduleClasses::class)->name('dashbo
 Route::get('/dashboard/create-course', CreateCourse::class)->name('dashboard.create-course');
 Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.course.details');
 // admin routes
+Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
 Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
 Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');

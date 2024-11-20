@@ -44,7 +44,7 @@
                                     professionals focusing on the importance of professional boundary setting, common
                                     types of boundary crossing.</p>
                                 <div class="card--btn">
-                                    <a class="button-primary mt-3" href="{{ route('course.details') }}" wire:navigate
+                                    <a class="button-primary mt-3" href="" wire:navigate
                                         class="btn btn-primary">Learn more</a>
                                 </div>
                             </div>
@@ -140,27 +140,26 @@
     </section>
 </div>
 @script
-<script type="text/javascript">
-    const swiper = new Swiper('.swiper', {
-        loop: true,
-        grabCursor: true,
-        spaceBetween: 30,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-            0: {
-                slidesPerView: 1
+    <script type="text/javascript">
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            grabCursor: true,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
-            768: {
-                slidesPerView: 2
-            },
-            1024: {
-                slidesPerView: 3
+            breakpoints: {
+                0: {
+                    slidesPerView: 1
+                },
+                768: {
+                    slidesPerView: 2
+                },
+                1024: {
+                    slidesPerView: 3
+                }
             }
-        }
-    });
-</script>
-
+        });
+    </script>
 @endscript

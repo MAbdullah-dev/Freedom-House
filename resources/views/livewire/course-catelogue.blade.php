@@ -1,8 +1,3 @@
-<style>
-    .course-catelogue-main {
-        background-image: url('{{ asset('assets/images/course.png') }}');
-    }
-</style>
 <div class="course-catalogue">
     <section class="course-catelogue-main">
         <div class="container d-flex flex-column justify-content-center align-items-center">
@@ -248,9 +243,11 @@
         </div>
     </div>
 
-
-
-</div>
+    <style>
+        .course-catelogue-main {
+            background-image: url('{{ asset('assets/images/course.png') }}');
+        }
+    </style>
 
 </div>
 @script

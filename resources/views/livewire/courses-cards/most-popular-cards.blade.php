@@ -1,4 +1,4 @@
-<div class="swiper">
+<div class="swiper" wire:ignore>
     <div class="arrows d-flex align-items-center justify-content-end gap-2">
         <div class="swiper-button-prev position-relative"></div>
         <div class="swiper-button-next position-relative"></div>
@@ -11,9 +11,9 @@
                         <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top" alt="...">
 
                         <!-- Wishlist Icon with Dynamic Class Toggle -->
-                        <i class="fa-regular fa-bookmark wishlist-icon"
-                            wire:click="toggleWishlist({{ $mostPopularCourse->id }})"
-                            class="{{ $mostPopularCourse->wishlist ? 'fa-solid' : 'fa-regular' }} wishlist-icon"></i>
+                        <i class="{{ Auth::check() && Auth::user()->wishlist->contains($mostPopularCourse) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
+                            data-course-id="{{ $mostPopularCourse->id }}" style="cursor: pointer;">
+                        </i>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $mostPopularCourse->title }}</h5>
@@ -43,3 +43,25 @@
         @endforeach
     </div>
 </div>
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            // Handle wishlist icon click for all icons dynamically
+            $('.wishlist-icon').on('click', function() {
+                var courseId = $(this).data('course-id');
+                var icon = $(this);
+
+                // Call Livewire method without re-rendering the entire component
+                @this.call('toggleWishlist', courseId);
+
+                // Toggle the icon class after Livewire call
+                if (icon.hasClass('fa-regular')) {
+                    icon.removeClass('fa-regular').addClass('fa-solid');
+                } else {
+                    icon.removeClass('fa-solid').addClass('fa-regular');
+                }
+            });
+        });
+    </script>
+@endpush

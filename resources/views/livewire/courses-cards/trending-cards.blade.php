@@ -9,7 +9,9 @@
                 <div class="card shadow">
                     <div class="card-img-top">
                         <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top" alt="...">
-                        <i class="fa-regular fa-bookmark"></i>
+                        <i class="{{ Auth::check() && Auth::user()->wishlist->contains($trendingCourse) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
+                            data-course-id="{{ $trendingCourse->id }}" style="cursor: pointer;">
+                        </i>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $trendingCourse->title }}</h5>
@@ -26,16 +28,6 @@
                                 <small>by</small><span>{{ $trendingCourse->user->first_name }}
                                     {{ $trendingCourse->user->last_name }}</span>
                             </div>
-                            {{-- <div class="tutor-meta-icon d-flex align-items-center gap-2">
-                                <div class="meta-icon d-flex align-items-center">
-                                    <i class="fa-regular fa-user" style="color: #757c8e;"></i>
-                                    <span>11</span>
-                                </div>
-                                <div class="meta-icon d-flex align-items-center">
-                                    <i class="fa-regular fa-clock" style="color: #757c8e;"></i>
-                                    <span>2h</span>
-                                </div>
-                            </div> --}}
                         </div>
                         <p class="card-text ">{{ $trendingCourse->description }}</p>
                         <div class="post-details d-flex align-items-center">
