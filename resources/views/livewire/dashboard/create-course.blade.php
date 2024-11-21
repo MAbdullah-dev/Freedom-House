@@ -164,7 +164,7 @@
                                                     <select class="form-control" id="tutorSelect" multiple
                                                         wire:model="tutors" required>
                                                         @foreach ($tutorList as $tutor)
-                                                            <option value="{{ $tutor->user_id }}">
+                                                            <option value="{{ $tutor->id }}">
                                                                 {{ $tutor->user->email }}
                                                             </option>
                                                         @endforeach

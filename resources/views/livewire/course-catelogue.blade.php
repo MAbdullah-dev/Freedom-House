@@ -27,20 +27,20 @@
                         <a class="nav-link" :class="{ 'active': tab === 'trending' }"
                             @click="tab = 'trending'">Trending</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" :class="{ 'active': tab === 'onsite' }" @click="tab = 'onsite'">Onsite</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" :class="{ 'active': tab === 'virtual' }"
                             @click="tab = 'virtual'">Virtual</a>
-                    </li>
+                    </li> --}}
                 </ul>
 
                 <!-- Tab Content -->
                 <div class="tab-content mt-4">
                     <!-- Most Popular Tab -->
                     <div x-show="tab === 'mostPopular'">
-                        <livewire:courses-cards.most-papular-cards />
+                        <livewire:courses-cards.most-popular-cards />
                     </div>
                     <!-- New Tab -->
                     <div x-show="tab === 'new'">
@@ -50,27 +50,21 @@
                     <div x-show="tab === 'trending'">
                         <livewire:courses-cards.trending-cards />
                     </div>
-                    <!-- Onsite Tab -->
+                    {{-- <!-- Onsite Tab -->
                     <div x-show="tab === 'onsite'">
                         <livewire:courses-cards.onsite-cards />
                     </div>
                     <!-- Virtual Tab -->
                     <div x-show="tab === 'virtual'">
                         <livewire:courses-cards.virtual-cards />
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
     </section>
     <section class="course-catelogue pt-3">
         <div class="container">
-            <div class="d-flex align-items-center justify-content-between">
-                <h2 class="my-5">Category</h2>
-                <button class="offcanvas-btn d-block d-flex d-xl-none" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                    <i class="fa-solid fa-sliders"></i>
-                </button>
-            </div>
+            <h2 class="my-5">Category</h2>
             <div class="filters d-flex justify-content-between align-items-center mb-4">
                 <!-- Search Input -->
                 <div class="input-group w-50 position-relative filter-search">
@@ -79,10 +73,13 @@
                             <i class="fas fa-search"></i>
                         </span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Search" aria-label="Search"
-                        aria-describedby="search-icon">
+                    <input type="text" placeholder="Search courses by title..." wire:model.debounce.300ms="search"
+                        class="form-control mb-3" />
                 </div>
-
+                <button class="offcanvas-btn d-block d-flex d-xl-none" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
                 <!-- Sort Dropdown -->
                 {{-- <div class="dropdown ">
                     <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
@@ -100,7 +97,7 @@
             </div>
 
             <!-- Offcanvas component -->
-            {{-- <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
                 aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -133,34 +130,12 @@
                                 <label for="substance-use">Substance Use Disorder</label>
                             </li>
                         </ul>
-                        <ul class="my-4">
-                            <h4>Course Type</h4>
-                            <li>
-                                <input type="checkbox" id="on-site">
-                                <label for="on-site">Onsite/In Person</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="virtual">
-                                <label for="virtual">Virtual</label>
-                            </li>
-                        </ul>
-                        <ul class="list-unstyled my-4">
-                            <h4>Price</h4>
-                            <li>
-                                <input type="checkbox" id="free">
-                                <label for="free">Free</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="paid">
-                                <label for="paid">Paid</label>
-                            </li>
-                        </ul>
                         <button class="btn filter-btn" @click="clearFilters()">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters
                         </button>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
             <div class="row">
                 <div class="col-xl-3 d-none d-xl-block">
@@ -209,12 +184,12 @@
                 </div>
                 <div class="col-lg-12 col-xl-9">
                     <div class="row gy-4">
-                        @foreach ($allCourses as $item)
+                        @foreach ($courses as $item)
                             <div class="col-sm-6 col-lg-4 ">
                                 <div class="card shadow">
                                     <div class="card-img-top">
-                                        <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
-                                            alt="...">
+                                        <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                                            class="card-img-top" alt="...">
                                         <i class="fa-regular fa-bookmark"></i>
                                     </div>
                                     <div class="card-body">
