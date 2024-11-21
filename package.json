@@ -16,7 +16,12 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.15",
+        "@fullcalendar/daygrid": "^6.1.15",
+        "@fullcalendar/interaction": "^6.1.15",
+        "@fullcalendar/timegrid": "^6.1.15",
         "@popperjs/core": "^2.11.8",
+        "fullcalendar": "^6.1.15",
         "sass": "^1.79.5"
     }
 }

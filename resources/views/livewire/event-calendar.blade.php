@@ -1,33 +1,8 @@
 <div>
 
-    <section class="event-calendar">
+    <section class="event-calendar my-5">
         <div class="container">
-            <div class="calendar-header d-flex align-items-center mb-3">
-                <div class="ms-auto d-flex align-items-center">
-                    <input type="text" class="form-control search-bar me-2" placeholder="🔍 Search">
-                    <button class="btn btn-outline-secondary btn-filter">Filters <i
-                            class="fas fa-caret-down"></i></button>
-                </div>
-            </div>
 
-            <!-- Additional Filters Row (shown when "Filters" is clicked) -->
-            <div class="calendar-additional-filters row g-2 mb-3 collapse">
-                <div class="col-md-3">
-                    <select class="form-select">
-                        <option>Event Type</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select">
-                        <option>Event Status</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select">
-                        <option>Event Employee</option>
-                    </select>
-                </div>
-            </div>
 
             <!-- Calendar and Event Cards -->
             <div class="row">
@@ -36,6 +11,7 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="event-cards">
+                        <input type="text" class="form-control mb-4" placeholder="Search">
                         <div class="event-card mb-3">
                             <div class="event-card-wrapper">
                                 <div class="date-badge me-3">
@@ -58,7 +34,7 @@
     </section>
 
     <!-- Event Modal -->
-    {{-- <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,5 +54,5 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 </div>

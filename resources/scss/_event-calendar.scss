@@ -1,20 +1,4 @@
 .event-calendar {
-    .calendar-header {
-        .btn-filter {
-            color: #555;
-            background-color: #f1f1f1;
-            border: 1px solid #ccc;
-            font-weight: 500;
-            border-radius: 5px;
-        }
-
-        .search-bar {
-            border-radius: 20px;
-            width: 180px;
-            padding-left: 10px;
-        }
-    }
-
     .calendar-additional-filters {
         .form-select {
             background-color: #f1f1f1;
@@ -77,5 +61,64 @@
 
     .modal-content {
         padding: 20px;
+    }
+
+    #calendar {
+        background-color: $background-color !important;
+        color: $text-color !important;
+        border-radius: 10px;
+
+        /* Calendar header styling */
+        .fc-toolbar {
+            // background-color: $primary-color !important;
+            color: $text-color !important;
+
+            /* Style for buttons or other elements inside the toolbar */
+            .fc-button {
+                color: $text-color !important;
+                background-color: #fff !important;
+            }
+        }
+
+        .fc-col-header-cell-cushion {
+            color: $text-color !important;
+        }
+
+        /* Style for the calendar day names (header rows) */
+        .fc-day-header {
+            // background-color: $primary-color-v1 !important;
+            // color: $text-color !important;
+        }
+
+        /* Style for the active day (today's date) */
+        .fc-day-today {
+            // background-color: $secondary-color !important;
+            // color: $text-color !important;
+        }
+
+        /* Style for individual days */
+        .fc-daygrid-day {
+            &.fc-day-today {
+                // background-color: $secondary-color !important;
+            }
+        }
+
+        /* Custom style for events */
+        .fc-event-main {
+            // background-color: $secondary-color !important;
+            color: #fff !important;
+            border: none !important;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        /* Style for the day grid */
+        .fc-daygrid-day {
+            /* Style for the individual cells of the day grid */
+            .fc-daygrid-day-number {
+                color: $text-color !important;
+            }
+        }
     }
 }
