@@ -65,7 +65,12 @@ protected function rules()
 
         $authTutor = Tutor::where('user_id', Auth::id())->first();
         if ($authTutor) {
+<<<<<<< HEAD
             $this->tutors[] = $authTutor->user_id;
+=======
+            $this->tutors = [$authTutor->id];
+            $this->selectedTutors = [$authTutor];
+>>>>>>> 32e49628448c0da8dec642deee6e37aaf67645ac
         }
     }
 
@@ -89,6 +94,17 @@ protected function rules()
 
     public function updatedTutors($value)
     {
+<<<<<<< HEAD
+=======
+        $authTutor = Tutor::where('user_id', Auth::id())->first();
+
+        // Ensure authenticated tutor remains selected
+        if ($authTutor && !in_array($authTutor->id, $this->tutors)) {
+            $this->tutors[] = $authTutor->id;
+        }
+
+        // Update selected tutors list
+>>>>>>> 32e49628448c0da8dec642deee6e37aaf67645ac
         $this->selectedTutors = Tutor::with('user')
             ->whereIn('id', array_unique($this->tutors))
             ->get();

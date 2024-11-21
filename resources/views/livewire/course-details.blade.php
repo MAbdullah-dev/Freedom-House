@@ -4,11 +4,9 @@
             <div class="inner">
                 <div class="hero-details">
                     <p class="course-heading-border">Course Description</p>
-                    <h1>Question. Persuade. Refer.</h1>
+                    <h1>{{ $courseTitle }}</h1>
                     <p>
-                        <strong>QPR or Question, Persuade and Refer</strong> is a training focused on suicide prevention
-                        techniques and
-                        conversation strategies. This training also provides resources to help yourself and others.
+                        {{ $courseDescription }}
                     </p>
                 </div>
             </div>
@@ -85,19 +83,26 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active text-start" id="most-popular" role="tabpanel"
                         aria-labelledby="most-popular-tab">
-                        <div class="course-details__content">
+                        {{-- <div class="course-details__content">
                             <h3 class="mt-3">About Course</h3>
                             <p><strong>QPR or Question, Persuade and Refer</strong> is a training focused on suicide
                                 prevention techniques and conversation strategies. This training also provides resources
                                 to help yourself and others. You will learn common causes of suicidal behavior, warning
                                 signs of suicide, and how to get help for someone in crisis. The training is
                                 one hour and certification is for up to 2 years.</p>
-                        </div>
-                        <div class="course-details__widget">
+                        </div> --}}
+                        <div class="course-details__widget my-4">
                             <h3>What Will You Learn?</h3>
                             <ul>
-                                <li>QPR or Question, Persuade and Refer is a training focused on suicide prevention
-                                    techniques and conversation strategies.</li>
+                                <li>{{ $learningOutcomes }}</li>
+                            </ul>
+                            <h3>Target Audience</h3>
+                            <ul>
+                                <li>{{ $target_audience }}</li>
+                            </ul>
+                            <h3>Requirements</h3>
+                            <ul>
+                                <li>{{ $requirements }}</li>
                             </ul>
                         </div>
                     </div>
@@ -133,17 +138,16 @@
 
 
 @script
-<script>
-    document.querySelector('.filter-btn').addEventListener('click', function() {
-        document.querySelector('.filter-row').classList.toggle('show');
-    });
+    <script>
+        document.querySelector('.filter-btn').addEventListener('click', function() {
+            document.querySelector('.filter-row').classList.toggle('show');
+        });
 
-    flatpickr(".calendar-input", {
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "F j, Y",
-        defaultDate: new Date(),
-    });
-
-</script>
+        flatpickr(".calendar-input", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            defaultDate: new Date(),
+        });
+    </script>
 @endscript

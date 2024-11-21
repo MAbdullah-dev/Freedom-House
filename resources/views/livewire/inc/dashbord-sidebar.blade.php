@@ -66,6 +66,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.coursesRequest' ? 'active' : '' }}"
+                        href="{{ route('dashboard.coursesRequest') }}" wire:navigate>
+                        <i class="fa-solid fa-clipboard-check"></i> Courses Request
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.categories' ? 'active' : '' }}"
                         href="{{ route('dashboard.categories') }}" wire:navigate>
                         <i class="fa-solid fa-table-list"></i> categories

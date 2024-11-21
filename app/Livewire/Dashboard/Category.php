@@ -12,10 +12,10 @@ class Category extends Component
 
     public $category_name;
     public $category_list;
-    public $search = ''; // Search property
-    public $categoryIdBeingDeleted; // Holds the ID of the category being deleted
-    public $categoryIdBeingUpdated; // For update functionality
-    public $updatedCategoryName; // Temporary name for updating category
+    public $search = '';
+    public $categoryIdBeingDeleted;
+    public $categoryIdBeingUpdated;
+    public $updatedCategoryName;
 
     public function mount()
     {
@@ -24,25 +24,22 @@ class Category extends Component
     }
 
     protected $rules = [
-        'category_name' => 'required|string|max:255|unique:categories', // Unique validation rule
+        'category_name' => 'required|string|max:255|unique:categories',
     ];
 
     public function createCategory()
     {
         $this->validate();
 
-        // Create a new category in the database using the Category model
         ModelsCategory::create(['category_name' => $this->category_name]);
 
         $this->alert('success', 'Category created successfully.');
 
-        $this->category_name = ''; // Reset the input field
+        $this->category_name = '';
 
-        // Refresh the category list after creating a category
         $this->category_list = ModelsCategory::all();
     }
 
-    // Search categories based on the search query
     public function updatedSearch()
     {
         $this->category_list = ModelsCategory::where('category_name', 'like', '%' . $this->search . '%')->get();
@@ -59,10 +56,8 @@ class Category extends Component
 
         $this->alert('success', 'Category deleted successfully.');
 
-        // Refresh the category list
         $this->category_list = ModelsCategory::all();
 
-        // Close the modal
         $this->reset('categoryIdBeingDeleted');
 
         $this->dispatch('close-modal');

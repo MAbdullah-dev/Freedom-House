@@ -25,9 +25,9 @@ class Course extends Model
 
 
     public function user()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
 
     public function instructors()
@@ -53,5 +53,10 @@ class Course extends Model
     public function ratings()
     {
         return $this->hasMany(CourseRating::class);
+    }
+    public function wishlistedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'course_id', 'user_id')
+            ->withTimestamps();
     }
 }

@@ -31,14 +31,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $hidden = ['password', 'remember_token'];
 
-      public function hasVerifiedEmail()
+    public function hasVerifiedEmail()
     {
         return !is_null($this->email_verified_at);
     }
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'roles_users')
-                ->select('roles.id');
+            ->select('roles.id');
     }
 
     public function courses()
@@ -62,9 +62,9 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function tutor()
-{
-    return $this->hasOne(Tutor::class);
-}
+    {
+        return $this->hasOne(Tutor::class);
+    }
 
     public function tutorFiles()
     {
@@ -99,5 +99,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reports()
     {
         return $this->hasMany(Report::class);
+    }
+    public function wishlist()
+    {
+        return $this->belongsToMany(Course::class, 'wishlists', 'user_id', 'course_id');
     }
 }
