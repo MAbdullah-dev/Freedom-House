@@ -34,22 +34,22 @@ class CreateCourse extends Component
 
     public $existingThumbnail;
 
-protected function rules()
-{
-    return [
-        'courseTitle' => 'required|string|max:255|unique:courses,title,' . $this->courseId,
-        'description' => 'required|string',
-        'category' => 'array|min:1',
-        'category.*' => 'exists:categories,id',
-        'tags' => 'required|array|min:1',
-        'tags.*' => 'exists:tags,id',
-        'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-        'videoUrl' => 'required|url',
-        'learnDetails' => 'required|string',
-        'audienceDetails' => 'required|string',
-        'requirements' => 'required|string',
-    ];
-}
+    protected function rules()
+    {
+        return [
+            'courseTitle' => 'required|string|max:255|unique:courses,title,' . $this->courseId,
+            'description' => 'required|string',
+            'category' => 'array|min:1',
+            'category.*' => 'exists:categories,id',
+            'tags' => 'required|array|min:1',
+            'tags.*' => 'exists:tags,id',
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'videoUrl' => 'required|url',
+            'learnDetails' => 'required|string',
+            'audienceDetails' => 'required|string',
+            'requirements' => 'required|string',
+        ];
+    }
 
 
     public function mount($courseId = null)
@@ -65,12 +65,7 @@ protected function rules()
 
         $authTutor = Tutor::where('user_id', Auth::id())->first();
         if ($authTutor) {
-<<<<<<< HEAD
             $this->tutors[] = $authTutor->user_id;
-=======
-            $this->tutors = [$authTutor->id];
-            $this->selectedTutors = [$authTutor];
->>>>>>> 32e49628448c0da8dec642deee6e37aaf67645ac
         }
     }
 
@@ -94,17 +89,6 @@ protected function rules()
 
     public function updatedTutors($value)
     {
-<<<<<<< HEAD
-=======
-        $authTutor = Tutor::where('user_id', Auth::id())->first();
-
-        // Ensure authenticated tutor remains selected
-        if ($authTutor && !in_array($authTutor->id, $this->tutors)) {
-            $this->tutors[] = $authTutor->id;
-        }
-
-        // Update selected tutors list
->>>>>>> 32e49628448c0da8dec642deee6e37aaf67645ac
         $this->selectedTutors = Tutor::with('user')
             ->whereIn('id', array_unique($this->tutors))
             ->get();
