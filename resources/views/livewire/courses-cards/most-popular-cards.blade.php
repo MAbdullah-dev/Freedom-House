@@ -35,7 +35,7 @@
                         <div class="post-details d-flex align-items-center">
                             <span class="date">Publish: {{ $mostPopularCourse->created_at->diffForHumans() }}</span>
                         </div>
-                        <a class="button-primary mt-3 d-block w-100 text-center"
+                        <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
                             href="{{ route('course.details', $mostPopularCourse->id) }}">More Details...</a>
                     </div>
                 </div>

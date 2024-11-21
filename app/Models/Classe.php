@@ -11,20 +11,20 @@ class Classe extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-    'course_id',
-    'user_id',
-    'title',
-    'description',
-    'capacity',
-    'visibility',
-    'class_type',
-    'teams_link',
-    'onsite_address',
-    'is_paid',
-    'price',
-    'start_date',
-    'end_date'
-];
+        'course_id',
+        'user_id',
+        'title',
+        'description',
+        'capacity',
+        'visibility',
+        'class_type',
+        'teams_link',
+        'onsite_address',
+        'is_paid',
+        'price',
+        'start_date',
+        'end_date'
+    ];
 
     public function course()
     {
@@ -49,5 +49,9 @@ class Classe extends Model
     public function assignments()
     {
         return $this->hasMany(Assignment::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -34,7 +34,7 @@
                             <span class="date">Publish
                                 :{{ $trendingCourse->created_at->diffForHumans() }}</span>
                         </div>
-                        <a class="button-primary mt-3 d-block w-100 text-center"
+                        <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
                             href="{{ route('course.details', $trendingCourse->id) }}">More
                             Details...</a>
                     </div>

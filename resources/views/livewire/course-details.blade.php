@@ -36,28 +36,33 @@
                 </select>
                 <input type="text" class="calendar-input mb-3" id="calendar" placeholder="Select date" />
             </div>
-
-            <div class="event-card">
-                <div class="event-card__date">
-                    <div class="day">12</div>
-                    <div class="month">Oct</div>
-                    <div class="time">2:00pm - 3:30pm</div>
-                </div>
-                <div class="event-card__info mx-4">
-                    <div class="event-name">Online QPR Training</div>
-                    <div class="event-card__details d-flex">
-                        <div class="status open me-2">Open</div>
-                        <div class="capacity">18<span>
-                                spots available
-                            </span>
+            @foreach ($classes as $class)
+                <div class="event-card">
+                    <div class="event-card__date">
+                        <div class="day">12</div>
+                        <div class="month">Oct</div>
+                        <div class="time">2:00pm - 3:30pm</div>
+                    </div>
+                    <div class="event-card__info mx-4">
+                        <div class="event-name">{{ $class->title }}</div>
+                        <div class="event-card__details d-flex">
+                            <div class="status open me-2">Open</div>
+                            <div class="capacity">18<span>
+                                    spots available
+                                </span>
+                            </div>
                         </div>
                     </div>
+                    <div class="event-card__actions">
+                        @if ($class->price > 0)
+                            <div class="price">${{ $class->price }}</div>
+                        @else
+                            <div class="price">FREE</div>
+                        @endif
+                        <button class="enroll-btn">Enroll Now</button>
+                    </div>
                 </div>
-                <div class="event-card__actions">
-                    <div class="price">FREE</div>
-                    <button class="enroll-btn">Enroll Now</button>
-                </div>
-            </div>
+            @endforeach
         </div>
     </section>
 

@@ -65,7 +65,7 @@ class CreateCourse extends Component
 
         $authTutor = Tutor::where('user_id', Auth::id())->first();
         if ($authTutor) {
-            $this->tutors[] = $authTutor->user_id;
+            $this->tutors = [$authTutor->id];
             $this->selectedTutors = [$authTutor];
         }
     }
@@ -146,6 +146,7 @@ class CreateCourse extends Component
 
         $this->resetForm();
         $this->alert('success', 'Course created successfully.');
+        $this->redirect(route('dashboard.mycourses'));
 
         // return redirect()->route('dashboard.course.details', ['courseId' => $course->id]);
     }
