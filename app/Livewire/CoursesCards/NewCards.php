@@ -15,7 +15,7 @@ class NewCards extends Component
     }
     public function loadNewCourses()
     {
-        $this->newCourses = Course::with(['user', 'instructors'])
+        $this->newCourses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->get();

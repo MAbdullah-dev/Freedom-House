@@ -18,7 +18,7 @@ class MostPopularCards extends Component
 
     public function loadMostPopularCourses()
     {
-        $this->mostPopularCourses = Course::with(['user', 'instructors'])
+        $this->mostPopularCourses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->get();
