@@ -35,10 +35,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return !is_null($this->email_verified_at);
     }
-    public function roles()
+     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'roles_users')
-            ->select('roles.id');
+        return $this->belongsToMany(Role::class, 'roles_users')->select('roles.id');
     }
 
     public function courses()
@@ -56,11 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Booking::class);
     }
 
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
-
     public function tutor()
     {
         return $this->hasOne(Tutor::class);
@@ -73,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function courseRatings()
     {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(CourseRating::class);
     }
 
     public function assignmentSubmissions()
@@ -100,6 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Report::class);
     }
+
     public function wishlist()
     {
         return $this->belongsToMany(Course::class, 'wishlists', 'user_id', 'course_id');
