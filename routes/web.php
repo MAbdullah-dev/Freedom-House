@@ -20,6 +20,7 @@ use App\Livewire\Dashboard\DashboardWishlist;
 use App\Livewire\Dashboard\MyCourses;
 use App\Livewire\Dashboard\ScheduleClasses;
 use App\Livewire\Dashboard\Tags;
+use App\Livewire\Dashboard\TutorRequest;
 use App\Livewire\Home as LivewireHome;
 use App\Livewire\Inc\DashboardFooter;
 use App\Livewire\Login;
@@ -61,3 +62,4 @@ Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.co
 Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
 Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
 Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
+Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');

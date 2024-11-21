@@ -66,6 +66,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tutor.request' ? 'active' : '' }}"
+                        href="{{ route('dashboard.tutor.request') }}" wire:navigate>
+                        <i class="fa-solid fa-person-circle-question"></i> Tutor Requests
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.coursesRequest' ? 'active' : '' }}"
                         href="{{ route('dashboard.coursesRequest') }}" wire:navigate>
                         <i class="fa-solid fa-clipboard-check"></i> Courses Request
