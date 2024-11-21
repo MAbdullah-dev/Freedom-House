@@ -39,7 +39,7 @@ Route::get('/login', Login::class)->name('login');
 
 Route::get('/course/catalogue', CourseCatelogue::class)->name('course.catalogue');
 Route::get('/about-us', AboutUs::class)->name('about-us');
-Route::get('/tutor/profile', TutorPrfile::class)->name('tutor.profile');
+Route::get('/tutor/profile/{id?}', TutorPrfile::class)->name('tutor.profile');
 Route::get('/course/details/{id}', CourseDetails::class)->name('course.details');
 Route::get('/on-site_course/details', OnSiteCourseDetails::class)->name('onsite.course.details');
 Route::get('/calendar', EventCalendar::class)->name('calendar');

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire\Dashboard;
 
 use Livewire\Component;
@@ -78,6 +79,7 @@ class ClassForm extends Component
             'title' => $this->title,
             'description' => $this->description,
             'course_id' => $this->course_id,
+            'user_id' => Auth::id(),
             'class_type' => $this->class_type,
             'teams_link' => $this->teams_link,
             'onsite_address' => $this->onsite_address,
@@ -98,19 +100,19 @@ class ClassForm extends Component
 
         $userId = Auth::id();
         Events::create([
-        'title' => $this->title,
-        'description' => $this->description,
-        'user_id' => $userId,
-        'class_type' => $this->class_type,
-        'teams_link' => $this->teams_link,
-        'onsite_address' => $this->onsite_address,
-        'recorded_video_url' => $this->recorded_video_url,
-        'is_paid' => $this->is_paid,
-        'price' => $this->price,
-        'capacity' => $this->capacity,
-        'start_date' => $this->start_date,
-        'end_date' => $this->end_date,
-    ]);
+            'title' => $this->title,
+            'description' => $this->description,
+            'user_id' => $userId,
+            'class_type' => $this->class_type,
+            'teams_link' => $this->teams_link,
+            'onsite_address' => $this->onsite_address,
+            'recorded_video_url' => $this->recorded_video_url,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'capacity' => $this->capacity,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+        ]);
         $this->dispatch('closeModal');
         $this->alert('success', 'Event created successfully!');
     }

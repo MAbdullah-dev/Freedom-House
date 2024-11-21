@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     {
         use HasFactory, SoftDeletes;
 
-        protected $fillable = [
+    protected $fillable = [
         'course_id',
         'user_id',
         'title',
@@ -45,8 +45,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
             return $this->hasMany(Quiz::class);
         }
 
-        public function assignments()
-        {
-            return $this->hasMany(Assignment::class);
-        }
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
     }
+     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+}

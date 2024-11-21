@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Classe;
 use App\Models\Course;
 use Livewire\Component;
 
@@ -13,6 +14,7 @@ class CourseDetails extends Component
     public $learningOutcomes;
     public $target_audience;
     public $requirements;
+    public $classes;
 
 
 
@@ -21,6 +23,7 @@ class CourseDetails extends Component
         if ($id) {
             $this->id = $id;
             $this->loadcoursedata();
+            $this->loadClasses();
         }
     }
 
@@ -33,6 +36,11 @@ class CourseDetails extends Component
         $this->learningOutcomes = $course->learning_outcomes;
         $this->target_audience = $course->target_audience;
         $this->requirements = $course->requirements;
+    }
+    public function loadClasses()
+    {
+        $classes = Classe::where('course_id', $this->id)->get();
+        $this->classes = $classes;
     }
 
     public function render()

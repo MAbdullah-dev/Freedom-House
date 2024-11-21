@@ -6,27 +6,29 @@
     <div class="swiper-wrapper">
         @foreach ($featuredTutors as $tutor)
             <div class="swiper-slide">
-                <div class="instructor-card shadow">
-                    <ul class="d-flex gap-4">
-                        <li class="instructor-img my-3">
-                            <img src="{{ asset('assets/images/instrutor-1.png') }}" alt="Instructor Image">
-                        </li>
-                        <li class="card-details">
-                            <h5>{{ $tutor->user->first_name }} {{ $tutor->user->last_name }}</h5>
-                            <p style="height: 30px" class="instructor-text my-2">{{ $tutor->specialization }}</p>
-                            <div class="instructor-rating d-flex">
-                                <span>4.5</span>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <span>Instructor rating</span>
-                            </div>
-                            <div class="instructor-data d-flex flex-column my-2">
-                                <span class="black-span"><strong>0</strong> students</span>
-                                <span class="black-span"><strong>{{ $tutor->user->courses()->count() }}</strong>
-                                    courses</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                <a href="{{ route('tutor.profile', $tutor->user_id) }}">
+                    <div class="instructor-card shadow">
+                        <ul class="d-flex gap-4">
+                            <li class="instructor-img my-3">
+                                <img src="{{ asset('assets/images/instrutor-1.png') }}" alt="Instructor Image">
+                            </li>
+                            <li class="card-details">
+                                <h5>{{ $tutor->user->first_name }} {{ $tutor->user->last_name }}</h5>
+                                <p style="height: 30px" class="instructor-text my-2">{{ $tutor->specialization }}</p>
+                                <div class="instructor-rating d-flex">
+                                    <span>4.5</span>
+                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                    <span>Instructor rating</span>
+                                </div>
+                                <div class="instructor-data d-flex flex-column my-2">
+                                    <span class="black-span"><strong>0</strong> students</span>
+                                    <span class="black-span"><strong>{{ $tutor->user->courses()->count() }}</strong>
+                                        courses</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </a>
             </div>
         @endforeach
     </div>
