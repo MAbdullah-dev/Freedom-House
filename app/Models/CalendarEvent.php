@@ -8,16 +8,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CalendarEvent extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'user_id',  
-        'event_title',
-        'start_time',
-        'end_time',
+       'user_id', 'class_id', 'event_id'
     ];
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(Classe::class, 'class_id');
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Events::class, 'event_id');
     }
 }
