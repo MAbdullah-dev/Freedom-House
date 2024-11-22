@@ -15,7 +15,7 @@ class TrendingCards extends Component
     }
     public function loadTrendingCourses()
     {
-        $this->trendingCourses = Course::with(['user', 'instructors'])
+        $this->trendingCourses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->get();

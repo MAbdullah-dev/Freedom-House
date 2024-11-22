@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire\Dashboard;
 
 use App\Models\Category;
@@ -72,20 +71,20 @@ class CreateCourse extends Component
 
     public function loadCourseData()
     {
-        $course = Course::with(['categories', 'tags', 'instructors.user'])->findOrFail($this->courseId);
+        $course = Course::with(['categories', 'tags', 'tutors.user'])->findOrFail($this->courseId);
         // dd($course->toArray());
 
         $this->courseTitle = $course->title;
         $this->description = $course->description;
         $this->category = $course->categories->pluck('id')->toArray();
         $this->tags = $course->tags->pluck('id')->toArray();
-        $this->tutors = $course->instructors->pluck('user_id')->toArray();
+        $this->tutors = $course->tutors->pluck('user_id')->toArray();
         $this->learnDetails = $course->learning_outcomes;
         $this->audienceDetails = $course->target_audience;
         $this->requirements = $course->requirements;
         $this->videoUrl = $course->video_url;
         $this->existingThumbnail = $course->thumbnail;
-        $this->selectedTutors = $course->instructors;
+        $this->selectedTutors = $course->tutors;
     }
 
     public function updatedTutors($value)
@@ -142,7 +141,7 @@ class CreateCourse extends Component
 
         $course->categories()->attach($this->category);
         $course->tags()->attach($this->tags);
-        $course->instructors()->attach($this->tutors);
+        $course->tutors()->attach($this->tutors);
 
         $this->resetForm();
         $this->alert('success', 'Course created successfully.');
@@ -170,7 +169,7 @@ class CreateCourse extends Component
 
         $course->categories()->sync($this->category);
         $course->tags()->sync($this->tags);
-        $course->instructors()->sync($this->tutors);
+        $course->tutors()->sync($this->tutors);
 
         $this->alert('success', 'Course updated successfully.');
     }

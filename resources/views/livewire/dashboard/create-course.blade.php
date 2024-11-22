@@ -79,8 +79,10 @@
                                         <div wire:ignore class="d-flex align-items-center select-wrapper">
                                             <!-- Category Dropdown -->
                                             <select class="form-control" id="category" multiple required>
-                                                @foreach ($categorylist as $category)
-                                                    <option value='{{ $category->id }}'>{{ $category->category_name }}
+                                                @foreach ($categorylist as $cat)
+                                                    <option value="{{ $cat->id }}"
+                                                        {{ in_array($cat->id, $category) ? 'selected' : '' }}>
+                                                        {{ $cat->category_name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -265,7 +267,10 @@
                                     <div wire:ignore class="d-flex align-items-center select-wrapper">
                                         <select class="form-control select2 w-100" id="tags" multiple required>
                                             @foreach ($tagslist as $tag)
-                                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                                <option value="{{ $tag->id }}"
+                                                    {{ in_array($tag->id, $tags) ? 'selected' : '' }}>
+                                                    {{ $tag->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>

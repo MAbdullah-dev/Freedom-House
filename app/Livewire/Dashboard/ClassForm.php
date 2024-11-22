@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\CalendarEvent;
 use Livewire\Component;
 use App\Models\Course;
 use App\Models\Classe;
@@ -36,7 +37,10 @@ class ClassForm extends Component
 
     public function mount()
     {
-        $this->courses = Course::all();
+        $this->courses = Course::with(['user', 'tutors'])
+            ->where('is_published', true)
+            ->where('is_drafted', false)
+            ->get();
     }
 
     public function dispatchClassTypeChanged()
@@ -74,48 +78,59 @@ class ClassForm extends Component
     }
 
     private function createClass()
-    {
-        Classe::create([
-            'title' => $this->title,
-            'description' => $this->description,
-            'course_id' => $this->course_id,
-            'user_id' => Auth::id(),
-            'class_type' => $this->class_type,
-            'teams_link' => $this->teams_link,
-            'onsite_address' => $this->onsite_address,
-            'recorded_video_url' => $this->recorded_video_url,
-            'is_paid' => $this->is_paid,
-            'price' => $this->price,
-            'capacity' => $this->capacity,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'visibility' => $this->visibility,
-        ]);
-        $this->dispatch('closeModal');
-        $this->alert('success', 'Class created successfully!');
-    }
+{
+    $class = Classe::create([
+        'title' => $this->title,
+        'description' => $this->description,
+        'course_id' => $this->course_id,
+        'user_id' => Auth::id(),
+        'class_type' => $this->class_type,
+        'teams_link' => $this->teams_link,
+        'onsite_address' => $this->onsite_address,
+        'recorded_video_url' => $this->recorded_video_url,
+        'is_paid' => $this->is_paid,
+        'price' => $this->price,
+        'capacity' => $this->capacity,
+        'start_date' => $this->start_date,
+        'end_date' => $this->end_date,
+        'visibility' => $this->visibility,
+    ]);
 
-    private function createEvent()
-    {
 
-        $userId = Auth::id();
-        Events::create([
-            'title' => $this->title,
-            'description' => $this->description,
-            'user_id' => $userId,
-            'class_type' => $this->class_type,
-            'teams_link' => $this->teams_link,
-            'onsite_address' => $this->onsite_address,
-            'recorded_video_url' => $this->recorded_video_url,
-            'is_paid' => $this->is_paid,
-            'price' => $this->price,
-            'capacity' => $this->capacity,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-        ]);
-        $this->dispatch('closeModal');
-        $this->alert('success', 'Event created successfully!');
-    }
+    CalendarEvent::create([
+        'user_id' => Auth::id(),
+        'class_id' => $class->id,
+    ]);
+
+    $this->dispatch('closeModal');
+    $this->alert('success', 'Class created successfully!');
+}
+
+private function createEvent()
+{
+    $event = Events::create([
+        'title' => $this->title,
+        'description' => $this->description,
+        'user_id' => Auth::id(),
+        'class_type' => $this->class_type,
+        'teams_link' => $this->teams_link,
+        'onsite_address' => $this->onsite_address,
+        'recorded_video_url' => $this->recorded_video_url,
+        'is_paid' => $this->is_paid,
+        'price' => $this->price,
+        'capacity' => $this->capacity,
+        'start_date' => $this->start_date,
+        'end_date' => $this->end_date,
+    ]);
+
+    CalendarEvent::create([
+        'user_id' => Auth::id(),
+        'event_id' => $event->id,
+    ]);
+
+    $this->dispatch('closeModal');
+    $this->alert('success', 'Event created successfully!');
+}
 
     public function render()
     {

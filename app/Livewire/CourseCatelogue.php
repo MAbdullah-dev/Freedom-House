@@ -18,7 +18,7 @@ class CourseCatelogue extends Component
 
     public function render()
     {
-        $courses = Course::with(['user', 'instructors'])
+        $courses = Course::with(['user'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->when($this->search, function ($query) {
