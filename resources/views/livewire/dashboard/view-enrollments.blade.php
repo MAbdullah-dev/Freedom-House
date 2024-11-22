@@ -30,8 +30,12 @@
                 </div>
             </div>
             <div class="col-xl-3 mb-3">
-                <button type="button" class="button-primary w-100" data-bs-toggle="modal"
-                    data-bs-target="#create-class"><i class="fa-solid fa-plus"></i> New Class/Event</button>
+                {{-- <button type="button" class="button-primary w-100"> --}}
+                <a href="{{ route('dashboard.create.class') }}" type="button" class="button-primary w-100">
+                    <i class="fa-solid fa-plus"></i> New
+                    Class/Event
+                </a>
+                {{-- </button> --}}
             </div>
         </div>
         <div class="no-enrollment-img d-flex justify-content-center align-content-center mt-5">

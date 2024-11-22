@@ -119,6 +119,6 @@ class ClassForm extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.class-form');
+        return view('livewire.dashboard.class-form')->layout('components.layouts.createCourse');
     }
 }

@@ -25,6 +25,14 @@
                         padding: 16px;
                         vertical-align: top;
                         border-bottom: 1px solid #cdcfd5;
+
+                        button {
+                            width: max-content;
+                        }
+
+                        a {
+                            width: max-content;
+                        }
                     }
                 }
             }
