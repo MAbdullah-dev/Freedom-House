@@ -73,12 +73,9 @@
                                     type="text" placeholder="Enter Title">
 
                                 @error('title')
-                                    <ul class="text-danger">
-                                        <li><span class="small">{{ $message }}</span></li>
-                                    </ul>
+                                    <li class="text-danger"><span class=" small">{{ $message }}</span></li>
                                 @enderror
                             </div>
-
                             <!-- Description -->
                             <div class="mb-3">
                                 <label for="description" class="form-label">

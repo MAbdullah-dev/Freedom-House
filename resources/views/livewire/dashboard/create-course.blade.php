@@ -56,7 +56,8 @@
                                         <!-- Course Title -->
                                         <div class="mb-3">
                                             <label for="courseTitle">Course Title</label>
-                                            <input type="text" wire:model="courseTitle" class="form-control"
+                                            <input type="text" wire:model="courseTitle"
+                                                class="form-control @if ($errors->has('courseTitle')) is-invalid @elseif ($courseTitle) is-valid @endif"
                                                 id="courseTitle" required>
                                             @error('courseTitle')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -65,11 +66,15 @@
                                         <!-- Description -->
                                         <div class="mb-3">
                                             <label for="description">Description</label>
-                                            <textarea wire:model="description" class="form-control" id="description" required></textarea>
+                                            <textarea wire:model="description"
+                                                class="form-control @if ($errors->has('description')) is-invalid @elseif ($description) is-valid @endif"
+                                                id="description" required>
+                                            </textarea>
                                             @error('description')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
+
                                         <label for="category">Categories</label>
                                         <div wire:ignore class="d-flex align-items-center select-wrapper">
                                             <!-- Category Dropdown -->
@@ -134,12 +139,15 @@
                                 <div class="accordion-body">
                                     <div class="mb-3">
                                         <label for="videoUpload" class="form-label">Upload Video URL</label>
-                                        <input type="url" class="form-control" id="videoUpload"
-                                            wire:model="videoUrl" placeholder="https://example.com/video.mp4">
+                                        <input type="url"
+                                            class="form-control @if ($errors->has('videoUrl')) is-invalid @elseif ($videoUrl) is-valid @endif"
+                                            id="videoUpload" wire:model="videoUrl"
+                                            placeholder="https://example.com/video.mp4">
                                         @error('videoUrl')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -218,18 +226,22 @@
                                     <!-- What Will I Learn? Textarea -->
                                     <div class="mb-3">
                                         <label for="learnDetails">What Will I Learn?</label>
-                                        <textarea wire:model="learnDetails" class="form-control" id="learnDetails"
-                                            placeholder="Write here the course benefits (One per line)"></textarea>
+                                        <textarea wire:model="learnDetails"
+                                            class="form-control @if ($errors->has('learnDetails')) is-invalid @elseif ($learnDetails) is-valid @endif"
+                                            id="learnDetails" placeholder="Write here the course benefits (One per line)">
+                                            </textarea>
                                         @error('learnDetails')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-
                                     <!-- Targeted Audience Textarea -->
                                     <div class="mb-3">
                                         <label for="audienceDetails">Targeted Audience</label>
-                                        <textarea wire:model="audienceDetails" class="form-control" id="audienceDetails"
-                                            placeholder="Specify the target audience that will benefit the most from the course. (One line per target audience)"></textarea>
+                                        <textarea wire:model="audienceDetails"
+                                            class="form-control @if ($errors->has('audienceDetails')) is-invalid @elseif ($audienceDetails) is-valid @endif"
+                                            id="audienceDetails"
+                                            placeholder="Specify the target audience that will benefit the most from the course. (One line per target audience)">
+                                            </textarea>
                                         @error('audienceDetails')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -238,12 +250,15 @@
                                     <!-- Requirements/Instructions Textarea -->
                                     <div class="mb-3">
                                         <label for="requirements">Requirements/Instructions</label>
-                                        <textarea wire:model="requirements" class="form-control" id="requirements"
-                                            placeholder="Additional requirements or special instructions for the students. (One per line)"></textarea>
+                                        <textarea wire:model="requirements"
+                                            class="form-control @if ($errors->has('requirements')) is-invalid @elseif ($requirements) is-valid @endif"
+                                            id="requirements" placeholder="Additional requirements or special instructions for the students. (One per line)">
+                                        </textarea>
                                         @error('requirements')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+
 
                                     <!-- Tags Select2 Dropdown -->
                                     <label for="tags" class="me-2">Tags:</label>

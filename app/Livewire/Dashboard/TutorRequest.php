@@ -19,7 +19,6 @@ class TutorRequest extends Component
 
     public function loadTutors()
     {
-        // Eager load the related models to minimize database queries
         $this->tutors = Tutor::with(['user', 'tutorFiles'])->get();
     }
 
@@ -28,7 +27,7 @@ class TutorRequest extends Component
         $tutor = Tutor::find($tutorId);
 
         if ($tutor) {
-            $tutor->update(['is_verified' => 1]); // Update the `is_verified` column to 1
+            $tutor->update(['is_verified' => 1]);
             $this->alert('success', 'Tutor approved successfully.');
             // session()->flash('success', 'Tutor approved successfully.');
         } else {
@@ -36,7 +35,7 @@ class TutorRequest extends Component
             // session()->flash('error', 'Tutor not found.');
         }
 
-        $this->loadTutors(); // Refresh the tutor list
+        $this->loadTutors();
     }
 
     public function rejectTutor($tutorId)
@@ -52,18 +51,16 @@ class TutorRequest extends Component
             // session()->flash('error', 'Tutor not found.');
         }
 
-        $this->loadTutors(); // Refresh the tutor list
+        $this->loadTutors();
     }
 
     public function downloadFile($filePath)
     {
-        // Ensure the correct path is used based on storage location
-        $fullPath = "private/$filePath";  // Assuming the file path stored in the database starts from 'tutor_files/'
+        $fullPath = "private/$filePath";
 
-        // Check if the file exists in storage
-        if (Storage::exists($fullPath)) { // Add the "!" to indicate the file doesn't exist
+        if (Storage::exists($fullPath)) {
             $this->alert('success', 'File downloaded successfully.');
-            // session()->flash('error', 'File not found.');
+            session()->flash('error', 'File not found.');
             return;
         }
 
