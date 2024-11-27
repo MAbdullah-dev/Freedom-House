@@ -29,6 +29,7 @@ use App\Livewire\Register;
 use App\Livewire\TutorPrfile;
 use App\Livewire\OnSiteCourseDetails;
 use App\Livewire\EventCalendar;
+use App\Livewire\Quizzes\QuizCreate;
 use Illuminate\Support\Facades\Route;
 
 
@@ -65,3 +66,7 @@ Route::get('dashboard/categories', Category::class)->name('dashboard.categories'
 Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
 Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
 Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');
+
+
+//quiz
+Route::get('/quizzes/create', QuizCreate::class)->name('quizzes.create');

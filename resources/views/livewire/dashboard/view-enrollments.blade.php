@@ -42,7 +42,7 @@
             <img src="{{ asset('assets/images/no-enrollment.png') }}" alt="no-enrollment" />
         </div>
     </section>
-    <livewire:dashboard.class-form />
+    {{-- <livewire:dashboard.class-form /> --}}
     @script
         <script>
             document.querySelectorAll('.dropdown-item').forEach(function(item) {

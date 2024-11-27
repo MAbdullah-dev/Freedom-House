@@ -179,10 +179,15 @@
                             <div class="row">
                                 {{-- <div class="col-xl-8"> --}}
                                 <div class="mb-3">
-                                    <label for="startDate"
-                                        class="form-label">{{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}</label>
-                                    <input type="text" class="mb-3 w-100" id="calendar-input"
-                                        placeholder="Select date" />
+                                    <label for="calendar-input" class="form-label">
+                                        {{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}
+                                    </label>
+                                    <input type="text" wire:model.lazy="date_range" id="calendar-input"
+                                        class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"
+                                        placeholder="Select Date Range">
+                                    @error('date_range')
+                                        <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                                    @enderror
                                 </div>
                                 {{-- </div> --}}
                             </div>
@@ -214,10 +219,15 @@
         flatpickr("#calendar-input", {
             mode: "range",
             dateFormat: "Y-m-d",
-            altInput: true,
             altFormat: "F j, Y",
-            minDate: "2024-01-01",
-            maxDate: "2030-12-31",
+            enableTime: true,
+            time_24hr: true,
+            minDate: "today",
+            onChange: function(selectedDates) {
+                const startDate = selectedDates[0] ? selectedDates[0].toLocaleString('en-CA') : '';
+                const endDate = selectedDates[1] ? selectedDates[1].toLocaleString('en-CA') : '';
+                @this.set('date_range', startDate + (endDate ? ' to ' + endDate : ''));
+            }
         });
     </script>
 @endscript
