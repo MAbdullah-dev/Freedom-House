@@ -16,8 +16,8 @@
                                 data-course-id="{{ $mostPopularCourse->id }}" style="cursor: pointer;">
                             </i>
                         @else
-                            <i class="fa-regular fa-bookmark wishlist-icon" style="cursor: pointer;"
-                                data-bs-toggle="modal" data-bs-target="#AuthCheckModal">
+                            <i class="fa-regular fa-bookmark" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#AuthCheckModal">
                             </i>
                         @endif
                     </div>

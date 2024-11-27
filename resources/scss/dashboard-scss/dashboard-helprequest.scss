@@ -72,6 +72,27 @@
                         font-weight: 500;
                         color: #2b2b2b;
                         color: #2b2b2b;
+                        border-bottom: 1px solid #b2b4b7 !important;
+                    }
+                }
+
+                tbody {
+                    tr {
+                        &:last-child {
+                            border-bottom: none !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .help-request-review {
+            .help-request-head {
+                .request-text {
+                    h4 {
+                        font-size: 14px;
                     }
                 }
             }

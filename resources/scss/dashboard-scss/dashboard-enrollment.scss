@@ -39,6 +39,7 @@
                 box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
             }
         }
+
         button {
             width: max-content;
         }
@@ -190,53 +191,58 @@
         }
     }
 
-    // #multiStepForm {
+    .classes {
+        .table-responsive {
+            font-size: 14px;
+            border: 1px solid #cdcfd5;
+            border-radius: 7px;
 
-    //     input,
-    //     textarea,
-    //     select {
-    //         box-shadow: none;
-    //         outline: none;
+            table {
+                margin-bottom: 0 !important;
 
-    //         &:focus {
-    //             border: 1px solid #dee2e6;
-    //         }
+                thead {
+                    th {
+                        background-color: #f1f1f1;
+                        font-weight: 700;
+                        color: #333;
+                        padding: 12px;
+                    }
+                }
 
-    //         option {
-    //             background-color: transparent;
-    //             color: #212529;
+                tbody {
+                    tr {
+                        td {
+                            padding: 16px;
+                            vertical-align: top;
+                            border-bottom: 1px solid #cdcfd5;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-    //             &:hover {
-    //                 background-color: #f0ad4e;
-    //                 /* Replace with desired color */
-    //                 color: #fff;
-    //                 /* Optional: change text color */
-    //             }
+    .modal-footer {
+        .icons {
+            .delete-icon {
+                color: #ff0000;
+                font-size: 16px;
 
-    //             // &:focus {
-    //             //     background-color: #4caf50 !important;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
 
-    //             // }
-    //         }
-    //     }
+            .edit-icon {
+                color: #4caf50;
+                font-size: 16px;
 
-    //     .dropdown {
-    //         .dropdown-toggle {
-    //             width: 100%;
-    //             border: 1px solid #cdcfd5;
-    //             border-radius: 6px;
-    //             background-color: transparent;
-    //             padding: 6px 12px;
-    //         }
-
-    //         .dropdown-menu {
-    //             input {
-    //                 margin-bottom: 8px;
-    //                 width: 100%;
-    //             }
-    //         }
-    //     }
-    // }
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
 
     // Responsive adjustments
     @media (max-width: 992px) {
@@ -266,6 +272,7 @@
             }
         }
     }
+
     .nav-tabs {
         border-bottom: none;
 
@@ -322,6 +329,7 @@
         0% {
             opacity: 0;
         }
+
         100% {
             opacity: 1;
         }
@@ -331,6 +339,7 @@
         0% {
             opacity: 1;
         }
+
         100% {
             opacity: 0;
         }

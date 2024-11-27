@@ -18,13 +18,13 @@
                     <input type="text" class="form-control" id="subject" wire:model="subject" name="subject"
                         placeholder="e.g I have an issue in my course video">
                     @error('subject')
-                        <h6 class="text-danger">{{ $message }}</h6>
+                        <li class="text-danger">{{ $message }}</li>
                     @enderror
                     <label for="Description" class="my-3">Description</label>
                     <textarea name="request_detail" wire:model="request_detail" class="form-control" id="Description" cols="30"
                         rows="10"></textarea>
                     @error('request_detail')
-                        <h6 class="text-danger">{{ $message }}</h6>
+                        <li class="text-danger">{{ $message }}</li>
                     @enderror
                     <div class="custom-file-input">
                         <label for="file-upload" class="custom-file-upload  button-secondary mt-3">
@@ -32,7 +32,7 @@
                         </label>
                         <input id="file-upload" wire:model="request_img" type="file" />
                         @error('request_img')
-                            <h6 class="text-danger">{{ $message }}</h6>
+                            <li class="text-danger">{{ $message }}</li>
                         @enderror
                     </div>
                     <div class="text-center">
@@ -71,33 +71,34 @@
             </div>
         </div>
         <div class="help-request-body mb-5">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Subject</th>
-                        <th scope="col">Created</th>
-                        <th scope="col">Last Activity</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($requests as $key => $request)
+            <div class="table-responsive">
+                <table class="table table-borderless">
+                    <thead>
                         <tr>
-                            <th scope="row">{{ $key + 1 }}</th>
-                            <td>{{ $request->subject }}</td>
-                            <td>{{ $request->created_at->format('Y-m-d H:i') }}</td>
-                            <td>{{ $request->updated_at->diffForHumans() }}</td>
-                            <td>{{ $request->status ?? 'Pending' }}</td>
+                            <th scope="col">#</th>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Last Activity</th>
+                            <th scope="col">Status</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">No help requests found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @forelse($requests as $key => $request)
+                            <tr>
+                                <td scope="row">{{ $key + 1 }}</td>
+                                <td>{{ $request->subject }}</td>
+                                <td>{{ $request->created_at->format('Y-m-d H:i') }}</td>
+                                <td>{{ $request->updated_at->diffForHumans() }}</td>
+                                <td>{{ $request->status ?? 'Pending' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">No help requests found.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
-
     </section>
 </div>

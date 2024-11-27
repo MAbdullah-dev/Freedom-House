@@ -25,8 +25,10 @@ return new class extends Migration
             $table->string('recorded_video_url')->nullable();
             $table->enum('is_paid', ['free', 'paid'])->default('free');
             $table->decimal('price', 8, 2)->nullable();
-            $table->dateTime('start_date')->nullable();
-            $table->dateTime('end_date')->nullable();
+            $table->time('class_time');
+            $table->date('class_date');
+            $table->dateTime('booking_start_date')->nullable();
+            $table->dateTime('booking_end_date')->nullable();
             $table->integer('max_students')->nullable();
             $table->timestamps();
             $table->softDeletes();

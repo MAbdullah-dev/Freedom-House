@@ -21,6 +21,10 @@
 
             tbody {
                 tr {
+                    &:last-child {
+                        border-bottom: none !important;
+                    }
+
                     td {
                         padding: 16px;
                         vertical-align: top;
