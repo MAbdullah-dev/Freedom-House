@@ -97,7 +97,9 @@
                                 <p><strong>Description:</strong> {{ $selectedClass->description }}</p>
                                 <p><strong>Capacity:</strong> {{ $selectedClass->capacity }}</p>
                                 <p><strong>Class Type:</strong> {{ ucfirst($selectedClass->class_type) }}</p>
-                                <p><strong>Class Date:</strong> {{ $selectedClass->class_date ?? 'Not Set' }}</p>
+                                <p><strong>Class Date:</strong>
+                                    {{ $selectedClass->class_date ? \Carbon\Carbon::parse($selectedClass->class_date)->format('F, d Y') : 'Not Set' }}
+                                </p>
                                 <p><strong>Class Time:</strong> {{ $selectedClass->class_time ?? 'Not Set' }}</p>
                                 <p><strong>Student Capacity:</strong> {{ $selectedClass->capacity }}</p>
                                 @if ($selectedClass->class_type == 'recorded')

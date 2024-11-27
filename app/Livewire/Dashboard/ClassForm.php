@@ -30,9 +30,11 @@ class ClassForm extends Component
         'recorded_video_url' => 'nullable|required_if:class_type,recorded|url',
         'is_paid' => 'required|in:free,paid',
         'price' => 'nullable|required_if:is_paid,paid|numeric',
+        'class_time' => 'required|date_format:H:i',
+        'class_date' => 'required|date',
         'capacity' => 'required|integer|min:1',
-        'start_date' => 'required|date|after_or_equal:today',
-        'end_date' => 'required|date|after:start_date',
+        'booking_start_date' => 'required|date|after_or_equal:today',
+        'booking_end_date' => 'required|date|after:start_date',
     ];
 
     public function mount()
@@ -78,59 +80,61 @@ class ClassForm extends Component
     }
 
     private function createClass()
-{
-    $class = Classe::create([
-        'title' => $this->title,
-        'description' => $this->description,
-        'course_id' => $this->course_id,
-        'user_id' => Auth::id(),
-        'class_type' => $this->class_type,
-        'teams_link' => $this->teams_link,
-        'onsite_address' => $this->onsite_address,
-        'recorded_video_url' => $this->recorded_video_url,
-        'is_paid' => $this->is_paid,
-        'price' => $this->price,
-        'capacity' => $this->capacity,
-        'start_date' => $this->start_date,
-        'end_date' => $this->end_date,
-        'visibility' => $this->visibility,
-    ]);
+    {
+        $class = Classe::create([
+            'title' => $this->title,
+            'description' => $this->description,
+            'course_id' => $this->course_id,
+            'user_id' => Auth::id(),
+            'class_type' => $this->class_type,
+            'teams_link' => $this->teams_link,
+            'onsite_address' => $this->onsite_address,
+            'recorded_video_url' => $this->recorded_video_url,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'capacity' => $this->capacity,
+            'class_time' => $this->class_time,
+            'class_date' => $this->class_date,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'visibility' => $this->visibility,
+        ]);
 
 
-    CalendarEvent::create([
-        'user_id' => Auth::id(),
-        'class_id' => $class->id,
-    ]);
+        CalendarEvent::create([
+            'user_id' => Auth::id(),
+            'class_id' => $class->id,
+        ]);
 
-    $this->dispatch('closeModal');
-    $this->alert('success', 'Class created successfully!');
-}
+        $this->dispatch('closeModal');
+        $this->alert('success', 'Class created successfully!');
+    }
 
-private function createEvent()
-{
-    $event = Events::create([
-        'title' => $this->title,
-        'description' => $this->description,
-        'user_id' => Auth::id(),
-        'class_type' => $this->class_type,
-        'teams_link' => $this->teams_link,
-        'onsite_address' => $this->onsite_address,
-        'recorded_video_url' => $this->recorded_video_url,
-        'is_paid' => $this->is_paid,
-        'price' => $this->price,
-        'capacity' => $this->capacity,
-        'start_date' => $this->start_date,
-        'end_date' => $this->end_date,
-    ]);
+    private function createEvent()
+    {
+        $event = Events::create([
+            'title' => $this->title,
+            'description' => $this->description,
+            'user_id' => Auth::id(),
+            'class_type' => $this->class_type,
+            'teams_link' => $this->teams_link,
+            'onsite_address' => $this->onsite_address,
+            'recorded_video_url' => $this->recorded_video_url,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'capacity' => $this->capacity,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+        ]);
 
-    CalendarEvent::create([
-        'user_id' => Auth::id(),
-        'event_id' => $event->id,
-    ]);
+        CalendarEvent::create([
+            'user_id' => Auth::id(),
+            'event_id' => $event->id,
+        ]);
 
-    $this->dispatch('closeModal');
-    $this->alert('success', 'Event created successfully!');
-}
+        $this->dispatch('closeModal');
+        $this->alert('success', 'Event created successfully!');
+    }
 
     public function render()
     {
