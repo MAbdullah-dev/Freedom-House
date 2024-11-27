@@ -1,46 +1,59 @@
 <?php
+
 namespace App\Livewire\Dashboard;
 
 use App\Models\Request;
+use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class HelpRequest extends Component
 {
-    use WithFileUploads,LivewireAlert;
+    use WithFileUploads, LivewireAlert;
 
-    public $user_id, $subject, $request_detail, $request_img, $status, $requests;
+    public $subject;
+    public $request_detail;
+    public $request_img;
+    public $requests;
 
-public function createRequest()
-{
-    $this->validate([
+    protected $rules = [
         'subject' => 'required|string|max:50',
         'request_detail' => 'required|string',
         'request_img' => 'nullable|image|max:1024',
-    ]);
+    ];
 
-    $path = $this->request_img ? $this->request_img->store('requests', 'public') : null;
+    public function mount()
+    {
+        $this->loadUserRequests();
+    }
 
-    Request::create([
-        'user_id' => auth()->id(), // Automatically get user ID from auth
-        'subject' => $this->subject,
-        'request_detail' => $this->request_detail,
-        'request_img' => $path,
-    ]);
+    public function loadUserRequests()
+    {
+        $this->requests = Request::where('user_id', Auth::id())->latest()->get();
+    }
 
-    $this->alert('success', 'Help Request has been sent.');
-    $this->resetForm();
-}
+    public function createRequest()
+    {
+        $this->validate();
 
+        $path = $this->request_img ? $this->request_img->store('requests', 'public') : null;
+
+        Request::create([
+            'user_id' => Auth::id(),
+            'subject' => $this->subject,
+            'request_detail' => $this->request_detail,
+            'request_img' => $path,
+        ]);
+
+        $this->alert('success', 'Help Request has been sent.');
+        $this->resetForm();
+        $this->loadUserRequests(); // Refresh the list of requests
+    }
 
     private function resetForm()
     {
         $this->reset(['subject', 'request_detail', 'request_img']);
-    }
-        public function mount()
-    {
-        $this->requests = Request::where('user_id', auth()->id())->get();
     }
 
     public function render()

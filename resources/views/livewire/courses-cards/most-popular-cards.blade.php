@@ -11,9 +11,15 @@
                         <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top" alt="...">
 
                         <!-- Wishlist Icon with Dynamic Class Toggle -->
-                        <i class="{{ Auth::check() && Auth::user()->wishlist->contains($mostPopularCourse) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
-                            data-course-id="{{ $mostPopularCourse->id }}" style="cursor: pointer;">
-                        </i>
+                        @if (Auth::check())
+                            <i class="{{ Auth::user()->wishlist->contains($mostPopularCourse) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
+                                data-course-id="{{ $mostPopularCourse->id }}" style="cursor: pointer;">
+                            </i>
+                        @else
+                            <i class="fa-regular fa-bookmark" style="cursor: pointer;" data-bs-toggle="modal"
+                                data-bs-target="#AuthCheckModal">
+                            </i>
+                        @endif
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{ $mostPopularCourse->title }}</h5>
@@ -35,8 +41,13 @@
                         <div class="post-details d-flex align-items-center">
                             <span class="date">Publish: {{ $mostPopularCourse->created_at->diffForHumans() }}</span>
                         </div>
-                        <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
-                            href="{{ route('course.details', $mostPopularCourse->id) }}">More Details...</a>
+                        @if (Auth::check())
+                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
+                                href="{{ route('course.details', $mostPopularCourse->id) }}">More Details...</a>
+                        @else
+                            <a class="button-primary mt-3 d-block w-100 text-center"data-bs-toggle="modal"
+                                data-bs-target="#AuthCheckModal" target="_blank" href="">More Details...</a>
+                        @endif
                     </div>
                 </div>
             </div>
