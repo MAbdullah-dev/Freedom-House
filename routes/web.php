@@ -18,6 +18,7 @@ use App\Livewire\Dashboard\DashboardEnrolledCourses;
 use App\Livewire\Dashboard\DashboardProfile;
 use App\Livewire\Dashboard\DashboardSettings;
 use App\Livewire\Dashboard\DashboardWishlist;
+use App\Livewire\Dashboard\HelpRequestsAdmin;
 use App\Livewire\Dashboard\MyCourses;
 use App\Livewire\Dashboard\ScheduleClasses;
 use App\Livewire\Dashboard\Tags;
@@ -70,3 +71,4 @@ Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tuto
 
 //quiz
 Route::get('/quizzes/create', QuizCreate::class)->name('quizzes.create');
+Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');

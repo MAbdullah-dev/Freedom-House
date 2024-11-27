@@ -65,6 +65,9 @@
                         <i class="fa-solid fa-book"></i> Course Analytics
                     </a>
                 </li>
+                <li class="tutor-dashboard-menu-divider-header">
+                    Admin
+                </li>
                 <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tutor.request' ? 'active' : '' }}"
                         href="{{ route('dashboard.tutor.request') }}" wire:navigate>
@@ -75,6 +78,12 @@
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.coursesRequest' ? 'active' : '' }}"
                         href="{{ route('dashboard.coursesRequest') }}" wire:navigate>
                         <i class="fa-solid fa-clipboard-check"></i> Courses Request
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help.admin' ? 'active' : '' }}"
+                        href="{{ route('dashboard.help.admin') }}" wire:navigate>
+                        <i class="fa-regular fa-circle-question"></i>help requests
                     </a>
                 </li>
                 <li class="nav-item">
