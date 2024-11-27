@@ -67,9 +67,9 @@
                                     class="form-label">{{ $type === 'class' ? 'Class Title' : 'Event Title' }}</label>
                                 <input wire:model="title" id="title"
                                     class="form-control
-                  @error('title') is-invalid
-                  @elseif($title) is-valid
-                  @enderror"
+                                    @error('title') is-invalid
+                                    @elseif($title) is-valid
+                                    @enderror"
                                     type="text" placeholder="Enter Title">
 
                                 @error('title')
@@ -163,6 +163,28 @@
                                     @enderror
                                 </div>
                             @endif
+                            {{-- class_date and event_date --}}
+                            <div class="mb-3">
+                                <label for="classDate"
+                                    class="form-label">{{ $type === 'class' ? 'Class Date' : 'Event date' }}</label>
+                                <input wire:model="class_date" id="classDate"
+                                    class="form-control @if ($errors->has('class_date')) is-invalid @elseif ($capacity) is-valid @endif"
+                                    type="date" placeholder="Enter class Date">
+                                @error('class_date')
+                                    <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                                @enderror
+                            </div>
+                            {{-- class_time and event_time --}}
+                            <div class="mb-3">
+                                <label for="classtime"
+                                    class="form-label">{{ $type === 'class' ? 'Class Date' : 'Event date' }}</label>
+                                <input wire:model="class_time" id="classtime"
+                                    class="form-control @if ($errors->has('class_time')) is-invalid @elseif ($capacity) is-valid @endif"
+                                    type="time" placeholder="Enter class Date">
+                                @error('class_time')
+                                    <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                                @enderror
+                            </div>
                             <!-- Capacity -->
                             <div class="mb-3">
                                 <label for="capacity"
@@ -177,18 +199,18 @@
 
                             <!-- Start and End Dates -->
                             <div class="row">
-                                {{-- <div class="col-xl-8"> --}}
-                                <div class="mb-3">
-                                    <label for="startDate"
-                                        class="form-label">{{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}</label>
-                                    <input type="text" class="mb-3 w-100" id="calendar-input"
-                                        placeholder="Select date" />
+                                <div class="mb-3" wire:ignore>
+                                    <label for="calendar-input" class="form-label">
+                                        {{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}
+                                    </label>
+                                    <input type="text" wire:model.lazy="date_range" id="calendar-input"
+                                        class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"
+                                        placeholder="Select Date Range (e.g., YYYY-MM-DD to YYYY-MM-DD)">
+                                    @error('date_range')
+                                        <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                                    @enderror
                                 </div>
-                                {{-- </div> --}}
                             </div>
-                            {{-- <button type="submit" class=" button-primary w-100 mt-3">
-                                {{ $type === 'class' ? 'Create Class' : 'Create Event' }}
-                            </button> --}}
                         </form>
                     </div>
                 </div>
@@ -213,11 +235,17 @@
     <script>
         flatpickr("#calendar-input", {
             mode: "range",
-            dateFormat: "Y-m-d",
+            // dateFormat: "Y-m-d",
             altInput: true,
-            altFormat: "F j, Y",
-            minDate: "2024-01-01",
-            maxDate: "2030-12-31",
+            // altFormat: "F j, Y",
+            // enableTime: true,
+            minDate: "today",
+            onChange: function(selectedDates) {
+                // Convert the selected dates into the desired format
+                const startDate = selectedDates[0] ? selectedDates[0].toLocaleString('en-CA') : '';
+                const endDate = selectedDates[1] ? selectedDates[1].toLocaleString('en-CA') : '';
+                @this.set('date_range', startDate + (endDate ? ' to ' + endDate : ''));
+            }
         });
     </script>
 @endscript

@@ -16,7 +16,7 @@ class ClassForm extends Component
 
     public $type = 'class';
     public $course_id, $title, $description, $class_type = 'onsite', $teams_link, $onsite_address, $is_paid = 'free';
-    public $price = 0, $capacity, $visibility = 1, $start_date, $end_date, $recorded_video_url;
+    public $price = 0, $capacity, $visibility = 1, $booking_start_date, $booking_end_date, $recorded_video_url, $date_range, $class_date, $class_time;
     public $courses = [];
 
     protected $rules = [
@@ -30,31 +30,57 @@ class ClassForm extends Component
         'recorded_video_url' => 'nullable|required_if:class_type,recorded|url',
         'is_paid' => 'required|in:free,paid',
         'price' => 'nullable|required_if:is_paid,paid|numeric',
-        'class_time' => 'required|date_format:H:i',
-        'class_date' => 'required|date',
         'capacity' => 'required|integer|min:1',
+        'class_date' => 'required|date|date_format:Y-m-d',
+        'class_time' => 'required',
+        'date_range' => 'required', // Custom date range validation
         'booking_start_date' => 'required|date|after_or_equal:today',
-        'booking_end_date' => 'required|date|after:start_date',
+        'booking_end_date' => 'required|date|after:booking_start_date',
     ];
 
+    protected $messages = [
+        'title.required' => 'Please provide a title for the class/event.',
+        'booking_start_date.after_or_equal' => 'The booking start date must be today or later.',
+        'booking_end_date.after' => 'The booking end date must be after the start date.',
+    ];
+
+
     public function mount()
+    {
+        $this->loadcources();
+    }
+    public function loadcources()
     {
         $this->courses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->get();
     }
+    public function updatedDateRange($value)
+    {
+        // Parse the date range string into start_date and end_date
+        $dates = explode(' to ', $value);
+        if (count($dates) === 2) {
+            $this->booking_start_date = $dates[0];
+            $this->booking_end_date = $dates[1];
+        }
+    }
 
     public function dispatchClassTypeChanged()
     {
-        if ($this->class_type === 'onsite') {
-            $this->reset(['teams_link', 'recorded_video_url']);
-        } elseif ($this->class_type === 'virtual') {
-            $this->reset(['onsite_address', 'recorded_video_url']);
-        } elseif ($this->class_type === 'recorded') {
-            $this->reset(['teams_link', 'onsite_address']);
+        switch ($this->class_type) {
+            case 'onsite':
+                $this->reset(['teams_link', 'recorded_video_url']);
+                break;
+            case 'virtual':
+                $this->reset(['onsite_address', 'recorded_video_url']);
+                break;
+            case 'recorded':
+                $this->reset(['teams_link', 'onsite_address']);
+                break;
         }
     }
+
 
     public function dispatchTypeChanged()
     {
@@ -72,8 +98,11 @@ class ClassForm extends Component
 
         if ($this->type === 'class') {
             $this->createClass();
+            $this->loadcources();
+            // $this->loadcources();
         } else {
             $this->createEvent();
+            $this->loadcources();
         }
 
         $this->reset();
@@ -93,11 +122,11 @@ class ClassForm extends Component
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,
-            'class_time' => $this->class_time,
-            'class_date' => $this->class_date,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
             'visibility' => $this->visibility,
+            'class_date' => $this->class_date,
+            'class_time' => $this->class_time,
+            'booking_start_date' => $this->booking_start_date,
+            'booking_end_date' => $this->booking_end_date,
         ]);
 
 
@@ -123,8 +152,10 @@ class ClassForm extends Component
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
+            'event_date' => $this->class_date,
+            'event_time' => $this->class_time,
+            'booking_start_date' => $this->booking_start_date,
+            'booking_end_date' => $this->booking_end_date,
         ]);
 
         CalendarEvent::create([
@@ -132,7 +163,6 @@ class ClassForm extends Component
             'event_id' => $event->id,
         ]);
 
-        $this->dispatch('closeModal');
         $this->alert('success', 'Event created successfully!');
     }
 
