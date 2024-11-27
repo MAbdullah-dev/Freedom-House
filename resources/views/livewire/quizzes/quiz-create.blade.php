@@ -88,10 +88,12 @@
                                                 </div>
                                                 <div class="col-2">
                                                     <input
-                                                        wire:model="questions.{{ $index }}.answers.{{ $answerIndex }}.is_correct"
-                                                        class="form-check-input" type="checkbox">
+                                                        wire:click="markCorrectAnswer({{ $index }}, {{ $answerIndex }})"
+                                                        class="form-check-input" type="radio"
+                                                        name="questions-{{ $index }}-correct-answer">
                                                     <label class="form-check-label">Correct</label>
                                                 </div>
+
                                                 <div class="col-2">
                                                     <button type="button" class="btn btn-danger btn-sm"
                                                         wire:click="removeAnswer({{ $index }}, {{ $answerIndex }})">Remove</button>
@@ -104,6 +106,10 @@
                                     </div>
                                 </div>
                             @endforeach
+
+                            <button type="button" class="btn btn-danger w-100 mb-3" wire:click="removeQuestion">
+                                - Remove Question
+                            </button>
 
                             <button type="button" class="btn btn-secondary w-100 mb-3" wire:click="addQuestion">+ Add
                                 Question</button>

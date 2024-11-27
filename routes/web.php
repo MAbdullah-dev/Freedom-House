@@ -70,5 +70,5 @@ Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tuto
 
 
 //quiz
-Route::get('/quizzes/create', QuizCreate::class)->name('quizzes.create');
+Route::get('/quizzes/create/{classId?}', QuizCreate::class)->name('quizzes.create');
 Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');
