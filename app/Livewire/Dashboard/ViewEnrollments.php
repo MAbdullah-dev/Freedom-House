@@ -54,12 +54,14 @@ class ViewEnrollments extends Component
         }
     }
 
-    public function createQuiz()
-    {
-        if ($this->selectedClass && $this->selectedClass->class_type == 'recorded') {
-            session()->flash('message', 'Create quiz functionality is not implemented yet.');
-        }
+public function createQuiz()
+{
+    if ($this->selectedClass && $this->selectedClass->class_type == 'recorded') {
+        $this->dispatch('close-modal');
+        return redirect()->route('quizzes.create', ['class_id' => $this->selectedClass->id]);
     }
+}
+
 
     public function render()
     {

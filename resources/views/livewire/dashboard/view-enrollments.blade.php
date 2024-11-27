@@ -122,9 +122,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex align-items-center justify-content-between py-2">
-                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" wire:click="editClass">Edit</button>
-                        <button type="button" class="btn btn-danger" wire:click="deleteClass">Delete</button> --}}
+
                         <div class="icons d-flex align-items-center justify-content-center gap-3">
                             <!-- Edit Icon -->
                             <i type="button" class="edit-icon fa-solid fa-pen-to-square" wire:click="editClass"></i>
@@ -135,6 +133,7 @@
                         @if ($selectedClass && $selectedClass->class_type == 'recorded')
                             <button type="button" class="button-primary" wire:click="createQuiz">Create Quiz</button>
                         @endif
+
                     </div>
                 </div>
             </div>
@@ -143,6 +142,9 @@
 </div>
 @script
     <script>
+        window.addEventListener('close-modal', event => {
+            $('#viewclassModal').modal('hide');
+        });
         document.querySelectorAll('.dropdown-item').forEach(function(item) {
             item.addEventListener('click', function(event) {
                 const selectedTimezone = event.target.textContent;

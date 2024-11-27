@@ -199,17 +199,21 @@
 
                             <!-- Start and End Dates -->
                             <div class="row">
-                                <div class="mb-3" wire:ignore>
-                                    <label for="calendar-input" class="form-label">
-                                        {{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}
-                                    </label>
-                                    <input type="text" wire:model.lazy="date_range" id="calendar-input"
-                                        class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"
-                                        placeholder="Select Date Range (e.g., YYYY-MM-DD to YYYY-MM-DD)">
-                                    @error('date_range')
-                                        <li class="text-danger"><span class="small">{{ $message }}</span></li>
-                                    @enderror
-                                </div>
+                                <<<<<<< HEAD <div class="mb-3" wire:ignore>
+                                    =======
+                                    {{-- <div class="col-xl-8"> --}}
+                                    <div class="mb-3">
+                                        >>>>>>> e8f96f9a7a6fed73eb27e71d70cba49042f2af5e
+                                        <label for="calendar-input" class="form-label">
+                                            {{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}
+                                        </label>
+                                        <input type="text" wire:model.lazy="date_range" id="calendar-input"
+                                            class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"
+                                            placeholder="Select Date Range (e.g., YYYY-MM-DD to YYYY-MM-DD)">
+                                        @error('date_range')
+                                            <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                                        @enderror
+                                    </div>
                             </div>
                         </form>
                     </div>

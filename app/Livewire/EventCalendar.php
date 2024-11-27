@@ -19,9 +19,8 @@ public $classes = [];
     {
         $user = Auth::user();
 
-        // Fetch all events (visible to everyone: logged-in and logged-out users)
         $events = CalendarEvent::with(['event', 'user'])
-            ->whereNotNull('event_id') // Ensure it's an event
+            ->whereNotNull('event_id') 
             ->get()
             ->map(function ($calendarEvent) {
                 if ($calendarEvent->event) {
@@ -34,21 +33,18 @@ public $classes = [];
                         'spotsLeft' => $calendarEvent->event->capacity,
                         'type' => 'event',
                         'event_id' => $calendarEvent->event_id,
-                        'created_by' => $calendarEvent->user->name ?? 'Unknown',
+                        'created_by' => $calendarEvent->user->username ?? 'Unknown',
                     ];
                 }
             })->toArray();
 
-        // Store the events data, which are available for everyone
         $this->events = $events;
 
-        // If the user is logged in, fetch the classes they have created or are booked for
         if ($user) {
-            // Fetch classes created by the logged-in user
             $createdClasses = CalendarEvent::with(['class', 'user'])
-                ->whereNotNull('class_id') // Ensure it's a class
+                ->whereNotNull('class_id') 
                 ->whereHas('user', function ($query) use ($user) {
-                    $query->where('id', $user->id);  // Only show classes created by the logged-in user
+                    $query->where('id', $user->id);  
                 })
                 ->get()
                 ->map(function ($calendarEvent) {
@@ -63,14 +59,13 @@ public $classes = [];
                             'type' => 'class',
                             'class_id' => $calendarEvent->class_id,
                             'course_title' => $calendarEvent->class->course->title ?? null,
-                            'created_by' => $calendarEvent->user->name ?? 'Unknown',
+                            'created_by' => $calendarEvent->user->username ?? 'Unknown',
                         ];
                     }
                 })->toArray();
 
-            // Fetch classes the user is booked for (through the bookings table)
             $bookedClasses = Booking::with(['calendarEvent', 'calendarEvent.class'])
-                ->where('user_id', $user->id) // The user is associated with the booking
+                ->where('user_id', $user->id) 
                 ->get()
                 ->map(function ($booking) {
                     $calendarEvent = $booking->calendarEvent;
@@ -85,21 +80,18 @@ public $classes = [];
                             'type' => 'class',
                             'class_id' => $calendarEvent->class_id,
                             'course_title' => $calendarEvent->class->course->title ?? null,
-                            'created_by' => $calendarEvent->user->name ?? 'Unknown',
+                            'created_by' => $calendarEvent->user->username ?? 'Unknown',
                         ];
                     }
                 })->toArray();
 
-            // Combine the created and booked classes
             $this->classes = array_merge($createdClasses, $bookedClasses);
 
-            // Dispatch both events and classes data to the frontend
             $this->dispatch('eventsLoaded', $this->events);
             $this->dispatch('classesLoaded', $this->classes);
 
             Log::debug('Livewire events and classes data:', ['events' => $this->events, 'classes' => $this->classes]);
         } else {
-            // If no user is logged in, just dispatch the events
             $this->dispatch('eventsLoaded', $this->events);
 
             Log::warning('No user logged in, no classes to display.');
