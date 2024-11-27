@@ -18,6 +18,7 @@ class ClassForm extends Component
     public $course_id, $title, $description, $class_type = 'onsite', $teams_link, $onsite_address, $is_paid = 'free';
     public $price = 0, $capacity, $visibility = 1, $booking_start_date, $booking_end_date, $recorded_video_url, $date_range, $class_date, $class_time;
     public $courses = [];
+    public $classId;
 
     protected $rules = [
         'type' => 'required|in:class,event',
@@ -47,7 +48,30 @@ class ClassForm extends Component
 
     public function mount()
     {
+        $this->classId = request()->query('classId');
+        $this->loadclassData();
+        // dd($this->classId);
         $this->loadcources();
+    }
+    public function loadclassData()
+    {
+        $class = Classe::find($this->classId);
+        $this->type = 'class';
+        $this->course_id = $class->course_id;
+        $this->title = $class->title;
+        $this->description = $class->description;
+        $this->class_type = $class->class_type;
+        $this->teams_link = $class->teams_link;
+        $this->onsite_address = $class->onsite_address;
+        $this->is_paid = $class->is_paid;
+        $this->price = $class->price;
+        $this->capacity = $class->capacity;
+        $this->visibility = $class->visibility;
+        $this->booking_start_date = $class->booking_start_date;
+        $this->booking_end_date = $class->booking_end_date;
+        $this->recorded_video_url = $class->recorded_video_url;
+        $this->class_date = $class->class_date;
+        $this->class_time = $class->class_time;
     }
     public function loadcources()
     {

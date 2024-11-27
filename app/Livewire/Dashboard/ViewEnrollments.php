@@ -41,7 +41,8 @@ class ViewEnrollments extends Component
 
     public function editClass()
     {
-        session()->flash('message', 'Edit functionality is not implemented yet.');
+        $this->dispatch('close-modal');
+        return redirect()->route('dashboard.create.class', ['classId' => $this->selectedClass->id]);
     }
 
     public function deleteClass()
@@ -54,13 +55,13 @@ class ViewEnrollments extends Component
         }
     }
 
-public function createQuiz()
-{
-    if ($this->selectedClass && $this->selectedClass->class_type == 'recorded') {
-        $this->dispatch('close-modal');
-        return redirect()->route('quizzes.create', ['class_id' => $this->selectedClass->id]);
+    public function createQuiz()
+    {
+        if ($this->selectedClass && $this->selectedClass->class_type == 'recorded') {
+            $this->dispatch('close-modal');
+            return redirect()->route('quizzes.create', ['class_id' => $this->selectedClass->id]);
+        }
     }
-}
 
 
     public function render()
