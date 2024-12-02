@@ -12,10 +12,20 @@ class Events extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-    'user_id', 'title', 'description', 'capacity', 'event_type',
-    'teams_link', 'onsite_address', 'payment_status', 'price', 'start_date', 'end_date',
-    'max_students'
-];
+        'user_id',
+        'title',
+        'description',
+        'capacity',
+        'event_type',
+        'teams_link',
+        'onsite_address',
+        'payment_status',
+        'price',
+        'booking_start_date',
+        'booking_end_date',
+        'event_date',
+        'event_time',
+    ];
 
     public function bookings()
     {
@@ -26,5 +36,4 @@ class Events extends Model
     {
         return $this->hasMany(Lecture::class);
     }
-
 }

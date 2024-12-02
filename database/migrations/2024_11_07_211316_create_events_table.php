@@ -12,20 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
-        $table->string('title');
-        $table->text('description');
-        $table->integer('capacity');
-        $table->enum('event_type', ['onsite', 'virtual', 'recorded']);
-        $table->string('teams_link')->nullable();
-        $table->string('onsite_address')->nullable();
-        $table->enum('payment_status', ['free', 'paid'])->default('free');
-        $table->decimal('price', 8, 2)->nullable();
-        $table->timestamp('start_date')->nullable();
-        $table->timestamp('end_date')->nullable();
-        $table->timestamps();
-        $table->softDeletes();
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
+            $table->string('title');
+            $table->text('description');
+            $table->integer('capacity');
+            $table->enum('event_type', ['onsite', 'virtual', 'recorded']);
+            $table->string('teams_link')->nullable();
+            $table->string('onsite_address')->nullable();
+            $table->enum('payment_status', ['free', 'paid'])->default('free');
+            $table->time('event_time');
+            $table->date('event_date');
+            $table->decimal('price', 8, 2)->nullable();
+            $table->timestamp('booking_start_date')->nullable();
+            $table->timestamp('booking_end_date')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

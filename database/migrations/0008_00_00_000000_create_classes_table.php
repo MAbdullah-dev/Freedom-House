@@ -27,8 +27,8 @@ return new class extends Migration
             $table->decimal('price', 8, 2)->nullable();
             $table->time('class_time');
             $table->date('class_date');
-            $table->dateTime('booking_start_date')->nullable();
-            $table->dateTime('booking_end_date')->nullable();
+            $table->date('booking_start_date')->nullable();
+            $table->date('booking_end_date')->nullable();
             $table->integer('max_students')->nullable();
             $table->timestamps();
             $table->softDeletes();
