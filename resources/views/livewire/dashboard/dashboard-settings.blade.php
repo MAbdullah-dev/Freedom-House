@@ -1,5 +1,5 @@
 <?php
-// dd(session()->all());
+// dd(request()->all());
 ?>
 <div class="settings px-5 mb-5">
     <h2 class="my-4">Settings</h2>

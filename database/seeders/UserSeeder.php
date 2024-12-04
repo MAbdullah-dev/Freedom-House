@@ -54,7 +54,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'email' => 'user2@example.com',
-                'microsoft_id' => 'microsoft456',
+                'microsoft_id' => 'null',
                 'microsoft_account' => false,
                 'first_name' => 'Alice',
                 'last_name' => 'Wonder',

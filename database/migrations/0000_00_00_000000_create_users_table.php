@@ -16,10 +16,12 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->string('microsoft_id', 255)->nullable();
             $table->boolean('microsoft_account')->default(false);
+            $table->string('refresh_token')->nullable();
+            $table->timestamp('token_expires_at')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('username')->nullable();
-            $table->string('phone')->unique();
+            $table->string('phone')->unique()->nullable();
             $table->text('bio')->nullable();
             $table->string('password');
             $table->string('pfp')->nullable();

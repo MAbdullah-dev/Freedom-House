@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\MicrosoftAuthController;
 use App\Livewire\CourseCatelogue;
 use App\Livewire\AboutUs;
 use App\Livewire\CourseAnalytics\CourseDetail;
@@ -72,3 +73,7 @@ Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tuto
 //quiz
 Route::get('/quizzes/create/{classId?}', QuizCreate::class)->name('quizzes.create');
 Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');
+
+
+Route::get('/auth/microsoft/callback', [MicrosoftAuthController::class, 'callback'])->name('microsoft.callback');
+Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicrosoft'])->name('microsoft.redirect');

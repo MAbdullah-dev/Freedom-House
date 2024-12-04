@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Services\MicrosoftGraphService;
 use App\Models\CalendarEvent;
 use Livewire\Component;
 use App\Models\Course;
@@ -35,8 +36,8 @@ class ClassForm extends Component
         'class_date' => 'required|date|date_format:Y-m-d',
         'class_time' => 'required',
         'date_range' => 'required', // Custom date range validation
-        'booking_start_date' => 'required|date|after_or_equal:today',
-        'booking_end_date' => 'required|date|after:booking_start_date',
+        'booking_start_date' => 'required|date',
+        'booking_end_date' => 'required|date',
     ];
 
     protected $messages = [
@@ -46,38 +47,72 @@ class ClassForm extends Component
     ];
 
 
-    public function mount()
+    public function mount($classId = null)
     {
-        $this->classId = request()->query('classId');
-        $this->loadclassData();
-        // dd($this->classId);
+        if ($classId) {
+            $this->classId = $classId;
+            $this->loadclassData();
+        }
         $this->loadcources();
     }
     public function loadclassData()
     {
         $class = Classe::find($this->classId);
-        $this->type = 'class';
-        $this->course_id = $class->course_id;
-        $this->title = $class->title;
-        $this->description = $class->description;
-        $this->class_type = $class->class_type;
-        $this->teams_link = $class->teams_link;
-        $this->onsite_address = $class->onsite_address;
-        $this->is_paid = $class->is_paid;
-        $this->price = $class->price;
-        $this->capacity = $class->capacity;
-        $this->visibility = $class->visibility;
-        $this->booking_start_date = $class->booking_start_date;
-        $this->booking_end_date = $class->booking_end_date;
-        $this->recorded_video_url = $class->recorded_video_url;
-        $this->class_date = $class->class_date;
-        $this->class_time = $class->class_time;
+        if ($class) {
+            $this->type = 'class';
+            $this->course_id = $class->course_id;
+            $this->title = $class->title;
+            $this->description = $class->description;
+            $this->class_type = $class->class_type;
+            $this->teams_link = $class->teams_link;
+            $this->onsite_address = $class->onsite_address;
+            $this->is_paid = $class->is_paid;
+            $this->price = $class->price;
+            $this->capacity = $class->capacity;
+            $this->visibility = $class->visibility;
+            $this->booking_start_date = $class->booking_start_date;
+            $this->booking_end_date = $class->booking_end_date;
+            $this->date_range = $this->booking_start_date . ' to ' . $this->booking_end_date;
+            $this->recorded_video_url = $class->recorded_video_url;
+            $this->class_date = $class->class_date;
+            $this->class_time = $class->class_time;
+        }
+    }
+    public function updateClass()
+    {
+        $this->validate([
+            'booking_start_date' => 'required|date|',
+        ]);
+        $this->validate();
+
+        $class = Classe::findOrFail($this->classId);
+        $class->update([
+            'course_id' => $this->course_id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'class_type' => $this->class_type,
+            'teams_link' => $this->teams_link,
+            'onsite_address' => $this->onsite_address,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'capacity' => $this->capacity,
+            'visibility' => $this->visibility,
+            'class_date' => $this->class_date,
+            'class_time' => $this->class_time,
+            'booking_start_date' => $this->booking_start_date,
+            'booking_end_date' => $this->booking_end_date,
+            'recorded_video_url' => $this->recorded_video_url,
+        ]);
+
+        $this->alert('success', 'Class updated successfully!');
+        $this->redirect(route("dashboard.enrollments"));
     }
     public function loadcources()
     {
         $this->courses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
+            ->where('user_id', Auth::id())
             ->get();
     }
     public function updatedDateRange($value)
@@ -123,12 +158,10 @@ class ClassForm extends Component
         if ($this->type === 'class') {
             $this->createClass();
             $this->loadcources();
-            // $this->loadcources();
         } else {
             $this->createEvent();
             $this->loadcources();
         }
-
         $this->reset();
     }
 
@@ -153,14 +186,13 @@ class ClassForm extends Component
             'booking_end_date' => $this->booking_end_date,
         ]);
 
-
         CalendarEvent::create([
             'user_id' => Auth::id(),
             'class_id' => $class->id,
         ]);
 
-        $this->dispatch('closeModal');
         $this->alert('success', 'Class created successfully!');
+        $this->redirect(route("dashboard.enrollments"));
     }
 
     private function createEvent()

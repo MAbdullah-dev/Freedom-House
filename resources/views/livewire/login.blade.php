@@ -41,10 +41,10 @@
                 <div class="row">
                     <div class="col d-flex flex-column py-3 gap-3">
                         <button type="submit" class="button-primary">Login</button>
-                        <button type="button" class="button-secondary">
+                        <a href='{{ route('microsoft.redirect') }}' type="button" class="button-secondary">
                             <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
                             <span class="ms-2">Continue with Microsoft</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
