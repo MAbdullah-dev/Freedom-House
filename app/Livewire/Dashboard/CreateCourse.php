@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire\Dashboard;
 
 use App\Models\Category;
@@ -26,6 +27,10 @@ class CreateCourse extends Component
     public $audienceDetails;
     public $requirements;
 
+    public $courseType; // New variable
+    public $is_paid; // New variable
+    public $price; // New variable
+
     public $selectedTutors = [];
     public $tagslist = [];
     public $categorylist = [];
@@ -42,14 +47,16 @@ class CreateCourse extends Component
             'category.*' => 'exists:categories,id',
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
             'videoUrl' => 'required|url',
             'learnDetails' => 'required|string',
             'audienceDetails' => 'required|string',
             'requirements' => 'required|string',
+            'courseType' => 'required',
+            'is_paid' => 'nullable|required_if:courseType,recorded',
+            'price' => 'required_if:is_paid,Paid|min:0',
         ];
     }
-
 
     public function mount($courseId = null)
     {
@@ -72,7 +79,6 @@ class CreateCourse extends Component
     public function loadCourseData()
     {
         $course = Course::with(['categories', 'tags', 'tutors.user'])->findOrFail($this->courseId);
-        // dd($course->toArray());
 
         $this->courseTitle = $course->title;
         $this->description = $course->description;
@@ -85,6 +91,9 @@ class CreateCourse extends Component
         $this->videoUrl = $course->video_url;
         $this->existingThumbnail = $course->thumbnail;
         $this->selectedTutors = $course->tutors;
+        $this->is_paid = $course->is_paid;
+        $this->price = $course->price;
+        $this->courseType = $course->course_type;
     }
 
     public function updatedTutors($value)
@@ -137,17 +146,19 @@ class CreateCourse extends Component
             'target_audience' => $this->audienceDetails,
             'is_drafted' => false,
             'is_published' => false,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'course_type' => $this->courseType,
         ]);
 
         $course->categories()->attach($this->category);
         $course->tags()->attach($this->tags);
         $course->tutors()->attach($this->tutors);
+        // dd($course);
 
         $this->resetForm();
         $this->alert('success', 'Course created successfully.');
         $this->redirect(route('dashboard.mycourses'));
-
-        // return redirect()->route('dashboard.course.details', ['courseId' => $course->id]);
     }
 
     public function updateCourse()
@@ -165,6 +176,9 @@ class CreateCourse extends Component
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'course_type' => $this->courseType,
         ]);
 
         $course->categories()->sync($this->category);
@@ -179,6 +193,14 @@ class CreateCourse extends Component
         $this->reset();
         $this->dispatch('clearSelect2');
         $this->reset('selectedTutors');
+    }
+    public function updateCourseType()
+    {
+        $this->dispatch('refreshComponent');
+    }
+    public function updateIsPaid()
+    {
+        $this->dispatch('refreshComponent');
     }
 
     public function render()

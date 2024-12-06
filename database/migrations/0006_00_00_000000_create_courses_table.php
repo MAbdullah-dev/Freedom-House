@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->enum('course_type', ['classtype', 'recorded']);
+            $table->enum('is_paid', ['free', 'paid'])->nullable();
+            $table->decimal('price', 8, 2)->nullable();
             $table->string('title')->unique();
             $table->text('description');
             $table->string('thumbnail');

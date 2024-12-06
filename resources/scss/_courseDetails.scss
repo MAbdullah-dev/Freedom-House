@@ -272,10 +272,12 @@
                         font-weight: 500;
                         line-height: 24px;
                     }
+
                     .capacity {
                         font-size: 15px;
                         font-weight: 700;
                         line-height: 24px;
+
                         span {
                             font-size: 15px;
                             font-weight: 300;
@@ -307,7 +309,6 @@
                     color: #fff;
                     padding: 5px 20px;
                     border-radius: 6px;
-                    cursor: pointer;
                     font-size: 14px;
                     font-weight: 600;
                     line-height: 20px;
@@ -343,21 +344,25 @@
 
     .course-details-tabs {
         border-top: 1px solid #ced4da;
+
         .nav-tabs {
             .nav-item {
                 .nav-link {
                     padding: 8px;
                     background-color: transparent;
                     color: #000;
+
                     &:hover {
                         border: none;
                     }
+
                     &.active {
                         border: none !important;
                         border-bottom: 1.6px solid #ff6636 !important;
                         background-color: transparent;
                         color: #ff6636;
                     }
+
                     transition: none;
                 }
             }
@@ -389,6 +394,7 @@
 
                     ul {
                         list-style-type: disc !important;
+
                         li {
                             color: #212327;
                             font-weight: 400;
@@ -404,9 +410,11 @@
 
     .news-letter {
         margin: 20px 0;
+
         .row {
             margin: 120px 0;
         }
+
         .news-letter-content {
             h6 {
                 font-weight: 600;
@@ -415,21 +423,25 @@
                 letter-spacing: 3px;
                 color: #161616;
             }
+
             p {
                 font-weight: 400;
                 font-size: 20px;
                 line-height: 24px;
                 color: #000;
             }
+
             input {
                 background-color: #fff;
                 border: 1px solid #ced4da;
                 border-radius: 4px;
                 padding: 10px;
+
                 &:focus-visible {
                     outline: none;
                 }
             }
+
             button {
                 width: max-content;
                 margin: 0 auto;
@@ -446,9 +458,11 @@
                 }
             }
         }
+
         .course-classes {
             h2 {
                 font-size: 32px !important;
+
                 &::before {
                     height: 6px;
                     width: 90px;
@@ -463,11 +477,13 @@
                 h1 {
                     font-size: 32px !important;
                 }
+
                 p {
                     font-size: 14px !important;
                 }
             }
         }
+
         .course-classes {
             .search-container {
                 flex-wrap: wrap;
@@ -488,6 +504,7 @@
 
             h2 {
                 font-size: 28px !important;
+
                 &::before {
                     height: 3px;
                     width: 90px;
@@ -495,6 +512,7 @@
             }
         }
     }
+
     @media (max-width: 380px) {
         .course-classes {
             h2 {

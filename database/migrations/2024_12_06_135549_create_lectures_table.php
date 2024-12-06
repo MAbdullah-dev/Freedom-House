@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('lectures', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade')->cascadeOnUpdate();
-            $table->string('vimeo_url');
-            $table->timestamp('uploaded_at')->useCurrent();
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('video_file')->nullable();
+            $table->integer('order')->nullable(); // To define the sequence of lectures
+            // $table->boolean('is_published')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

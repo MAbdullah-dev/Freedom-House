@@ -4,6 +4,7 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
+
 .form-select,
 .form-control {
     &:focus {
@@ -15,14 +16,18 @@
 
 ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 a {
     text-decoration: none;
 }
+
 .container {
     margin: 0 auto;
 }
+
 .button-primary {
     background: $primary-color;
     color: #fff;
@@ -32,11 +37,13 @@ a {
     border-radius: 5px;
     padding: 12px 47px;
     border: none;
+
     &:hover {
         background-color: #156636;
         transition: all 0.3s ease-in-out;
     }
 }
+
 .button-secondary {
     background: transparent;
     border: 1px solid $primary-color;
@@ -52,10 +59,12 @@ a {
     border: 1px solid #cdcfd5;
     border-radius: 6px;
     border-bottom: none !important;
+
     table {
         border: none !important;
         min-width: 700px;
         margin-bottom: 0 !important;
+
         thead {
             th {
                 padding: 9px 16px;
@@ -68,18 +77,22 @@ a {
                 background-color: #f4f6f9;
             }
         }
+
         tbody {
             tr {
                 border-bottom: 1px solid #cdcfd5;
+
                 td {
                     padding: 16px;
                     font-size: 16px;
                     line-height: 1.6;
                     font-weight: 500;
                     color: #212327;
+
                     a {
                         cursor: pointer;
                         color: #212327;
+
                         &:hover {
                             color: $primary-color;
                         }
@@ -92,9 +105,11 @@ a {
 
 .news-letter {
     margin: 20px 0;
+
     .row {
         margin: 120px 0;
     }
+
     .news-letter-content {
         h6 {
             font-weight: 600;
@@ -103,35 +118,42 @@ a {
             letter-spacing: 3px;
             color: #161616;
         }
+
         p {
             font-weight: 400;
             font-size: 20px;
             line-height: 24px;
             color: #000;
         }
+
         input {
             background-color: #fff;
             border: 1px solid #ced4da;
             border-radius: 4px;
             padding: 10px;
+
             &:focus-visible {
                 outline: none;
             }
         }
+
         button {
             width: max-content;
             margin: 0 auto;
         }
     }
 }
+
 @media screen and (max-width: 768px) {
     .news-letter {
         .row {
             margin: 60px 0;
+
             .news-letter-content {
                 h6 {
                     font-size: 20px;
                 }
+
                 p {
                     font-size: 14px;
                 }
@@ -167,6 +189,7 @@ a {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }

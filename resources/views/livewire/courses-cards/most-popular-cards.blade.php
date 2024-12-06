@@ -41,12 +41,19 @@
                         <div class="post-details d-flex align-items-center">
                             <span class="date">Publish: {{ $mostPopularCourse->created_at->diffForHumans() }}</span>
                         </div>
-                        @if (Auth::check())
+                        {{-- @if (Auth::check())
                             <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
                                 href="{{ route('course.details', $mostPopularCourse->id) }}">More Details...</a>
                         @else
                             <a class="button-primary mt-3 d-block w-100 text-center"data-bs-toggle="modal"
                                 data-bs-target="#AuthCheckModal" target="_blank" href="">More Details...</a>
+                        @endif --}}
+                        @if ($mostPopularCourse->course_type == 'recorded')
+                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
+                                href="{{ route('onsite.course.details', $mostPopularCourse->id) }}">Enroll Now...</a>
+                        @else
+                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
+                                href="{{ route('course.details', $mostPopularCourse->id) }}">More Details...</a>
                         @endif
                     </div>
                 </div>

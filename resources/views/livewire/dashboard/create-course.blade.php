@@ -74,6 +74,52 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
+                                        <!-- Course Type -->
+                                        <div class="mb-3">
+                                            <label for="courseType">Course Type</label>
+                                            <select wire:model="courseType" id="courseType"
+                                                class="form-control @if ($errors->has('courseType')) is-invalid @elseif ($courseType) is-valid @endif"
+                                                required wire:change="updateCourseType">
+                                                <option value="">Select course type</option>
+                                                <option value="classtype">Class Type</option>
+                                                <option value="recorded">Recorded</option>
+                                            </select>
+                                            @error('courseType')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Payment Status and Price (conditionally displayed) -->
+                                        @if ($courseType === 'recorded')
+                                            <div class="mb-3">
+                                                <label for="isPaid" class="form-label">Course Payment Status</label>
+                                                <select wire:model="is_paid" id="isPaid"
+                                                    class="form-select @if ($errors->has('is_paid')) is-invalid @elseif (!is_null($is_paid)) is-valid @endif"
+                                                    wire:change="updateIsPaid">
+                                                    <option value="">Select payment status</option>
+                                                    <option value="Paid">Paid</option>
+                                                    <option value="Free">Free</option>
+                                                </select>
+                                                @error('is_paid')
+                                                    <li class="text-danger"><span class="small">{{ $message }}</span>
+                                                    </li>
+                                                @enderror
+                                            </div>
+
+                                            @if ($is_paid == 'Paid')
+                                                <div class="mb-3">
+                                                    <label for="price" class="form-label">Price</label>
+                                                    <input type="number" wire:model="price" id="price"
+                                                        class="form-control @if ($errors->has('price')) is-invalid @elseif ($price) is-valid @endif"
+                                                        min="0" required>
+                                                    @error('price')
+                                                        <li class="text-danger"><span
+                                                                class="small">{{ $message }}</span></li>
+                                                    @enderror
+                                                </div>
+                                            @endif
+                                        @endif
+
 
                                         <label for="category">Categories</label>
                                         <div wire:ignore class="d-flex align-items-center select-wrapper">
@@ -106,13 +152,14 @@
                                                 <p class="mb-2 text-secondary">File Support: JPG, PNG</p>
 
                                                 <!-- Loader spinner that shows when the file is being uploaded -->
-                                                <div wire:loading wire:target="file" class="spinner-border text-success"
-                                                    role="status">
+                                                <div wire:loading wire:target="file"
+                                                    class="spinner-border text-success" role="status">
                                                     <span class="visually-hidden">Uploading...</span>
                                                 </div>
 
                                                 <!-- Input for file upload -->
-                                                <label for="file-upload" class="custom-file-upload button-primary mt-3">
+                                                <label for="file-upload"
+                                                    class="custom-file-upload button-primary mt-3">
                                                     <i class="bi bi-upload me-1"></i> Upload Image
                                                 </label>
                                                 <input wire:model="file" id="file-upload" type="file" />

@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Lecture extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'course_id',
+        'title',
+        'description',
+        'video_file',
+        'order',
+    ];
 
-    protected $fillable = ['class_id', 'vimeo_url'];
-
-    public function class()
+    public function course()
     {
-        return $this->belongsTo(Classe::class);
+        return $this->belongsTo(Course::class);
     }
 }

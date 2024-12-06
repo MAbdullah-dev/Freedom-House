@@ -97,7 +97,7 @@
                                     wire:change="dispatchClassTypeChanged">
                                     <option value="onsite">Onsite</option>
                                     <option value="virtual">Virtual</option>
-                                    <option value="recorded">Recorded</option>
+                                    {{-- <option value="recorded">Recorded</option> --}}
                                 </select>
                                 @error('class_type')
                                     <li class="text-danger"><span class=" small">{{ $message }}</span></li>
@@ -126,7 +126,7 @@
                                     @enderror
                                 </div>
                             @endif
-                            @if ($class_type === 'recorded')
+                            {{-- @if ($class_type === 'recorded')
                                 <div class="mb-3">
                                     <label for="recordedVideoUrl" class="form-label">Recorded Video URL</label>
                                     <input wire:model="recorded_video_url" id="recordedVideoUrl"
@@ -136,7 +136,7 @@
                                         <li class="text-danger"><span class="small">{{ $message }}</span></li>
                                     @enderror
                                 </div>
-                            @endif
+                            @endif --}}
                             <!-- Payment Status -->
                             <div class="mb-3">
                                 <label for="isPaid"
