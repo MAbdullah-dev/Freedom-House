@@ -35,7 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return !is_null($this->email_verified_at);
     }
-     public function roles()
+    public function roles()
     {
         return $this->belongsToMany(Role::class, 'roles_users')->select('roles.id');
     }
@@ -98,5 +98,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function wishlist()
     {
         return $this->belongsToMany(Course::class, 'wishlists', 'user_id', 'course_id');
+    }
+    public function videoActivities()
+    {
+        return $this->hasMany(VideoActivity::class);
     }
 }

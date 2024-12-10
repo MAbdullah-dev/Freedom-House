@@ -17,13 +17,16 @@ class Lecture extends Component
     public $courses = [];
     public $course_id; // Course selected once for all lectures
     public $lectures = [];
+    public $alllectures;
+    public $totalLectures = 0;
+    public $usedOrders = [];
 
     protected $rules = [
         'course_id' => 'required|exists:courses,id',
         'lectures.*.title' => 'required|string|max:255',
         'lectures.*.description' => 'nullable|string',
         'lectures.*.video_file' => 'required|file|mimetypes:video/mp4,video/quicktime|max:51200', // Max 50MB
-        'lectures.*.order' => 'nullable|integer|min:1',
+        'lectures.*.order' => 'required|integer|distinct|min:1',
     ];
 
     public function mount()
@@ -34,6 +37,23 @@ class Lecture extends Component
             ->get();
 
         // Initialize with one lecture input block
+        $this->initializeLectureBlock();
+    }
+    public function fetchLectures()
+    {
+        $this->dispatch('refreshComponent');
+    }
+    public function updatedCourseId()
+    {
+        if ($this->course_id) {
+            $this->alllectures = ModelsLecture::where('course_id', $this->course_id)->get();
+            $this->totalLectures = $this->alllectures->count() + count($this->lectures);
+            $this->usedOrders = $this->alllectures->pluck('order')->toArray();
+        }
+    }
+
+    private function initializeLectureBlock()
+    {
         $this->lectures[] = [
             'title' => '',
             'description' => '',
@@ -44,12 +64,9 @@ class Lecture extends Component
 
     public function addLectureBlock()
     {
-        $this->lectures[] = [
-            'title' => '',
-            'description' => '',
-            'video_file' => '',
-            'order' => '',
-        ];
+        $this->initializeLectureBlock();
+        $this->totalLectures += 1;
+        $this->dispatch('refreshComponent');
     }
 
     public function removeLectureBlock($index)
@@ -71,7 +88,6 @@ class Lecture extends Component
                 'name' => $lecture['title'],
                 'description' => $lecture['description'],
             ]);
-            // dd($response);
 
             // Delete temporary file
             Storage::disk('local')->delete($videoPath);
@@ -93,16 +109,15 @@ class Lecture extends Component
     private function resetFields()
     {
         $this->course_id = '';
-        $this->lectures = [
-            [
-                'title' => '',
-                'description' => '',
-                'video_file' => '',
-                'order' => '',
-            ],
-        ];
+        $this->lectures = [];
+        $this->initializeLectureBlock();
+        $this->totalLectures = 0;
+        $this->usedOrders = [];
     }
-
+    public function updateorder()
+    {
+        $this->dispatch('refreshComponent');
+    }
     public function render()
     {
         return view('livewire.dashboard.lecture')->layout('components.layouts.dashboard');

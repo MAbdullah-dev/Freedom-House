@@ -13,16 +13,39 @@
                 <li><i class="fa-regular fa-clock fa-sm"></i> {{ $currentLecture->duration }} hours</li>
             </ul>
             <div class="controll-btn">
-                <button class="button-primary" wire:click="previousLecture"><i class="fa-solid fa-arrow-left fa-xs"></i>
-                    Previous </button>
-                <button class="button-secondary" wire:click="nextLecture">Next <i
-                        class="fa-solid fa-arrow-right fa-xs"></i></button>
+                @php
+                    $prevLecture = $lectures
+                        ->where('id', '<', $currentLecture->id)
+                        ->sortByDesc('id')
+                        ->first();
+                    $prevLectureId = $prevLecture ? $prevLecture->id : null;
+                    $nextLecture = $lectures
+                        ->where('id', '>', $currentLecture->id)
+                        ->sortByDesc('id')
+                        ->first();
+                    $nextLectureId = $nextLecture ? $nextLecture->id : null;
+                @endphp
+
+
+                <a class="button-primary {{ !$prevLectureId ? 'disabled' : '' }}"
+                    {{ !$prevLectureId ? '' : 'wire:navigate' }}
+                    href="{{ $prevLectureId ? route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $prevLectureId]) : 'javascript:void(0)' }}">
+                    <i class="fa-solid fa-arrow-left fa-xs"></i> Previous
+                </a>
+
+                <a class="button-secondary {{ !$nextLectureId ? 'disabled' : '' }}"
+                    {{ !$nextLectureId ? '' : 'wire:navigate' }}
+                    href="{{ $nextLectureId ? route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $nextLectureId]) : 'javascript:void(0)' }}">
+                    Next <i class="fa-solid fa-arrow-right fa-xs"></i>
+                </a>
             </div>
+
         </div>
         <section class="lacture d-flex mt-5">
             <div class="iframe-container">
-                <iframe src="https://player.vimeo.com/video/{{ $currentLecture->video_file }}" width="640"
-                    height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
+                <iframe id="vimeo-player"
+                    src="https://player.vimeo.com/video/{{ $videoDetails['uri'] ? explode('/', $videoDetails['uri'])[2] : '' }}"
+                    width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
                 </iframe>
 
                 <h3>{{ $currentLecture->title }}</h3>
@@ -140,3 +163,17 @@
         </section>
     </div>
 </div>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+    console.log('ggg');
+
+    var iframe = document.getElementById('vimeo-player');
+    var player = new Vimeo.Player(iframe);
+
+    // Listen for when the video finishes
+    player.on('ended', function() {
+        // Notify Livewire or backend when the video is finished
+        @this.markAsWatched({{ $lecture->id }});
+    });
+</script>
