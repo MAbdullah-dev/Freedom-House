@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->string('microsoft_id', 255)->nullable();
             $table->boolean('microsoft_account')->default(false);
-            $table->string('refresh_token')->nullable();
             $table->timestamp('token_expires_at')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
@@ -28,6 +27,8 @@ return new class extends Migration
             $table->string('cover_photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('verification_token', 100)->nullable();
+            $table->string('password_reset_token', 100)->nullable();
+            $table->timestamp('password_token_created_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

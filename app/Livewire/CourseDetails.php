@@ -4,47 +4,151 @@ namespace App\Livewire;
 
 use App\Models\Classe;
 use App\Models\Course;
+use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class CourseDetails extends Component
 {
-    public $id;
+    use LivewireAlert;
+    public $courseId;
     public $courseTitle;
     public $courseDescription;
     public $learningOutcomes;
-    public $target_audience;
+    public $targetAudience;
     public $requirements;
     public $classes;
 
-
+    // Modal data
+    public $selectedClassId;
+    public $selectedClassTitle;
+    public $isPaid;
+    public $price;
+    public $slots;
 
     public function mount($id = null)
     {
         if ($id) {
-            $this->id = $id;
-            $this->loadcoursedata();
+            $this->courseId = $id;
+            $this->loadCourseData();
             $this->loadClasses();
         }
     }
-
-    public function loadcoursedata()
+    public function prepareEnrollment($classId)
     {
-        $course = Course::find($this->id);
+        $class = Classe::find($classId);
+
+        if ($class) {
+            $this->selectedClassId = $class->id;
+            $this->selectedClassTitle = $class->title;
+            $this->isPaid = $class->is_paid === 'paid';
+            $this->price = $class->price;
+            $this->slots = $class->capacity;
+        }
+    }
+    private function loadCourseData()
+    {
+        $course = Course::findOrFail($this->courseId);
 
         $this->courseTitle = $course->title;
         $this->courseDescription = $course->description;
         $this->learningOutcomes = $course->learning_outcomes;
-        $this->target_audience = $course->target_audience;
+        $this->targetAudience = $course->target_audience;
         $this->requirements = $course->requirements;
     }
-    public function loadClasses()
+
+    private function loadClasses()
     {
-        $classes = Classe::where('course_id', $this->id)->get();
-        $this->classes = $classes;
+        $this->classes = Classe::where('course_id', $this->courseId)
+            ->where('visibility', true)
+            ->get();
     }
 
+    public function enroll($classId, $isPaid, $price)
+    {
+        $this->selectedClassId = $classId;
+        $this->isPaid = $isPaid;
+        $this->price = $price;
+
+        if ($isPaid) {
+            $this->redirectToStripeCheckout();
+        } else {
+            $this->enrollFreeClass();
+        }
+    }
+
+    private function enrollFreeClass()
+    {
+        if ($this->slots <= 0) {
+            $this->alert('error', 'No slot available for this class!');
+            return;
+        }
+
+        Booking::create([
+            'class_id' => $this->selectedClassId,
+            'user_id' => Auth::id(),
+            'payment_status' => 'free',
+            'order_number' => uniqid('FREE_'),
+        ]);
+
+        Classe::where('id', $this->selectedClassId)->update([
+            'capacity' => Classe::where('id', $this->selectedClassId)->value('capacity') - 1
+        ]);
+        $this->alert('success', 'You have successfully enrolled in the free class!');
+        $this->loadClasses();
+        $this->dispatch('close-modal');
+    }
+
+    private function redirectToStripeCheckout()
+    {
+        if ($this->slots <= 0) {
+            $this->alert('error', 'No slot available for this class!');
+            return;
+        }
+
+
+        session()->put('stripe_payment_amount', $this->price);
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        try {
+            // Create a new Stripe Checkout Session
+            $session = Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => 'Class Enrollment', // Name of the product
+                        ],
+                        'unit_amount' => $this->price * 100, // Convert price to cents
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&class_id=' . $this->selectedClassId . '&course_id=' . $this->courseId,
+                'cancel_url' => route('payment.cancel') . '?class_id=' . $this->selectedClassId,
+            ]);
+
+            // Redirect the user to the Stripe Checkout URL
+            return redirect($session->url);
+        } catch (\Exception $e) {
+            // Handle any errors during session creation
+            session()->flash('error', 'Unable to create Stripe Checkout session: ' . $e->getMessage());
+            return redirect()->back();
+        }
+    }
+    public function isEnrolled($classId)
+    {
+        return Booking::where('class_id', $classId)
+            ->where('user_id', Auth::id())
+            ->exists();
+    }
     public function render()
     {
+        $classes = Classe::all();
         return view('livewire.course-details');
     }
 }

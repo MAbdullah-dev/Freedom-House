@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\MicrosoftAuthController;
+use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PaymentController;
 use App\Livewire\CourseCatelogue;
 use App\Livewire\AboutUs;
 use App\Livewire\CourseAnalytics\CourseDetail;
@@ -20,6 +22,8 @@ use App\Livewire\Dashboard\DashboardProfile;
 use App\Livewire\Dashboard\DashboardSettings;
 use App\Livewire\Dashboard\DashboardWishlist;
 use App\Livewire\Dashboard\HelpRequestsAdmin;
+use App\Livewire\Dashboard\Lacture;
+use App\Livewire\Dashboard\Lecture as DashboardLecture;
 use App\Livewire\Dashboard\MyCourses;
 use App\Livewire\Dashboard\ScheduleClasses;
 use App\Livewire\Dashboard\Tags;
@@ -32,6 +36,8 @@ use App\Livewire\TutorPrfile;
 use App\Livewire\OnSiteCourseDetails;
 use App\Livewire\EventCalendar;
 use App\Livewire\Quizzes\QuizCreate;
+use App\Livewire\RecordedLacture;
+use App\Models\Lecture;
 use Illuminate\Support\Facades\Route;
 
 
@@ -45,8 +51,8 @@ Route::get('/login', Login::class)->name('login');
 Route::get('/course/catalogue', CourseCatelogue::class)->name('course.catalogue');
 Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/tutor/profile/{id?}', TutorPrfile::class)->name('tutor.profile');
-Route::get('/course/details/{id}', CourseDetails::class)->name('course.details');
-Route::get('/on-site_course/details', OnSiteCourseDetails::class)->name('onsite.course.details');
+Route::get('/course/details/{id?}', CourseDetails::class)->name('course.details');
+Route::get('/on-site/course/details/{id?}', OnSiteCourseDetails::class)->name('onsite.course.details');
 Route::get('/calendar', EventCalendar::class)->name('calendar');
 // dashboard routes
 Route::get('/dashboard', Dashboard::class)->name('dashboard');
@@ -57,6 +63,7 @@ Route::get('/dashboard/wishlist', DashboardWishlist::class)->name('dashboard.wis
 Route::get('/dashboard/enrolled-courses', DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
 Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
 Route::get('/dashboard/settings', DashboardSettings::class)->name('dashboard.settings');
+Route::get('/recorded/lacture/{courseId}/{lectureId}', RecordedLacture::class)->name('recorded.lacture');
 
 Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses');
 Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
@@ -68,12 +75,19 @@ Route::get('dashboard/categories', Category::class)->name('dashboard.categories'
 Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
 Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
 Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');
+Route::get('/dashboard/lactures', DashboardLecture::class)->name('dashboard.lactures');
 
 
 //quiz
 Route::get('/quizzes/create/{classId?}', QuizCreate::class)->name('quizzes.create');
 Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');
 
-
+// stripe
+Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 Route::get('/auth/microsoft/callback', [MicrosoftAuthController::class, 'callback'])->name('microsoft.callback');
 Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicrosoft'])->name('microsoft.redirect');
+
+// password reset
+Route::post('password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
+Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');

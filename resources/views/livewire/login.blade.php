@@ -6,6 +6,15 @@
                 <div wire:loading wire:target="login" class="loading-spinner">
                     <div class="spinner"></div>
                 </div>
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+
+
+
                 @if (session()->has('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
@@ -34,7 +43,10 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div class="text-end mt-2 mb-4">
-                            <a href="">Forgot Password?</a>
+                            <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                                data-bs-target="#forgotPasswordModal">
+                                Forgot Password?
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -50,4 +62,42 @@
             </div>
         </form>
     </div>
+
+
+    <!-- Forgot Password Modal -->
+    <div wire:ignore.self class="modal fade" id="forgotPasswordModal" tabindex="-1"
+        aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form wire:submit.prevent="sendPasswordResetLink">
+                        <div class="mb-3">
+                            <label for="reset_email" class="form-label">Enter your email address</label>
+                            <input type="email" wire:model="reset_email" class="form-control" id="reset_email"
+                                required>
+                            @error('reset_email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <button type="submit" class="btn button-primary">Send Reset Link</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </section>
+
+@script
+    <script>
+        window.addEventListener('close-modal', event => {
+
+            $('#forgotPasswordModal').modal('hide');
+        })
+    </script>
+@endscript

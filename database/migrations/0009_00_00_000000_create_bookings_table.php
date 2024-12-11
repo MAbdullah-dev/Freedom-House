@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->id();            
-            $table->enum('payment_status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->id();
+            $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
             $table->string('order_number')->unique();
             $table->foreignId('class_id')->constrained('classes')->onDelete('cascade')->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();

@@ -15,9 +15,15 @@ class ClassForm extends Component
 {
     use LivewireAlert;
 
+    protected $microsoftGraphService;
+    public function __construct()
+    {
+        $this->microsoftGraphService = app(MicrosoftGraphService::class);
+    }
+
     public $type = 'class';
     public $course_id, $title, $description, $class_type = 'onsite', $teams_link, $onsite_address, $is_paid = 'free';
-    public $price = 0, $capacity, $visibility = 1, $booking_start_date, $booking_end_date, $recorded_video_url, $date_range, $class_date, $class_time;
+    public $price = 0, $capacity, $visibility = 1, $booking_start_date, $booking_end_date, $date_range, $class_date, $class_time;
     public $courses = [];
     public $classId;
 
@@ -26,10 +32,10 @@ class ClassForm extends Component
         'course_id' => 'nullable|exists:courses,id',
         'title' => 'required|string|max:255',
         'description' => 'required|string',
-        'class_type' => 'required_if:type,class|in:onsite,virtual,recorded',
+        'class_type' => 'required_if:type,class|in:onsite,virtual',
         'teams_link' => 'nullable|url',
         'onsite_address' => 'nullable|required_if:class_type,onsite|string|max:255',
-        'recorded_video_url' => 'nullable|required_if:class_type,recorded|url',
+        // 'recorded_video_url' => 'nullable|required_if:class_type,recorded|url',
         'is_paid' => 'required|in:free,paid',
         'price' => 'nullable|required_if:is_paid,paid|numeric',
         'capacity' => 'required|integer|min:1',
@@ -73,7 +79,7 @@ class ClassForm extends Component
             $this->booking_start_date = $class->booking_start_date;
             $this->booking_end_date = $class->booking_end_date;
             $this->date_range = $this->booking_start_date . ' to ' . $this->booking_end_date;
-            $this->recorded_video_url = $class->recorded_video_url;
+            // $this->recorded_video_url = $class->recorded_video_url;
             $this->class_date = $class->class_date;
             $this->class_time = $class->class_time;
         }
@@ -82,6 +88,7 @@ class ClassForm extends Component
     {
         $this->validate([
             'booking_start_date' => 'required|date|',
+            // Add other fields as necessary
         ]);
         $this->validate();
 
@@ -101,7 +108,7 @@ class ClassForm extends Component
             'class_time' => $this->class_time,
             'booking_start_date' => $this->booking_start_date,
             'booking_end_date' => $this->booking_end_date,
-            'recorded_video_url' => $this->recorded_video_url,
+            // 'recorded_video_url' => $this->recorded_video_url,
         ]);
 
         $this->alert('success', 'Class updated successfully!');
@@ -129,14 +136,14 @@ class ClassForm extends Component
     {
         switch ($this->class_type) {
             case 'onsite':
-                $this->reset(['teams_link', 'recorded_video_url']);
+                $this->reset(['teams_link']);
                 break;
             case 'virtual':
-                $this->reset(['onsite_address', 'recorded_video_url']);
+                $this->reset(['onsite_address']);
                 break;
-            case 'recorded':
-                $this->reset(['teams_link', 'onsite_address']);
-                break;
+                // case 'recorded':
+                //     $this->reset(['teams_link', 'onsite_address']);
+                //     break;
         }
     }
 
@@ -162,6 +169,10 @@ class ClassForm extends Component
             $this->createEvent();
             $this->loadcources();
         }
+        // if ($this->classId) {
+        // }
+
+
         $this->reset();
     }
 
@@ -175,7 +186,7 @@ class ClassForm extends Component
             'class_type' => $this->class_type,
             'teams_link' => $this->teams_link,
             'onsite_address' => $this->onsite_address,
-            'recorded_video_url' => $this->recorded_video_url,
+            // 'recorded_video_url' => $this->recorded_video_url,
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,
@@ -186,13 +197,35 @@ class ClassForm extends Component
             'booking_end_date' => $this->booking_end_date,
         ]);
 
+        // dd($class);
+
         CalendarEvent::create([
             'user_id' => Auth::id(),
             'class_id' => $class->id,
         ]);
 
-        $this->alert('success', 'Class created successfully!');
-        $this->redirect(route("dashboard.enrollments"));
+        // Define attendees
+        $attendees = [
+            ['email' => 'example@example.com', 'name' => 'John Doe'],
+            ['email' => 'another@example.com', 'name' => 'Jane Smith'],
+        ];
+
+        $graphService = new MicrosoftGraphService();
+
+        $success = false;
+
+        if ($class->class_type == 'virtual') {
+            $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
+        } else {
+            $success = $graphService->createCalendarEvent($class) ? true : false;
+        }
+
+        if ($success) {
+            $this->alert('success', 'Class created successfully!');
+            $this->redirect(route("dashboard.enrollments"));
+        } else {
+            $this->alert('error', 'Failed to create class.');
+        }
     }
 
     private function createEvent()
@@ -204,7 +237,7 @@ class ClassForm extends Component
             'class_type' => $this->class_type,
             'teams_link' => $this->teams_link,
             'onsite_address' => $this->onsite_address,
-            'recorded_video_url' => $this->recorded_video_url,
+            // 'recorded_video_url' => $this->recorded_video_url,
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,

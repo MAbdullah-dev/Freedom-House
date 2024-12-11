@@ -18,6 +18,7 @@ class CourseSeeder extends Seeder
                 'user_id' => 2, // Tutor user ID
                 'title' => 'Introduction to Mathematics',
                 'description' => 'This course covers the basics of mathematics including algebra, geometry, and calculus.',
+                'course_type' => 'classtype',
                 'thumbnail' => 'uploads/math_course.jpg',
                 'video_url' => 'https://www.example.com/math-intro',
                 'learning_outcomes' => 'Understand basic mathematical concepts and problem-solving techniques.',
@@ -32,6 +33,7 @@ class CourseSeeder extends Seeder
                 'user_id' => 3, // Tutor user ID
                 'title' => 'Basics of Programming with Python',
                 'description' => 'Learn the fundamentals of programming using Python.',
+                'course_type' => 'classtype',
                 'thumbnail' => 'uploads/python_course.jpg',
                 'video_url' => 'https://www.example.com/python-basics',
                 'learning_outcomes' => 'Write Python scripts and understand basic programming concepts.',
@@ -46,6 +48,7 @@ class CourseSeeder extends Seeder
                 'user_id' => 2, // Tutor user ID
                 'title' => 'Physics for Beginners',
                 'description' => 'A comprehensive introduction to physics covering motion, force, and energy.',
+                'course_type' => 'classtype',
                 'thumbnail' => 'uploads/physics_course.jpg',
                 'video_url' => 'https://www.example.com/physics-beginners',
                 'learning_outcomes' => 'Grasp fundamental physics concepts and their real-world applications.',
@@ -60,6 +63,7 @@ class CourseSeeder extends Seeder
                 'user_id' => 3, // Tutor user ID
                 'title' => 'Web Development Fundamentals',
                 'description' => 'An introductory course on web development covering HTML, CSS, and JavaScript.',
+                'course_type' => 'classtype',
                 'thumbnail' => 'uploads/webdev_course.jpg',
                 'video_url' => 'https://www.example.com/web-dev-fundamentals',
                 'learning_outcomes' => 'Build basic websites using HTML, CSS, and JavaScript.',
@@ -74,6 +78,7 @@ class CourseSeeder extends Seeder
                 'user_id' => 2, // Tutor user ID
                 'title' => 'Advanced Calculus',
                 'description' => 'An advanced course on calculus including integrals, derivatives, and their applications.',
+                'course_type' => 'classtype',
                 'thumbnail' => 'uploads/adv_calculus.jpg',
                 'video_url' => 'https://www.example.com/adv-calculus',
                 'learning_outcomes' => 'Solve complex calculus problems with ease.',

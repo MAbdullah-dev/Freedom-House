@@ -21,6 +21,9 @@ class Course extends Model
         'requirements',
         'is_drafted',
         'is_published',
+        'is_paid',
+        'price',
+        'course_type',
     ];
 
 
@@ -58,5 +61,13 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class, 'wishlists', 'course_id', 'user_id')
             ->withTimestamps();
+    }
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+    public function lectures()
+    {
+        return $this->hasMany(Lecture::class);
     }
 }

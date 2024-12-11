@@ -21,7 +21,7 @@
                 <div class="col-md-6 onsite-course-details">
                     <div class="onsite-course-pricing">
                         <span class="onsite-price">$10.00</span>
-                        <a class="onsite-add-to-cart button-primary">Add To Cart</a>
+                        <a class="onsite-add-to-cart button-primary">Enroll NOW</a>
                     </div>
                     <div class="onsite-enrollment">
                         <span class="onsite-validity my-2"><i class="bi bi-calendar4"></i> Enrollment
@@ -69,14 +69,69 @@
                             aria-labelledby="most-popular-tab">
                             <div class="course-details__content">
                                 <h3 class="mt-3">About Course</h3>
-                                <p><strong>QPR or Question, Persuade and Refer</strong> is a training focused on suicide
-                                    prevention techniques and conversation strategies. This training also provides
-                                    resources
-                                    to help yourself and others. You will learn common causes of suicidal behavior,
-                                    warning
-                                    signs of suicide, and how to get help for someone in crisis. The training is
-                                    one hour and certification is for up to 2 years.</p>
+
+                                <!-- Content Wrapper -->
+                                <div class="content-wrapper {{ $showFullDescription ? 'expanded' : '' }}">
+                                    <h3>What Will You Learn?</h3>
+                                    <ul>
+                                        <li>{{ $learningOutcomes }}</li>
+                                    </ul>
+
+                                    @if ($showFullDescription)
+                                        <h3>Target Audience</h3>
+                                        <ul>
+                                            <li>{{ $targetAudience }}</li>
+                                        </ul>
+                                        <h3>Requirements</h3>
+                                        <ul>
+                                            <li>{{ $requirements }}</li>
+                                        </ul>
+                                    @endif
+                                </div>
+
+                                <!-- Toggle Button -->
+                                <button wire:click="toggleDescription" class="showmore-btn my-3">
+                                    {!! $showFullDescription
+                                        ? '<i class="fa-solid fa-minus"></i> Show Less'
+                                        : '<i class="fa-solid fa-plus"></i> Show More' !!}
+                                </button>
+                                <div class="accordion" id="accordionPanelsStayOpenExample">
+                                    @foreach ($lectures as $index => $lecture)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button {{ $index === 0 ? '' : 'collapsed' }}"
+                                                    type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#panelsStayOpen-collapse{{ $index }}"
+                                                    aria-expanded="{{ $index === 0 ? 'true' : 'false' }}"
+                                                    aria-controls="panelsStayOpen-collapse{{ $index }}">
+                                                    {{ $lecture->title }} <i
+                                                        class="fa-solid fa-circle-exclamation ms-4"></i>
+                                                </button>
+                                            </h2>
+                                            <div id="panelsStayOpen-collapse{{ $index }}"
+                                                class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}">
+                                                <div
+                                                    class="accordion-body d-flex align-items-center justify-content-between">
+                                                    <div class="class-name d-flex align-items-center">
+                                                        <i class="fa-brands fa-youtube mx-2"></i>
+                                                        <a {{-- href="{{ route('recorded.lacture', ['lecture' => $lecture->id, 'course' => $courseId]) }}">
+                                                            <span>{{ $lecture->title }}</span> --}}
+                                                            href="{{ route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
+                                                            <span>{{ $lecture->title }}</span>
+                                                        </a>
+                                                    </div>
+                                                    <div>
+                                                        <span class="class-duration">Duration:</span>
+                                                        {{ $lecture->duration }} <i class="fa-solid fa-lock"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
                             </div>
+
                         </div>
 
                         <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="new-tab">

@@ -60,6 +60,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.lactures' ? 'active' : '' }}"
+                        href="{{ route('dashboard.lactures') }}" wire:navigate>
+                        <i class="fa-solid fa-video"></i> Recorded Lacture
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.analytics' ? 'active' : '' }}"
                         href="{{ route('dashboard.analytics') }}" wire:navigate>
                         <i class="fa-solid fa-book"></i> Course Analytics
