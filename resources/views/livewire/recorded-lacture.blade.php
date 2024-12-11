@@ -6,11 +6,11 @@
                 <li>
                     <span class="d-block">{{ $currentLecture->title }}</span>
                     <i class="fa-regular fa-folder-closed fa-sm"></i>
-                    {{ $currentLecture->topics_count }} Topics
+                    {{ $lectures->count() }} Topics
                 </li>
-                <li><i class="fa-regular fa-circle-play fa-sm video-player"></i> {{ $currentLecture->lectures_count }}
+                <li><i class="fa-regular fa-circle-play fa-sm video-player"></i> {{ $lectures->count() }}
                     Lectures</li>
-                <li><i class="fa-regular fa-clock fa-sm"></i> {{ $currentLecture->duration }} hours</li>
+                {{-- <li><i class="fa-regular fa-clock fa-sm"></i> {{ $currentLecture->duration }} hours</li> --}}
             </ul>
             <div class="controll-btn">
                 @php
@@ -127,37 +127,45 @@
                         @foreach ($lectures as $lecture)
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#lecture-{{ $lecture->id }}" aria-expanded="false"
+                                    <button
+                                        class="accordion-button {{ $lecture->id === $currentLecture->id ? '' : 'collapsed' }}"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#lecture-{{ $lecture->id }}"
+                                        aria-expanded="{{ $lecture->id === $currentLecture->id ? 'true' : 'false' }}"
                                         aria-controls="lecture-{{ $lecture->id }}">
                                         <div>
                                             <span class="d-block">Lecture #{{ $loop->iteration }} <i
                                                     class="fa-solid fa-circle-exclamation ms-4"></i></span>
                                             <ul class="d-flex gap-2 align-items-center my-2">
                                                 <li><i class="fa-regular fa-folder-closed fa-sm"></i>
-                                                    {{ $lecture->topics_count }} Topics</li>
+                                                    {{ $lecture->order }} Topics</li>
                                                 <li><i class="fa-regular fa-circle-play fa-sm video-player"></i>
-                                                    {{ $lecture->lectures_count }} Lectures</li>
+                                                    {{ $lecture->order }} Lectures</li>
                                                 <li><i class="fa-solid fa-check-double"></i>
                                                     {{ $lecture->completion_status }}</li>
                                             </ul>
                                         </div>
                                     </button>
                                 </h2>
-                                <div id="lecture-{{ $lecture->id }}" class="accordion-collapse collapse">
+                                <div id="lecture-{{ $lecture->id }}"
+                                    class="accordion-collapse collapse {{ $lecture->id === $currentLecture->id ? 'show' : '' }}">
                                     <div class="accordion-body d-flex align-items-center justify-content-between">
-                                        <input type="radio"
-                                            {{ $lecture->id === $currentLecture->id ? 'checked' : 'disabled' }}
-                                            name="class" id="class-{{ $lecture->id }}">
-                                        <span class="ms-2">{{ $lecture->title }}</span>
                                         <div>
-                                            <span class="class-duration">Duration:</span> {{ $lecture->duration }} hrs
+                                            <input type="radio"
+                                                {{ $lecture->id === $currentLecture->id ? 'checked' : 'disabled' }}
+                                                name="class" id="class-{{ $lecture->id }}">
+                                            <span class="ms-2">{{ $lecture->title }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="class-duration">Total Duration:
+                                                {{ $lecture->video_duration }} hours</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
+
                 </div>
             </div>
         </section>
@@ -171,9 +179,14 @@
     var iframe = document.getElementById('vimeo-player');
     var player = new Vimeo.Player(iframe);
 
-    // Listen for when the video finishes
-    player.on('ended', function() {
-        // Notify Livewire or backend when the video is finished
-        @this.markAsWatched({{ $lecture->id }});
+    player.on('timeupdate', function(data) {
+        // Check if 10 seconds or less remain in the video
+        if (data.duration - data.seconds <= 10) {
+            // Notify Livewire or backend when 10 seconds remain
+            @this.call('markAsWatched', {{ $currentLecture->id }});
+
+            // Remove the event listener to prevent multiple calls
+            player.off('timeupdate');
+        }
     });
 </script>

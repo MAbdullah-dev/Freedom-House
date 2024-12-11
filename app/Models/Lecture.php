@@ -12,6 +12,7 @@ class Lecture extends Model
         'description',
         'video_file',
         'order',
+        'video_duration',
     ];
 
     public function course()

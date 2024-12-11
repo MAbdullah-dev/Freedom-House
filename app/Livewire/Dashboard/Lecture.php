@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Jobs\FetchVimeoVideoDetailsJob;
 use App\Models\Course;
 use App\Models\Lecture as ModelsLecture;
 use Vimeo\Laravel\Facades\Vimeo;
@@ -89,22 +90,31 @@ class Lecture extends Component
                 'description' => $lecture['description'],
             ]);
 
+            // Get the video ID from the Vimeo response
+            $videoId = $response; // Vimeo returns the video ID or URL
+
             // Delete temporary file
             Storage::disk('local')->delete($videoPath);
 
-            // Create lecture record in the database
-            ModelsLecture::create([
+            // Create lecture record in the database (without duration initially)
+            $lectureRecord = ModelsLecture::create([
                 'course_id' => $this->course_id,
                 'title' => $lecture['title'],
                 'description' => $lecture['description'],
-                'video_file' => $response, // Vimeo video URL or ID
+                'video_file' => $videoId, // Vimeo video ID
+                'video_duration' => null, // Initially null
                 'order' => $lecture['order'],
             ]);
+
+            // Dispatch a job to fetch video details later
+            FetchVimeoVideoDetailsJob::dispatch($lectureRecord->id, $videoId);
         }
 
-        $this->alert('success', 'Lectures successfully uploaded to Vimeo!');
+        $this->alert('success', 'Lectures successfully uploaded to Vimeo! Video details will update soon.');
         $this->resetFields();
     }
+
+
 
     private function resetFields()
     {

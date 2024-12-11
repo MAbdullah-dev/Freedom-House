@@ -110,9 +110,14 @@ class RecordedLacture extends Component
         try {
             $response = Vimeo::request("{$videoId}", [], 'GET');
             $this->videoDetails = $response['body'];
+            // dd($this->videoDetails);
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
+    }
+    public function pollVideoDuration()
+    {
+        $this->lecture->refresh(); // Reload the model
     }
 
     // Render the view
