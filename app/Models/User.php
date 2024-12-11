@@ -26,7 +26,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'microsoft_id',
         'verification_token',
-        'email_verified_at'
+        'email_verified_at',
+        'password_reset_token',
+        'password_token_created_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -35,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return !is_null($this->email_verified_at);
     }
-     public function roles()
+    public function roles()
     {
         return $this->belongsToMany(Role::class, 'roles_users')->select('roles.id');
     }

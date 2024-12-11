@@ -7,12 +7,19 @@ use Livewire\Component;
 use App\Models\Course;
 use App\Models\Classe;
 use App\Models\Events;
+use App\Services\MicrosoftGraphService;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class ClassForm extends Component
 {
     use LivewireAlert;
+
+    protected $microsoftGraphService;
+    public function __construct()
+    {
+        $this->microsoftGraphService = app(MicrosoftGraphService::class);
+    }
 
     public $type = 'class';
     public $course_id, $title, $description, $class_type = 'onsite', $teams_link, $onsite_address, $is_paid = 'free';
@@ -190,13 +197,35 @@ class ClassForm extends Component
             'booking_end_date' => $this->booking_end_date,
         ]);
 
+        // dd($class);
+
         CalendarEvent::create([
             'user_id' => Auth::id(),
             'class_id' => $class->id,
         ]);
 
-        $this->alert('success', 'Class created successfully!');
-        $this->redirect(route("dashboard.enrollments"));
+        // Define attendees
+        $attendees = [
+            ['email' => 'example@example.com', 'name' => 'John Doe'],
+            ['email' => 'another@example.com', 'name' => 'Jane Smith'],
+        ];
+
+        $graphService = new MicrosoftGraphService();
+
+        $success = false;
+
+        if ($class->class_type == 'virtual') {
+            $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
+        } else {
+            $success = $graphService->createCalendarEvent($class) ? true : false;
+        }
+
+        if ($success) {
+            $this->alert('success', 'Class created successfully!');
+            $this->redirect(route("dashboard.enrollments"));
+        } else {
+            $this->alert('error', 'Failed to create class.');
+        }
     }
 
     private function createEvent()

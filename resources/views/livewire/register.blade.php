@@ -76,11 +76,11 @@
                     <div class="col-12 d-flex flex-column py-3 gap-3">
                         <button type="submit" class="button-primary">Register</button>
 
-                        <button type="button"
+                        <a type="button" href='{{ route('microsoft.redirect') }}'
                             class="button-secondary d-flex align-items-center justify-content-center">
                             <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
                             <span class="ms-2">Sign in with Microsoft</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

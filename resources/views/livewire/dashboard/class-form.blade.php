@@ -106,17 +106,12 @@
                             <!-- Dynamic Fields -->
                             @if ($class_type === 'virtual')
                                 <div class="mb-3">
-                                    <label for="teamsLink" class="form-label">Teams Link</label>
-                                    <input wire:model="teams_link" id="teamsLink"
-                                        class="form-control @if ($errors->has('teams_link')) is-invalid @elseif ($teams_link) is-valid @endif"
-                                        type="url" placeholder="Enter Teams Link">
-                                    @error('teams_link')
-                                        <li class="text-danger"><span class="small">{{ $message }}</span></li>
-                                    @enderror
+                                    <label for="teamsLink" class="form-label">Teams Link Will be Generated Automatically
+                                        for the Class</label>
                                 </div>
                             @endif
                             @if ($class_type === 'onsite')
-                                <div class="mb-3">
+                                <div class="">
                                     <label for="onsiteAddress" class="form-label">Onsite Address</label>
                                     <input wire:model="onsite_address" id="onsiteAddress"
                                         class="form-control @if ($errors->has('onsite_address')) is-invalid @elseif ($onsite_address) is-valid @endif"

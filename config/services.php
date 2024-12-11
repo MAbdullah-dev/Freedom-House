@@ -39,6 +39,10 @@ return [
         'client_secret' => env('VIMEO_CLIENT_SECRET'),
         'access_token' => env('VIMEO_ACCESS_TOKEN'),
     ],
+    'microsoft' => [
+        'client_id' => env('AZURE_CLIENT_ID'),
+        'client_secret' => env('AZURE_CLIENT_SECRET'),
+    ],
 
 
 ];
