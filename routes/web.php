@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\MicrosoftAuthController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
 use App\Livewire\CourseCatelogue;
 use App\Livewire\AboutUs;
@@ -83,3 +85,9 @@ Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('das
 // stripe
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+Route::get('/auth/microsoft/callback', [MicrosoftAuthController::class, 'callback'])->name('microsoft.callback');
+Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicrosoft'])->name('microsoft.redirect');
+
+// password reset
+Route::post('password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
+Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');

@@ -26,7 +26,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'microsoft_id',
         'verification_token',
-        'email_verified_at'
+        'email_verified_at',
+        'password_reset_token',
+        'password_token_created_at',
     ];
 
     protected $hidden = ['password', 'remember_token'];
