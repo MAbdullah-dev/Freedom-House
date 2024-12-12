@@ -19,6 +19,7 @@ class RecordedLacture extends Component
     public $currentLecture;
     public $lecturescountcurrent;
     public $videoDetails = [];
+    public $progressPercentage;
 
     public function mount($courseId, $lectureId = null)
     {
@@ -44,7 +45,17 @@ class RecordedLacture extends Component
         if ($this->currentLecture) {
             $this->fetchVideoDetails($this->currentLecture->video_file);
         }
+
+        // Check if the user has watched each lecture
+        $user = Auth::user();
+        foreach ($this->lectures as $lecture) {
+            $lecture->watched = VideoActivity::where('user_id', $user->id)
+                ->where('lecture_id', $lecture->id)
+                ->exists();
+        }
+        $this->progressPercentage = $this->getCourseProgress($courseId);
     }
+
 
     // Mark the video as watched for the user
     public function markAsWatched($lectureId)
@@ -70,6 +81,13 @@ class RecordedLacture extends Component
             $activity->save();
             $this->alert('success', 'Video watched successfully.');
         }
+        $user = Auth::user();
+        foreach ($this->lectures as $lecture) {
+            $lecture->watched = VideoActivity::where('user_id', $user->id)
+                ->where('lecture_id', $lecture->id)
+                ->exists();
+        }
+        $this->progressPercentage = $this->getCourseProgress($this->courseId);
     }
 
     // Change to the next lecture
@@ -119,6 +137,31 @@ class RecordedLacture extends Component
     {
         $this->lecture->refresh(); // Reload the model
     }
+    public function getCourseProgress($courseId)
+    {
+        $user = Auth::user();
+
+        // Get all lectures for the course
+        $lectures = Lecture::where('course_id', $courseId)->get();
+
+        // Total number of lectures in the course
+        $totalLectures = $lectures->count();
+
+        if ($totalLectures === 0) {
+            return 0; // Avoid division by zero
+        }
+
+        // Count watched lectures by the user
+        $watchedLectures = VideoActivity::where('user_id', $user->id)
+            ->whereIn('lecture_id', $lectures->pluck('id'))
+            ->count();
+
+        // Calculate progress percentage
+        $progress = ($watchedLectures / $totalLectures) * 100;
+
+        return round($progress, 2); // Return progress rounded to 2 decimal places
+    }
+
 
     // Render the view
     public function render()
