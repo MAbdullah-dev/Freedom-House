@@ -6,23 +6,46 @@
                 <li>
                     <span class="d-block">{{ $currentLecture->title }}</span>
                     <i class="fa-regular fa-folder-closed fa-sm"></i>
-                    {{ $currentLecture->topics_count }} Topics
+                    {{ $lectures->count() }} Topics
                 </li>
-                <li><i class="fa-regular fa-circle-play fa-sm video-player"></i> {{ $currentLecture->lectures_count }}
+                <li><i class="fa-regular fa-circle-play fa-sm video-player"></i> {{ $lectures->count() }}
                     Lectures</li>
-                <li><i class="fa-regular fa-clock fa-sm"></i> {{ $currentLecture->duration }} hours</li>
+                {{-- <li><i class="fa-regular fa-clock fa-sm"></i> {{ $currentLecture->duration }} hours</li> --}}
             </ul>
             <div class="controll-btn">
-                <button class="button-primary" wire:click="previousLecture"><i class="fa-solid fa-arrow-left fa-xs"></i>
-                    Previous </button>
-                <button class="button-secondary" wire:click="nextLecture">Next <i
-                        class="fa-solid fa-arrow-right fa-xs"></i></button>
+                @php
+                    $prevLecture = $lectures
+                        ->where('id', '<', $currentLecture->id)
+                        ->sortByDesc('id')
+                        ->first();
+                    $prevLectureId = $prevLecture ? $prevLecture->id : null;
+                    $nextLecture = $lectures
+                        ->where('id', '>', $currentLecture->id)
+                        ->sortByDesc('id')
+                        ->first();
+                    $nextLectureId = $nextLecture ? $nextLecture->id : null;
+                @endphp
+
+
+                <a class="button-primary {{ !$prevLectureId ? 'disabled' : '' }}"
+                    {{ !$prevLectureId ? '' : 'wire:navigate' }}
+                    href="{{ $prevLectureId ? route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $prevLectureId]) : 'javascript:void(0)' }}">
+                    <i class="fa-solid fa-arrow-left fa-xs"></i> Previous
+                </a>
+
+                <a class="button-secondary {{ !$nextLectureId ? 'disabled' : '' }}"
+                    {{ !$nextLectureId ? '' : 'wire:navigate' }}
+                    href="{{ $nextLectureId ? route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $nextLectureId]) : 'javascript:void(0)' }}">
+                    Next <i class="fa-solid fa-arrow-right fa-xs"></i>
+                </a>
             </div>
+
         </div>
         <section class="lacture d-flex mt-5">
             <div class="iframe-container">
-                <iframe src="https://player.vimeo.com/video/{{ $currentLecture->video_file }}" width="640"
-                    height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
+                <iframe id="vimeo-player"
+                    src="https://player.vimeo.com/video/{{ $videoDetails['uri'] ? explode('/', $videoDetails['uri'])[2] : '' }}"
+                    width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
                 </iframe>
 
                 <h3>{{ $currentLecture->title }}</h3>
@@ -104,39 +127,66 @@
                         @foreach ($lectures as $lecture)
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#lecture-{{ $lecture->id }}" aria-expanded="false"
+                                    <button
+                                        class="accordion-button {{ $lecture->id === $currentLecture->id ? '' : 'collapsed' }}"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#lecture-{{ $lecture->id }}"
+                                        aria-expanded="{{ $lecture->id === $currentLecture->id ? 'true' : 'false' }}"
                                         aria-controls="lecture-{{ $lecture->id }}">
                                         <div>
                                             <span class="d-block">Lecture #{{ $loop->iteration }} <i
                                                     class="fa-solid fa-circle-exclamation ms-4"></i></span>
                                             <ul class="d-flex gap-2 align-items-center my-2">
                                                 <li><i class="fa-regular fa-folder-closed fa-sm"></i>
-                                                    {{ $lecture->topics_count }} Topics</li>
+                                                    {{ $lecture->order }} Topics</li>
                                                 <li><i class="fa-regular fa-circle-play fa-sm video-player"></i>
-                                                    {{ $lecture->lectures_count }} Lectures</li>
+                                                    {{ $lecture->order }} Lectures</li>
                                                 <li><i class="fa-solid fa-check-double"></i>
                                                     {{ $lecture->completion_status }}</li>
                                             </ul>
                                         </div>
                                     </button>
                                 </h2>
-                                <div id="lecture-{{ $lecture->id }}" class="accordion-collapse collapse">
+                                <div id="lecture-{{ $lecture->id }}"
+                                    class="accordion-collapse collapse {{ $lecture->id === $currentLecture->id ? 'show' : '' }}">
                                     <div class="accordion-body d-flex align-items-center justify-content-between">
-                                        <input type="radio"
-                                            {{ $lecture->id === $currentLecture->id ? 'checked' : 'disabled' }}
-                                            name="class" id="class-{{ $lecture->id }}">
-                                        <span class="ms-2">{{ $lecture->title }}</span>
                                         <div>
-                                            <span class="class-duration">Duration:</span> {{ $lecture->duration }} hrs
+                                            <input type="radio"
+                                                {{ $lecture->id === $currentLecture->id ? 'checked' : 'disabled' }}
+                                                name="class" id="class-{{ $lecture->id }}">
+                                            <span class="ms-2">{{ $lecture->title }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="class-duration">Total Duration:
+                                                {{ $lecture->video_duration }} hours</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
+
                 </div>
             </div>
         </section>
     </div>
 </div>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+    console.log('ggg');
+
+    var iframe = document.getElementById('vimeo-player');
+    var player = new Vimeo.Player(iframe);
+
+    player.on('timeupdate', function(data) {
+        // Check if 10 seconds or less remain in the video
+        if (data.duration - data.seconds <= 10) {
+            // Notify Livewire or backend when 10 seconds remain
+            @this.call('markAsWatched', {{ $currentLecture->id }});
+
+            // Remove the event listener to prevent multiple calls
+            player.off('timeupdate');
+        }
+    });
+</script>

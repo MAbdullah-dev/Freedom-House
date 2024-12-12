@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('video_file')->nullable();
             $table->integer('order')->nullable(); // To define the sequence of lectures
+            $table->integer('video_duration')->nullable();
             // $table->boolean('is_published')->default(false);
             $table->timestamps();
             $table->softDeletes();

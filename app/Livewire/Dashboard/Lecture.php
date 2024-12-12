@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Jobs\FetchVimeoVideoDetailsJob;
 use App\Models\Course;
 use App\Models\Lecture as ModelsLecture;
 use Vimeo\Laravel\Facades\Vimeo;
@@ -17,13 +18,16 @@ class Lecture extends Component
     public $courses = [];
     public $course_id; // Course selected once for all lectures
     public $lectures = [];
+    public $alllectures;
+    public $totalLectures = 0;
+    public $usedOrders = [];
 
     protected $rules = [
         'course_id' => 'required|exists:courses,id',
         'lectures.*.title' => 'required|string|max:255',
         'lectures.*.description' => 'nullable|string',
         'lectures.*.video_file' => 'required|file|mimetypes:video/mp4,video/quicktime|max:51200', // Max 50MB
-        'lectures.*.order' => 'nullable|integer|min:1',
+        'lectures.*.order' => 'required|integer|distinct|min:1',
     ];
 
     public function mount()
@@ -34,6 +38,23 @@ class Lecture extends Component
             ->get();
 
         // Initialize with one lecture input block
+        $this->initializeLectureBlock();
+    }
+    public function fetchLectures()
+    {
+        $this->dispatch('refreshComponent');
+    }
+    public function updatedCourseId()
+    {
+        if ($this->course_id) {
+            $this->alllectures = ModelsLecture::where('course_id', $this->course_id)->get();
+            $this->totalLectures = $this->alllectures->count() + count($this->lectures);
+            $this->usedOrders = $this->alllectures->pluck('order')->toArray();
+        }
+    }
+
+    private function initializeLectureBlock()
+    {
         $this->lectures[] = [
             'title' => '',
             'description' => '',
@@ -44,12 +65,9 @@ class Lecture extends Component
 
     public function addLectureBlock()
     {
-        $this->lectures[] = [
-            'title' => '',
-            'description' => '',
-            'video_file' => '',
-            'order' => '',
-        ];
+        $this->initializeLectureBlock();
+        $this->totalLectures += 1;
+        $this->dispatch('refreshComponent');
     }
 
     public function removeLectureBlock($index)
@@ -71,38 +89,45 @@ class Lecture extends Component
                 'name' => $lecture['title'],
                 'description' => $lecture['description'],
             ]);
-            // dd($response);
+
+            // Get the video ID from the Vimeo response
+            $videoId = $response; // Vimeo returns the video ID or URL
 
             // Delete temporary file
             Storage::disk('local')->delete($videoPath);
 
-            // Create lecture record in the database
-            ModelsLecture::create([
+            // Create lecture record in the database (without duration initially)
+            $lectureRecord = ModelsLecture::create([
                 'course_id' => $this->course_id,
                 'title' => $lecture['title'],
                 'description' => $lecture['description'],
-                'video_file' => $response, // Vimeo video URL or ID
+                'video_file' => $videoId, // Vimeo video ID
+                'video_duration' => null, // Initially null
                 'order' => $lecture['order'],
             ]);
+
+            // Dispatch a job to fetch video details later
+            FetchVimeoVideoDetailsJob::dispatch($lectureRecord->id, $videoId);
         }
 
-        $this->alert('success', 'Lectures successfully uploaded to Vimeo!');
+        $this->alert('success', 'Lectures successfully uploaded to Vimeo! Video details will update soon.');
         $this->resetFields();
     }
+
+
 
     private function resetFields()
     {
         $this->course_id = '';
-        $this->lectures = [
-            [
-                'title' => '',
-                'description' => '',
-                'video_file' => '',
-                'order' => '',
-            ],
-        ];
+        $this->lectures = [];
+        $this->initializeLectureBlock();
+        $this->totalLectures = 0;
+        $this->usedOrders = [];
     }
-
+    public function updateorder()
+    {
+        $this->dispatch('refreshComponent');
+    }
     public function render()
     {
         return view('livewire.dashboard.lecture')->layout('components.layouts.dashboard');

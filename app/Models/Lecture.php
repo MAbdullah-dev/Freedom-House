@@ -12,10 +12,15 @@ class Lecture extends Model
         'description',
         'video_file',
         'order',
+        'video_duration',
     ];
 
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+    public function videoActivities()
+    {
+        return $this->hasMany(VideoActivity::class);
     }
 }
