@@ -172,6 +172,9 @@
                     </div>
 
                 </div>
+                <button wire:click="sendCertificate" class="btn btn-success">
+                    Get Certificate
+                </button>
             </div>
         </section>
     </div>
