@@ -6,6 +6,7 @@ use App\Models\Certificate;
 use App\Models\Course;
 use Livewire\Component;
 use App\Models\Lecture;
+use App\Models\Review;
 use App\Models\VideoActivity;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,9 @@ class RecordedLacture extends Component
     public $lecturescountcurrent;
     public $videoDetails = [];
     public $progressPercentage;
+    public $rating;
+    public $review;
+    public $showReviewModal = false;
 
     public function mount($courseId, $lectureId = null)
     {
@@ -62,31 +66,38 @@ class RecordedLacture extends Component
         $this->progressPercentage = $this->getCourseProgress($courseId);
     }
 
+    public function setRating($value)
+    {
+        $this->rating = $value;
+        $user = Auth::user();
+        foreach ($this->lectures as $lecture) {
+            $lecture->watched = VideoActivity::where('user_id', $user->id)
+                ->where('lecture_id', $lecture->id)
+                ->exists();
+        }
+    }
 
     // Mark the video as watched for the user
     public function markAsWatched($lectureId)
     {
         $user = Auth::user();
 
-        // Check if activity already exists for this user and lecture
         $activity = VideoActivity::where('user_id', $user->id)
             ->where('lecture_id', $lectureId)
             ->first();
 
-        // If activity doesn't exist, create a new one
         if (!$activity) {
             VideoActivity::create([
                 'user_id' => $user->id,
                 'lecture_id' => $lectureId,
-                'watched' => 1,  // Mark as fully watched
+                'watched' => 1,
             ]);
-            $this->alert('success', 'Video marked as watched!');
         } else {
-            // If activity exists, update it
             $activity->watched = 1;
             $activity->save();
-            $this->alert('success', 'Video watched successfully.');
         }
+
+        $this->alert('success', 'Video marked as watched!');
         $user = Auth::user();
         foreach ($this->lectures as $lecture) {
             $lecture->watched = VideoActivity::where('user_id', $user->id)
@@ -94,6 +105,63 @@ class RecordedLacture extends Component
                 ->exists();
         }
         $this->progressPercentage = $this->getCourseProgress($this->courseId);
+
+        // Check for course completion
+        $this->checkCompletionAndRequestReview();
+    }
+
+    // Method to open the modal when the user completes all lectures
+    public function checkCompletionAndRequestReview()
+    {
+        $user = Auth::user();
+
+        // Check if the user has already reviewed this course
+        $existingReview = Review::where('user_id', $user->id)
+            ->where('course_id', $this->courseId)
+            ->exists();
+
+        if ($existingReview) {
+            // If the user has already submitted a review, do not dispatch the modal event
+            return;
+        }
+
+        $totalLectures = $this->lectures->count();
+        $watchedLectures = VideoActivity::where('user_id', $user->id)
+            ->whereIn('lecture_id', $this->lectures->pluck('id'))
+            ->where('watched', 1)
+            ->count();
+
+        // If all lectures are watched and no review exists, trigger the review modal
+        if ($totalLectures === $watchedLectures) {
+            $this->dispatch('open-review-modal');
+        }
+    }
+
+    public function submitReview()
+    {
+        $this->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'required|string|min:5|max:1000',
+        ]);
+
+        // Save review to the database
+        \App\Models\Review::create([
+            'user_id' => Auth::id(),
+            'course_id' => $this->courseId,
+            'rating' => $this->rating,
+            'review' => $this->review,
+        ]);
+
+        // Close the modal and reset form
+        $this->reset(['rating', 'review']);
+        $this->dispatch('close-review-modal');
+        $this->alert('success', 'Thank you for your review!');
+        $user = Auth::user();
+        foreach ($this->lectures as $lecture) {
+            $lecture->watched = VideoActivity::where('user_id', $user->id)
+                ->where('lecture_id', $lecture->id)
+                ->exists();
+        }
     }
 
     // Change to the next lecture

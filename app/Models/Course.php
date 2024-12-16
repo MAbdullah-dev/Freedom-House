@@ -24,6 +24,7 @@ class Course extends Model
         'is_paid',
         'price',
         'course_type',
+        'is_completed',
     ];
 
 
@@ -69,5 +70,9 @@ class Course extends Model
     public function lectures()
     {
         return $this->hasMany(Lecture::class);
+    }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
