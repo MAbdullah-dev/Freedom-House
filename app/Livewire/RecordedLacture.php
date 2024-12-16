@@ -2,10 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Models\Certificate;
+use App\Models\Course;
 use Livewire\Component;
 use App\Models\Lecture;
 use App\Models\VideoActivity;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Vimeo\Laravel\Facades\Vimeo;
 
@@ -160,6 +166,92 @@ class RecordedLacture extends Component
         $progress = ($watchedLectures / $totalLectures) * 100;
 
         return round($progress, 2); // Return progress rounded to 2 decimal places
+    }
+    public function checkCompletionAndGenerateCertificate()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            $this->alert('error', 'User not found.');
+            return;
+        }
+
+        // Get the total and watched lectures in one query
+        $watchedLectures = VideoActivity::where('user_id', $user->id)
+            ->whereIn('lecture_id', $this->lectures->pluck('id'))
+            ->where('watched', 1)
+            ->count();
+
+        $totalLectures = $this->lectures->count();
+
+        // Log the user's progress
+        Log::info("User {$user->id}: Total Lectures: $totalLectures, Watched Lectures: $watchedLectures");
+
+        // If all lectures are watched, check and generate certificate
+        if ($totalLectures === $watchedLectures) {
+            $existingCertificate = Certificate::firstOrCreate(
+                ['user_id' => $user->id, 'course_id' => $this->courseId],
+                ['certificate_path' => $this->generateCertificate($user, $this->courseId)]
+            );
+
+            // Check if the certificate already exists
+            if ($existingCertificate->wasRecentlyCreated) {
+                try {
+                    $this->sendCertificateEmail($user, $existingCertificate->certificate_path);
+                    $this->alert('success', 'Congratulations! Your certificate has been emailed.');
+                } catch (\Exception $e) {
+                    Log::error("Email Sending Error for User {$user->id}, Certificate {$existingCertificate->certificate_path}: " . $e->getMessage());
+                    $this->alert('warning', 'Certificate generated but email could not be sent. Please contact support.');
+                }
+            } else {
+                $this->alert('info', 'Your certificate has already been issued.');
+            }
+        } else {
+            $this->alert('warning', 'You need to complete all lectures to earn a certificate.');
+        }
+    }
+
+    private function generateCertificate($user, $courseId)
+    {
+        $course = Course::find($courseId);
+        if (!$course) {
+            throw new \Exception("Course with ID $courseId not found.");
+        }
+
+        try {
+            // Generate PDF and save it in storage
+            $pdf = Pdf::loadView('certificates.dummy', compact('user', 'course'));
+            $certificatePath = 'certificates/' . $user->id . '_' . $course->id . '_' . now()->timestamp . '.pdf';
+
+            // Ensure the directory exists and store the PDF
+            Storage::disk('public')->put($certificatePath, $pdf->output());
+
+            return Storage::url($certificatePath);
+        } catch (\Exception $e) {
+            Log::error("Certificate Generation Error for User {$user->id}, Course {$courseId}: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    private function sendCertificateEmail($user, $certificatePath)
+    {
+        // Use public_path to get the absolute path for email attachment
+        $certificateFullPath = public_path($certificatePath);
+
+        // Send the certificate email
+        Mail::raw("Congratulations on completing the course! Your certificate is attached.", function ($message) use ($user, $certificateFullPath) {
+            $message->to($user->email)
+                ->subject('Your Certificate of Completion')
+                ->attach($certificateFullPath, [
+                    'as' => 'Certificate.pdf',
+                    'mime' => 'application/pdf',
+                ]);
+        });
+    }
+
+    public function sendCertificate()
+    {
+        $this->checkCompletionAndGenerateCertificate();
     }
 
 
