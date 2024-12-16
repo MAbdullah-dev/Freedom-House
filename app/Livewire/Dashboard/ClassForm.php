@@ -11,6 +11,8 @@ use App\Models\Events;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
+use function Laravel\Prompts\alert;
+
 class ClassForm extends Component
 {
     use LivewireAlert;
@@ -204,27 +206,31 @@ class ClassForm extends Component
             'class_id' => $class->id,
         ]);
 
-        // Define attendees
-        $attendees = [
-            ['email' => 'example@example.com', 'name' => 'John Doe'],
-            ['email' => 'another@example.com', 'name' => 'Jane Smith'],
-        ];
+        if (Auth::user()->microsoft_account == true) {
+            $attendees = [
+                ['email' => 'example@example.com', 'name' => 'John Doe'],
+                ['email' => 'another@example.com', 'name' => 'Jane Smith'],
+            ];
 
-        $graphService = new MicrosoftGraphService();
+            $graphService = new MicrosoftGraphService();
 
-        $success = false;
+            $success = false;
 
-        if ($class->class_type == 'virtual') {
-            $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
+            if ($class->class_type == 'virtual') {
+                $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
+            } else {
+                $success = $graphService->createCalendarEvent($class) ? true : false;
+            }
+
+            if ($success) {
+                $this->alert('success', 'Class created successfully!');
+                $this->redirect(route("dashboard.enrollments"));
+            } else {
+                $this->alert('error', 'Failed to create class.');
+            }
         } else {
-            $success = $graphService->createCalendarEvent($class) ? true : false;
-        }
-
-        if ($success) {
-            $this->alert('success', 'Class created successfully!');
+            alert('success', 'Class created successfully!');
             $this->redirect(route("dashboard.enrollments"));
-        } else {
-            $this->alert('error', 'Failed to create class.');
         }
     }
 

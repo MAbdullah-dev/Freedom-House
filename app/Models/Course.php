@@ -50,7 +50,7 @@ class Course extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_courses');
+        return $this->belongsToMany(Category::class, 'category_courses', 'course_id', 'category_id');
     }
 
     public function ratings()

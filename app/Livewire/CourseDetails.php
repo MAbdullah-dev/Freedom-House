@@ -5,7 +5,9 @@ namespace App\Livewire;
 use App\Models\Classe;
 use App\Models\Course;
 use App\Models\Booking;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Stripe\Stripe;
@@ -21,6 +23,9 @@ class CourseDetails extends Component
     public $targetAudience;
     public $requirements;
     public $classes;
+    public $searchKeyword = '';
+    public $selectedLocation = '';
+    public $selectedDate = '';
 
     // Modal data
     public $selectedClassId;
@@ -36,6 +41,10 @@ class CourseDetails extends Component
             $this->loadCourseData();
             $this->loadClasses();
         }
+    }
+    public function fetch()
+    {
+        $this->loadClasses();
     }
     public function prepareEnrollment($classId)
     {
@@ -60,11 +69,44 @@ class CourseDetails extends Component
         $this->requirements = $course->requirements;
     }
 
-    private function loadClasses()
+    public function loadClasses()
     {
-        $this->classes = Classe::where('course_id', $this->courseId)
-            ->where('visibility', true)
-            ->get();
+        Log::info("Filters - Keyword: $this->searchKeyword, Location: $this->selectedLocation, Date: $this->selectedDate");
+
+        $query = Classe::where('course_id', $this->courseId)->where('visibility', true);
+
+        if ($this->searchKeyword) {
+            $query->where('title', 'like', '%' . $this->searchKeyword . '%');
+        }
+
+        if ($this->selectedLocation) {
+            $query->where('class_type', $this->selectedLocation);
+        }
+
+        if ($this->selectedDate) {
+            $query->whereDate('class_date', Carbon::parse($this->selectedDate)->format('Y-m-d'));
+        }
+
+        Log::info('Query: ' . $query->toSql());
+        Log::info('Bindings: ' . json_encode($query->getBindings()));
+
+        $this->classes = $query->get();
+
+        Log::info($query->toSql());
+        Log::info($query->getBindings());
+
+
+        Log::info('Classes loaded: ' . $this->classes->count());
+    }
+
+
+    public function updated($propertyName)
+    {
+        Log::info("Updated property: $propertyName, Value: " . $this->{$propertyName});
+
+        if (in_array($propertyName, ['selectedLocation', 'selectedDate', 'searchKeyword'])) {
+            $this->loadClasses();
+        }
     }
 
     public function enroll($classId, $isPaid, $price)

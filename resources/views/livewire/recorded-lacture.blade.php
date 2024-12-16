@@ -119,10 +119,10 @@
                 <div class="lacture-progress">
                     <div class="d-flex justify-content-between">
                         <p>Course Content</p>
-                        <p>{{ $currentLecture->progress_percentage }}% completed</p>
+                        <p>{{ $progressPercentage }}% completed</p>
                     </div>
-                    <progress class="w-100" id="file" value="{{ $currentLecture->progress_percentage }}"
-                        max="100">{{ $currentLecture->progress_percentage }}%</progress>
+                    <progress class="w-100" id="file" value="{{ $progressPercentage }}"
+                        max="100">{{ $progressPercentage }}%</progress>
                     <div class="accordion" id="accordionPanelsStayOpenExample">
                         @foreach ($lectures as $lecture)
                             <div class="accordion-item">
@@ -142,7 +142,12 @@
                                                 <li><i class="fa-regular fa-circle-play fa-sm video-player"></i>
                                                     {{ $lecture->order }} Lectures</li>
                                                 <li><i class="fa-solid fa-check-double"></i>
-                                                    {{ $lecture->completion_status }}</li>
+                                                    @if ($lecture->watched)
+                                                        100% finish (1/1)
+                                                    @else
+                                                        0% finish (0/1)
+                                                    @endif
+                                                </li>
                                             </ul>
                                         </div>
                                     </button>
@@ -151,14 +156,14 @@
                                     class="accordion-collapse collapse {{ $lecture->id === $currentLecture->id ? 'show' : '' }}">
                                     <div class="accordion-body d-flex align-items-center justify-content-between">
                                         <div>
-                                            <input type="radio"
-                                                {{ $lecture->id === $currentLecture->id ? 'checked' : 'disabled' }}
+                                            <input type="radio" {{ $lecture->watched ? 'checked' : 'disabled' }}
                                                 name="class" id="class-{{ $lecture->id }}">
                                             <span class="ms-2">{{ $lecture->title }}</span>
                                         </div>
                                         <div>
-                                            <span class="class-duration">Total Duration:
-                                                {{ $lecture->video_duration }} hours</span>
+                                            <span class="class-duration">
+                                                Total Duration: {{ gmdate('H:i:s', $lecture->video_duration) }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

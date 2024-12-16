@@ -137,45 +137,20 @@
                     <div class="filter d-none d-xl-block">
                         <ul class="my-4">
                             <h4>Category</h4>
-                            <li>
-                                <input type="checkbox" id="ethics">
-                                <label for="ethics">Ethics</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="mental-health">
-                                <label for="mental-health">Mental Health</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="substance-use">
-                                <label for="substance-use">Substance Use Disorder</label>
-                            </li>
+                            @foreach ($categories as $category)
+                                <li>
+                                    <input type="checkbox" id="category-{{ $category->id }}" value="{{ $category->id }}"
+                                        wire:change="selectedCategorieschanged({{ $category->id }})">
+                                    <label for="category-{{ $category->id }}">{{ $category->category_name }}</label>
+                                </li>
+                            @endforeach
+                            @dump($selectedCategories)
                         </ul>
-                        {{-- <ul class="my-4">
-                            <h4>Course Type</h4>
-                            <li>
-                                <input type="checkbox" id="on-site">
-                                <label for="on-site">Onsite/In Person</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="virtual">
-                                <label for="virtual">Virtual</label>
-                            </li>
-                        </ul> --}}
-                        {{-- <ul class="list-unstyled my-4">
-                            <h4>Price</h4>
-                            <li>
-                                <input type="checkbox" id="free">
-                                <label for="free">Free</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="paid">
-                                <label for="paid">Paid</label>
-                            </li>
-                        </ul> --}}
-                        <button class="btn filter-btn" @click="clearFilters()">
+                        <button class="btn filter-btn" wire:click="clearFilters">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters
                         </button>
                     </div>
+
                 </div>
                 <div class="col-lg-12 col-xl-9">
                     <div class="row gy-4">
@@ -183,8 +158,8 @@
                             <div class="col-sm-6 col-lg-4 ">
                                 <div class="card shadow">
                                     <div class="card-img-top">
-                                        <img src="{{ asset('assets/images/featured-card-1.png') }}"
-                                            class="card-img-top" alt="...">
+                                        <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
+                                            alt="...">
                                         <i class="fa-regular fa-bookmark"></i>
                                     </div>
                                     <div class="card-body">
