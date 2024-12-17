@@ -55,6 +55,13 @@
                                     </a>
                                 </p>
                             </div>
+                            @if ($publishedCourse->course_type == 'recorded')
+                                <a class="button-primary w-100 text-center"
+                                    href="{{ route('dashboard.view.lectures', ['courseId' => $publishedCourse->id]) }}">
+                                    View Lectures
+                                </a>
+                            @endif
+
                         </div>
                     </div>
                 @endforeach

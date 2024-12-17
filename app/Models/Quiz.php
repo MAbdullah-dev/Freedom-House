@@ -9,11 +9,11 @@ class Quiz extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['class_id', 'title', 'timer'];
+    protected $fillable = ['lecture_id', 'title', 'description'];
 
-    public function class()
+    public function lectures()
     {
-        return $this->belongsTo(Classe::class, 'class_id');
+        return $this->belongsTo(Lecture::class, 'lecture_id');
     }
 
     public function questions()

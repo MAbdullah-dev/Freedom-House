@@ -23,4 +23,8 @@ class Lecture extends Model
     {
         return $this->hasMany(VideoActivity::class);
     }
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
 }

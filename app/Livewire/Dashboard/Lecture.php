@@ -26,7 +26,7 @@ class Lecture extends Component
         'course_id' => 'required|exists:courses,id',
         'lectures.*.title' => 'required|string|max:255',
         'lectures.*.description' => 'nullable|string',
-        'lectures.*.video_file' => 'required|file|mimetypes:video/mp4,video/quicktime|max:51200', // Max 50MB
+        'lectures.*.video_file' => 'required|file|mimetypes:video/mp4',
         'lectures.*.order' => 'required|integer|distinct|min:1',
     ];
 

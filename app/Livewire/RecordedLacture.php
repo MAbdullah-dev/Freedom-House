@@ -6,6 +6,7 @@ use App\Models\Certificate;
 use App\Models\Course;
 use Livewire\Component;
 use App\Models\Lecture;
+use App\Models\Quiz;
 use App\Models\VideoActivity;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,7 @@ class RecordedLacture extends Component
     public $lecturescountcurrent;
     public $videoDetails = [];
     public $progressPercentage;
+    public $quiz;
 
     public function mount($courseId, $lectureId = null)
     {
@@ -34,7 +36,7 @@ class RecordedLacture extends Component
 
         // Fetch all lectures for the given course, ordered by 'order'
         $this->lectures = Lecture::where('course_id', $this->courseId)->orderBy('order')->get();
-
+        $this->quiz = Quiz::where('lecture_id', $this->currentLectureId)->first();
         // Set the current lecture based on passed lectureId or default to the first lecture
         if ($this->currentLectureId) {
             $this->currentLecture = $this->lectures->firstWhere('id', $this->currentLectureId);
