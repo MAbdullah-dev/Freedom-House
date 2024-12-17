@@ -14,6 +14,7 @@ class Booking extends Model
         'class_id',
         'user_id',
         'order_number',
+        'course_id',
     ];
 
     public function user()
@@ -24,6 +25,10 @@ class Booking extends Model
     public function class()
     {
         return $this->belongsTo(Classe::class);
+    }
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 
     public function payments()

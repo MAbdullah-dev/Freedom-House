@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->foreignId('class_id')->constrained('classes')->onDelete('cascade')->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
+            $table->integer('course_id')->constrained('courses')->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();
         });
     }

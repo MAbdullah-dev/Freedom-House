@@ -6,11 +6,8 @@ use App\Models\Certificate;
 use App\Models\Course;
 use Livewire\Component;
 use App\Models\Lecture;
-<<<<<<< HEAD
 use App\Models\Quiz;
-=======
 use App\Models\Review;
->>>>>>> 3075710db1e44935d76494505fc12107f16af63e
 use App\Models\VideoActivity;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -31,13 +28,10 @@ class RecordedLacture extends Component
     public $lecturescountcurrent;
     public $videoDetails = [];
     public $progressPercentage;
-<<<<<<< HEAD
     public $quiz;
-=======
     public $rating;
     public $review;
     public $showReviewModal = false;
->>>>>>> 3075710db1e44935d76494505fc12107f16af63e
 
     public function mount($courseId, $lectureId = null)
     {

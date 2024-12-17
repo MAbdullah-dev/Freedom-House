@@ -77,7 +77,7 @@ Route::get('dashboard/categories', Category::class)->name('dashboard.categories'
 Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
 Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
 Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');
-Route::get('/dashboard/lactures', DashboardLecture::class)->name('dashboard.lactures');
+Route::get('/dashboard/lactures/{lectureId?}', DashboardLecture::class)->name('dashboard.lactures');
 
 
 //quiz

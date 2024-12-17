@@ -48,12 +48,6 @@ class Course extends Model
     {
         return $this->belongsToMany(Tag::class, 'course_tags');
     }
-
-    // public function categories()
-    // {
-    //     return $this->belongsToMany(Category::class, 'category_courses');
-    // }
-
     public function ratings()
     {
         return $this->hasMany(CourseRating::class);
@@ -78,5 +72,9 @@ class Course extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_courses', 'course_id', 'category_id');
+    }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }
