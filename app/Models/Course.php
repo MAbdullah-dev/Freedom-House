@@ -49,10 +49,10 @@ class Course extends Model
         return $this->belongsToMany(Tag::class, 'course_tags');
     }
 
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'category_courses');
-    }
+    // public function categories()
+    // {
+    //     return $this->belongsToMany(Category::class, 'category_courses');
+    // }
 
     public function ratings()
     {
@@ -74,5 +74,9 @@ class Course extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_courses', 'course_id', 'category_id');
     }
 }

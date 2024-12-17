@@ -27,36 +27,39 @@
                         <hr>
                         <div class="category-grid">
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div>
-                                        <b>Mental Health</b>
-                                        <ul>
-                                            <li><a href="#">- Adult Mental Health First Aid</a></li>
-                                            <li><a href="#">- Youth Mental Health First Aid</a></li>
-                                            <li><a href="#">- Question. Persuade. Refer.</a></li>
-                                            <li><a href="#">- Mindset</a></li>
-                                        </ul>
+                                @foreach ($categories as $category)
+                                    <div class="col-lg-6">
+                                        <div>
+                                            <b>{{ $category->category_name }}</b>
+                                            <ul>
+                                                @foreach ($category->courses as $course)
+                                                    @if ($uniqueCourses->contains('id', $course->id))
+                                                        <li>
+                                                            @if ($course->course_type == 'recorded')
+                                                                <a
+                                                                    href="{{ route('onsite.course.details', $course->id) }}">{{ $course->title }}</a>
+                                                            @else
+                                                                <a
+                                                                    href="{{ route('course.details', $course->id) }}">{{ $course->title }}</a>
+                                                            @endif
+                                                        </li>
+                                                        @php
+                                                            $uniqueCourses = $uniqueCourses->reject(function ($c) use (
+                                                                $course,
+                                                            ) {
+                                                                return $c->id === $course->id;
+                                                            });
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <b>Substance Use Disorder</b>
-                                        <ul>
-                                            <li><a href="#">- Recovery-Oriented System of Care</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div>
-                                        <b>Ethics</b>
-                                        <ul>
-                                            <li><a href="#">- Maintaining Professional Boundaries</a></li>
-                                            <li><a href="#">- Clinical Documentation</a></li>
-                                            <li><a href="#">- QI Orientation</a></li>
-                                            <li><a href="#">- Documentation for Authorization</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
+
+
                     </div>
                 </li>
             </ul>

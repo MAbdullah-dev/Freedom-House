@@ -14,12 +14,12 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['category_name' => 'Technology'],
-            ['category_name' => 'Health'],
-            ['category_name' => 'Education'],
-            ['category_name' => 'Business'],
-            ['category_name' => 'Lifestyle'],
-            ['category_name' => 'Travel'],
+            ['category_name' => 'MENTAL HEALTH'],
+            ['category_name' => 'ETHICS'],
+            ['category_name' => 'SUBSTANCE USE DISORDER'],
+            // ['category_name' => 'Business'],
+            // ['category_name' => 'Lifestyle'],
+            // ['category_name' => 'Travel'],
         ];
         foreach ($categories as $category) {
             Category::create($category);
