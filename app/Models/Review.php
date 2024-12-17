@@ -13,7 +13,7 @@ class Review extends Model
         'user_id',
         'course_id',
         'rating',
-        'comment'
+        'review',
     ];
 
     public function user()
@@ -21,6 +21,7 @@ class Review extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Relationship with Course
     public function course()
     {
         return $this->belongsTo(Course::class);

@@ -149,17 +149,18 @@ class CreateCourse extends Component
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'course_type' => $this->courseType,
+            'is_completed' => $this->courseType === 'recorded' ? false : true, // Set based on course_type
         ]);
 
         $course->categories()->attach($this->category);
         $course->tags()->attach($this->tags);
         $course->tutors()->attach($this->tutors);
-        // dd($course);
 
         $this->resetForm();
         $this->alert('success', 'Course created successfully.');
         $this->redirect(route('dashboard.mycourses'));
     }
+
 
     public function updateCourse()
     {

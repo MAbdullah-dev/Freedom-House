@@ -156,18 +156,26 @@
                                 </h2>
                                 <div id="lecture-{{ $lecture->id }}"
                                     class="accordion-collapse collapse {{ $lecture->id === $currentLecture->id ? 'show' : '' }}">
-                                    <div class="accordion-body d-flex align-items-center justify-content-between">
-                                        <div>
-                                            <input type="radio" {{ $lecture->watched ? 'checked' : 'disabled' }}
-                                                name="class" id="class-{{ $lecture->id }}">
-                                            <span class="ms-2">{{ $lecture->title }}</span>
+                                    <a
+                                        href="{{ route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
+                                        <div class="accordion-body d-flex align-items-center justify-content-between">
+                                            <div>
+                                                @if ($lecture->watched)
+                                                    <input type="radio" checked>
+                                                @else
+                                                    <input type="radio" disabled>
+                                                @endif
+                                                {{-- <input type="radio"
+                                                    {{ $lecture->watched ? 'checked disabled' : 'disabled' }}> --}}
+                                                <span class="ms-2">{{ $lecture->title }}</span>
+                                            </div>
+                                            <div>
+                                                <span class="class-duration">
+                                                    Total Duration: {{ gmdate('H:i:s', $lecture->video_duration) }}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <span class="class-duration">
-                                                Total Duration: {{ gmdate('H:i:s', $lecture->video_duration) }}
-                                            </span>
-                                        </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         @endforeach
@@ -180,8 +188,60 @@
             </div>
         </section>
     </div>
+    <!-- Review and Rating Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true"
+        wire:ignore.self>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reviewModalLabel">Course Review & Rating</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form wire:submit.prevent="submitReview">
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="d-flex align-items-center justify-content-center">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="bi {{ $rating >= $i ? 'bi-star-fill' : 'bi-star' }} text-warning fs-3"
+                                        style="cursor: pointer;" wire:click="setRating({{ $i }})"></i>
+                                @endfor
+                            </div>
+                            @error('rating')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="review" class="form-label">Review</label>
+                            <textarea class="form-control" id="review" rows="3" wire:model="review"></textarea>
+                            @error('review')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Livewire.on('open-review-modal', () => {
+            $('#reviewModal').modal('show');
+
+        });
+        Livewire.on('close-review-modal', () => {
+            $('#reviewModal').modal('hide');
+        });
+    });
+</script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
     console.log('ggg');

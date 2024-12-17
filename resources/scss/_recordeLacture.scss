@@ -185,4 +185,22 @@
             }
         }
     }
+
+    /* Add hover effect for stars */
+    .rating i {
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .rating i:hover,
+    .rating i.active {
+        color: #f39c12;
+        /* Gold color for active stars */
+    }
+
+    /* Optional: change the color of the stars when they are selected */
+    .rating .bi-star-fill {
+        color: #f39c12;
+        /* Gold color for filled stars */
+    }
 }
