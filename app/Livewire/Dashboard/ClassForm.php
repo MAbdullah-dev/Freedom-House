@@ -2,14 +2,16 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Services\MicrosoftGraphService;
 use App\Models\CalendarEvent;
 use Livewire\Component;
 use App\Models\Course;
 use App\Models\Classe;
 use App\Models\Events;
-use App\Services\MicrosoftGraphService;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+
+use function Laravel\Prompts\alert;
 
 class ClassForm extends Component
 {
@@ -119,6 +121,7 @@ class ClassForm extends Component
         $this->courses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
+            ->where('user_id', Auth::id())
             ->get();
     }
     public function updatedDateRange($value)
@@ -164,7 +167,6 @@ class ClassForm extends Component
         if ($this->type === 'class') {
             $this->createClass();
             $this->loadcources();
-            // $this->loadcources();
         } else {
             $this->createEvent();
             $this->loadcources();
@@ -204,27 +206,31 @@ class ClassForm extends Component
             'class_id' => $class->id,
         ]);
 
-        // Define attendees
-        $attendees = [
-            ['email' => 'example@example.com', 'name' => 'John Doe'],
-            ['email' => 'another@example.com', 'name' => 'Jane Smith'],
-        ];
+        if (Auth::user()->microsoft_account == true) {
+            $attendees = [
+                ['email' => 'example@example.com', 'name' => 'John Doe'],
+                ['email' => 'another@example.com', 'name' => 'Jane Smith'],
+            ];
 
-        $graphService = new MicrosoftGraphService();
+            $graphService = new MicrosoftGraphService();
 
-        $success = false;
+            $success = false;
 
-        if ($class->class_type == 'virtual') {
-            $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
+            if ($class->class_type == 'virtual') {
+                $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
+            } else {
+                $success = $graphService->createCalendarEvent($class) ? true : false;
+            }
+
+            if ($success) {
+                $this->alert('success', 'Class created successfully!');
+                $this->redirect(route("dashboard.enrollments"));
+            } else {
+                $this->alert('error', 'Failed to create class.');
+            }
         } else {
-            $success = $graphService->createCalendarEvent($class) ? true : false;
-        }
-
-        if ($success) {
-            $this->alert('success', 'Class created successfully!');
+            alert('success', 'Class created successfully!');
             $this->redirect(route("dashboard.enrollments"));
-        } else {
-            $this->alert('error', 'Failed to create class.');
         }
     }
 

@@ -87,7 +87,9 @@
                             aria-labelledby="exercise-files-tab">
                             <div class="course-details__widget">
                                 <h6>Exercise Files</h6>
-                                <p>Here you can access and download all exercise files related to the course.</p>
+                                @if ($quiz)
+                                    <a href="{{ route('quiz.take', ['quizId' => $quiz->id]) }}">Create Quiz</a>
+                                @endif
                             </div>
                         </div>
 

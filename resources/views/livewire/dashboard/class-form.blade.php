@@ -8,15 +8,25 @@
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
                     </button> --}}
                     {{-- <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button> --}}
-                    <button type="submit" class="btn button-submit custom-submit-button" wire:click="submit"
-                        wire:loading.attr="disabled">
-                        <span wire:loading wire:target="submit" class="spinner-border spinner-border-sm"
-                            aria-hidden="true"></span>
-                        <span wire:loading.remove
-                            wire:target="submit">{{ $type === 'class' ? 'Create Class' : 'Create Event' }}</span>
-                        <span wire:loading wire:target="">Loading...</span>
-                    </button>
-
+                    @if (!$classId)
+                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="submit"
+                            wire:loading.attr="disabled">
+                            <span wire:loading wire:target="submit" class="spinner-border spinner-border-sm"
+                                aria-hidden="true"></span>
+                            <span wire:loading.remove
+                                wire:target="submit">{{ $type === 'class' ? 'Create Class' : 'Create Event' }}</span>
+                            <span wire:loading wire:target="submit">Loading...</span>
+                        </button>
+                    @endif
+                    @if ($classId)
+                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="updateClass"
+                            wire:loading.attr="disabled">
+                            <span wire:loading wire:target="updateClass" class="spinner-border spinner-border-sm"
+                                aria-hidden="true"></span>
+                            <span wire:loading.remove wire:target="updateClass">Update</span>
+                            <span wire:loading wire:target="updateClass">Loading...</span>
+                        </button>
+                    @endif
                     <a href="" class="custom-close-link ms-1">
                         <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
                     </a>
@@ -200,7 +210,7 @@
                                     </label>
                                     <input type="text" wire:model.lazy="date_range" id="calendar-input"
                                         class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"
-                                        placeholder="Select Date Range (e.g., YYYY-MM-DD to YYYY-MM-DD)">
+                                        placeholder="@if ($date_range) {{ $date_range }} @else Select Date Range (e.g., YYYY-MM-DD to YYYY-MM-DD) @endif">
                                     @error('date_range')
                                         <li class="text-danger"><span class="small">{{ $message }}</span></li>
                                     @enderror

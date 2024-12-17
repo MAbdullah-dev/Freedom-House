@@ -38,16 +38,6 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="timer" class="form-label">Quiz Timer (Minutes)</label>
-                                <input wire:model="timer" id="timer"
-                                    class="form-control @error('timer') is-invalid @enderror" type="number"
-                                    placeholder="Enter Quiz Timer">
-                                @error('timer')
-                                    <span class="text-danger small">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
                                 <label for="description" class="form-label">Quiz Description</label>
                                 <textarea wire:model="description" id="description" class="form-control @error('description') is-invalid @enderror"
                                     placeholder="Enter Description"></textarea>

@@ -20,24 +20,23 @@
             <div class="search-container">
                 <div class="search-bar">
                     <img src="{{ asset('assets/svgs/search-icon.svg') }}" alt="Search icon" />
-                    <input type="text" wire:model.debounce.500ms="searchKeyword"
-                        placeholder="Search classes by keyword" />
+                    <input type="text" wire:model.live="searchKeyword" placeholder="Search classes by keyword" />
                 </div>
 
-                <button type="button" class="filter-btn" wire:click="$emit('toggleFilters')">
+                <button type="button" class="filter-btn">
                     <img src="{{ asset('assets/svgs/filter-icon.svg') }}" alt="Filter icon" /> Filters
                 </button>
             </div>
 
-            <div class="filter-row">
-                <select class="location-dropdown mb-3" wire:model="selectedLocation">
+            <div wire:ignore class="filter-row">
+                <select class="location-dropdown mb-3" wire:model="selectedLocation" wire:change="fetch">
                     <option value="">Select location</option>
                     <option value="online">Online</option>
                     <option value="onsite">On-site</option>
                 </select>
-                <input type="text" class="calendar-input mb-3" wire:model="selectedDate" placeholder="Select date" />
+                <input type="text" id="calendar-input" class="calendar-input mb-3" wire:model="selectedDate"
+                    placeholder="Select date" wire:change="fetch" />
             </div>
-
             @forelse ($classes as $class)
                 <div class="event-card">
                     <div class="event-card__date">
@@ -186,9 +185,8 @@
             document.querySelector('.filter-row').classList.toggle('show');
         });
 
-        flatpickr(".calendar-input", {
+        flatpickr("#calendar-input", {
             dateFormat: "Y-m-d",
-            altInput: true,
             altFormat: "F j, Y",
             defaultDate: new Date(),
         });

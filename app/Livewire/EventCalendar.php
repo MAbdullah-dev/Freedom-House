@@ -12,15 +12,15 @@ use Livewire\Component;
 
 class EventCalendar extends Component
 {
-public $events = [];
-public $classes = [];
+    public $events = [];
+    public $classes = [];
 
-   public function mount()
+    public function mount()
     {
         $user = Auth::user();
 
         $events = CalendarEvent::with(['event', 'user'])
-            ->whereNotNull('event_id') 
+            ->whereNotNull('event_id')
             ->get()
             ->map(function ($calendarEvent) {
                 if ($calendarEvent->event) {
@@ -42,9 +42,9 @@ public $classes = [];
 
         if ($user) {
             $createdClasses = CalendarEvent::with(['class', 'user'])
-                ->whereNotNull('class_id') 
+                ->whereNotNull('class_id')
                 ->whereHas('user', function ($query) use ($user) {
-                    $query->where('id', $user->id);  
+                    $query->where('id', $user->id);
                 })
                 ->get()
                 ->map(function ($calendarEvent) {
@@ -65,7 +65,7 @@ public $classes = [];
                 })->toArray();
 
             $bookedClasses = Booking::with(['calendarEvent', 'calendarEvent.class'])
-                ->where('user_id', $user->id) 
+                ->where('user_id', $user->id)
                 ->get()
                 ->map(function ($booking) {
                     $calendarEvent = $booking->calendarEvent;

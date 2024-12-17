@@ -44,11 +44,12 @@ class Register extends Component
                 'phone' => $this->phone,
                 'password' => Hash::make($this->password),
                 'verification_token' => $verificationToken,
+                'microsoft_account' => false,
             ]);
             $role = Role::findOrFail($role_id);
-            
+
             $user->roles()->attach($role->id);
-            
+
             $this->sendVerificationEmail($user);
             // dd(request());
             DB::commit();

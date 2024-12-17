@@ -28,6 +28,7 @@ use App\Livewire\Dashboard\MyCourses;
 use App\Livewire\Dashboard\ScheduleClasses;
 use App\Livewire\Dashboard\Tags;
 use App\Livewire\Dashboard\TutorRequest;
+use App\Livewire\Dashboard\ViewLectures;
 use App\Livewire\Home as LivewireHome;
 use App\Livewire\Inc\DashboardFooter;
 use App\Livewire\Login;
@@ -36,6 +37,7 @@ use App\Livewire\TutorPrfile;
 use App\Livewire\OnSiteCourseDetails;
 use App\Livewire\EventCalendar;
 use App\Livewire\Quizzes\QuizCreate;
+use App\Livewire\Quizzes\QuizView;
 use App\Livewire\RecordedLacture;
 use App\Models\Lecture;
 use Illuminate\Support\Facades\Route;
@@ -79,7 +81,10 @@ Route::get('/dashboard/lactures', DashboardLecture::class)->name('dashboard.lact
 
 
 //quiz
-Route::get('/quizzes/create/{classId?}', QuizCreate::class)->name('quizzes.create');
+Route::get('/quizzes/create/{lectureId}', QuizCreate::class)->name('quizzes.create');
+Route::get('/quiz/{quizId}', QuizView::class)->name('quiz.take');
+
+
 Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');
 
 // stripe
@@ -91,3 +96,4 @@ Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicros
 // password reset
 Route::post('password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
 Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::get('dashboard/view/lectures/{courseId}', ViewLectures::class)->name('dashboard.view.lectures');
