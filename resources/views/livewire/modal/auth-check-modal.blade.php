@@ -20,11 +20,13 @@
 
                     <!-- Login with Microsoft -->
                     <div class="card login-option">
-                        <div class="card-body d-flex align-items-center">
-                            <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="Microsoft Icon" class="me-3"
-                                style="width: 24px; height: 24px;">
-                            <p class="mb-0">Login with Microsoft</p>
-                        </div>
+                        <a href="{{ route('microsoft.redirect') }}">
+                            <div class="card-body d-flex align-items-center">
+                                <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="Microsoft Icon"
+                                    class="me-3" style="width: 24px; height: 24px;">
+                                <p class="mb-0">Login with Microsoft</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

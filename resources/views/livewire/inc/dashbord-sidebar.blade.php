@@ -38,72 +38,76 @@
                         <i class="fas fa-list"></i> View Enrollments
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.scehedule-classes' ? 'active' : '' }}"
                         href="{{ route('dashboard.scehedule-classes') }}" wire:navigate>
                         <i class="fa-solid fa-list"></i> Schedule Classes
                     </a>
-                </li>
-                <li class="tutor-dashboard-menu-divider-header">
-                    Instructor
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.mycourses' ? 'active' : '' }}"
-                        href="{{ route('dashboard.mycourses') }}" wire:navigate>
-                        <i class="fa-solid fa-rocket"></i> My Courses
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.announcements' ? 'active' : '' }}"
-                        href="{{ route('dashboard.announcements') }}" wire:navigate>
-                        <i class="fa-solid fa-bullhorn"></i> Announcements
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.lactures' ? 'active' : '' }}"
-                        href="{{ route('dashboard.lactures') }}" wire:navigate>
-                        <i class="fa-solid fa-video"></i> Recorded Lacture
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.analytics' ? 'active' : '' }}"
-                        href="{{ route('dashboard.analytics') }}" wire:navigate>
-                        <i class="fa-solid fa-book"></i> Course Analytics
-                    </a>
-                </li>
-                <li class="tutor-dashboard-menu-divider-header">
-                    Admin
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tutor.request' ? 'active' : '' }}"
-                        href="{{ route('dashboard.tutor.request') }}" wire:navigate>
-                        <i class="fa-solid fa-person-circle-question"></i> Tutor Requests
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.coursesRequest' ? 'active' : '' }}"
-                        href="{{ route('dashboard.coursesRequest') }}" wire:navigate>
-                        <i class="fa-solid fa-clipboard-check"></i> Courses Request
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help.admin' ? 'active' : '' }}"
-                        href="{{ route('dashboard.help.admin') }}" wire:navigate>
-                        <i class="fa-regular fa-circle-question"></i>help requests
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.categories' ? 'active' : '' }}"
-                        href="{{ route('dashboard.categories') }}" wire:navigate>
-                        <i class="fa-solid fa-table-list"></i> categories
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tags' ? 'active' : '' }}"
-                        href="{{ route('dashboard.tags') }}" wire:navigate>
-                        <i class="fa-solid fa-tag"></i> Tags
-                    </a>
-                </li>
+                </li> --}}
+                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
+                    <li class="tutor-dashboard-menu-divider-header">
+                        Instructor
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.mycourses' ? 'active' : '' }}"
+                            href="{{ route('dashboard.mycourses') }}" wire:navigate>
+                            <i class="fa-solid fa-rocket"></i> My Courses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.announcements' ? 'active' : '' }}"
+                            href="{{ route('dashboard.announcements') }}" wire:navigate>
+                            <i class="fa-solid fa-bullhorn"></i> Announcements
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.lactures' ? 'active' : '' }}"
+                            href="{{ route('dashboard.lactures') }}" wire:navigate>
+                            <i class="fa-solid fa-video"></i> Recorded Lacture
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.analytics' ? 'active' : '' }}"
+                            href="{{ route('dashboard.analytics') }}" wire:navigate>
+                            <i class="fa-solid fa-book"></i> Course Analytics
+                        </a>
+                    </li>
+                @endif
+                @if (Auth::user()->role_id == 1)
+                    <li class="tutor-dashboard-menu-divider-header">
+                        Admin
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tutor.request' ? 'active' : '' }}"
+                            href="{{ route('dashboard.tutor.request') }}" wire:navigate>
+                            <i class="fa-solid fa-person-circle-question"></i> Tutor Requests
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.coursesRequest' ? 'active' : '' }}"
+                            href="{{ route('dashboard.coursesRequest') }}" wire:navigate>
+                            <i class="fa-solid fa-clipboard-check"></i> Courses Request
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help.admin' ? 'active' : '' }}"
+                            href="{{ route('dashboard.help.admin') }}" wire:navigate>
+                            <i class="fa-regular fa-circle-question"></i>help requests
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.categories' ? 'active' : '' }}"
+                            href="{{ route('dashboard.categories') }}" wire:navigate>
+                            <i class="fa-solid fa-table-list"></i> categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tags' ? 'active' : '' }}"
+                            href="{{ route('dashboard.tags') }}" wire:navigate>
+                            <i class="fa-solid fa-tag"></i> Tags
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.settings' ? 'active' : '' }}"
                         href="{{ route('dashboard.settings') }}" wire:navigate>

@@ -70,14 +70,14 @@ Route::get('/recorded/lacture/{courseId}/{lectureId}', RecordedLacture::class)->
 Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses');
 Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
 Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
-Route::get('/dashboard/scehedule-classes', ScheduleClasses::class)->name('dashboard.scehedule-classes');
+// Route::get('/dashboard/scehedule-classes', ScheduleClasses::class)->name('dashboard.scehedule-classes');
 Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
 Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.course.details');
 Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
 Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
 Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
 Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');
-Route::get('/dashboard/lactures', DashboardLecture::class)->name('dashboard.lactures');
+Route::get('/dashboard/lactures/{lectureId?}', DashboardLecture::class)->name('dashboard.lactures');
 
 
 //quiz

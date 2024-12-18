@@ -30,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at',
         'password_reset_token',
         'password_token_created_at',
+        'role_id',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -114,5 +115,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+    public function courseProgress()
+    {
+        return $this->hasMany(CourseProgress::class);
     }
 }
