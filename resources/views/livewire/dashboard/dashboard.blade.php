@@ -2,26 +2,29 @@
     <section class="courses-info-section">
         <div class="inner">
             <h4 class="my-4">Dashboard</h4>
-            <div class="tutor-course-info d-flex align-items-center justify-content-center gap-3 flex-wrap">
-                <div class="course-box d-flex align-items-center justify-content-center flex-column mb-3">
-                    <div class="course-box-icon">
-                        <i class="fa-brands fa-google-scholar"></i>
+
+            @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+                <div class="tutor-course-info d-flex align-items-center justify-content-center gap-3 flex-wrap">
+                    <div class="course-box d-flex align-items-center justify-content-center flex-column mb-3">
+                        <div class="course-box-icon">
+                            <i class="fa-brands fa-google-scholar"></i>
+                        </div>
+                        <div class="number">
+                            3
+                        </div>
+                        <span>Total Student</span>
                     </div>
-                    <div class="number">
-                        3
+                    <div class="course-box d-flex align-items-center justify-content-center flex-column mb-3">
+                        <div class="course-box-icon">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                        <div class="number">
+                            3
+                        </div>
+                        <span>Total courses</span>
                     </div>
-                    <span>Total Student</span>
                 </div>
-                <div class="course-box d-flex align-items-center justify-content-center flex-column mb-3">
-                    <div class="course-box-icon">
-                        <i class="fa-solid fa-boxes-stacked"></i>
-                    </div>
-                    <div class="number">
-                        3
-                    </div>
-                    <span>Total courses</span>
-                </div>
-            </div>
+            @endif
             <div class="courses-info">
                 <div class="course-detail d-flex align-items-center justify-content-center gap-3 flex-wrap">
                     <div class="course-box d-flex align-items-center justify-content-center flex-column">
@@ -88,93 +91,95 @@
             </div>
         </div>
     </section>
-    <section class="tutor-course-detail py-3 mt-3">
-        <div class="inner">
-            <h4 class="mb-4">My Courses</h4>
-            <div class="table-responsive">
-                <div class="card-table">
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th scope="col">Course Name</th>
-                                <th scope="col">Enrolled</th>
-                                <th scope="col">Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <a href="">
-                                        The Complete Web Development Bootcamp
-                                    </a>
-                                </td>
-                                <td>3</td>
-                                <td>
-                                    <span>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="">
-                                        The Complete Web Development Bootcamp
-                                    </a>
-                                </td>
-                                <td>3</td>
-                                <td>
-                                    <span>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="">
-                                        The Complete Web Development Bootcamp
-                                    </a>
-                                </td>
-                                <td>3</td>
-                                <td>
-                                    <span>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="">
-                                        The Complete Web Development Bootcamp
-                                    </a>
-                                </td>
-                                <td>3</td>
-                                <td>
-                                    <span>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+    @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+        <section class="tutor-course-detail py-3 mt-3">
+            <div class="inner">
+                <h4 class="mb-4">My Courses</h4>
+                <div class="table-responsive">
+                    <div class="card-table">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Course Name</th>
+                                    <th scope="col">Enrolled</th>
+                                    <th scope="col">Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="">
+                                            The Complete Web Development Bootcamp
+                                        </a>
+                                    </td>
+                                    <td>3</td>
+                                    <td>
+                                        <span>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="">
+                                            The Complete Web Development Bootcamp
+                                        </a>
+                                    </td>
+                                    <td>3</td>
+                                    <td>
+                                        <span>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="">
+                                            The Complete Web Development Bootcamp
+                                        </a>
+                                    </td>
+                                    <td>3</td>
+                                    <td>
+                                        <span>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="">
+                                            The Complete Web Development Bootcamp
+                                        </a>
+                                    </td>
+                                    <td>3</td>
+                                    <td>
+                                        <span>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-        </div>
-    </section>
+            </div>
+        </section>
+    @endif
 </div>

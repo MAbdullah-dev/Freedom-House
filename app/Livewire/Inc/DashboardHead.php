@@ -4,6 +4,7 @@ namespace App\Livewire\Inc;
 
 use App\Models\Role;
 use App\Models\Tutor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -28,9 +29,10 @@ class DashboardHead extends Component
         try {
             DB::beginTransaction();
 
-            $user = auth()->user();
-            $user->roles()->syncWithoutDetaching([Role::TUTOR_ROLE]);
-
+            $user = Auth::user();
+            $user->update([
+                'role_id' => 2,
+            ]);
             $tutor = Tutor::updateOrCreate(
                 ['user_id' => $user->id],
                 [
@@ -62,7 +64,7 @@ class DashboardHead extends Component
 
     public function mount()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $this->username = $user->first_name . ' ' . $user->last_name;
     }
 

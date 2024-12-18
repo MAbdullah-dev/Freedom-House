@@ -26,11 +26,6 @@ class Booking extends Model
     {
         return $this->belongsTo(Classe::class);
     }
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
-    }
-
     public function payments()
     {
         return $this->hasOne(Payment::class);
@@ -38,5 +33,9 @@ class Booking extends Model
     public function event()
     {
         return $this->belongsTo(Events::class);
+    }
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 }

@@ -29,12 +29,14 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-xl-3 mb-3">
-                <a href="{{ route('dashboard.create.class') }}" type="button" class="button-primary w-100">
-                    <i class="fa-solid fa-plus"></i> New
-                    Class/Event
-                </a>
-            </div>
+            @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+                <div class="col-xl-3 mb-3">
+                    <a href="{{ route('dashboard.create.class') }}" type="button" class="button-primary w-100">
+                        <i class="fa-solid fa-plus"></i> New
+                        Class/Event
+                    </a>
+                </div>
+            @endif
         </div>
     </section>
     <section class="enrollments my-5 mx-4">

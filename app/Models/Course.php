@@ -73,6 +73,10 @@ class Course extends Model
     {
         return $this->belongsToMany(Category::class, 'category_courses', 'course_id', 'category_id');
     }
+    public function progress()
+    {
+        return $this->hasMany(CourseProgress::class);
+    }
     public function bookings()
     {
         return $this->hasMany(Booking::class);

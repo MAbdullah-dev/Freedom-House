@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Certificate;
 use App\Models\Course;
+use App\Models\CourseProgress;
 use Livewire\Component;
 use App\Models\Lecture;
 use App\Models\Quiz;
@@ -100,17 +101,19 @@ class RecordedLacture extends Component
         }
 
         $this->alert('success', 'Video marked as watched!');
-        $user = Auth::user();
+
         foreach ($this->lectures as $lecture) {
             $lecture->watched = VideoActivity::where('user_id', $user->id)
                 ->where('lecture_id', $lecture->id)
                 ->exists();
         }
+
         $this->progressPercentage = $this->getCourseProgress($this->courseId);
 
         // Check for course completion
         $this->checkCompletionAndRequestReview();
     }
+
 
     // Method to open the modal when the user completes all lectures
     public function checkCompletionAndRequestReview()
@@ -235,8 +238,18 @@ class RecordedLacture extends Component
         // Calculate progress percentage
         $progress = ($watchedLectures / $totalLectures) * 100;
 
-        return round($progress, 2); // Return progress rounded to 2 decimal places
+        // Round to 2 decimal places
+        $progress = round($progress, 2);
+
+        // Save the progress in the database
+        CourseProgress::updateOrCreate(
+            ['user_id' => $user->id, 'course_id' => $courseId],
+            ['progress' => $progress]
+        );
+
+        return $progress;
     }
+
     public function checkCompletionAndGenerateCertificate()
     {
         $user = Auth::user();

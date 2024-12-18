@@ -58,8 +58,6 @@
                                 @endforeach
                             </div>
                         </div>
-
-
                     </div>
                 </li>
             </ul>
@@ -71,18 +69,39 @@
                         <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="user-dropdown">
-                        <span class="fs-5 mb-3 d-block">Name</span>
+                        <span class="fs-5 mb-3 d-block">{{ Auth::user()->first_name }}</span>
                         <ul>
-                            <li><a href="#">Dashboard</a></li>
-                            <li><a href="#">My Profile</a></li>
-                            <li><a href="#">Wishlist</a></li>
+                            <li>
+                                <a href="{{ route('dashboard') }}" wire:navigate>
+                                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dashboard.settings') }}" wire:navigate>
+                                    <i class="fa-solid fa-user"></i> My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dashboard.wishlist') }}" wire:navigate>
+                                    <i class="fa-solid fa-heart"></i> Wishlist
+                                </a>
+                            </li>
                         </ul>
                         <hr>
                         <ul>
-                            <li><a href="#">Setting</a></li>
-                            <li><a href="#">log out</a></li>
+                            <li>
+                                <a href="{{ route('dashboard.settings') }}" wire:navigate>
+                                    <i class="fa-solid fa-gear"></i> Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('login') }}" wire:navigate>
+                                    <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                                </a>
+                            </li>
                         </ul>
                     </div>
+
             </div>
         @else
             <div class="nav-btn d-flex gap-2">
