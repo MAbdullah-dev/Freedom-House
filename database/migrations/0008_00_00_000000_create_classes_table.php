@@ -22,14 +22,12 @@ return new class extends Migration
             $table->enum('class_type', ['onsite', 'virtual']);
             $table->string('teams_link')->nullable();
             $table->string('onsite_address')->nullable();
-            // $table->string('recorded_video_url')->nullable();
             $table->enum('is_paid', ['free', 'paid'])->default('free');
             $table->decimal('price', 8, 2)->nullable();
             $table->time('class_time');
             $table->date('class_date');
             $table->date('booking_start_date')->nullable();
             $table->date('booking_end_date')->nullable();
-            $table->integer('max_students')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

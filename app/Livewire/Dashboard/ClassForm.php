@@ -243,22 +243,47 @@ class ClassForm extends Component
             'class_type' => $this->class_type,
             'teams_link' => $this->teams_link,
             'onsite_address' => $this->onsite_address,
-            // 'recorded_video_url' => $this->recorded_video_url,
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,
-            'event_date' => $this->class_date,
-            'event_time' => $this->class_time,
+            'class_date' => $this->class_date,
+            'class_time' => $this->class_time,
             'booking_start_date' => $this->booking_start_date,
             'booking_end_date' => $this->booking_end_date,
         ]);
+
+        // dd($event);
 
         CalendarEvent::create([
             'user_id' => Auth::id(),
             'event_id' => $event->id,
         ]);
+        if (Auth::user()->microsoft_account == true) {
+            $attendees = [
+                ['email' => 'example@example.com', 'name' => 'John Doe'],
+                ['email' => 'another@example.com', 'name' => 'Jane Smith'],
+            ];
 
-        $this->alert('success', 'Event created successfully!');
+            $graphService = new MicrosoftGraphService();
+
+            $success = false;
+
+            if ($event->class_type == 'virtual') {
+                $success = $graphService->createCalendarEventWithTeamsMeeting($event, $attendees) ? true : false;
+            } else {
+                $success = $graphService->createCalendarEvent($event) ? true : false;
+            }
+
+            if ($success) {
+                $this->alert('success', 'Event created successfully!');
+                $this->redirect(route("calendar"));
+            } else {
+                $this->alert('error', 'Failed to create class.');
+            }
+        } else {
+            alert('success', 'Event created successfully!');
+            $this->redirect(route("dashboard.enrollments"));
+        }
     }
 
     public function render()
