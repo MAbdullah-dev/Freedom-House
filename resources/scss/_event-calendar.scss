@@ -15,7 +15,7 @@
             padding: 14px 8px;
             .event-card-wrapper {
                 display: flex;
-                align-items: self-start;
+                align-items: flex-start;
             }
             .date-badge {
                 text-align: center;
@@ -68,12 +68,8 @@
         color: $text-color !important;
         border-radius: 10px;
 
-        /* Calendar header styling */
         .fc-toolbar {
-            // background-color: $primary-color !important;
             color: $text-color !important;
-
-            /* Style for buttons or other elements inside the toolbar */
             .fc-button {
                 color: $text-color !important;
                 background-color: #fff !important;
@@ -84,26 +80,17 @@
             color: $text-color !important;
         }
 
-        /* Style for the calendar day names (header rows) */
         .fc-day-header {
-            // background-color: $primary-color-v1 !important;
-            // color: $text-color !important;
         }
 
-        /* Style for the active day (today's date) */
         .fc-day-today {
-            // background-color: $secondary-color !important;
-            // color: $text-color !important;
         }
 
-        /* Style for individual days */
         .fc-daygrid-day {
             &.fc-day-today {
-                // background-color: $secondary-color !important;
             }
         }
 
-        /* Custom style for events */
         .fc-event {
             background-color: #87ceeb !important;
             color: #fff !important;
@@ -111,11 +98,12 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            cursor: pointer;
+            .calendarEvent-details {
+            }
         }
 
-        /* Style for the day grid */
         .fc-daygrid-day {
-            /* Style for the individual cells of the day grid */
             .fc-daygrid-day-number {
                 color: $text-color !important;
             }
