@@ -62,15 +62,33 @@
             </ul>
         </nav>
         <div class="nav-btn d-flex align-items-center gap-2 mx-2">
-            <div class="nav-btn mb-4 d-flex gap-2">
+            <div class="user-login">
                 @if (Auth::check())
-                    <button wire:click="logout" class="btn btn-danger">Logout</button>
-                @else
-                    <a class="button-secondary" href="{{ route('login') }}" wire:navigate>Login</a>
-                    <a class="button-primary" href="{{ route('register') }}" wire:navigate>Register</a>
-                @endif
+                    <div class="login-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <span class="fs-5 mb-3 d-block">Name</span>
+                        <ul>
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">My Profile</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                        </ul>
+                        <hr>
+                        <ul>
+                            <li><a href="#">Setting</a></li>
+                            <li><a href="#">log out</a></li>
+                        </ul>
+                    </div>
             </div>
+        @else
+            <div class="nav-btn d-flex gap-2">
+                <a class="button-secondary" href="{{ route('login') }}" wire:navigate>Login</a>
+                <a class="button-primary" href="{{ route('register') }}" wire:navigate>Register</a>
+            </div>
+            @endif
         </div>
+    </div>
     </div>
     <div class="mobile-menu align-items-start justify-content-start d-xl-none d-flex flex-column gap-1 px-2"
         id="mobile-nav">

@@ -29,6 +29,9 @@ class RecordedLacture extends Component
     public $videoDetails = [];
     public $progressPercentage;
     public $quiz;
+    public $rating;
+    public $review;
+    public $showReviewModal = false;
 
     public function mount($courseId, $lectureId = null)
     {
