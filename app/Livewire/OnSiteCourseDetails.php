@@ -74,7 +74,7 @@ class OnSiteCourseDetails extends Component
         ]);
         Notification::create([
             'user_id' => Auth::id(),
-            'message' => 'You successfully Enrolled in the course: ' . $this->courseTitle . ' 😊.',
+            'message' => 'You successfully Enrolled in the free course: ' . $this->courseTitle . ' 😊.',
             'type' => 'purchase',
         ]);
         session()->flash('success', 'You have successfully enrolled in the free course!');

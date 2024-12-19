@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Mail\EmailVerificationMail;
+use App\Models\Notification;
 use App\Models\Role;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -49,12 +50,18 @@ class Register extends Component
             ]);
             // $role = Role::findOrFail($role_id);
 
+
             // $user->roles()->attach($role->id);
 
             $this->sendVerificationEmail($user);
             // dd(request());
             DB::commit();
             $this->alert('success', 'Registration successful! Please check your email to verify your account.');
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => '🎉 Welcome to our platform! We are thrilled to have you on board. 🚀',
+                'type' => 'general',
+            ]);
             // session()->flash('success', 'Registration successful! Please check your email to verify your account.');
             $this->resetForm();
             // return redirect()->route('login');
