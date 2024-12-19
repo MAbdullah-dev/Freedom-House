@@ -20,8 +20,21 @@
             <div class="inner row">
                 <div class="col-md-6 onsite-course-details">
                     <div class="onsite-course-pricing">
-                        <span class="onsite-price">$10.00</span>
-                        <a class="onsite-add-to-cart button-primary">Enroll NOW</a>
+                        @if ($price == 0)
+                            <span class="onsite-price">FREE</span>
+                        @else
+                            <span class="onsite-price">{{ $price }}$</span>
+                        @endif
+                        @if ($isEnrolled)
+                            <!-- Show 'Enrolled' Button -->
+                            <button type="button" class="btn btn-success">Enrolled</button>
+                        @else
+                            <!-- Show 'Enroll NOW' Button -->
+                            <button type="button" class="onsite-add-to-cart button-primary" data-bs-toggle="modal"
+                                data-bs-target="#courseEnrollment">
+                                Enroll NOW
+                            </button>
+                        @endif
                     </div>
                     <div class="onsite-enrollment">
                         <span class="onsite-validity my-2"><i class="bi bi-calendar4"></i> Enrollment
@@ -110,21 +123,38 @@
                                             </h2>
                                             <div id="panelsStayOpen-collapse{{ $index }}"
                                                 class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}">
-                                                <div
-                                                    class="accordion-body d-flex align-items-center justify-content-between">
-                                                    <div class="class-name d-flex align-items-center">
-                                                        <i class="fa-brands fa-youtube mx-2"></i>
-                                                        <a {{-- href="{{ route('recorded.lacture', ['lecture' => $lecture->id, 'course' => $courseId]) }}">
-                                                            <span>{{ $lecture->title }}</span> --}}
-                                                            href="{{ route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
-                                                            <span>{{ $lecture->title }}</span>
-                                                        </a>
+                                                @if ($isEnrolled)
+                                                    <div
+                                                        class="accordion-body d-flex align-items-center justify-content-between">
+                                                        <div class="class-name d-flex align-items-center">
+                                                            <i class="fa-brands fa-youtube mx-2"></i>
+                                                            <a
+                                                                href="{{ route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
+                                                                <span>{{ $lecture->title }}</span>
+                                                            </a>
+                                                        </div>
+                                                        <div>
+                                                            <span class="class-duration">Duration:</span>
+                                                            {{ $lecture->duration }} <i class="fa-solid fa-unlock"></i>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <span class="class-duration">Duration:</span>
-                                                        {{ $lecture->duration }} <i class="fa-solid fa-lock"></i>
+                                                @else
+                                                    <div class="accordion-body d-flex align-items-center justify-content-between text-muted opacity-50"
+                                                        style="pointer-events: none;">
+                                                        <div class="class-name d-flex align-items-center">
+                                                            <i class="fa-brands fa-youtube mx-2"></i>
+                                                            <a href="#" onclick="return false;"
+                                                                style="text-decoration: none; color: inherit;">
+                                                                <span>{{ $lecture->title }}</span>
+                                                            </a>
+                                                        </div>
+                                                        <div>
+                                                            <span class="class-duration">Duration:</span>
+                                                            {{ $lecture->duration }} <i class="fa-solid fa-lock"></i>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @endif
+
                                             </div>
                                         </div>
                                     @endforeach
@@ -164,6 +194,25 @@
                     </div>
                 </div>
             </div>
-
     </section>
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade" id="courseEnrollment" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure want to enroll in this course ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" wire:click="enrollCourse" class="onsite-add-to-cart button-primary">Enroll
+                        NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

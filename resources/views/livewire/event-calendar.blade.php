@@ -2,8 +2,8 @@
     <section class="event-calendar my-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-9" wire:ignore>
-                    <div id="calendar"></div>
+                <div class="col-lg-9">
+                    <div id="calendar" wire:ignore></div>
                 </div>
                 <div class="col-lg-3">
                     <div class="event-cards">
@@ -33,50 +33,98 @@
             </div>
         </div>
     </section>
-    <!-- eventcard Modal -->
+
+    <!-- EventCard Modal -->
     <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true"
         wire:ignore.self>
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="event-modal-title">{{ $selectedEvent['title'] ?? 'Event Details' }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Start Date:</strong>
-                        <span>{{ \Carbon\Carbon::parse($selectedEvent['start_date'] ?? '')->toFormattedDateString() ?: 'N/A' }}</span>
-                    </p>
-                    <p><strong>End Date:</strong>
-                        <span>{{ \Carbon\Carbon::parse($selectedEvent['end_date'] ?? '')->toFormattedDateString() ?: 'N/A' }}</span>
-                    </p>
-                    <p><strong>Spots Left:</strong> <span>{{ $selectedEvent['capacity'] ?? 'N/A' }}</span></p>
-                    <p><strong>Description:</strong>
-                        <span>{{ $selectedEvent['description'] ?? 'No description available' }}</span>
-                    </p>
+                    <div class="event-details">
+                        <p><strong>Description:</strong>
+                            <span>{{ $selectedEvent['description'] ?? 'No description available' }}</span>
+                        </p>
+                        <p><strong>Spots Left:</strong> <span>{{ $selectedEvent['capacity'] ?? 'N/A' }}</span></p>
+                        <p><strong>Booking Start Date:</strong>
+                            <span>{{ \Carbon\Carbon::parse($selectedEvent['booking_start_date'] ?? '')->toFormattedDateString() ?: 'N/A' }}</span>
+                        </p>
+                        <p><strong>Booking End Date:</strong>
+                            <span>{{ \Carbon\Carbon::parse($selectedEvent['booking_end_date'] ?? '')->toFormattedDateString() ?: 'N/A' }}</span>
+                        </p>
+                        <p><strong>Class Date:</strong>
+                            <span>{{ isset($selectedEvent['class_date']) ? \Carbon\Carbon::parse($selectedEvent['class_date'])->toFormattedDateString() : 'N/A' }}</span>
+                        </p>
+                        <p><strong>Class Time:</strong>
+                            <span>
+                                {{ isset($selectedEvent['class_time']) && $selectedEvent['class_time']
+                                    ? \Carbon\Carbon::createFromFormat('H:i:s', $selectedEvent['class_time'])->format('h:i A')
+                                    : 'N/A' }}
+                            </span>
+                        </p>
+                        @if (isset($selectedEvent['is_paid']) && $selectedEvent['is_paid'] == 'paid')
+                            <p><strong>Price:</strong>
+                                <span>
+                                    {{ isset($selectedEvent['price']) ? number_format($selectedEvent['price'], 2) : 'N/A' }}
+                                </span>
+                            </p>
+                        @endif
+
+                        <p><strong>Created By:</strong>
+                            <span>
+                                {{ $selectedEvent['users']['first_name'] ?? 'N/A' }}
+                                {{ $selectedEvent['users']['last_name'] ?? '' }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    @if (isset($selectedEvent['users']) && $selectedEvent['users']['id'] == auth()->user()->id)
+                        <button type="button" class="btn btn-success" disabled>Enroll Now</button>
+                    @else
+                        <button type="button" class="btn btn-success" wire:click="enroll">Enroll Now</button>
+                    @endif
+
                 </div>
             </div>
         </div>
     </div>
-    {{-- <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
-    </button>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+
+    <!-- Calendar Event Modal -->
+    <div class="modal fade" id="calendarEventModal" tabindex="-1" aria-labelledby="calendarEventModalLabel"
+        aria-hidden="true" wire:ignore.self>
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="calendarEventModalLabel">Event Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div class="event-details">
+                        <p><strong>Description:</strong> <span class="description">No description available</span></p>
+                        <p><strong>Spots Left:</strong> <span class="spotsLeft">N/A</span></p>
+                        <p><strong>Class will be on:</strong> <span class="date">N/A</span></p>
+                        <p><strong>Class Time:</strong> <span class="class_time">N/A</span></p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
+
+
+
 </div>
+@push('js')
+    <script>
+        window.addEventListener('close-modal', event => {
+            $('#eventModal').modal('hide');
+        });
+    </script>
+@endpush

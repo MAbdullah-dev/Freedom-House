@@ -19,22 +19,31 @@
                     <div class="swiper-button-next position-relative"></div>
                 </div>
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
-                                alt="...">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Recovery-Oriented System of Care</h5>
-                                <p class="card-text my-3">A recovery-oriented system of care is a network of clinical
-                                    and nonclinical services and supports that sustain long-term, community-based
-                                    substance use recovery. While co…</p>
-                                <div class="card-btn">
-                                    <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
+                    @foreach ($courses as $course)
+                        <div class="swiper-slide">
+                            <div class="card shadow">
+                                <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
+                                    alt="...">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ $course->title }}</h5>
+                                    <p class="card-text my-3">{{ $course->description }}</p>
+                                    <div class="card-btn">
+                                        @if ($course->course_type == 'recorded')
+                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
+                                                href="{{ route('onsite.course.details', $course->id) }}">Learn
+                                                more...</a>
+                                        @else
+                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
+                                                href="{{ route('course.details', $course->id) }}">Learn
+                                                more...</a>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
+                    @endforeach
+
+                    {{-- <div class="swiper-slide">
                         <div class="card shadow">
                             <img src="{{ asset('assets/images/featured-card-2.png') }}" class="card-img-top"
                                 alt="...">
@@ -49,8 +58,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
+                    </div> --}}
+                    {{-- <div class="swiper-slide">
                         <div class="card shadow">
                             <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top"
                                 alt="...">
@@ -64,8 +73,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
+                    </div> --}}
+                    {{-- <div class="swiper-slide">
                         <div class="card shadow">
                             <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top"
                                 alt="...">
@@ -79,7 +88,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

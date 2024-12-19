@@ -46,18 +46,20 @@
             </div>
 
             <div class="card-container">
-                <div class="card">
-                    <img src="{{ asset('assets/images/Rectangle 5524.png') }}" alt=""
-                        class="card-img-top img-fluid">
-                    <div class="card-body text-center">
-                        <h5>Autumn Green</h5>
-                        <span>Behavioral Health Trainer</span>
-                        <p>Autumn has worked as a mental health clinician for over 3 years. She began her career within
-                            mental health 15 years ago.</p>
-                        <a href="#" class="">Show More</a>
+                @foreach ($tutors as $tutor)
+                    <div class="card">
+                        <img src="{{ asset('assets/images/Rectangle 5524.png') }}" alt=""
+                            class="card-img-top img-fluid">
+                        <div class="card-body text-center">
+                            <h5>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</h5>
+                            <span>{{ $tutor->specialization }}</span>
+                            <p>{{ $tutor->user->bio }}</p>
+                            <a href="{{ route('tutor.profile', $tutor->user_id) }}" class="" wire:navigate>Show
+                                More</a>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
+                @endforeach
+                {{-- <div class="card">
                     <img src="{{ asset('assets/images/image (1).png') }}" alt="" class="card-img-top img-fluid">
                     <div class="card-body text-center">
                         <h5>Autumn Green</h5>
@@ -96,7 +98,7 @@
                             mental health 15 years ago.</p>
                         <a href="#" class="">Show More</a>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>

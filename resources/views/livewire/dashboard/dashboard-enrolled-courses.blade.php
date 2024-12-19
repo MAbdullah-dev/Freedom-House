@@ -5,19 +5,19 @@
         <li class="nav-item">
             <a class="nav-link active" id="enrolled-tab" data-bs-toggle="tab" href="#enrolled" role="tab"
                 aria-controls="enrolled" aria-selected="true">
-                Enrolled Courses (2)
+                Enrolled Courses ({{ count($enrolledCourses) }})
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="active-tab" data-bs-toggle="tab" href="#active" role="tab"
                 aria-controls="active" aria-selected="false">
-                Active Courses (2)
+                Active Courses ({{ count($activeCourses) }})
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="completed-tab" data-bs-toggle="tab" href="#completed" role="tab"
                 aria-controls="completed" aria-selected="false">
-                Completed Courses (2)
+                Completed Courses ({{ count($completedCourses) }})
             </a>
         </li>
     </ul>
@@ -27,76 +27,92 @@
         <!-- Enrolled Courses Tab -->
         <div class="tab-pane fade show active" id="enrolled" role="tabpanel" aria-labelledby="enrolled-tab">
             <div class="enrolled-cards d-flex flex-wrap gap-4">
-                <!-- Card 1 -->
-                <div class="card shadow">
-                    <div class="card-img-top">
-                        <img src="{{ asset('assets/images/featured-card-1.png') }}" alt="Course 1">
-                    </div>
-                    <div class="card-body">
-                        <div class="tutor-ratings d-flex align-items-center gap-1">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
+                @foreach ($enrolledCourses as $course)
+                    <div class="card shadow">
+                        <div class="card-img-top">
+                            <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                                alt="{{ $course['course']->title }}">
                         </div>
-                        <h5 class="card-title my-3">Documentation for Authorization</h5>
-                        <div class="progress-info d-flex justify-content-between">
-                            <p>0/0</p>
-                            <p>0% Complete</p>
-                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title my-3">{{ $course['course']->title }}</h5>
+                            <p>{{ $course['course']->description }}</p>
 
-                        <!-- Progress Bar -->
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="text-center">
-                            <a href="#" class="button-primary mt-3">Start Learning</a>
-                        </div>
-                    </div>
-                </div>
+                            <!-- Progress Bar with percentage inside -->
+                            <p class="d-flex justify-content-end">Compelete {{ $course['progress'] }}%</p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ $course['progress'] }}%"
+                                    aria-valuenow="{{ $course['progress'] }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{-- {{ $course['progress'] }}% --}}
+                                </div>
+                            </div>
 
-                <!-- Card 2 -->
-                <div class="card shadow">
-                    <div class="card-img-top">
-                        <img src="{{ asset('assets/images/featured-card-1.png') }}" alt="Course 1">
-                    </div>
-                    <div class="card-body">
-                        <div class="tutor-ratings d-flex align-items-center gap-1">
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <h5 class="card-title my-3">Documentation for Authorization</h5>
-                        <div class="progress-info d-flex justify-content-between">
-                            <p>0/0</p>
-                            <p>0% Complete</p>
-                        </div>
-
-                        <!-- Progress Bar -->
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="text-center">
-                            <a href="#" class="button-primary mt-3">Start Learning</a>
+                            <div class="text-center">
+                                <a href="#" class="button-primary mt-3">Start Learning</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
 
         <!-- Active Courses Tab -->
         <div class="tab-pane fade" id="active" role="tabpanel" aria-labelledby="active-tab">
-            <p>Active courses content goes here.</p>
+            <div class="active-cards d-flex flex-wrap gap-4">
+                @foreach ($activeCourses as $course)
+                    <div class="card shadow">
+                        <div class="card-img-top">
+                            <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                                alt="{{ $course['course']->title }}">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title my-3">{{ $course['course']->title }}</h5>
+                            <p>{{ $course['course']->description }}</p>
+
+                            <!-- Progress Bar with percentage inside -->
+                            <p class="d-flex justify-content-end">Compelete {{ $course['progress'] }}%</p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ $course['progress'] }}%"
+                                    aria-valuenow="{{ $course['progress'] }}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <a href="#" class="button-primary mt-3">Continue Learning</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
 
         <!-- Completed Courses Tab -->
         <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
-            <p>Completed courses content goes here.</p>
+            <div class="completed-cards d-flex flex-wrap gap-4">
+                @foreach ($completedCourses as $course)
+                    <div class="card shadow">
+                        <div class="card-img-top">
+                            <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                                alt="{{ $course['course']->title }}">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title my-3">{{ $course['course']->title }}</h5>
+                            <p>{{ $course['course']->description }}</p>
+
+                            <!-- Progress Bar with percentage inside -->
+                            <p class="d-flex justify-content-end">Compelete {{ $course['progress'] }}%</p>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ $course['progress'] }}%"
+                                    aria-valuenow="{{ $course['progress'] }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{-- {{ $course['progress'] }}% --}}
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <a href="#" class="button-primary mt-3">View Certificate</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
 </div>

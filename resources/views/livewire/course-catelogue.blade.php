@@ -68,27 +68,13 @@
                             <i class="fas fa-search"></i>
                         </span>
                     </div>
-                    <input type="text" placeholder="Search courses by title..." wire:model.debounce.300ms="search"
+                    <input type="text" placeholder="Search courses by title..." wire:model.live="search"
                         class="form-control mb-3" />
                 </div>
                 <button class="offcanvas-btn d-block d-flex d-xl-none" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                     <i class="fa-solid fa-sliders"></i>
                 </button>
-                <!-- Sort Dropdown -->
-                {{-- <div class="dropdown ">
-                    <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
-                        id="sortOrderDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Release Date(Newest first)
-                    </button>
-                    <ul class="dropdown-menu p-3 w-100" aria-labelledby="sortOrderDropdown">
-                        <input type="text" class="form-control mb-2" id="sortOrderSearchInput" placeholder="Search sort order..." />
-                        <li><a class="dropdown-item" href="#">Course Title (a-z)</a></li>
-                        <li><a class="dropdown-item" href="#">Course Title (z-a)</a></li>
-                        <li><a class="dropdown-item" href="#">Date (Newest)</a></li>
-                        <li><a class="dropdown-item" href="#">Date (Oldest)</a></li>
-                    </ul>
-                </div> --}}
             </div>
 
             <!-- Offcanvas component -->
@@ -144,7 +130,7 @@
                                     <label for="category-{{ $category->id }}">{{ $category->category_name }}</label>
                                 </li>
                             @endforeach
-                            @dump($selectedCategories)
+                            {{-- @dump($selectedCategories) --}}
                         </ul>
                         <button class="btn filter-btn" wire:click="clearFilters">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters

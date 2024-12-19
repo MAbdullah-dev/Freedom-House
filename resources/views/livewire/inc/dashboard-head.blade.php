@@ -21,7 +21,8 @@
                     $isTutorVerified = auth()->user()->tutor->is_verified ?? null;
                 @endphp
 
-                @if (in_array(2, $roleIds))
+                {{-- @if (in_array(2, $roleIds)) --}}
+                @if (Auth::user()->role_id == 2)
                     @if ($isTutorVerified)
                         <button type="button" class="button-secondary"
                             onclick="location.href='{{ route('dashboard.create.course') }}'">
@@ -30,7 +31,7 @@
                     @else
                         <p class="text-danger mt-2">Your request to become a tutor is pending.</p>
                     @endif
-                @elseif (in_array(3, $roleIds))
+                @elseif (Auth::user()->role_id == 3)
                     <button type="button" class="button-secondary" data-bs-toggle="modal"
                         data-bs-target="#instructorModal">
                         Become an Instructor

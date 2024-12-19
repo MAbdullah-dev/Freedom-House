@@ -37,4 +37,8 @@ class Events extends Model
     {
         return $this->hasMany(Lecture::class);
     }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

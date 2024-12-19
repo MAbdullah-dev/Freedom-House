@@ -41,59 +41,67 @@ use App\Livewire\Quizzes\QuizView;
 use App\Livewire\RecordedLacture;
 use App\Models\Lecture;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckRole;
 
-
+//public routes
 Route::get('/', LivewireHome::class)->name('home');
-
 Route::get('/register', Register::class)->name('register');
 Route::get('/verify-email/{token}', [EmailVerificationController::class, 'verify'])->name('verify.email');
 Route::get('/login', Login::class)->name('login');
-
-
 Route::get('/course/catalogue', CourseCatelogue::class)->name('course.catalogue');
 Route::get('/about-us', AboutUs::class)->name('about-us');
 Route::get('/tutor/profile/{id?}', TutorPrfile::class)->name('tutor.profile');
 Route::get('/course/details/{id?}', CourseDetails::class)->name('course.details');
 Route::get('/on-site/course/details/{id?}', OnSiteCourseDetails::class)->name('onsite.course.details');
 Route::get('/calendar', EventCalendar::class)->name('calendar');
-// dashboard routes
-Route::get('/dashboard', Dashboard::class)->name('dashboard');
-Route::get('dashboard/help', HelpRequest::class)->name('dashboard.help');
-Route::get('/dashboard/enrollments', ViewEnrollments::class)->name('dashboard.enrollments');
-Route::get('/dashboard/profile', DashboardProfile::class)->name('dashboard.profile');
-Route::get('/dashboard/wishlist', DashboardWishlist::class)->name('dashboard.wishlist');
-Route::get('/dashboard/enrolled-courses', DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
-Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
-Route::get('/dashboard/settings', DashboardSettings::class)->name('dashboard.settings');
-Route::get('/recorded/lacture/{courseId}/{lectureId}', RecordedLacture::class)->name('recorded.lacture');
-
-Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses');
-Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
-Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
-Route::get('/dashboard/scehedule-classes', ScheduleClasses::class)->name('dashboard.scehedule-classes');
-Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
-Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.course.details');
-Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
-Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
-Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
-Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');
-Route::get('/dashboard/lactures', DashboardLecture::class)->name('dashboard.lactures');
-
-
-//quiz
-Route::get('/quizzes/create/{lectureId}', QuizCreate::class)->name('quizzes.create');
-Route::get('/quiz/{quizId}', QuizView::class)->name('quiz.take');
-
-
-Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');
-
-// stripe
-Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
-Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
-Route::get('/auth/microsoft/callback', [MicrosoftAuthController::class, 'callback'])->name('microsoft.callback');
-Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicrosoft'])->name('microsoft.redirect');
-
 // password reset
 Route::post('password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
 Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
-Route::get('dashboard/view/lectures/{courseId}', ViewLectures::class)->name('dashboard.view.lectures');
+//microsoft
+Route::get('/auth/microsoft/callback', [MicrosoftAuthController::class, 'callback'])->name('microsoft.callback');
+Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicrosoft'])->name('microsoft.redirect');
+
+
+
+Route::middleware(['checkrole:1'])->group(
+    function () {
+
+        Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');
+        Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');
+        Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
+        Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
+        Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
+    }
+);
+
+Route::middleware('auth')->group(
+    function () {
+        // stripe
+        Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+        Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+        Route::get('/quiz/{quizId}', QuizView::class)->name('quiz.take');
+        Route::get('/recorded/lacture/{courseId}/{lectureId}', RecordedLacture::class)->name('recorded.lacture');
+        // dashboard routes
+        Route::get('/dashboard', Dashboard::class)->name('dashboard');
+        Route::get('dashboard/help', HelpRequest::class)->name('dashboard.help');
+        Route::get('/dashboard/enrollments', ViewEnrollments::class)->name('dashboard.enrollments');
+        Route::get('/dashboard/profile', DashboardProfile::class)->name('dashboard.profile');
+        Route::get('/dashboard/wishlist', DashboardWishlist::class)->name('dashboard.wishlist');
+        Route::get('/dashboard/enrolled-courses', DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
+        Route::get('/dashboard/settings', DashboardSettings::class)->name('dashboard.settings');
+    }
+);
+Route::middleware(['checkrole:1,2'])->group(
+    function () {
+        //quiz
+        Route::get('/quizzes/create/{lectureId}', QuizCreate::class)->name('quizzes.create');
+        Route::get('dashboard/view/lectures/{courseId}', ViewLectures::class)->name('dashboard.view.lectures');
+        Route::get('/dashboard/lectures', DashboardLecture::class)->name('dashboard.lectures');
+        Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.course.details');
+        Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses');
+        Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
+        Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
+        Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
+        Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
+    }
+);

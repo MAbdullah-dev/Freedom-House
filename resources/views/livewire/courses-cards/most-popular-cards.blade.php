@@ -50,7 +50,7 @@
                         @endif --}}
                         @if ($mostPopularCourse->course_type == 'recorded')
                             <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
-                                href="{{ route('onsite.course.details', $mostPopularCourse->id) }}">Enroll Now...</a>
+                                href="{{ route('onsite.course.details', $mostPopularCourse->id) }}">More Details...</a>
                         @else
                             <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
                                 href="{{ route('course.details', $mostPopularCourse->id) }}">More Details...</a>

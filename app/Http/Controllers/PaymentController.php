@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\CalendarEvent;
 use App\Models\Classe;
+use App\Models\Course;
+use App\Models\Event;
+use App\Models\Events;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,27 +16,94 @@ class PaymentController extends Controller
 {
     public function success(Request $request)
     {
-        $classId = $request->query('class_id');
+        $userId = Auth::id();
         $amount = session('stripe_payment_amount'); // Retrieve the session value
-        $courseId = $request->query('course_id');
-        $booking = Booking::create([
-            'class_id' => $classId,
-            'user_id' => Auth::id(),
-            'payment_status' => 'paid',
-            'order_number' => uniqid('PAID_'),
-        ]);
+        $sessionId = $request->query('session_id');
 
-        Payment::create([
-            'amount' => $amount,
-            'booking_id' => $booking->id,
-            'payment_method' => 'stripe',
-            'transaction_id' => $request->query('session_id'),
-        ]);
-        Classe::where('id', $classId)->update([
-            'capacity' => Classe::where('id', $classId)->value('capacity') - 1
-        ]);
+        $classId = $request->query('class_id'); // class payments
+        $courseId = $request->query('course_id'); // course payments
+        $eventId = $request->query('event_id'); // event payments
 
-        return redirect()->route("course.details", $courseId)->with('success', 'Payment successful and enrollment completed!');
+        if ($courseId) {
+            // Handle Course Enrollment
+            $booking = Booking::create([
+                'course_id' => $courseId,
+                'user_id' => $userId,
+                'class_id' => null,
+                'payment_status' => 'paid',
+                'order_number' => uniqid('PAID_COURSE_'),
+            ]);
+
+            Payment::create([
+                'amount' => $amount,
+                'booking_id' => $booking->id,
+                'payment_method' => 'stripe',
+                'transaction_id' => $sessionId,
+            ]);
+
+            // Optionally reduce available slots in the course if needed
+            // Course::where('id', $courseId)->decrement('capacity');
+
+            return redirect()->route("onsite.course.details", $courseId)
+                ->with('success', 'Payment successful! You are enrolled in the course.');
+        } elseif ($classId) {
+            // Handle Class Enrollment
+            $booking = Booking::create([
+                'class_id' => $classId,
+                'course_id' => null,
+                'user_id' => $userId,
+                'payment_status' => 'paid',
+                'order_number' => uniqid('PAID_CLASS_'),
+            ]);
+
+            Payment::create([
+                'amount' => $amount,
+                'booking_id' => $booking->id,
+                'payment_method' => 'stripe',
+                'transaction_id' => $sessionId,
+            ]);
+
+            // Reduce class capacity
+            Classe::where('id', $classId)->decrement('capacity');
+
+            CalendarEvent::create([
+                'user_id' => $userId,
+                'class_id' => $classId,
+            ]);
+
+            return redirect()->route("class.details", $classId)
+                ->with('success', 'Payment successful! You are enrolled in the class.');
+        } elseif ($eventId) {
+            // Handle Event Enrollment
+            $booking = Booking::create([
+                'event_id' => $eventId,
+                'user_id' => $userId,
+                'payment_status' => 'paid',
+                'order_number' => uniqid('PAID_EVENT_'),
+            ]);
+
+            Payment::create([
+                'amount' => $amount,
+                'booking_id' => $booking->id,
+                'payment_method' => 'stripe',
+                'transaction_id' => $sessionId,
+            ]);
+
+            // Optionally reduce available slots in the event if needed
+            Events::where('id', $eventId)->decrement('capacity');
+
+            CalendarEvent::create([
+                'user_id' => $userId,
+                'event_id' => $eventId,
+            ]);
+
+            return redirect()->route("calendar")
+                ->with('success', 'Payment successful! You are enrolled in the event.');
+        }
+
+        // Default case - something went wrong
+        return redirect()->route('dashboard')
+            ->with('error', 'Payment failed. Please try again.');
     }
 
     public function cancel()
