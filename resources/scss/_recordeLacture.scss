@@ -3,7 +3,7 @@
         ul {
             li {
                 i {
-                    color: #FF7450;
+                    color: #ff7450;
                 }
             }
         }
@@ -16,13 +16,13 @@
         }
 
         .video-player {
-            color: #564FFD;
+            color: #564ffd;
         }
     }
 
     .lacture {
         .iframe-container {
-            width: 70%;
+            width: 100%;
 
             iframe {
                 border-radius: 10px;
@@ -30,77 +30,76 @@
                 max-width: 100%;
                 width: 100%;
             }
+        }
 
-            ul {
-                li {
-                    span {
-                        font-size: 16px;
-                        font-weight: 500;
+        ul {
+            li {
+                span {
+                    font-size: 16px;
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .course-details-tabs {
+            .nav-tabs {
+                border-top: 1px solid #ced4da;
+
+                .nav-link {
+                    border: none !important;
+                    color: #666;
+
+                    &.active {
+                        border: none !important;
+                        border-bottom: 1.6px solid #ff6636 !important;
+                        background-color: transparent;
+                        color: #ff6636;
                     }
                 }
             }
 
-            .course-details-tabs {
-                .nav-tabs {
-                    border-top: 1px solid #ced4da;
-
-                    .nav-link {
-                        border: none !important;
-                        color: #666;
-
-                        &.active {
-                            border: none !important;
-                            border-bottom: 1.6px solid #ff6636 !important;
-                            background-color: transparent;
-                            color: #ff6636;
-                        }
+            #comments {
+                .comment-avatar {
+                    img {
+                        height: 50px;
+                        width: 50px;
+                        border-radius: 50%;
                     }
                 }
 
-                #comments {
-                    .comment-avatar {
-                        img {
-                            height: 50px;
-                            width: 50px;
-                            border-radius: 50%;
-                        }
+                .comment-textarea {
+                    flex: 1;
+                    position: relative;
+
+                    textarea {
+                        border: 1px solid #666;
                     }
 
-                    .comment-textarea {
-                        flex: 1;
-                        position: relative;
-
-                        textarea {
-                            border: 1px solid #666;
-                        }
-
-                        &::before {
-                            content: "";
-                            display: block;
-                            height: 9px;
-                            width: 10px;
-                            background-color: #fff;
-                            border: 1px solid #666;
-                            position: absolute;
-                            left: -3px;
-                            top: 18px;
-                            clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
-                            transform: rotate(45deg);
-                            border-radius: 0 0 0 3px;
-                        }
+                    &::before {
+                        content: "";
+                        display: block;
+                        height: 9px;
+                        width: 10px;
+                        background-color: #fff;
+                        border: 1px solid #666;
+                        position: absolute;
+                        left: -3px;
+                        top: 18px;
+                        clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+                        transform: rotate(45deg);
+                        border-radius: 0 0 0 3px;
                     }
+                }
 
-                    .button-primary {
-                        float: right;
-                    }
+                .button-primary {
+                    float: right;
                 }
             }
         }
 
         .lactures-detail {
-            width: 30%;
+            // width: 30%;
             max-width: 100%;
-
 
             progress {
                 width: 100%;
@@ -140,7 +139,7 @@
                     .accordion-button {
                         &:not(.collapsed) {
                             span {
-                                color: #FF6636 !important;
+                                color: #ff6636 !important;
                             }
                         }
                     }
@@ -151,13 +150,12 @@
                         }
 
                         &:hover {
-                            background-color: #FFEEE8 !important;
+                            background-color: #ffeee8 !important;
 
                             i {
-                                color: #FF6636 !important;
+                                color: #ff6636 !important;
                             }
                         }
-
                     }
 
                     input[type="radio"] {
@@ -173,13 +171,13 @@
 
                         li {
                             i {
-                                color: #FF7450;
+                                color: #ff7450;
                             }
                         }
                     }
 
                     .video-player {
-                        color: #564FFD;
+                        color: #564ffd;
                     }
                 }
             }

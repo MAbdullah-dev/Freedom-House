@@ -24,6 +24,11 @@ footer {
 
     .certificates {
         .certificate {
+            @media (max-width: 992px) {
+                max-width: 60%;
+                font-size: 16px;
+            }
+
             img {
                 width: 60px;
                 height: 60px;
@@ -32,9 +37,8 @@ footer {
         }
 
         p {
-            font-size: 12px;
+            font-size: 14px;
             color: #000;
-            max-width: 242px;
         }
     }
 
@@ -48,7 +52,7 @@ footer {
         .nav.flex-column {
             margin-top: 25px;
             li {
-                font-size: 14px;
+                font-size: 16px;
                 color: #333;
 
                 a {

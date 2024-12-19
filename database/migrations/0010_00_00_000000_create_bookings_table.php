@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
             $table->string('order_number')->unique();
-            $table->foreignId('class_id')->nullable()->constrained('classes')->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignId('class_id')->nullable()->constrained('classes')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('event_id')->nullable()->constrained('events')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->foreignId('course_id')->nullable()->constrained('courses')->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();

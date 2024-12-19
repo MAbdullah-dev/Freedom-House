@@ -16,15 +16,16 @@ class Events extends Model
         'title',
         'description',
         'capacity',
-        'event_type',
+        'class_type',
         'teams_link',
         'onsite_address',
-        'payment_status',
+        'recorded_video_url',
+        'is_paid',
         'price',
+        'class_date',
+        'class_time',
         'booking_start_date',
-        'booking_end_date',
-        'event_date',
-        'event_time',
+        'booking_end_date'
     ];
 
     public function bookings()
@@ -35,5 +36,9 @@ class Events extends Model
     public function recordedLectures()
     {
         return $this->hasMany(Lecture::class);
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

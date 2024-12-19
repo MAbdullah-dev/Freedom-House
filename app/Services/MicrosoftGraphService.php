@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Classe;
 use App\Models\Events;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -45,13 +46,13 @@ class MicrosoftGraphService
     public function createCalendarEventWithTeamsMeeting(Classe|Events $model, array $attendees)
     {
         try {
-            $accessToken = session('access_token');
+            $accessToken = $this->refreshAccessToken(Auth::user());
 
             $eventData = [
                 'subject' => $model->title,
                 'body' => [
                     'contentType' => 'HTML',
-                    'content' => $class->description ?? 'No description provided.',
+                    'content' => $model->description ?? 'No description provided.',
                 ],
                 'start' => [
                     'dateTime' => $model->class_date . 'T' . $model->class_time,
@@ -71,9 +72,9 @@ class MicrosoftGraphService
             ];
 
             $response = Http::withToken($accessToken)->post('https://graph.microsoft.com/v1.0/me/events', $eventData);
-
+            // dd($response);
             if ($response->failed()) {
-                throw new \Exception('Failed to create calendar event with Teams meeting.');
+                dd($response->body());
             }
 
 
@@ -107,13 +108,13 @@ class MicrosoftGraphService
     public function createCalendarEvent(Classe|Events $model)
     {
         try {
-            $accessToken = session('access_token');
+            $accessToken = $this->refreshAccessToken(Auth::user());
 
             $eventData = [
                 'subject' => $model->title,
                 'body' => [
                     'contentType' => 'HTML',
-                    'content' => $class->description ?? 'No description provided.',
+                    'content' => $model->description ?? 'No description provided.',
                 ],
                 'start' => [
                     'dateTime' => $model->class_date . 'T' . $model->class_time,
@@ -129,9 +130,10 @@ class MicrosoftGraphService
             ];
 
             $response = Http::withToken($accessToken)->post('https://graph.microsoft.com/v1.0/me/events', $eventData);
+            // dd($response);
 
             if ($response->failed()) {
-                throw new \Exception('Failed to create calendar event.');
+                dd($response->body());
             }
 
             return true;

@@ -43,7 +43,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div class="text-end mt-2 mb-4">
-                            <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-link forgot-btn" data-bs-toggle="modal"
                                 data-bs-target="#forgotPasswordModal">
                                 Forgot Password?
                             </button>
@@ -53,7 +53,7 @@
                 <div class="row">
                     <div class="col d-flex flex-column py-3 gap-3">
                         <button type="submit" class="button-primary">Login</button>
-                        <a href='{{ route('microsoft.redirect') }}' type="button" class="button-secondary">
+                        <a href='{{ route('microsoft.redirect') }}' type="button" class="button-secondary text-center">
                             <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
                             <span class="ms-2">Continue with Microsoft</span>
                         </a>

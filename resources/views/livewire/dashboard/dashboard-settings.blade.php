@@ -23,60 +23,63 @@
 
         <div id="profile" class="tab-pane fade show active" role="tabpanel" aria-labelledby="profile-tab">
             {{-- Cover Photo Section --}}
-            <div class="cover-photo-wrapper position-relative">
-                @if ($coverPhoto)
-                    <img src="{{ $coverPhoto->temporaryUrl() }}" class="cover-photo" alt="Cover Photo">
-                @elseif ($user->cover_photo)
-                    <img src="{{ asset('storage/' . $user->cover_photo) }}" class="cover-photo" alt="Cover Photo">
-                @else
-                    <img src="{{ asset('assets/images/dummy-cover-photo.jpg') }}" class="cover-photo" alt="Cover Photo">
-                @endif
-                <button type="button" wire:click="deleteCoverPhoto" class="btn btn-danger btn-sm position-absolute"
-                    style="top: 10px; right: 10px;">
-                    <i class="fas fa-trash"></i>
-                </button>
-                <label for="coverPhotoUpload" class="btn btn-success btn-sm position-absolute"
-                    style="bottom: 10px; right: 10px;">
-                    <i class="fas fa-upload"></i> Update Cover Photo
-                </label>
-                <input type="file" id="coverPhotoUpload" wire:model="coverPhoto" class="file-input d-none"
-                    accept="image/*">
-            </div>
-
-            <!-- Profile Photo Section -->
-            <div>
-                <div class="profile-photo-wrapper d-inline-block">
-                    @if ($profilePhoto)
-                        <img src="{{ $profilePhoto->temporaryUrl() }}" class="profile-photo rounded-circle"
-                            alt="Profile Photo">
-                    @elseif ($user->pfp)
-                        <img src="{{ asset('storage/' . $user->pfp) }}" class="profile-photo rounded-circle"
-                            alt="Profile Photo">
+            <div class="wrapper position-relative">
+                <div class="cover-photo-wrapper">
+                    @if ($coverPhoto)
+                        <img src="{{ $coverPhoto->temporaryUrl() }}" class="cover-photo" alt="Cover Photo">
+                    @elseif ($user->cover_photo)
+                        <img src="{{ asset('storage/' . $user->cover_photo) }}" class="cover-photo" alt="Cover Photo">
                     @else
-                        <img src="{{ asset('assets/images/dummy-profile-photo.png') }}"
-                            class="profile-photo rounded-circle" alt="Profile Photo">
+                        <img src="{{ asset('assets/images/dummy-cover-photo.jpg') }}" class="cover-photo"
+                            alt="Cover Photo">
                     @endif
-                    <!-- Camera Button with Dropdown -->
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-light btn-circle" id="profileDropdown" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fas fa-camera"></i>
+                    <button type="button" wire:click="deleteCoverPhoto" class="btn btn-danger btn-sm position-absolute"
+                        style="top: 10px; right: 10px;">
+                        <i class="fas fa-trash"></i>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li>
-                            <label for="profilePhotoUpload" class="dropdown-item">
-                                <i class="fas fa-upload"></i> Upload Photo
-                            </label>
-                            <input type="file" id="profilePhotoUpload" wire:model="profilePhoto"
-                                class="file-input d-none" accept="image/*">
-                        </li>
-                        <li>
-                            <button type="button" wire:click="deleteProfilePhoto" class="dropdown-item text-danger">
-                                <i class="fas fa-trash"></i> Delete Photo
-                            </button>
-                        </li>
-                    </ul>
+                    <label for="coverPhotoUpload" class="btn btn-success btn-sm position-absolute"
+                        style="bottom: 10px; right: 10px;">
+                        <i class="fas fa-upload"></i> <span class="update-label
+                        ">Update Cover
+                            Photo</span>
+                    </label>
+                    <input type="file" id="coverPhotoUpload" wire:model="coverPhoto" class="file-input d-none"
+                        accept="image/*">
+                </div>
+
+                <div class="profile-picture">
+                    <div class="profile-img">
+                        @if ($profilePhoto)
+                            <img src="{{ $profilePhoto->temporaryUrl() }}" class="profile-photo rounded-circle"
+                                alt="Profile Photo">
+                        @elseif ($user->pfp)
+                            <img src="{{ asset('storage/' . $user->pfp) }}" class="profile-photo rounded-circle"
+                                alt="Profile Photo">
+                        @else
+                            <img src="{{ asset('assets/images/dummy-profile-photo.png') }}"
+                                class="profile-photo rounded-circle" alt="Profile Photo">
+                        @endif
+                        <button class="btn btn-light btn-circle" id="profileDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li>
+                                <label for="profilePhotoUpload" class="dropdown-item">
+                                    <i class="fas fa-upload"></i> Upload Photo
+                                </label>
+                                <input type="file" id="profilePhotoUpload" wire:model="profilePhoto"
+                                    class="file-input d-none" accept="image/*">
+                            </li>
+                            <li>
+                                <button type="button" wire:click="deleteProfilePhoto"
+                                    class="dropdown-item text-danger">
+                                    <i class="fas fa-trash"></i> Delete Photo
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    {{-- </div> --}}
                 </div>
                 @error('profilePhoto')
                     <span class="text-danger">{{ $message }}</span>
@@ -84,7 +87,7 @@
             </div>
 
             <!-- Update Profile Form -->
-            <form wire:submit.prevent="updateProfile" class="mt-4">
+            <form wire:submit.prevent="updateProfile">
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="firstName">First Name</label>

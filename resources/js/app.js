@@ -3,21 +3,16 @@ import { Calendar } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-
-let calendar; // Global variable to store the calendar instance
-
-// Function to initialize or update the calendar with events and classes
+<<<<<<< HEAD
+let calendar;
 function initCalendar(events, classes) {
     const calendarEl = document.getElementById("calendar");
     if (!calendarEl) return;
-
-    // If a calendar instance already exists, update its events
     if (calendar) {
-        calendar.removeAllEvents(); // Remove all existing events
-        calendar.addEventSource(events); // Add new events (all events)
-        calendar.addEventSource(classes); // Add new classes (user's classes only)
+        calendar.removeAllEvents();
+        calendar.addEventSource(events);
+        calendar.addEventSource(classes);
     } else {
-        // Create a new calendar instance if it doesn't exist
         calendar = new Calendar(calendarEl, {
             plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
             initialView: "dayGridMonth",
@@ -26,13 +21,12 @@ function initCalendar(events, classes) {
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay",
             },
-            events: events, // Initial events
+            events: events,
             eventContent: function (arg) {
                 return {
                     html: `<div class="event-details">
                             <strong>${arg.event.title}</strong><br/>
-                            <small>${arg.event.extendedProps.description}</small><br/>
-                            <small>Created by: ${arg.event.extendedProps.created_by}</small>
+                            <small>${arg.event.extendedProps.spotsLeft} spots left</small><br/>
                         </div>`,
                 };
             },
@@ -46,42 +40,134 @@ function initCalendar(events, classes) {
                 );
             },
         });
+        calendar.render();
+=======
 
-        calendar.render(); // Render the calendar
+let calendar;
+
+function initCalendar(events = []) {
+    const calendarEl = document.getElementById("calendar");
+    if (!calendarEl) return;
+
+    if (calendar) {
+        calendar.destroy(); // Properly destroy the existing instance
+>>>>>>> 54e30ea75e34b1254788264351058c4cbe123a5a
     }
-}
 
-// Wait for Livewire to load
+    calendar = new Calendar(calendarEl, {
+        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+        initialView: "dayGridMonth",
+        headerToolbar: {
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+        },
+        events: events,
+        eventContent: function (arg) {
+            return {
+                html: `<div class="calendarEvent-details">
+                            <strong>${arg.event.title}</strong><br/>
+                            <small>${arg.event.extendedProps.spotsLeft} spots left</small><br/>
+                        </div>`,
+            };
+        },
+        eventClick: function (info) {
+            const event = info.event;
+            const eventData = {
+                title: event.title,
+                date: event.start.toISOString(),
+                description: event.extendedProps.description,
+                spotsLeft: event.extendedProps.spotsLeft,
+                class_time: event.extendedProps.class_time,
+            };
+            Livewire.dispatch("selectEvent", eventData, "calendarEvent");
+
+            window.dispatchEvent(
+                new CustomEvent("calendarEventSelected", {
+                    detail: eventData,
+                })
+            );
+        },
+    });
+
+    calendar.render();
+}
+<<<<<<< HEAD
 document.addEventListener("livewire:load", () => {
     console.log("Livewire load");
-    // Initialize the calendar with an empty events array or data from Livewire
     initCalendar([], []);
 });
-
-// Listener for eventsLoaded event dispatched by Livewire
 window.addEventListener("eventsLoaded", (event) => {
-    console.log("Events loaded:", event.detail); // Log the event data
-
+    console.log("Events loaded:", event.detail);
     if (Array.isArray(event.detail)) {
-        const events = event.detail.flat(); // Flatten the array if it's wrapped in another array
-
-        // Initialize or update the calendar with the loaded events
+        const events = event.detail.flat();
         initCalendar(events, []);
     } else {
         console.error("Invalid event detail. Expected an array of events.");
     }
 });
-
-// Listener for classesLoaded event dispatched by Livewire
 window.addEventListener("classesLoaded", (event) => {
-    console.log("Classes loaded:", event.detail); // Log the class data
-
+    console.log("Classes loaded:", event.detail);
     if (Array.isArray(event.detail)) {
-        const classes = event.detail.flat(); // Flatten the array if it's wrapped in another array
-
-        // Initialize or update the calendar with the loaded classes
+        const classes = event.detail.flat();
         initCalendar([], classes);
     } else {
         console.error("Invalid class detail. Expected an array of classes.");
+=======
+
+window.addEventListener("eventsLoaded", (event) => {
+    if (Array.isArray(event.detail)) {
+        const events = event.detail.flat();
+        initCalendar(events);
     }
+});
+
+window.addEventListener("calendarEventSelected", (event) => {
+    const selectedEvent = event.detail;
+    const classDate = new Date(selectedEvent.date);
+    const formattedClassDate = classDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+
+    let formattedClassTime = "N/A";
+    if (selectedEvent.class_time) {
+        const timeWithDate =
+            selectedEvent.date.split("T")[0] + "T" + selectedEvent.class_time;
+        const classTime = new Date(timeWithDate);
+        if (!isNaN(classTime)) {
+            formattedClassTime = classTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+        }
+>>>>>>> 54e30ea75e34b1254788264351058c4cbe123a5a
+    }
+
+    const modalTitle = document.querySelector(
+        "#calendarEventModal .modal-title"
+    );
+    const spotsLeft = document.querySelector("#calendarEventModal .spotsLeft");
+    const date = document.querySelector("#calendarEventModal .date");
+    const description = document.querySelector(
+        "#calendarEventModal .description"
+    );
+    const classTime = document.querySelector("#calendarEventModal .class_time");
+
+    modalTitle.textContent = selectedEvent.title || "Event Details";
+    spotsLeft.textContent = selectedEvent.spotsLeft || "N/A";
+    description.textContent =
+        selectedEvent.description || "No description available";
+    date.textContent = formattedClassDate || "N/A";
+    classTime.textContent = formattedClassTime || "N/A";
+
+    $("#calendarEventModal").modal("show");
+});
+
+document.addEventListener("livewire:load", () => {
+    initCalendar([]);
+    Livewire.on("updateCalendar", (events) => {
+        initCalendar(events);
+    });
 });
