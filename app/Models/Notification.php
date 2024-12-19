@@ -11,10 +11,9 @@ class Notification extends Model
 
     protected $fillable = [
         'user_id',
-        'class_id',
-        'event_type', 
         'message',
-        'read_at' 
+        'type',
+        'read_status',
     ];
 
     protected $dates = ['read_at'];

@@ -12,11 +12,13 @@
                     object-fit: cover;
                     border-radius: 50%;
                 }
+
                 span {
                     font-size: 20px;
                     font-weight: 400;
                     line-height: 32px;
                 }
+
                 b {
                     font-size: 24px;
                     font-weight: 500;
@@ -25,6 +27,7 @@
                 }
             }
         }
+
         .tutor-notification-request {
             .offcanvas-btn {
                 border: 0;
@@ -35,6 +38,8 @@
                 align-items: center;
                 justify-content: center;
                 transition: all 0.3s ease-in-out;
+                filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.621));
+
                 i {
                     font-size: 20px;
                     color: $primary-color;
@@ -48,6 +53,14 @@
                     }
                 }
             }
+
+        }
+
+    }
+
+    .notification-request {
+        .notification-item {
+            cursor: pointer !important;
         }
     }
 }

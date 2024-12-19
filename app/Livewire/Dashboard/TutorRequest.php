@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Notification;
 use App\Models\Tutor;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -29,11 +30,17 @@ class TutorRequest extends Component
         if ($tutor) {
             $tutor->update(['is_verified' => 1]);
             $this->alert('success', 'Tutor approved successfully.');
+            $tutor->user->update(['role_id' => 2]);
             // session()->flash('success', 'Tutor approved successfully.');
         } else {
             $this->alert('error', 'Tutor not found.');
             // session()->flash('error', 'Tutor not found.');
         }
+        Notification::create([
+            'user_id' => $tutor->user_id,
+            'message' => 'Congratulations ! Your tutor request has been approved 🎉.',
+            'type' => 'congratulation',
+        ]);
 
         $this->loadTutors();
     }
@@ -50,6 +57,11 @@ class TutorRequest extends Component
             $this->alert('error', 'Tutor not found.');
             // session()->flash('error', 'Tutor not found.');
         }
+        Notification::create([
+            'user_id' => $tutor->user_id,
+            'message' => 'Your tutor request has been rejected ❌. Please check your email for details.',
+            'type' => 'congratulation',
+        ]);
 
         $this->loadTutors();
     }
