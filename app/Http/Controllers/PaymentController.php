@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Classe;
 use App\Models\Course;
+use App\Models\Notification;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,9 @@ class PaymentController extends Controller
         // Check if payment is for a course or a class
         $classId = $request->query('class_id'); // For class payments
         $courseId = $request->query('course_id'); // For course payments
+
+        $courseName = Course::where('id', $courseId)->value('title');
+        // dd($courseName);
 
         if ($courseId) {
             // Handle Course Enrollment
@@ -37,7 +41,11 @@ class PaymentController extends Controller
                 'payment_method' => 'stripe',
                 'transaction_id' => $sessionId,
             ]);
-
+            Notification::create([
+                'user_id' => $userId,
+                'message' => 'You successfully purchased the course: ' . $courseName . ' 😊.',
+                'type' => 'purchase',
+            ]);
             // Optionally reduce available slots in the course if needed
             // Course::where('id', $courseId)->decrement('capacity');
 
@@ -58,6 +66,11 @@ class PaymentController extends Controller
                 'booking_id' => $booking->id,
                 'payment_method' => 'stripe',
                 'transaction_id' => $sessionId,
+            ]);
+            Notification::create([
+                'user_id' => $userId,
+                'message' => 'You successfully purchased the course: ' . $courseName . ' 😊.',
+                'type' => 'purchase',
             ]);
 
             // Reduce class capacity
