@@ -5,11 +5,16 @@
         <div class="row">
 
             <!-- Logo and Certificates Column (col-6 at 1024px and below) -->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
+            <div class="col-12">
+                <div class="mb-5">
                     <img src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
                 </div>
-                <div class="certificates mt-4 d-flex flex-column gap-2 align-items-center align-items-lg-start">
+            </div>
+            <div class="col-xl-3 col-lg-6 mb-4 mb-md-0">
+                {{-- <div>
+                    <img src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
+                </div> --}}
+                <div class="certificates mt-4 d-flex flex-column gap-3 align-items-center align-items-lg-start">
                     <div class="certificate d-flex align-items-start gap-3">
                         <img src="{{ asset('assets/svgs/certificate_logo_2.svg') }}" alt="">
                         <p>CARF accreditation represents our focus on community feedback and ongoing improvement.</p>
@@ -23,9 +28,9 @@
             </div>
 
             <!-- Contact Us Column (col-6 at 1024px and below) -->
-            <div class="col-lg-3 col-md-6 footer-body mb-4 mb-md-0">
+            <div class="col-xl-3 col-lg-6 footer-body mb-4 mb-md-0 mt-lg-0 mt-4">
                 <b>Contact Us</b>
-                <ul class="nav flex-column align-items-center align-items-lg-start">
+                <ul class="nav flex-column">
                     <li class="mb-2">Headquarters: <a href="https://freedomhousetraining.org/" class="p-0">104 New
                             Stateside Drive, Chapel Hill, NC 27516</a></li>
                     <li class="mb-2">Phone: <a href="tel:919-942-2803" class="p-0">919-942-2803</a></li>
@@ -36,7 +41,7 @@
             </div>
 
             <!-- Map Column (col-12 at 1024px and below) -->
-            <div class="col-lg-6 col-md-12 footer-map text-center text-lg-end mt-4 mt-lg-0">
+            <div class="col-xl-6 col-lg-12 footer-map mt-4 mt-xl-0">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3229.6460339106516!2d-79.06218132525402!3d35.95562801485366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89acdd21927c4031%3A0x52f75dce3e86e216!2s104%20New Stateside Dr, Chapel Hill, NC 27516!5e0!3m2!1sen!2sus!4v1701960492740!5m2!1sen!2sus"
                     width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>

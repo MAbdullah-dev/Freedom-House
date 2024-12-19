@@ -31,6 +31,11 @@
                                 box-shadow: none;
                             }
                         }
+
+                        .forgot-btn {
+                            text-decoration: none;
+                            color: $primary-color;
+                        }
                     }
                 }
                 .d-flex {
@@ -50,7 +55,7 @@
                         line-height: 24px;
                         letter-spacing: -0.015em;
                         color: $primary-color-v1;
-                        img{
+                        img {
                             display: inline-block;
                             height: 24px;
                             width: 24px;

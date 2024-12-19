@@ -19,13 +19,12 @@
                                         <div class="day py-1">{{ \Carbon\Carbon::parse($event['date'])->format('d') }}
                                         </div>
                                         <div class="event-count mt-1 text-secondary">
-                                            <i class="fas fa-user me-1"></i>{{ $event['spotsLeft'] ?? 'N/A' }}
+                                            <i class="fas fa-user me-1"></i>{{ $event->capacity . ' slots' ?? 'N/A' }}
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <h6 class="mb-1 event-title">{{ $event['title'] ?? 'N/A' }}</h6>
                                     </div>
-                                    <div class="event-description">{{ $event['description'] ?? 'No description' }}</div>
                                 </div>
                             </button>
                         @endforeach
@@ -34,25 +33,7 @@
             </div>
         </div>
     </section>
-
-    <!-- Calendar Event Modal -->
-    <div class="modal fade" id="calendarEventModal" tabindex="-1" aria-labelledby="calendarModalLabel"
-        aria-hidden="true" wire:ignore.self>
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="calendar-modal-title">Calendar Event Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Description:</strong> <span>{{ $selectedEvent['description'] ?? 'N/A' }}</span></p>
-                    <p><strong>Created By:</strong> <span>{{ $selectedEvent['created_by'] ?? 'N/A' }}</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Event Card Modal -->
+    <!-- eventcard Modal -->
     <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true"
         wire:ignore.self>
         <div class="modal-dialog">
@@ -68,11 +49,34 @@
                     <p><strong>End Date:</strong>
                         <span>{{ \Carbon\Carbon::parse($selectedEvent['end_date'] ?? '')->toFormattedDateString() ?: 'N/A' }}</span>
                     </p>
-                    <p><strong>Spots Left:</strong> <span>{{ $selectedEvent['spotsLeft'] ?? 'N/A' }}</span></p>
+                    <p><strong>Spots Left:</strong> <span>{{ $selectedEvent['capacity'] ?? 'N/A' }}</span></p>
                     <p><strong>Description:</strong>
-                        <span>{{ $selectedEvent['description'] ?? 'No description available' }}</span></p>
+                        <span>{{ $selectedEvent['description'] ?? 'No description available' }}</span>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+    {{-- <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div> --}}
 </div>
