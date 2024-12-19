@@ -83,18 +83,19 @@ class MicrosoftAuthController extends Controller
         $user = User::updateOrCreate(
             ['email' => $microsoftUser['mail'] ?? $microsoftUser['userPrincipalName']],
             [
-                'first_name' => $microsoftUser['givenName'],
-                'last_name' => $microsoftUser['surname'],
+                // 'first_name' => $microsoftUser['givenName'],
+                // 'last_name' => $microsoftUser['surname'],
                 'microsoft_id' => $microsoftUser['id'],
                 'microsoft_account' => true,
                 'password' => bcrypt(Str::random(16)),
-                'phone' => null,
+                // 'phone' => null,
                 'token_expires_at' => $tokenExpiresAt,
+                'role_id' => $role_id
             ]
         );
 
-        $role = Role::findOrFail($role_id);
-        $user->roles()->attach($role->id);
+        // $role = Role::findOrFail($role_id);
+        // $user->roles()->attach($role->id);
 
         Log::info('User created or updated from Microsoft login', ['user' => $user]);
 
