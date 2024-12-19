@@ -13,12 +13,10 @@ use Livewire\Component;
 use Stripe\Stripe;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-
-
-
 class EventCalendar extends Component
 {
     use LivewireAlert;
+
     public $modalType;
     public $events = [];
     public $classes = [];
@@ -32,49 +30,53 @@ class EventCalendar extends Component
 
     public function mount()
     {
-
         $this->stripeKey = env('STRIPE_KEY');
 
         $user = Auth::user();
 
         if ($user) {
-            $events = CalendarEvent::with(['event', 'user'])
-                ->where(function ($query) use ($user) {
-                    $query->where('user_id', $user->id)
-                        ->orWhereNotNull('event_id');
+            $events = CalendarEvent::with(['event', 'class', 'user'])
+                ->where('user_id', $user->id)
+                ->orWhere(function ($query) use ($user) {
+                    $query->whereNotNull('event_id')
+                        ->whereHas('event', function ($subQuery) use ($user) {
+                            $subQuery->where('user_id', $user->id);
+                        });
                 })
                 ->get()
                 ->map(function ($calendarEvent) {
+                    $isEvent = !is_null($calendarEvent->event_id);
+                    $source = $isEvent ? $calendarEvent->event : $calendarEvent->class;
+
                     return [
                         'id' => $calendarEvent->id,
-                        'title' => $calendarEvent->event ? $calendarEvent->event->title : $calendarEvent->class->title,
-                        'date' => Carbon::parse($calendarEvent->event ? $calendarEvent->event->class_date : $calendarEvent->class->class_date)->toIso8601String(),
-                        'start_date' => Carbon::parse($calendarEvent->event ? $calendarEvent->event->booking_start_date : $calendarEvent->class->start_date)->toIso8601String(),
-                        'end_date' => Carbon::parse($calendarEvent->event ? $calendarEvent->event->booking_end_date : $calendarEvent->class->end_date)->toIso8601String(),
-                        'description' => $calendarEvent->event ? $calendarEvent->event->description : $calendarEvent->class->description,
-                        'spotsLeft' => $calendarEvent->event ? $calendarEvent->event->capacity : $calendarEvent->class->capacity,
-                        'class_time' => $calendarEvent->event ? $calendarEvent->event->class_time : $calendarEvent->class->class_time,
-                        'type' => 'event',
+                        'title' => $source->title,
+                        'date' => Carbon::parse($source->class_date)->toIso8601String(),
+                        'start_date' => Carbon::parse($source->booking_start_date ?? $source->start_date)->toIso8601String(),
+                        'end_date' => Carbon::parse($source->booking_end_date ?? $source->end_date)->toIso8601String(),
+                        'description' => $source->description,
+                        'spotsLeft' => $source->capacity,
+                        'class_time' => $source->class_time,
+                        'type' => $isEvent ? 'event' : 'class',
                         'created_by' => optional($calendarEvent->user)->first_name,
                     ];
                 });
+
             $this->events = $events;
         } else {
             $this->events = [];
         }
 
-        $this->eventCards = Events::with('users')->get();
 
+        $this->eventCards = Events::with('users')->get();
 
         $this->dispatch('eventsLoaded', $this->events);
         $this->dispatch('eventCardsLoaded', $this->eventCards);
     }
 
-
     public function selectEvent($event, $type)
     {
         $this->selectedEvent = $event;
-        // dd($this->selectedEvent);
         $this->modalType = $type;
 
         if ($type === 'eventCard') {
@@ -86,7 +88,6 @@ class EventCalendar extends Component
         $this->selectedEventId = $event['id'];
         $this->isPaid = $event['is_paid'];
         $this->price = $event['price'];
-        // dd($this->price);
 
         $this->slots = $event['capacity'];
         $this->eventCards = Events::with('users')->get();
@@ -94,24 +95,18 @@ class EventCalendar extends Component
         Log::info('Selected event is_paid value: ' . $this->isPaid);
     }
 
-
     public function enroll()
     {
-
         Log::info("Enroll button clicked!");
-        // dd($this->isPaid);
         if ($this->isPaid == 'paid') {
             $this->redirectToStripeCheckout();
-            // dd("go to stripe booking");
         } else {
             $this->enrollFreeEvent();
-            // dd("go to free booking");
         }
     }
 
     private function enrollFreeEvent()
     {
-
         if ($this->slots <= 0) {
             $this->alert('error', 'No slot available for this event!');
             return;
@@ -124,6 +119,13 @@ class EventCalendar extends Component
             'order_number' => uniqid('FREE_'),
         ]);
 
+        CalendarEvent::create([
+            'event_id' => $this->selectedEventId,
+            'user_id' => Auth::id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         $event = Events::find($this->selectedEventId);
         if ($event && $event->capacity > 0) {
             $event->decrement('capacity');
@@ -131,7 +133,6 @@ class EventCalendar extends Component
             $this->alert('error', 'No slots available for this event!');
             return;
         }
-
 
         $this->alert('success', 'You have successfully enrolled in the free event!');
         $this->dispatch('close-modal');
@@ -148,9 +149,7 @@ class EventCalendar extends Component
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         try {
-            // @dd('gg');
-
-            $session = Session::create([
+            $session = \Stripe\Checkout\Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
@@ -173,7 +172,6 @@ class EventCalendar extends Component
             return redirect()->back();
         }
     }
-
 
     public function render()
     {

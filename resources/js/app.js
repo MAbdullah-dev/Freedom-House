@@ -6,59 +6,57 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 
 let calendar;
 
-function initCalendar(events, classes) {
+function initCalendar(events = []) {
     const calendarEl = document.getElementById("calendar");
     if (!calendarEl) return;
 
     if (calendar) {
-        calendar.removeAllEvents();
-        calendar.addEventSource(events);
-        calendar.addEventSource(classes);
-    } else {
-        calendar = new Calendar(calendarEl, {
-            plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-            initialView: "dayGridMonth",
-            headerToolbar: {
-                left: "prev,next today",
-                center: "title",
-                right: "dayGridMonth,timeGridWeek,timeGridDay",
-            },
-            events: events,
-            eventContent: function (arg) {
-                return {
-                    html: `<div class="calendarEvent-details">
+        calendar.destroy(); // Properly destroy the existing instance
+    }
+
+    calendar = new Calendar(calendarEl, {
+        plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+        initialView: "dayGridMonth",
+        headerToolbar: {
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+        },
+        events: events,
+        eventContent: function (arg) {
+            return {
+                html: `<div class="calendarEvent-details">
                             <strong>${arg.event.title}</strong><br/>
                             <small>${arg.event.extendedProps.spotsLeft} spots left</small><br/>
                         </div>`,
-                };
-            },
-            eventClick: function (info) {
-                const event = info.event;
-                const eventData = {
-                    title: event.title,
-                    date: event.start.toISOString(),
-                    description: event.extendedProps.description,
-                    spotsLeft: event.extendedProps.spotsLeft,
-                    class_time: event.extendedProps.class_time,
-                };
-                Livewire.dispatch("selectEvent", eventData, "calendarEvent");
+            };
+        },
+        eventClick: function (info) {
+            const event = info.event;
+            const eventData = {
+                title: event.title,
+                date: event.start.toISOString(),
+                description: event.extendedProps.description,
+                spotsLeft: event.extendedProps.spotsLeft,
+                class_time: event.extendedProps.class_time,
+            };
+            Livewire.dispatch("selectEvent", eventData, "calendarEvent");
 
-                window.dispatchEvent(
-                    new CustomEvent("calendarEventSelected", {
-                        detail: eventData,
-                    })
-                );
-            },
-        });
+            window.dispatchEvent(
+                new CustomEvent("calendarEventSelected", {
+                    detail: eventData,
+                })
+            );
+        },
+    });
 
-        calendar.render();
-    }
+    calendar.render();
 }
 
 window.addEventListener("eventsLoaded", (event) => {
     if (Array.isArray(event.detail)) {
         const events = event.detail.flat();
-        initCalendar(events, []);
+        initCalendar(events);
     }
 });
 
@@ -102,4 +100,11 @@ window.addEventListener("calendarEventSelected", (event) => {
     classTime.textContent = formattedClassTime || "N/A";
 
     $("#calendarEventModal").modal("show");
+});
+
+document.addEventListener("livewire:load", () => {
+    initCalendar([]);
+    Livewire.on("updateCalendar", (events) => {
+        initCalendar(events);
+    });
 });

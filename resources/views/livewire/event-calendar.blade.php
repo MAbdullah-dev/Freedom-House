@@ -2,8 +2,8 @@
     <section class="event-calendar my-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-9" wire:ignore>
-                    <div id="calendar"></div>
+                <div class="col-lg-9">
+                    <div id="calendar" wire:ignore></div>
                 </div>
                 <div class="col-lg-3">
                     <div class="event-cards">
@@ -83,7 +83,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" wire:click="enroll">Enroll Now</button>
+                    @if (isset($selectedEvent['users']) && $selectedEvent['users']['id'] == auth()->user()->id)
+                        <button type="button" class="btn btn-success" disabled>Enroll Now</button>
+                    @else
+                        <button type="button" class="btn btn-success" wire:click="enroll">Enroll Now</button>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -116,3 +121,10 @@
 
 
 </div>
+@push('js')
+    <script>
+        window.addEventListener('close-modal', event => {
+            $('#eventModal').modal('hide');
+        });
+    </script>
+@endpush
