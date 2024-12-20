@@ -1,5 +1,5 @@
-<div class="my-course px-5 w-100">
-    <h2 class="py-4">My Courses</h2>
+<div class="my-course py-5 px-4 w-100">
+    <h2 class="mb-4">My Courses</h2>
 
     <!-- Nav Tabs -->
     <ul class="nav nav-tabs" id="courseTabs" role="tablist">

@@ -2,7 +2,7 @@
     <div x-data="{ tab: 'Overview' }" class="container mt-5">
 
         <!-- Tab Navigation -->
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-tabs mb-4" role="tablist">
             <li class="nav-item">
                 <a class="nav-link" role="tab" :class="{ 'active': tab === 'Overview' }" @click="tab = 'Overview'"
                     aria-selected="tab === 'Overview'">

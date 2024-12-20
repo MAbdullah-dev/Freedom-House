@@ -1,5 +1,5 @@
 <div class="help-request px-4">
-    <section class="help-request-alert py-5 px-5 mt-3">
+    <section class="help-request-alert py-5 px-4 mt-3">
         <div class="row align-items-center justify-content-center flex-wrap">
             <div class="col-md-7">
                 <div class="help-request-content d-flex align-items-center justify-content-center gap-3">

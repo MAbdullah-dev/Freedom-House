@@ -1,5 +1,5 @@
-<div class="CourseRequest px-5">
-    <h2>Course Requests</h2>
+<div class="CourseRequest py-5 px-4">
+    <h2 class="mb-4">Course Requests</h2>
     <section class="tag-list mt-5">
         <div class="table-responsive">
             <table class="table">

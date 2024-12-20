@@ -1,5 +1,5 @@
-<div class="announcements px-4">
-    <section class="announcement-card py-3 my-3">
+<div class="announcements py-5 px-4">
+    <section class="announcement-card p-3 mb-4">
         <div class="d-flex flex-wrap align-content-center justify-content-center">
             <div class="col-md-7">
                 <ul class="d-flex align-items-center gap-3 w-100 flex-wrap">

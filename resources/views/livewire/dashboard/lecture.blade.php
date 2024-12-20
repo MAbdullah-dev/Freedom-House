@@ -1,4 +1,4 @@
-<div class="lecture_upload px-5 py-5">
+<div class="lecture_upload px-4 py-5">
     <form wire:submit.prevent="submit">
         <!-- Single Course Selection -->
         <div class="mb-3">
@@ -84,10 +84,10 @@
 
         <!-- Add and Submit Buttons -->
         <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-secondary" wire:click.prevent="addLectureBlock">
+            <button type="button" class="button-secondary" wire:click.prevent="addLectureBlock">
                 Add More Lectures
             </button>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="button-primary">
                 Submit Lectures
             </button>
         </div>

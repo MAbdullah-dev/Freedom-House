@@ -42,6 +42,7 @@ use App\Livewire\RecordedLacture;
 use App\Models\Lecture;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
+use App\Livewire\Dashboard\StudentView;
 
 //public routes
 Route::get('/', LivewireHome::class)->name('home');
@@ -103,3 +104,4 @@ Route::middleware(['checkrole:1,2'])->group(function () {
     Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
     Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
 });
+Route::get('/dashboard/student/view', StudentView::class)->name('dashboard.student.view');
