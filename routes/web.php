@@ -63,19 +63,15 @@ Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicros
 
 
 
-Route::middleware(['checkrole:1'])->group(
-    function () {
+
 
         Route::get('dashboard/tutor/Request', TutorRequest::class)->name('dashboard.tutor.request');
         Route::get('/dashboard/help/Request/Admin', HelpRequestsAdmin::class)->name('dashboard.help.admin');
         Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
         Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
         Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
-    }
-);
 
-Route::middleware('auth')->group(
-    function () {
+
         // stripe
         Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
         Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
@@ -89,10 +85,8 @@ Route::middleware('auth')->group(
         Route::get('/dashboard/wishlist', DashboardWishlist::class)->name('dashboard.wishlist');
         Route::get('/dashboard/enrolled-courses', DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
         Route::get('/dashboard/settings', DashboardSettings::class)->name('dashboard.settings');
-    }
-);
-Route::middleware(['checkrole:1,2'])->group(
-    function () {
+
+
         //quiz
         Route::get('/quizzes/create/{lectureId}', QuizCreate::class)->name('quizzes.create');
         Route::get('dashboard/view/lectures/{courseId}', ViewLectures::class)->name('dashboard.view.lectures');
@@ -103,5 +97,5 @@ Route::middleware(['checkrole:1,2'])->group(
         Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
         Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
         Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
-    }
-);
+
+

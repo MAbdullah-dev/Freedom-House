@@ -8,12 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
-<<<<<<< HEAD
-=======
 use Stripe\Stripe;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
->>>>>>> 54e30ea75e34b1254788264351058c4cbe123a5a
 class EventCalendar extends Component
 {
     use LivewireAlert;
@@ -23,42 +20,17 @@ class EventCalendar extends Component
     public $classes = [];
     public $selectedEvent;
     public $eventCards;
-<<<<<<< HEAD
-=======
     public $stripeKey;
     public $selectedEventId;
     public $isPaid;
     public $price;
     public $slots;
 
->>>>>>> 54e30ea75e34b1254788264351058c4cbe123a5a
     public function mount()
     {
         $this->stripeKey = env('STRIPE_KEY');
 
         $user = Auth::user();
-<<<<<<< HEAD
-        if ($user) {
-            $events = CalendarEvent::with(['event', 'user'])
-                ->where(function ($query) use ($user) {
-                    $query->where('user_id', $user->id)
-                        ->orWhereNotNull('event_id');
-                })
-                ->get()
-                ->map(function ($calendarEvent) {
-                    return [
-                        'id' => $calendarEvent->id,
-                        'title' => $calendarEvent->event ? $calendarEvent->event->title : $calendarEvent->class->title,
-                        'date' => Carbon::parse($calendarEvent->event ? $calendarEvent->event->class_date : $calendarEvent->class->class_date)->toIso8601String(),
-                        'start_date' => Carbon::parse($calendarEvent->event ? $calendarEvent->event->start_date : $calendarEvent->class->start_date)->toIso8601String(),
-                        'end_date' => Carbon::parse($calendarEvent->event ? $calendarEvent->event->end_date : $calendarEvent->class->end_date)->toIso8601String(),
-                        'description' => $calendarEvent->event ? $calendarEvent->event->description : $calendarEvent->class->description,
-                        'spotsLeft' => $calendarEvent->event ? $calendarEvent->event->capacity : $calendarEvent->class->capacity,
-                        'type' => 'event',
-                        'created_by' => $calendarEvent->user->username ?? 'Unknown',
-                    ];
-                });
-=======
 
         if ($user) {
             $events = CalendarEvent::with(['event', 'class', 'user'])
@@ -88,19 +60,14 @@ class EventCalendar extends Component
                     ];
                 });
 
->>>>>>> 54e30ea75e34b1254788264351058c4cbe123a5a
             $this->events = $events;
         } else {
             $this->events = [];
         }
-<<<<<<< HEAD
-        $this->eventCards = Events::all();
-=======
 
 
         $this->eventCards = Events::with('users')->get();
 
->>>>>>> 54e30ea75e34b1254788264351058c4cbe123a5a
         $this->dispatch('eventsLoaded', $this->events);
         $this->dispatch('eventCardsLoaded', $this->eventCards);
     }
@@ -108,9 +75,6 @@ class EventCalendar extends Component
     {
         $this->selectedEvent = $event;
         $this->modalType = $type;
-<<<<<<< HEAD
-        $this->dispatch('openModal');
-=======
 
         if ($type === 'eventCard') {
             $this->dispatch('eventCardSelected', $this->selectedEvent);
@@ -204,7 +168,6 @@ class EventCalendar extends Component
             session()->flash('error', 'Unable to create Stripe Checkout session: ' . $e->getMessage());
             return redirect()->back();
         }
->>>>>>> 54e30ea75e34b1254788264351058c4cbe123a5a
     }
     public function render()
     {

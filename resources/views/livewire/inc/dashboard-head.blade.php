@@ -1,4 +1,4 @@
-<div class="dashboard-head">
+<div class="dashboard-head mt-5">
     <div class="container">
         <div class="inner d-flex align-items-center justify-content-between tutor-data flex-wrap pb-2">
             <div class="tutor-info">
