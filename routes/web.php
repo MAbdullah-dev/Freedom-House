@@ -86,16 +86,15 @@ Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicros
         Route::get('/dashboard/enrolled-courses', DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
         Route::get('/dashboard/settings', DashboardSettings::class)->name('dashboard.settings');
 
-
-        //quiz
-        Route::get('/quizzes/create/{lectureId}', QuizCreate::class)->name('quizzes.create');
-        Route::get('dashboard/view/lectures/{courseId}', ViewLectures::class)->name('dashboard.view.lectures');
-        Route::get('/dashboard/lectures', DashboardLecture::class)->name('dashboard.lectures');
-        Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.course.details');
-        Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses');
-        Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
-        Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
-        Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
-        Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
-
-
+Route::middleware(['checkrole:1,2'])->group(function () {
+    //quiz
+    Route::get('/quizzes/create/{lectureId}', QuizCreate::class)->name('quizzes.create');
+    Route::get('dashboard/view/lectures/{courseId}', ViewLectures::class)->name('dashboard.view.lectures');
+    Route::get('/dashboard/lectures', DashboardLecture::class)->name('dashboard.lectures');
+    Route::get('/dashboard/course/details', CourseDetail::class)->name('dashboard.course.details');
+    Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses');
+    Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
+    Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
+    Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
+    Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
+});

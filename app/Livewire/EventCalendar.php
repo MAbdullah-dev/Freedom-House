@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Livewire;
+
 use App\Models\Booking;
 use App\Models\CalendarEvent;
 use App\Models\Events;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -133,6 +136,11 @@ class EventCalendar extends Component
 
         $this->alert('success', 'You have successfully enrolled in the free event!');
         $this->dispatch('close-modal');
+        Notification::create([
+            'user_id' => Auth::id(),
+            'message' => 'You successfully Enrolled in the free event: ' . $this->selectedEvent . ' 😊.',
+            'type' => 'booking',
+        ]);
     }
 
     private function redirectToStripeCheckout()

@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Classe;
 use App\Models\Course;
 use App\Models\Booking;
+use App\Services\GoogleCalendarService;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +17,15 @@ use Stripe\Checkout\Session;
 
 class CourseDetails extends Component
 {
+
+    protected $googleCalendarService;
+
+    public function __construct(GoogleCalendarService $googleCalendarService)
+    {
+        $this->googleCalendarService = $googleCalendarService;
+    }
+
+
     use LivewireAlert;
     public $courseId;
     public $courseTitle;
@@ -137,11 +148,27 @@ class CourseDetails extends Component
             'order_number' => uniqid('FREE_'),
         ]);
 
+
+
+        $user = Auth::user();
+        $class = Classe::find($this->selectedClassId);
+        if ($user->microsoft_account) {
+            $this->addToMicrosoftCalendar($user, $class);
+        } else {
+            $this->sendGoogleCalendarInvite($user, $class);
+        }
+
         Classe::where('id', $this->selectedClassId)->update([
             'capacity' => Classe::where('id', $this->selectedClassId)->value('capacity') - 1
         ]);
+
         $this->alert('success', 'You have successfully enrolled in the free class!');
         $this->loadClasses();
+        Notification::create([
+            'user_id' => Auth::id(),
+            'message' => 'You successfully Enrolled in the free class: ' . $this->selectedClassTitle . ' 😊.',
+            'type' => 'booking',
+        ]);
         $this->dispatch('close-modal');
     }
 

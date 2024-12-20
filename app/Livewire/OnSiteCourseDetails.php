@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Booking;
 use App\Models\Lecture; // Make sure to import the Lecture model
 use App\Models\Course;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
@@ -71,7 +72,11 @@ class OnSiteCourseDetails extends Component
             'payment_status' => 'free',
             'order_number' => uniqid('FREE_'),
         ]);
-
+        Notification::create([
+            'user_id' => Auth::id(),
+            'message' => 'You successfully Enrolled in the free course: ' . $this->courseTitle . ' 😊.',
+            'type' => 'purchase',
+        ]);
         session()->flash('success', 'You have successfully enrolled in the free course!');
         return redirect()->to(route('onsite.course.details', ['id' => $this->courseId]));
     }

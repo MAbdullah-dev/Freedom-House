@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\CourseProgress;
 use Livewire\Component;
 use App\Models\Lecture;
+use App\Models\Notification;
 use App\Models\Quiz;
 use App\Models\Review;
 use App\Models\VideoActivity;
@@ -241,6 +242,22 @@ class RecordedLacture extends Component
         // Round to 2 decimal places
         $progress = round($progress, 2);
 
+        // Check for 100% progress and ensure the notification is sent only once
+        if ($progress == 100) {
+            $existingNotification = Notification::where('user_id', $user->id)
+                ->where('type', 'congratulation')
+                ->where('message', '🎉 Congratulations! You have successfully completed your course. Well done! 👏')
+                ->exists();
+
+            if (!$existingNotification) {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'message' => '🎉 Congratulations! You have successfully completed your course. Well done! 👏',
+                    'type' => 'congratulation',
+                ]);
+            }
+        }
+
         // Save the progress in the database
         CourseProgress::updateOrCreate(
             ['user_id' => $user->id, 'course_id' => $courseId],
@@ -249,6 +266,7 @@ class RecordedLacture extends Component
 
         return $progress;
     }
+
 
     public function checkCompletionAndGenerateCertificate()
     {
@@ -275,11 +293,17 @@ class RecordedLacture extends Component
             $existingCertificate = Certificate::firstOrCreate(
                 ['user_id' => $user->id, 'course_id' => $this->courseId],
                 ['certificate_path' => $this->generateCertificate($user, $this->courseId)]
+
             );
 
             // Check if the certificate already exists
             if ($existingCertificate->wasRecentlyCreated) {
                 try {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'message' => '📜 Your certificate is ready! Please check your email to download it. 📨',
+                        'type' => 'congratulation',
+                    ]);
                     $this->sendCertificateEmail($user, $existingCertificate->certificate_path);
                     $this->alert('success', 'Congratulations! Your certificate has been emailed.');
                 } catch (\Exception $e) {
@@ -334,6 +358,12 @@ class RecordedLacture extends Component
 
     public function sendCertificate()
     {
+        $user = Auth::user();
+        foreach ($this->lectures as $lecture) {
+            $lecture->watched = VideoActivity::where('user_id', $user->id)
+                ->where('lecture_id', $lecture->id)
+                ->exists();
+        }
         $this->checkCompletionAndGenerateCertificate();
     }
 

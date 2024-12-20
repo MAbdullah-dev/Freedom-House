@@ -110,6 +110,10 @@ class MicrosoftGraphService
         try {
             $accessToken = $this->refreshAccessToken(Auth::user());
 
+            $durationInHours = 1;
+            $startDateTime = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $model->class_date . 'T' . $model->class_time, 'America/New_York');
+
+            $endDateTime = $startDateTime->copy()->addHours($durationInHours);
             $eventData = [
                 'subject' => $model->title,
                 'body' => [
@@ -117,11 +121,11 @@ class MicrosoftGraphService
                     'content' => $model->description ?? 'No description provided.',
                 ],
                 'start' => [
-                    'dateTime' => $model->class_date . 'T' . $model->class_time,
+                    'dateTime' => $startDateTime->toIso8601String(),
                     'timeZone' => 'America/New_York',
                 ],
                 'end' => [
-                    'dateTime' => $model->class_date . 'T' . $model->class_time,
+                    'dateTime' => $endDateTime->toIso8601String(),
                     'timeZone' => 'America/New_York',
                 ],
                 'location' => [
