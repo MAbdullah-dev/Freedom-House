@@ -33,6 +33,8 @@ class PaymentController extends Controller
         $eventId = $request->query('event_id'); // event payments
 
         $courseName = Course::where('id', $courseId)->value('title');
+        $className = Classe::where('id', $classId)->value('title');
+        $eventName = Events::where('id', $eventId)->value('title');
         // dd($courseName);
 
         if ($courseId) {
@@ -80,7 +82,7 @@ class PaymentController extends Controller
             ]);
             Notification::create([
                 'user_id' => $userId,
-                'message' => 'You successfully purchased the course: ' . $courseName . ' 😊.',
+                'message' => 'You successfully purchased the course: ' . $className . ' 😊.',
                 'type' => 'purchase',
             ]);
 
@@ -113,7 +115,11 @@ class PaymentController extends Controller
                 'payment_method' => 'stripe',
                 'transaction_id' => $sessionId,
             ]);
-
+            Notification::create([
+                'user_id' => $userId,
+                'message' => 'You successfully purchased the course: ' . $eventName . ' 😊.',
+                'type' => 'purchase',
+            ]);
             // Optionally reduce available slots in the event if needed
             Events::where('id', $eventId)->decrement('capacity');
 

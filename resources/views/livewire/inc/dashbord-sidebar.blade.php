@@ -63,7 +63,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.lectures' ? 'active' : '' }}"
                             href="{{ route('dashboard.lectures') }}" wire:navigate>
-                            <i class="fa-solid fa-video"></i> Recorded Lectures
+                            <i class="fa-solid fa-video"></i> Recorded Lecture
                         </a>
                     </li>
                     <li class="nav-item">

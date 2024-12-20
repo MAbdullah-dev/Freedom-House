@@ -59,12 +59,14 @@
                                 @endif
                             </td>
                             <td>
-                                <button class="btn btn-outline-success" wire:click="approveTutor({{ $tutor->id }})">
+                                <button class="btn btn-outline-success"
+                                    wire:click="openApproveModal({{ $tutor->id }})">
                                     Approve
                                 </button>
                             </td>
                             <td>
-                                <button class="btn btn-outline-danger" wire:click="rejectTutor({{ $tutor->id }})">
+                                <button class="btn btn-outline-danger"
+                                    wire:click="openRejectModal({{ $tutor->id }})">
                                     Reject
                                 </button>
                             </td>
@@ -80,4 +82,65 @@
             </table>
         </div>
     </section>
+    <!-- Approve Modal -->
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approveModalLabel">Approve Tutor Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form wire:submit.prevent="submitApproval">
+                        <div class="mb-3">
+                            <label for="approvalMessage" class="form-label">Approval Message:</label>
+                            <textarea class="form-control" id="approvalMessage" wire:model="approvalMessage" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Approve Tutor</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectModalLabel">Reject Tutor Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form wire:submit.prevent="submitRejection">
+                        <div class="mb-3">
+                            <label for="rejectionReason" class="form-label">Rejection Reason:</label>
+                            <textarea class="form-control" id="rejectionReason" wire:model="rejectionReason" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Reject Tutor</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@push('js')
+    <script>
+        window.addEventListener('showRejectModal', event => {
+            $('#rejectModal').modal('show');
+        });
+
+        window.addEventListener('hideRejectModal', event => {
+            $('#rejectModal').modal('hide');
+        });
+
+        window.addEventListener('showApproveModal', event => {
+            $('#approveModal').modal('show');
+        });
+
+        window.addEventListener('hideApproveModal', event => {
+            $('#approveModal').modal('hide');
+        });
+    </script>
+@endpush

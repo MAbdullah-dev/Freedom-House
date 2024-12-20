@@ -6,6 +6,7 @@ use App\Models\Classe;
 use App\Models\Course;
 use App\Models\Booking;
 use App\Services\GoogleCalendarService;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -163,6 +164,11 @@ class CourseDetails extends Component
 
         $this->alert('success', 'You have successfully enrolled in the free class!');
         $this->loadClasses();
+        Notification::create([
+            'user_id' => Auth::id(),
+            'message' => 'You successfully Enrolled in the free class: ' . $this->selectedClassTitle . ' 😊.',
+            'type' => 'booking',
+        ]);
         $this->dispatch('close-modal');
     }
 

@@ -4,13 +4,17 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Notification;
 use App\Models\Tutor;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class TutorRequest extends Component
 {
     public $tutors;
+    public $rejectionReason = ''; // For the rejection reason
+    public $approvalMessage = ''; // For the approval message
+    public $tutorId = null; // Store tutor ID for rejection or approval
+
     use LivewireAlert;
 
     public function mount()
@@ -23,63 +27,87 @@ class TutorRequest extends Component
         $this->tutors = Tutor::with(['user', 'tutorFiles'])->get();
     }
 
-    public function approveTutor($tutorId)
+    public function openRejectModal($tutorId)
     {
-        $tutor = Tutor::find($tutorId);
+        $this->tutorId = $tutorId;
+        $this->dispatch('showRejectModal');
+    }
+
+    public function openApproveModal($tutorId)
+    {
+        $this->tutorId = $tutorId;
+        $this->dispatch('showApproveModal');
+    }
+
+    public function submitRejection()
+    {
+        $tutor = Tutor::find($this->tutorId);
 
         if ($tutor) {
+            // Reject the tutor request
+            $tutor->update(['is_verified' => 3]);
+
+            // Send rejection email
+            Mail::raw("Your tutor request has been rejected ❌. Reason: {$this->rejectionReason}", function ($message) use ($tutor) {
+                $message->to($tutor->user->email)  // Send to tutor's email from user table
+                    ->subject('Your Tutor Request Has Been Rejected');
+            });
+
+            // Create a rejection notification
+            Notification::create([
+                'user_id' => $tutor->user_id,
+                'message' => 'Your tutor request has been rejected ❌. Please check your email for details.',
+                'type' => 'cancellation',
+            ]);
+
+            $this->alert('success', 'Tutor rejected successfully and email sent.');
+
+            // Reset modal fields
+            $this->rejectionReason = '';
+        } else {
+            $this->alert('error', 'Tutor not found.');
+        }
+
+        // Reload tutors
+        $this->loadTutors();
+        // Close modal
+        $this->dispatch('hideRejectModal');
+    }
+
+    public function submitApproval()
+    {
+        $tutor = Tutor::find($this->tutorId);
+
+        if ($tutor) {
+            // Approve the tutor request
             $tutor->update(['is_verified' => 1]);
-            $this->alert('success', 'Tutor approved successfully.');
-            $tutor->user->update(['role_id' => 2]);
-            // session()->flash('success', 'Tutor approved successfully.');
+
+            // Send approval email
+            Mail::raw($this->approvalMessage ?: "Congratulations! Your tutor request has been approved 🎉", function ($message) use ($tutor) {
+                $message->to($tutor->user->email)  // Send to tutor's email from user table
+                    ->subject('Your Tutor Request Has Been Approved');
+            });
+
+            // Create approval notification
+            Notification::create([
+                'user_id' => $tutor->user_id,
+                'message' => "congratulations ! Your tutor request has been approved 🎉 . Please check your email for details.",
+                'type' => 'congratulation',
+            ]);
+
+            $this->alert('success', 'Tutor approved successfully and email sent.');
+
+            // Reset modal fields
+            $this->approvalMessage = '';
         } else {
             $this->alert('error', 'Tutor not found.');
-            // session()->flash('error', 'Tutor not found.');
         }
-        Notification::create([
-            'user_id' => $tutor->user_id,
-            'message' => 'Congratulations ! Your tutor request has been approved 🎉.',
-            'type' => 'congratulation',
-        ]);
 
+        // Reload tutors
         $this->loadTutors();
+        // Close modal
+        $this->dispatch('hideApproveModal');
     }
-
-    public function rejectTutor($tutorId)
-    {
-        $tutor = Tutor::find($tutorId);
-
-        if ($tutor) {
-            $tutor->update(['is_verified' => 3]); // Update the `is_verified` column to 3
-            $this->alert('success', 'Tutor rejected successfully.');
-            // session()->flash('success', 'Tutor rejected successfully.');
-        } else {
-            $this->alert('error', 'Tutor not found.');
-            // session()->flash('error', 'Tutor not found.');
-        }
-        Notification::create([
-            'user_id' => $tutor->user_id,
-            'message' => 'Your tutor request has been rejected ❌. Please check your email for details.',
-            'type' => 'congratulation',
-        ]);
-
-        $this->loadTutors();
-    }
-
-    public function downloadFile($filePath)
-    {
-        $fullPath = "private/$filePath";
-
-        if (Storage::exists($fullPath)) {
-            $this->alert('success', 'File downloaded successfully.');
-            session()->flash('error', 'File not found.');
-            return;
-        }
-
-        // Return the file as a download
-        return response()->download(storage_path("app/$fullPath"));
-    }
-
 
     public function render()
     {
