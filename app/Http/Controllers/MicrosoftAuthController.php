@@ -80,19 +80,25 @@ class MicrosoftAuthController extends Controller
 
         $role_id = 3;
 
+        $user = User::where('email', $microsoftUser['mail'] ?? $microsoftUser['userPrincipalName'])->first();
+
+        $updateData = [
+            'microsoft_id' => $microsoftUser['id'],
+            'microsoft_account' => true,
+            'password' => bcrypt(Str::random(16)),
+            'token_expires_at' => $tokenExpiresAt,
+        ];
+
+        // Only set role_id if it doesn't exist
+        if (!$user || !$user->role_id) {
+            $updateData['role_id'] = $role_id;
+        }
+
         $user = User::updateOrCreate(
             ['email' => $microsoftUser['mail'] ?? $microsoftUser['userPrincipalName']],
-            [
-                // 'first_name' => $microsoftUser['givenName'],
-                // 'last_name' => $microsoftUser['surname'],
-                'microsoft_id' => $microsoftUser['id'],
-                'microsoft_account' => true,
-                'password' => bcrypt(Str::random(16)),
-                // 'phone' => null,
-                'token_expires_at' => $tokenExpiresAt,
-                'role_id' => $role_id
-            ]
+            $updateData
         );
+
 
         // $role = Role::findOrFail($role_id);
         // $user->roles()->attach($role->id);

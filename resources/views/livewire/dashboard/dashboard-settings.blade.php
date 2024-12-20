@@ -1,5 +1,6 @@
 <?php
-// dd(request()->all());
+// dd(Auth::user()->role_id == 2 || Auth::user()->role_id == 1);
+// dd(Auth::user()->role_id);
 ?>
 <div class="settings px-5 mb-5">
     <h2 class="my-4">Settings</h2>

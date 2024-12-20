@@ -208,8 +208,7 @@ class ClassForm extends Component
 
         if (Auth::user()->microsoft_account == true) {
             $attendees = [
-                ['email' => 'example@example.com', 'name' => 'John Doe'],
-                ['email' => 'another@example.com', 'name' => 'Jane Smith'],
+                ['email' => Auth::user()->email, 'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name],
             ];
 
             $graphService = new MicrosoftGraphService();
@@ -260,8 +259,7 @@ class ClassForm extends Component
         ]);
         if (Auth::user()->microsoft_account == true) {
             $attendees = [
-                ['email' => 'example@example.com', 'name' => 'John Doe'],
-                ['email' => 'another@example.com', 'name' => 'Jane Smith'],
+                ['email' => Auth::user()->email, 'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name],
             ];
 
             $graphService = new MicrosoftGraphService();
