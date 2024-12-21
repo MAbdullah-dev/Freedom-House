@@ -1,24 +1,18 @@
 <div class="statements-tab px-5">
-    <div class="filters d-flex flex-column flex-md-row gap-3 align-items-start mb-4">
-        <div class="dropdown flex-grow-1">
+    <div wire:ignore class="filters d-flex flex-column flex-md-row gap-3 align-items-start mb-4">
+        <div class="flex-grow-1">
             <label for="courses" class="form-label">Courses</label>
-            <div class="dropdown">
-                <button class="dropdown-toggle w-100 d-flex justify-content-between align-items-center" type="button"
-                    id="coursesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    All
-                </button>
-                <ul class="dropdown-menu p-3 w-100" aria-labelledby="coursesDropdown">
-                    <input type="text" class="form-control mb-2" placeholder="Search courses..." />
-                    <li>Understanding Personality Disorders</li>
-                    <li>Maintain Professional Boundaries</li>
-                    <li>Clinical Documentation</li>
-                    <li>Mental Health Basics</li>
-                </ul>
-            </div>
+            <select class="form-select w-100" id="courses" wire:model="selectedCourse" wire:change="fetchPayments">
+                <option value="">All</option>
+                @foreach ($courses as $course)
+                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="flex-grow-1">
             <label for="date" class="form-label">Date</label>
-            <input type="date" class="form-control" id="calendar-input-statements-tab" placeholder="Y-M-d" />
+            <input type="date" class="form-control" id="calendar-input-statements-tab" placeholder="Y-M-d"
+                wire:model="selectedDate" wire:change="fetchPayments" />
         </div>
     </div>
 
@@ -33,48 +27,32 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <div class="statement-info">
-                            <span class="text-muted">Wc-checkout-draft · 2024-09-18</span><br />
-                            <h4>Understanding Personality Disorders</h4><br />
-                            <a href="#" class="text-secondary">Order ID: #1147</a>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="earnings">
-                            <strong>$0.00</strong><br />
-                            <small class="text-secondary">0.00% of $10.00</small>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="admin-gets">
-                            <strong>$10.00</strong><br />
-                            <small class="text-muted">As per 100.00%</small>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="statement-info">
-                            <span class="text-muted">Wc-checkout-draft · 2024-07-31</span><br />
-                            <h4>Maintain Professional Boundaries</h4><br />
-                            <a href="#" class="text-primary">Order ID: #1046</a>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="earnings">
-                            <strong>$0.00</strong><br />
-                            <small class="text-muted">0.00% of $20.00</small>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="admin-gets">
-                            <strong>$20.00</strong><br />
-                            <small class="text-muted">As per 100.00%</small>
-                        </div>
-                    </td>
-                </tr>
+                @foreach ($payments as $payment)
+                    <tr>
+                        <td>
+                            <div class="statement-info">
+                                <span class="text-muted">{{ $payment->booking->created_at->format('Y-m-d') }} ·
+                                    {{ $payment->booking->course->title }}</span><br />
+                                <h4>{{ $payment->booking->course->title }}</h4><br />
+                                <a href="#" class="text-secondary">Order ID:
+                                    #{{ $payment->booking->order_id }}</a>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="earnings">
+                                <strong>${{ $payment->amount }}</strong><br />
+                                <small class="text-muted">{{ $payment->amount }} of
+                                    ${{ $payment->booking->price }}</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="admin-gets">
+                                <strong>${{ $payment->booking->price }}</strong><br />
+                                <small class="text-muted">As per 100.00%</small>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
