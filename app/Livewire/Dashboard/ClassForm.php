@@ -164,6 +164,11 @@ class ClassForm extends Component
     {
         $this->validate();
 
+        if ($this->class_type == 'virtual' && !Auth::user()->microsoft_account) {
+            $this->alert('error', 'You must have a Microsoft account to create a virtual class.');
+            return;
+        }
+
         if ($this->type === 'class') {
             $this->createClass();
             $this->loadcources();

@@ -95,7 +95,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('login') }}" wire:navigate>
+                                <a wire:click="logout">
                                     <i class="fa-solid fa-right-from-bracket"></i> Log Out
                                 </a>
                             </li>
@@ -166,7 +166,7 @@
         </ul>
         <div class="nav-btn mb-4 d-flex gap-2">
             @if (Auth::check())
-                <button wire:click="logout" class="button-primary">Logout</button>
+                <button class="button-primary">Logout</button>
             @else
                 <a class="text-danger" href="{{ asset('/login') }}">Login</a>
                 <a class="button-primary" href="{{ asset('/register') }}">Register</a>

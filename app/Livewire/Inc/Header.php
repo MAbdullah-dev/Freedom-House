@@ -25,9 +25,9 @@ class Header extends Component
     }
     public function logout()
     {
-        Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
+        Auth::logout();
 
         return redirect()->route('login');
     }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
+            $table->string('microsoft_event_id');
             $table->string('title');
             $table->text('description');
             $table->integer('capacity');

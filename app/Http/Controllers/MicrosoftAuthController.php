@@ -17,7 +17,7 @@ class MicrosoftAuthController extends Controller
     {
         $clientId = env('AZURE_CLIENT_ID');
         $redirectUri = env('AZURE_REDIRECT_URI');
-        $scopes = 'openid profile email offline_access User.read OnlineMeetings.ReadWrite';
+        $scopes = 'openid profile email offline_access User.read OnlineMeetings.ReadWrite Calendars.ReadWrite';
         $state = csrf_token();
 
         $url = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?" . http_build_query([

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->foreignId('course_id')->nullable()->constrained('courses')->onDelete('cascade')->cascadeOnUpdate();
+            $table->string('microsoft_event_id')->nullable();
             $table->string('title');
             $table->text('description');
             $table->integer('capacity')->nullable();

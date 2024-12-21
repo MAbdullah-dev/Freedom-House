@@ -13,6 +13,7 @@ class Events extends Model
 
     protected $fillable = [
         'user_id',
+        'microsoft_event_id',
         'title',
         'description',
         'capacity',

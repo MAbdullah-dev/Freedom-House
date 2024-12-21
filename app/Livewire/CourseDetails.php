@@ -5,8 +5,8 @@ namespace App\Livewire;
 use App\Models\Classe;
 use App\Models\Course;
 use App\Models\Booking;
-use App\Services\GoogleCalendarService;
 use App\Models\Notification;
+use App\Services\MicrosoftGraphService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,11 +18,10 @@ use Stripe\Checkout\Session;
 class CourseDetails extends Component
 {
 
-    protected $googleCalendarService;
-
-    public function __construct(GoogleCalendarService $googleCalendarService)
+    protected $microsoftGraphService;
+    public function __construct()
     {
-        $this->googleCalendarService = $googleCalendarService;
+        $this->microsoftGraphService = app(MicrosoftGraphService::class);
     }
 
 
@@ -136,41 +135,58 @@ class CourseDetails extends Component
     private function enrollFreeClass()
     {
         if ($this->slots <= 0) {
-            $this->alert('error', 'No slot available for this class!');
+            $this->alert('error', 'No slots available for this class!');
             return;
         }
 
-        Booking::create([
-            'class_id' => $this->selectedClassId,
-            'course_id' => null,
-            'user_id' => Auth::id(),
-            'payment_status' => 'free',
-            'order_number' => uniqid('FREE_'),
-        ]);
-
-
-
-        $user = Auth::user();
         $class = Classe::find($this->selectedClassId);
-        if ($user->microsoft_account) {
-            $this->addToMicrosoftCalendar($user, $class);
-        } else {
-            $this->sendGoogleCalendarInvite($user, $class);
+
+        if (!$class || !$class->microsoft_event_id) {
+            $this->alert('error', 'Class not found or missing Microsoft Event ID!');
+            return;
         }
 
-        Classe::where('id', $this->selectedClassId)->update([
-            'capacity' => Classe::where('id', $this->selectedClassId)->value('capacity') - 1
-        ]);
+        $user = Auth::user();
+        if (!$user->microsoft_id) {
+            $this->alert('error', 'User Microsoft ID not found!');
+            return;
+        }
 
-        $this->alert('success', 'You have successfully enrolled in the free class!');
-        $this->loadClasses();
-        Notification::create([
-            'user_id' => Auth::id(),
-            'message' => 'You successfully Enrolled in the free class: ' . $this->selectedClassTitle . ' 😊.',
-            'type' => 'booking',
-        ]);
-        $this->dispatch('close-modal');
+        $attendees = [
+            [
+                'email' => $user->email,
+                'name' => $user->first_name . ' ' . $user->last_name,
+            ]
+        ];
+
+        try {
+            // Use the user's Microsoft ID from Auth::user()->microsoft_id
+            $organizerId = $class->user->microsoft_id;
+
+
+            // Add attendee to the event using the organizer's Microsoft ID
+            $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
+
+            // Create a booking record
+            Booking::create([
+                'class_id' => $this->selectedClassId,
+                'course_id' => null,
+                'user_id' => $user->id,
+                'payment_status' => 'free',
+                'order_number' => uniqid('FREE_'),
+            ]);
+
+            // Update class capacity
+            $class->decrement('capacity');
+
+            $this->alert('success', 'Successfully enrolled in the class!');
+        } catch (\Exception $e) {
+            Log::error('Failed to enroll user in class: ' . $e->getMessage());
+            $this->alert('error', 'Failed to enroll in the class.');
+        }
     }
+
+
 
     private function redirectToStripeCheckout()
     {

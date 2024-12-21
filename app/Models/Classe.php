@@ -13,6 +13,7 @@ class Classe extends Model
     protected $fillable = [
         'course_id',
         'user_id',
+        'microsoft_event_id',
         'title',
         'description',
         'capacity',
