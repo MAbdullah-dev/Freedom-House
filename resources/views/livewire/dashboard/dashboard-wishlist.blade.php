@@ -1,5 +1,5 @@
-<div class="wishlist px-5">
-    <h2 class="py-4">WishList</h2>
+<div class="wishlist py-5 px-4">
+    <h2 class="mb-4">WishList</h2>
     <div class="wishlist-cards d-flex flex-wrap gap-4">
         @forelse ($wishlists as $wishlist)
             <div class="card shadow">

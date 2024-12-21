@@ -1,5 +1,5 @@
-<div class="help-requests-admin px-4">
-    <h4 class="my-5">Help Requests of Students</h4>
+<div class="help-requests-admin py-5 px-4">
+    <h4 class="mb-4">Help Requests of Students</h4>
     <section class="help-requests">
         <div class="table-responsive">
             <table class="table table-borderless">

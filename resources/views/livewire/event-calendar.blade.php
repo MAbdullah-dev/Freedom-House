@@ -39,7 +39,7 @@
         wire:ignore.self>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header text-white">
                     <h5 class="modal-title" id="event-modal-title">{{ $selectedEvent['title'] ?? 'Event Details' }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -80,13 +80,22 @@
                             </span>
                         </p>
                     </div>
+                    <hr>
+
+                    <div class="hosted">
+                        <h4 class="mb-3">Hosted by:</h4>
+                        <div class="hosted-profile">
+                            <img src="" alt="profile">
+                            <p class="m-0">Heather Griffin-Dolciney</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
                     @if (isset($selectedEvent['users']) && $selectedEvent['users']['id'] == auth()->user()->id)
-                        <button type="button" class="btn btn-success" disabled>Enroll Now</button>
+                        <button type="button" class="button-primary" disabled>Enroll Now</button>
                     @else
-                        <button type="button" class="btn btn-success" wire:click="enroll">Enroll Now</button>
+                        <button type="button" class="button-primary" wire:click="enroll">Enroll Now</button>
                     @endif
 
                 </div>
@@ -112,7 +121,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

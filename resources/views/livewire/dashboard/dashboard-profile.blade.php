@@ -1,5 +1,5 @@
-<div class="profile px-5">
-    <h2>My Profile</h2>
+<div class="profile py-5 px-4">
+    <h2 class="mb-4">My Profile</h2>
     <ul class="profile-details">
         <li>
             <span class="label">Registration Date</span>

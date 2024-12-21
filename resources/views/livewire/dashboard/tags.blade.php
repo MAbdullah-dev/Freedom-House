@@ -1,7 +1,7 @@
-<div class="tag-management px-5">
+<div class="tag-management px-4 py-5">
     <!-- Create Tag Section -->
     <section class="create-tag">
-        <form wire:submit.prevent="createTag" class="mt-5">
+        <form wire:submit.prevent="createTag">
             <div class="row align-items-center">
                 <div class="col-md-8 mt-3">
                     <input type="text" wire:model="name" placeholder="Create tag" class="form-control" />

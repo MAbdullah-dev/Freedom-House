@@ -523,3 +523,18 @@
         }
     }
 }
+
+.modal-body {
+    p {
+        font-size: 20px;
+
+        strong {
+            text-transform: capitalize;
+        }
+        // margin-bottom: 25px;
+
+        // span {
+        //     display: block;
+        // }
+    }
+}
