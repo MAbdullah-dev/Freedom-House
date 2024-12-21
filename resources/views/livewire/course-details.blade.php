@@ -88,23 +88,28 @@
     <div wire:ignore.self class="modal fade" id="enrollModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                {{-- <div class="modal-header">
                     <h5 class="modal-title">Enroll in {{ $selectedClassTitle }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> --}}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enrollModalLabel">Enroll in {{ $selectedClassTitle }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                    <p>Are you sure you want to enroll in this class?</p>
-                    <p>Title: {{ $selectedClassTitle }}</p>
-                    <p>type: {{ $isPaid ? 'Paid' : 'Free' }}</p>
+                    <p><strong>Title: </strong><span>{{ $selectedClassTitle }}</span></p>
+                    <p><strong>type:</strong> <span>{{ $isPaid ? 'Paid' : 'Free' }}</span></p>
                     @if ($isPaid)
-                        <p>Price: ${{ $price }}</p>
+                        <p><strong>Price:</strong> <span>${{ $price }}</span></p>
                     @endif
+                    <p><span class="d-block mb-3">Are you sure you want to enroll in this class?</span></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button"
                         wire:click="enroll({{ $selectedClassId }}, '{{ $isPaid }}', {{ $price }})"
-                        class="btn btn-primary">
+                        class="button-primary">
                         Enroll Now
                     </button>
                 </div>

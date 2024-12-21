@@ -1,5 +1,5 @@
-<div class="course-section px-5">
-    <h2 class="py-4">Enrolled Courses</h2>
+<div class="course-section py-5 px-4">
+    <h2 class="mb-4">Enrolled Courses</h2>
     <!-- Nav Tabs -->
     <ul class="nav nav-tabs" id="courseTabs" role="tablist">
         <li class="nav-item">

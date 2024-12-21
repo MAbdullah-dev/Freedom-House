@@ -1,8 +1,9 @@
 <?php
-// dd(request()->all());
+// dd(Auth::user()->role_id == 2 || Auth::user()->role_id == 1);
+// dd(Auth::user()->role_id);
 ?>
-<div class="settings px-5 mb-5">
-    <h2 class="my-4">Settings</h2>
+<div class="settings px-4 py-5">
+    <h2 class="mb-4">Settings</h2>
     <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"

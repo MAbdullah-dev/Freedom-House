@@ -67,10 +67,6 @@
         }
     }
 
-    .modal-content {
-        padding: 20px;
-    }
-
     #calendar {
         background-color: $background-color !important;
         color: $text-color !important;
@@ -115,6 +111,65 @@
             .fc-daygrid-day-number {
                 color: $text-color !important;
             }
+        }
+    }
+}
+
+.modal-content {
+    padding: 20px;
+
+    .modal-header {
+        background: $primary-color;
+    }
+
+    .modal-title {
+        font-size: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .modal-body {
+        .event-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            row-gap: 30px;
+            p {
+                font-size: 20px;
+                // margin-bottom: 25px;
+                width: 45%;
+
+                strong {
+                    text-transform: capitalize;
+                }
+
+                span {
+                    display: block;
+                }
+            }
+        }
+
+        .hosted-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            img {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+            }
+
+            p {
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .modal-footer {
+        button {
+            padding: 10px 50px;
         }
     }
 }

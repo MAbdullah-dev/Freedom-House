@@ -1,4 +1,5 @@
 .settings {
+    border-left: 2px solid #b2b4b7;
     .nav-tabs {
         border-bottom: none;
 
@@ -300,12 +301,13 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background: red;
+        background: #104627;
 
         img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
         }
 
         // &::before {

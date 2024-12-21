@@ -1,7 +1,7 @@
-<div class="dashboard px-4">
+<div class="dashboard py-5 px-4">
     <section class="courses-info-section">
         <div class="inner">
-            <h4 class="my-4">Dashboard</h4>
+            <h4 class="mb-4">Dashboard</h4>
 
             @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
                 <div class="tutor-course-info d-flex align-items-center justify-content-center gap-3 flex-wrap">

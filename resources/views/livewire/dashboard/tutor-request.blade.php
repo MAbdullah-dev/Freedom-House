@@ -1,5 +1,5 @@
-<div class="tutorRequest px-5">
-    <h2>Course Requests</h2>
+<div class="tutorRequest py-5 px-4">
+    <h2 class="mb-4">Course Requests</h2>
 
     <!-- Display flash messages -->
     @if (session()->has('success'))

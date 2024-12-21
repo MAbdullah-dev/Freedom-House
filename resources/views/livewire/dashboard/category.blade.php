@@ -1,7 +1,7 @@
-<div class="category px-5">
+<div class="category px-4 py-5">
     <section>
         <div class="create-category">
-            <form wire:submit.prevent="createCategory" class="mt-5">
+            <form wire:submit.prevent="createCategory">
                 <div class="row align-items-center">
                     <div class="col-md-8 mt-3">
                         <input type="text" wire:model="category_name" placeholder="Create category"
