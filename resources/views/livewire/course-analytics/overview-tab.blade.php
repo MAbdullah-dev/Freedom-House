@@ -134,4 +134,51 @@
             </div>
         </div>
     </section>
+    <section wire:ignore.self id="student-enrollment-chart">
+        <h4 class="my-4">Student Enrollment by Course</h4>
+        <div id="chart"></div>
+    </section>
 </div>
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+            var enrollmentData = @this.enrollmentData; // Get the data from Livewire component
+
+            var courses = @json($highestRatedCourse->pluck('title'));
+            var enrollments = Object.values(enrollmentData);
+            console.log(enrollments);
+
+
+            var options = {
+                series: [{
+                    name: 'Enrollments',
+                    data: enrollments
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        endingShape: 'rounded',
+                        columnWidth: '55%',
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: courses,
+                },
+                title: {
+                    text: 'Student Enrollment by Course',
+                    align: 'center'
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        });
+</script>
+@endpush

@@ -54,7 +54,8 @@
         </div>
     </section>
 
-    @php
+</div>
+{{-- @php
         echo '<script>
             const chartLabels1 = ' . $chartLabels . ';
             const chartData1 = ' . $chartData . ';
@@ -95,5 +96,49 @@
                 chart.render();
             });
         </script>';
-    @endphp
-</div>
+    @endphp --}}
+{{-- </div> --}}
+@push('js')
+    <script>
+        const chartLabels = @json($chartLabels);
+        const chartData = @json($chartData);
+
+        console.log(chartLabels, chartData); // Debug in the browser console
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (chartLabels.length && chartData.length) {
+                var options = {
+                    chart: {
+                        type: "bar",
+                        height: 350
+                    },
+                    series: [{
+                        name: "Earnings",
+                        data: chartData
+                    }],
+                    xaxis: {
+                        categories: chartLabels,
+                        title: {
+                            text: "Months"
+                        }
+                    },
+                    yaxis: {
+                        title: {
+                            text: "Earnings ($)"
+                        }
+                    },
+                    title: {
+                        text: "Monthly Earnings",
+                        align: "center"
+                    },
+                    colors: ["#008FFB"]
+                };
+
+                var chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
+                chart.render();
+            } else {
+                console.error("Chart data is empty.");
+            }
+        });
+    </script>
+@endpush

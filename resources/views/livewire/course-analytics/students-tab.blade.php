@@ -27,7 +27,7 @@
                     <th>Student</th>
                     <th>Registration Date</th>
                     <th>Course Taken</th>
-                    <th></th>
+                    <th>Progress</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,7 +45,20 @@
                         </td>
                         <td class="text-center">{{ $student['registration_date']->format('Y-m-d') }}</td>
                         <td class="text-center">{{ $student['course']->title }}</td>
-                        <td><button class="button-secondary">Details</button></td>
+                        <td>
+                            @if ($student['course']->course_type === 'class_type')
+                            <span>No progress due to class type</span>
+                            @else
+                            <div>
+                                <label for="progress-{{ $student['course']->id }}" class="d-block">
+                                    Course Progress: {{ $student['progress'] }}%
+                                </label>
+                                <progress id="progress-{{ $student['course']->id }}" value="{{ $student['progress'] }}" max="100" class="w-100">
+                                    {{ $student['progress'] }}%
+                                </progress>
+                            </div>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

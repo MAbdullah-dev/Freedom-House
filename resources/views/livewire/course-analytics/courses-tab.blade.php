@@ -15,6 +15,7 @@
                     </thead>
                     <tbody>
                         @forelse ($courses as $course)
+                            {{-- @dd($course) --}}
                             <tr>
                                 <td>
                                     <strong>{{ $course['course_name'] }}</strong>
@@ -29,9 +30,18 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">
-                                        Details
-                                    </a>
+                                    @if ($course['course_type'] == 'class_type')
+                                        <a href="{{ route('course.details', $course['course_id']) }}"
+                                            class="btn btn-outline-secondary btn-sm" wire:navigate>
+                                            Details
+                                        </a>
+                                        {{-- {{ $course['class_count'] }} Classes --}}
+                                    @elseif ($course['course_type'] == 'recorded')
+                                        <a href="{{ route('onsite.course.details', $course['course_id']) }}"
+                                            class="btn btn-outline-secondary btn-sm" wire:navigate>
+                                            Details
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

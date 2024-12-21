@@ -4,6 +4,7 @@ namespace App\Livewire\CourseAnalytics;
 
 use App\Models\Booking;
 use App\Models\Course;
+use App\Models\CourseProgress;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Carbon\Carbon;
@@ -72,10 +73,14 @@ class StudentsTab extends Component
 
         // Map the bookings to the required student data
         $this->students = $bookings->map(function ($booking) {
+            $progress = CourseProgress::where('user_id', $booking->user_id)
+                ->where('course_id', $booking->course_id)
+                ->first();
             return [
                 'user' => $booking->user,
                 'course' => $booking->course,
                 'registration_date' => $booking->created_at,
+                'progress' => $progress ? $progress->progress : 0, // Default progress to 0 if not found
             ];
         });
     }

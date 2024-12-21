@@ -19,7 +19,6 @@ class EarningsTab extends Component
     {
         $user = Auth::user();
 
-        // Get the courses for the authenticated user that are published and not drafted
         $courses = Course::where('user_id', $user->id)
             ->where('is_published', true)
             ->where('is_drafted', false)
@@ -31,49 +30,44 @@ class EarningsTab extends Component
         $totalCommissions = 0;
         $totalFees = 0;
 
-        $earningsByMonth = array_fill(1, 12, 0); // Initialize earnings for each month
+        $earningsByMonth = array_fill(1, 12, 0);
 
-        // Loop through the courses and calculate the totals
         foreach ($courses as $course) {
-            $bookings = $course->bookings; // Get the bookings for the course
+            $bookings = $course->bookings;
 
             foreach ($bookings as $booking) {
-                // Get the payments for the current booking
-                $payments = $booking->payments; // This assumes payments are related to the booking via booking_id
-
-                // Get the sum of payments for the booking
+                $payments = $booking->payments;
                 $paymentSum = $payments->sum('amount');
 
-                // Update the total earnings, sales, and withdrawals
                 $totalEarnings += $paymentSum;
                 $totalSales += $paymentSum;
                 $totalWithdrawals += $paymentSum;
 
-                // Loop through each payment to access its created_at date and month
                 foreach ($payments as $payment) {
-                    // dd($payment);
-                    $month = $payment->created_at->month; // Get the month of the payment
-                    // Accumulate earnings by month
-                    $earningsByMonth[$month] = ($earningsByMonth[$month]) + $payment->amount;
+                    $month = $payment->created_at->month;
+                    $earningsByMonth[$month] += $payment->amount;
                 }
             }
         }
 
-        // Assign the calculated values to the public properties
         $this->totalEarnings = $totalEarnings;
         $this->totalSales = $totalSales;
         $this->totalWithdrawals = $totalWithdrawals;
         $this->totalCommissions = $totalCommissions;
         $this->totalFees = $totalFees;
 
-        $this->monthlyEarnings = array_values($earningsByMonth); // Convert array to a simple indexed array
+        $this->monthlyEarnings = array_values($earningsByMonth);
+
+        // Dispatch the event with chart data
+        $this->dispatch('renderChart', range(1, 12), $this->monthlyEarnings);
     }
+
 
     public function render()
     {
         return view('livewire.course-analytics.earnings-tab', [
-            'chartLabels' => json_encode(range(1, 12)), // Months (1 to 12)
-            'chartData' => json_encode($this->monthlyEarnings),
+            'chartLabels' => range(1, 12), // Months (1 to 12)
+            'chartData' => $this->monthlyEarnings,
         ]);
     }
 }

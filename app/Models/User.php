@@ -120,4 +120,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(CourseProgress::class);
     }
+    public function progress()
+    {
+        return $this->hasMany(CourseProgress::class);
+    }
 }

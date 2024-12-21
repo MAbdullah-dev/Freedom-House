@@ -330,19 +330,19 @@
                     </div>
                 </div>
                 <!-- Course Upload Tips -->
-                <div class="col-lg-4">
-                    <div class="card p-3 mb-3 custom-upload-tips-card">
-                        <h5 class="card-title">Course Upload Tips</h5>
-                        <ul class="custom-upload-tips-list">
-                            <li>Set the Course Price option or make it free.</li>
-                            <li>Standard size for the course thumbnail is 700x430.</li>
-                            <li>Video section controls the course overview video.</li>
-                            <li>Course Builder is where you create & organize a course.</li>
-                            <li>Add Topics in the Course Builder to create lessons, quizzes, and assignments.</li>
-                            <li>Prerequisites refer to required courses before this one.</li>
-                        </ul>
-                    </div>
+               <div class="col-lg-4">
+                <div class="card p-3 mb-3 custom-upload-tips-card">
+                    <h5 class="card-title">Course Upload Tips</h5>
+                    <ul class="custom-upload-tips-list">
+                        <li><strong>Set Course Price</strong> – Recorded courses can be either paid or free.</li>
+                        <li><strong>Use 700x430 Thumbnail</strong> – Make sure the course thumbnail is the right size.</li>
+                        <li><strong>Upload a Course Video</strong> – Add a video that gives an overview of the course.</li>
+                        <li><strong>Use Course Builder</strong> – Create and organize lessons and classes.</li>
+                        <li><strong>Add Topics</strong> – Structure your course with topics for better navigation.</li>
+                        <li><strong>Set Prerequisites</strong> – Specify any required courses before enrolling in this one.</li>
+                    </ul>
                 </div>
+            </div>
             </div>
         </form>
     </div>

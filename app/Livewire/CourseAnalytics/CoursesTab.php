@@ -25,6 +25,7 @@ class CoursesTab extends Component
             $courseData = [
                 'course_name' => $course->title,
                 'course_type' => $course->course_type,
+                'course_id' => $course->id,
                 'total_learners' => 0,
                 'total_earnings' => 0,
                 'class_count' => 0,

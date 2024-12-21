@@ -15,6 +15,7 @@ class OverviewTab extends Component
     public $reviewCount;
     public $highestRatedCourse;
     public $recentReviews;
+    public $enrollmentData; // For ApexChart
 
     public function mount()
     {
@@ -42,6 +43,12 @@ class OverviewTab extends Component
             ->latest()
             ->take(5)
             ->get();
+
+        // Fetch student enrollment data for graph (by course)
+        $this->enrollmentData = Booking::selectRaw('course_id, COUNT(*) as total_students')
+            ->whereIn('course_id', $courses)
+            ->groupBy('course_id')
+            ->pluck('total_students', 'course_id');
     }
 
     public function render()
