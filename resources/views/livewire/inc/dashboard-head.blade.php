@@ -29,26 +29,25 @@
 
                 @php
                     $user = auth()->user();
-                    $roleIds = auth()->user()->roles->pluck('id')->toArray();
-                    $isTutorVerified = auth()->user()->tutor->is_verified ?? null;
                     $tutorRequest = $user->tutor ?? null;
+                    $isTutorVerified = $tutorRequest ? $user->tutor->is_verified : false;
+                    $isAdmin = $user->role_id == 1;
                 @endphp
 
-                @if ($tutorRequest)
-                    @if ($isTutorVerified)
-                        <button type="button" class="button-secondary"
-                            onclick="location.href='{{ route('dashboard.create.course') }}'">
-                            Create Course
-                        </button>
-                    @else
-                        <p class="text-danger mb-0">Your request to become a tutor is pending.</p>
-                    @endif
+                @if ($isAdmin || ($tutorRequest && $isTutorVerified))
+                    <button type="button" class="button-secondary"
+                        onclick="location.href='{{ route('dashboard.create.course') }}'">
+                        Create Course
+                    </button>
+                @elseif ($tutorRequest && !$isTutorVerified)
+                    <p class="text-danger mb-0">Your request to become a tutor is pending.</p>
                 @else
                     <button type="button" class="button-secondary" data-bs-toggle="modal"
                         data-bs-target="#instructorModal">
                         Become an Instructor
                     </button>
                 @endif
+
             </div>
         </div>
 
@@ -90,7 +89,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="instructorModalLabel">Become an Instructor</h5>
+                    <h5 class="modal-title text-white" id="instructorModalLabel">Become an Instructor</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

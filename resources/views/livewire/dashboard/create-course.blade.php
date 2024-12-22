@@ -17,7 +17,7 @@
                         <span wire:loading wire:target="submitCourse">Loading...</span>
                     </button>
 
-                    <a href="" class="custom-close-link ms-1">
+                    <a href="{{ url()->previous() }}" class="custom-close-link ms-1">
                         <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
                     </a>
                 </div>

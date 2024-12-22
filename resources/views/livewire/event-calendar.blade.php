@@ -72,31 +72,30 @@
                                 </span>
                             </p>
                         @endif
-
-                        <p><strong>Created By:</strong>
-                            <span>
-                                {{ $selectedEvent['users']['first_name'] ?? 'N/A' }}
-                                {{ $selectedEvent['users']['last_name'] ?? '' }}
-                            </span>
-                        </p>
                     </div>
                     <hr>
 
                     <div class="hosted">
                         <h4 class="mb-3">Hosted by:</h4>
                         <div class="hosted-profile">
-                            <img src="" alt="profile">
-                            <p class="m-0">Heather Griffin-Dolciney</p>
+                            @if (isset($selectedEvent['users']['pfp']))
+                                <img src="{{ $selectedEvent['users']['pfp'] }}" alt="profile">
+                            @else
+                                <img src="{{ asset('assets/images/dummy-profile-photo.png') }}" alt="profile">
+                            @endif
+                            <p class="m-0"> {{ $selectedEvent['users']['first_name'] ?? 'N/A' }}
+                                {{ $selectedEvent['users']['last_name'] ?? '' }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
-                    @if (isset($selectedEvent['users']) && $selectedEvent['users']['id'] == auth()->user()->id)
+                    @if (auth()->check() && isset($selectedEvent['users']) && $selectedEvent['users']['id'] == auth()->user()->id)
                         <button type="button" class="button-primary" disabled>Enroll Now</button>
                     @else
                         <button type="button" class="button-primary" wire:click="enroll">Enroll Now</button>
                     @endif
+
 
                 </div>
             </div>

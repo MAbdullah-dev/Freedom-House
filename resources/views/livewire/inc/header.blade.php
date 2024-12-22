@@ -95,8 +95,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a wire:click="logout">
-                                    <i class="fa-solid fa-right-from-bracket"></i> Log Out
+                                <a href="#" wire:click="logout">
+                                    <i class="fa-solid fa-right-from-bracket cursor-pointer"></i> Log Out
                                 </a>
                             </li>
                         </ul>

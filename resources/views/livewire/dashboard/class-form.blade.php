@@ -27,7 +27,7 @@
                             <span wire:loading wire:target="updateClass">Loading...</span>
                         </button>
                     @endif
-                    <a href="" class="custom-close-link ms-1">
+                    <a href="{{ url()->previous() }}" class="custom-close-link ms-1">
                         <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
                     </a>
                 </div>
@@ -227,9 +227,12 @@
                         <h6 class="mb-0">Additional Information</h6>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Use this space to display help text, previews, or other relevant
-                            information
-                            related to the form.</p>
+                        <ul class="text-muted custom-upload-tips-list">
+                            <li>Create a class (linked to a course) or an event (e.g., webinar, workshop).</li>
+                            <li>Choose class type: Virtual (requires Microsoft account) or On-site.</li>
+                            <li>Set student capacity for the class.</li>
+                            <li>Booking dates must be before the class date.</li>
+                        </ul>
                     </div>
                 </div>
             </div>

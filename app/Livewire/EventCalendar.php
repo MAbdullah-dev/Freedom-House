@@ -35,7 +35,11 @@ class EventCalendar extends Component
 
         $user = Auth::user();
 
+        // Always load event cards (for all users)
+        $this->eventCards = Events::with('users')->get();
+
         if ($user) {
+            // Load user's specific calendar events
             $events = CalendarEvent::with(['event', 'class', 'user'])
                 ->where('user_id', $user->id)
                 ->orWhere(function ($query) use ($user) {
@@ -65,15 +69,14 @@ class EventCalendar extends Component
 
             $this->events = $events;
         } else {
-            $this->events = [];
+            $this->events = [];  // No user-specific events for guest users
         }
 
-
-        $this->eventCards = Events::with('users')->get();
-
+        // Dispatch data to frontend
         $this->dispatch('eventsLoaded', $this->events);
         $this->dispatch('eventCardsLoaded', $this->eventCards);
     }
+
     public function selectEvent($event, $type)
     {
         $this->selectedEvent = $event;

@@ -20,19 +20,6 @@
                         font-weight: 400;
                         line-height: 22px;
 
-                        // &.button-draft {
-                        //     color: $secondary-color;
-                        // }
-
-                        // &.button-preview {
-                        //     background-color: #e7ece9;
-                        //     color: $primary-color;
-
-                        //     &:hover {
-                        //         background-color: $primary-color;
-                        //     }
-                        // }
-
                         &.button-submit {
                             background-color: $primary-color;
                             color: #fff;
@@ -62,7 +49,33 @@
 
     .main-class-form {
         .card-header {
-            background: #0E3C22;
+            background: #0e3c22;
+        }
+    }
+
+    .custom-upload-tips-list {
+        list-style: none;
+        padding: 0;
+
+        li {
+            font-size: 16px;
+            line-height: 24px;
+            position: relative;
+            padding-left: 25px;
+            color: #555;
+            margin-bottom: 20px;
+
+            &::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                background-color: $primary-color;
+                border-radius: 50%;
+            }
         }
     }
 }
