@@ -67,8 +67,9 @@ class Course extends Model
     }
     public function reviews()
     {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(Review::class, 'course_id');
     }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_courses', 'course_id', 'category_id');
