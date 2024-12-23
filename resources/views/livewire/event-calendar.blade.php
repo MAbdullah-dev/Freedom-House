@@ -117,6 +117,7 @@
                         <p><strong>Spots Left:</strong> <span class="spotsLeft">N/A</span></p>
                         <p><strong>Class will be on:</strong> <span class="date">N/A</span></p>
                         <p><strong>Class Time:</strong> <span class="class_time">N/A</span></p>
+                        <p><strong>Location:</strong> <span class="location">N/A</span></p>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -147,7 +147,7 @@ class RecordedLecture extends Component
     {
         $this->validate([
             'rating' => 'required|integer|min:1|max:5',
-            'review' => 'required|string|min:5|max:1000',
+            'review' => 'required|string|min:5|max:50',
         ]);
 
         // Save review to the database

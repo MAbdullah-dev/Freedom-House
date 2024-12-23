@@ -71,7 +71,7 @@ class Category extends Component
     }
     public function updateCategory()
     {
-        $this->validate(['updatedCategoryName' => 'required|string|max:255|unique:categories,category_name,' . $this->categoryIdBeingUpdated]);
+        $this->validate(['updatedCategoryName' => 'required|string|min:5|max:30|unique:categories,category_name,' . $this->categoryIdBeingUpdated]);
         $category = ModelsCategory::find($this->categoryIdBeingUpdated);
         $category->update(['category_name' => $this->updatedCategoryName]);
 

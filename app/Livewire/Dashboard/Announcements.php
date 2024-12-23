@@ -24,8 +24,8 @@ class Announcements extends Component
 
     protected $rules = [
         'selectedCourse' => 'required|exists:courses,id',
-        'subject' => 'required|string|max:255',
-        'message' => 'required|string',
+        'subject' => 'required|string|min:5|max:20',
+        'message' => 'required|string|min:5|max:50',
     ];
 
     public function mount()

@@ -32,18 +32,17 @@ class ClassForm extends Component
     protected $rules = [
         'type' => 'required|in:class,event',
         'course_id' => 'nullable|exists:courses,id',
-        'title' => 'required|string|max:40|unique:classes,title',
-        'description' => 'required|string',
+        'title' => 'required|string|min:5|max:30|unique:classes,title',
+        'description' => 'required|string|min:10|max:100',
         'class_type' => 'required_if:type,class|in:onsite,virtual',
         'teams_link' => 'nullable|url',
         'onsite_address' => 'nullable|required_if:class_type,onsite|string|max:255',
-        // 'recorded_video_url' => 'nullable|required_if:class_type,recorded|url',
         'is_paid' => 'required|in:free,paid',
         'price' => 'nullable|required_if:is_paid,paid|numeric',
         'capacity' => 'required|integer|min:1',
         'class_date' => 'required|date|date_format:Y-m-d',
         'class_time' => 'required',
-        'date_range' => 'required', // Custom date range validation
+        'date_range' => 'required',
         'booking_start_date' => 'required|date',
         'booking_end_date' => 'required|date',
     ];
