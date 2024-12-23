@@ -10,10 +10,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Announcements extends Component
 {
+    use LivewireAlert;
     public $courses;
     public $selectedCourse;
     public $subject;
@@ -73,10 +75,10 @@ class Announcements extends Component
 
             // Log success and display flash message
             Log::info('Announcement created successfully', ['announcement_id' => $announcement->id]);
-            session()->flash('success', 'Announcement sent successfully!');
+            $this->alert('success', 'Announcement sent successfully!');
         } catch (\Exception $e) {
             Log::error("Failed to create announcement: " . $e->getMessage());
-            session()->flash('error', 'Failed to send the announcement. Please try again.');
+            $this->alert('error', 'Failed to create announcement. Please try again.');
         }
     }
     public function filterAnnouncements()
@@ -96,7 +98,7 @@ class Announcements extends Component
         } catch (\Exception $e) {
             // Log the error for failed email sending
             Log::error("Failed to send email: " . $e->getMessage());
-            session()->flash('error', 'Failed to send emails. Please try again.');
+            $this->alert('error', 'Failed to send emails. Please try again.');
         }
     }
 

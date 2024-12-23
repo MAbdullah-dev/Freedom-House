@@ -14,6 +14,8 @@ class EarningsTab extends Component
     public $totalCommissions;
     public $totalFees;
     public $monthlyEarnings = []; // Data for the chart
+    public $chartLabels;
+    public $chartData;
 
     public function mount()
     {
@@ -57,17 +59,17 @@ class EarningsTab extends Component
         $this->totalFees = $totalFees;
 
         $this->monthlyEarnings = array_values($earningsByMonth);
+        $this->chartLabels = range(1, 12);
+        $this->chartData = $this->monthlyEarnings;
 
         // Dispatch the event with chart data
-        $this->dispatch('renderChart', range(1, 12), $this->monthlyEarnings);
+        $this->dispatch('renderChart', $this->chartLabels, $this->monthlyEarnings);
     }
+
 
 
     public function render()
     {
-        return view('livewire.course-analytics.earnings-tab', [
-            'chartLabels' => range(1, 12), // Months (1 to 12)
-            'chartData' => $this->monthlyEarnings,
-        ]);
+        return view('livewire.course-analytics.earnings-tab');
     }
 }

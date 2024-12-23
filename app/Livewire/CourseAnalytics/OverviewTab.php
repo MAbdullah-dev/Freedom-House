@@ -49,10 +49,15 @@ class OverviewTab extends Component
             ->whereIn('course_id', $courses)
             ->groupBy('course_id')
             ->pluck('total_students', 'course_id');
+
+        $this->dispatch('updatechart', $this->enrollmentData, $this->highestRatedCourse);
     }
 
     public function render()
     {
-        return view('livewire.course-analytics.overview-tab');
+        return view('livewire.course-analytics.overview-tab', [
+            $this->enrollmentData,
+            $this->highestRatedCourse
+        ]);
     }
 }

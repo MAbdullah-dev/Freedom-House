@@ -140,8 +140,8 @@
     </section>
 </div>
 @push('js')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             var enrollmentData = @this.enrollmentData; // Get the data from Livewire component
 
             var courses = @json($highestRatedCourse->pluck('title'));
@@ -179,6 +179,10 @@
 
             var chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
+            document.addEventListener('renderChart', function() {
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            })
         });
-</script>
+    </script>
 @endpush

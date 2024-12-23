@@ -37,7 +37,7 @@ class Login extends Component
                 ]);
 
 
-                return redirect()->route('dashboard.settings');
+                return redirect()->route('home');
             } else {
                 $this->alert('warning', 'Please verify your email address before logging in.');
 

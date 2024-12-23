@@ -124,21 +124,14 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Send Announcement</button>
+                        <button type="button" class="button-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="button-primary">Send Announcement</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-{{-- <!-- Success Flash Message (if any) -->
-@if (session()->has('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif --}}
 @script
     <script>
         // Initialize Flatpickr

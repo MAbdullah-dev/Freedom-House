@@ -50,95 +50,57 @@
     <section>
         <div>
             <h3>Earnings Overview</h3>
-            <div id="earnings-chart"></div>
+            <div wire:ignore wire:change='updated' id="earnings-chart"></div>
         </div>
     </section>
 
 </div>
-{{-- @php
-        echo '<script>
-            const chartLabels1 = ' . $chartLabels . ';
-            const chartData1 = ' . $chartData . ';
-            document.addEventListener("DOMContentLoaded", function() {
-                // Chart Data from Livewire
-                const chartLabels = chartLabels1;
-                const chartData = chartData1;
-                console.log(chartLabels);
-                // Initialize ApexCharts
-                var options = {
-                    chart: {
-                        type: "bar",
-                        height: 350
-                    },
-                    series: [{
-                        name: "Earnings",
-                        data: chartData
-                    }],
-                    xaxis: {
-                        categories: chartLabels,
-                        title: {
-                            text: "Months"
-                        }
-                    },
-                    yaxis: {
-                        title: {
-                            text: "Earnings ($)"
-                        }
-                    },
+
+{{-- @push('js') --}}
+<script>
+    const chartLabels = @json($chartLabels);
+    const chartData = @json($chartData);
+
+    console.log(chartLabels, chartData); // Debug in the browser console
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (chartLabels.length && chartData.length) {
+            var options = {
+                chart: {
+                    type: "bar",
+                    height: 350
+                },
+                series: [{
+                    name: "Earnings",
+                    data: chartData
+                }],
+                xaxis: {
+                    categories: chartLabels,
                     title: {
-                        text: "Monthly Earnings",
-                        align: "center"
-                    },
-                    colors: ["#008FFB"]
-                };
-
-                var chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
-                chart.render();
-            });
-        </script>';
-    @endphp --}}
-{{-- </div> --}}
-@push('js')
-    <script>
-        const chartLabels = @json($chartLabels);
-        const chartData = @json($chartData);
-
-        console.log(chartLabels, chartData); // Debug in the browser console
-
-        document.addEventListener("DOMContentLoaded", function() {
-            if (chartLabels.length && chartData.length) {
-                var options = {
-                    chart: {
-                        type: "bar",
-                        height: 350
-                    },
-                    series: [{
-                        name: "Earnings",
-                        data: chartData
-                    }],
-                    xaxis: {
-                        categories: chartLabels,
-                        title: {
-                            text: "Months"
-                        }
-                    },
-                    yaxis: {
-                        title: {
-                            text: "Earnings ($)"
-                        }
-                    },
+                        text: "Months"
+                    }
+                },
+                yaxis: {
                     title: {
-                        text: "Monthly Earnings",
-                        align: "center"
-                    },
-                    colors: ["#008FFB"]
-                };
+                        text: "Earnings ($)"
+                    }
+                },
+                title: {
+                    text: "Monthly Earnings",
+                    align: "center"
+                },
+                colors: ["#008FFB"]
+            };
 
-                var chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
-                chart.render();
-            } else {
-                console.error("Chart data is empty.");
-            }
-        });
-    </script>
-@endpush
+            var chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
+            chart.render();
+        } else {
+            console.error("Chart data is empty.");
+        }
+        document.addEventListener('renderChart', function() {
+            var chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
+            chart.render();
+        })
+    });
+</script>
+{{-- @endpush --}}
