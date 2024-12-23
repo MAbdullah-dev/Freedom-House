@@ -129,7 +129,7 @@
                                                         <div class="class-name d-flex align-items-center">
                                                             <i class="fa-brands fa-youtube mx-2"></i>
                                                             <a
-                                                                href="{{ route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
+                                                                href="{{ route('recorded.lecture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
                                                                 <span>{{ $lecture->title }}</span>
                                                             </a>
                                                         </div>

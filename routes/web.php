@@ -22,7 +22,7 @@ use App\Livewire\Dashboard\DashboardProfile;
 use App\Livewire\Dashboard\DashboardSettings;
 use App\Livewire\Dashboard\DashboardWishlist;
 use App\Livewire\Dashboard\HelpRequestsAdmin;
-use App\Livewire\Dashboard\Lacture;
+use App\Livewire\Dashboard\Lcture;
 use App\Livewire\Dashboard\Lecture as DashboardLecture;
 use App\Livewire\Dashboard\MyCourses;
 use App\Livewire\Dashboard\ScheduleClasses;
@@ -38,11 +38,12 @@ use App\Livewire\OnSiteCourseDetails;
 use App\Livewire\EventCalendar;
 use App\Livewire\Quizzes\QuizCreate;
 use App\Livewire\Quizzes\QuizView;
-use App\Livewire\RecordedLacture;
+use App\Livewire\RecordedLcture;
 use App\Models\Lecture;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
 use App\Livewire\Dashboard\StudentView;
+use App\Livewire\RecordedLecture;
 
 //public routes
 Route::get('/', LivewireHome::class)->name('home');
@@ -81,7 +82,7 @@ Route::middleware('auth')->group(
         Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
         Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
         Route::get('/quiz/{quizId}', QuizView::class)->name('quiz.take');
-        Route::get('/recorded/lacture/{courseId}/{lectureId}', RecordedLacture::class)->name('recorded.lacture');
+        Route::get('/recorded/lecture/{courseId}/{lectureId}', RecordedLecture::class)->name('recorded.lecture');
         // dashboard routes
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         Route::get('dashboard/help', HelpRequest::class)->name('dashboard.help');

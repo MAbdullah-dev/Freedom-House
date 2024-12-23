@@ -41,13 +41,13 @@ class CreateCourse extends Component
     protected function rules()
     {
         return [
-            'courseTitle' => 'required|string|max:255|unique:courses,title,' . $this->courseId,
+            'courseTitle' => 'required|string|max:35|unique:courses,title,' . $this->courseId,
             'description' => 'required|string',
             'category' => 'array|min:1',
             'category.*' => 'exists:categories,id',
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'file' => 'required|image|mimes:jpeg,png,jpg|max:1024',
             'videoUrl' => 'required|url',
             'learnDetails' => 'required|string',
             'audienceDetails' => 'required|string',
@@ -187,6 +187,37 @@ class CreateCourse extends Component
         $course->tutors()->sync($this->tutors);
 
         $this->alert('success', 'Course updated successfully.');
+    }
+    public function saveAsDraft()
+    {
+        $this->validate();
+
+        $filePath = $this->uploadThumbnail();
+
+        $course = Course::create([
+            'user_id' => Auth::id(),
+            'title' => $this->courseTitle,
+            'description' => $this->description,
+            'thumbnail' => $filePath,
+            'video_url' => $this->videoUrl,
+            'learning_outcomes' => $this->learnDetails,
+            'requirements' => $this->requirements,
+            'target_audience' => $this->audienceDetails,
+            'is_drafted' => true,
+            'is_published' => false,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'course_type' => $this->courseType,
+            'is_completed' => $this->courseType === 'recorded' ? false : true, // Set based on course_type
+        ]);
+
+        $course->categories()->attach($this->category);
+        $course->tags()->attach($this->tags);
+        $course->tutors()->attach($this->tutors);
+
+        $this->resetForm();
+        $this->alert('success', 'Course saved as draft.');
+        $this->redirect(route('dashboard.mycourses'));
     }
 
     public function resetForm()

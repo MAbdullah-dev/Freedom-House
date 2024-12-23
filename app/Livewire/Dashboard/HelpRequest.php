@@ -20,7 +20,7 @@ class HelpRequest extends Component
     protected $rules = [
         'subject' => 'required|string|max:50',
         'request_detail' => 'required|string',
-        'request_img' => 'nullable|image|max:1024',
+        'request_img' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
     ];
 
     public function mount()

@@ -17,7 +17,7 @@ class Tags extends Component
     public $tags;
 
     protected $rules = [
-        'name' => 'required|string|max:255|unique:tags,name',
+        'name' => 'required|string|max:30|unique:tags,name',
     ];
 
     public function mount()
