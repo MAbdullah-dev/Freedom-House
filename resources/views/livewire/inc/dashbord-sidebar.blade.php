@@ -68,7 +68,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.analytics' ? 'active' : '' }}"
-                            href="{{ route('dashboard.analytics') }}" wire:navigate>
+                            href="{{ route('dashboard.analytics') }}">
                             <i class="fa-solid fa-book"></i> Course Analytics
                         </a>
                     </li>

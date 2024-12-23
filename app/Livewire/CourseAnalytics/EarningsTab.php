@@ -61,8 +61,6 @@ class EarningsTab extends Component
         $this->monthlyEarnings = array_values($earningsByMonth);
         $this->chartLabels = range(1, 12);
         $this->chartData = $this->monthlyEarnings;
-
-        // Dispatch the event with chart data
         $this->dispatch('renderChart', $this->chartLabels, $this->monthlyEarnings);
     }
 

@@ -56,14 +56,14 @@
 
 </div>
 
-{{-- @push('js') --}}
-<script>
-    const chartLabels = @json($chartLabels);
-    const chartData = @json($chartData);
+@script
+    <script type="text/javascript">
+        const chartLabels = @json($chartLabels);
+        const chartData = @json($chartData);
 
-    console.log(chartLabels, chartData); // Debug in the browser console
+        console.log(chartLabels, chartData); // Debugging output (remove for production)
 
-    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize the chart if data exists
         if (chartLabels.length && chartData.length) {
             var options = {
                 chart: {
@@ -92,15 +92,18 @@
                 colors: ["#008FFB"]
             };
 
+            // Create and render the chart
             var chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
             chart.render();
+
+            // Listen for a custom event to re-render the chart
+            document.addEventListener('renderChart', function() {
+                chart.destroy(); // Destroy the previous chart instance
+                chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
+                chart.render(); // Reinitialize and render
+            });
         } else {
             console.error("Chart data is empty.");
         }
-        document.addEventListener('renderChart', function() {
-            var chart = new ApexCharts(document.querySelector("#earnings-chart"), options);
-            chart.render();
-        })
-    });
-</script>
-{{-- @endpush --}}
+    </script>
+@endscript

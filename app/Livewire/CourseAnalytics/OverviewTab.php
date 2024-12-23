@@ -15,7 +15,7 @@ class OverviewTab extends Component
     public $reviewCount;
     public $highestRatedCourse;
     public $recentReviews;
-    public $enrollmentData; // For ApexChart
+    public $enrollmentData;
 
     public function mount()
     {
@@ -55,6 +55,7 @@ class OverviewTab extends Component
 
     public function render()
     {
+        // dd($this->enrollmentData, $this->highestRatedCourse);
         return view('livewire.course-analytics.overview-tab', [
             $this->enrollmentData,
             $this->highestRatedCourse

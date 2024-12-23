@@ -75,7 +75,7 @@ class OnSiteCourseDetails extends Component
         Notification::create([
             'user_id' => Auth::id(),
             'message' => 'You successfully Enrolled in the free course: ' . $this->courseTitle . ' 😊.',
-            'type' => 'purchase',
+            'type' => 'booking',
         ]);
         session()->flash('success', 'You have successfully enrolled in the free course!');
         return redirect()->to(route('onsite.course.details', ['id' => $this->courseId]));

@@ -10,10 +10,10 @@
                 </li>
                 <li><i class="fa-regular fa-circle-play fa-sm video-player"></i> {{ $lectures->count() }}
                     Lectures</li>
-               <li>
-                <i class="fa-regular fa-clock fa-sm"></i>
-                {{ gmdate('H:i:s', $lectures->sum('video_duration')) }}
-            </li>
+                <li>
+                    <i class="fa-regular fa-clock fa-sm"></i>
+                    {{ gmdate('H:i:s', $lectures->sum('video_duration')) }}
+                </li>
             </ul>
             <div class="controll-btn d-flex gap-4">
                 @php
@@ -324,18 +324,41 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        Livewire.on('open-review-modal', () => {
-            $('#reviewModal').modal('show');
 
+        Livewire.on('open-review-modal', () => {
+            setTimeout(() => {
+                $('#reviewModal').modal('show');
+            }, 2000);
         });
         Livewire.on('close-review-modal', () => {
             $('#reviewModal').modal('hide');
         });
+
     });
+    document.addEventListener('congratulation', function() {
+        setTimeout(() => {
+            confetti({
+                particleCount: 700,
+                spread: 200,
+                origin: {
+                    y: 1.2
+                }
+            });
+        }, 200);
+        setTimeout(() => {
+            confetti({
+                particleCount: 700,
+                spread: 200,
+                origin: {
+                    y: 1
+                }
+            });
+        }, 500);
+    })
 </script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
-    console.log('ggg');
+    // console.log('ggg');
 
     var iframe = document.getElementById('vimeo-player');
     var player = new Vimeo.Player(iframe);

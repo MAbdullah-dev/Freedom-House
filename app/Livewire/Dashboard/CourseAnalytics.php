@@ -6,7 +6,12 @@ use Livewire\Component;
 
 class CourseAnalytics extends Component
 {
-      public $activeTab = 'overview'; 
+    public $activeTab = 'overview';
+
+    public  function mount()
+    {
+        $this->dispatch('renderChart');
+    }
 
     public function setActiveTab($tab)
     {
@@ -18,6 +23,3 @@ class CourseAnalytics extends Component
         return view('livewire.dashboard.course-analytics')->layout('components.layouts.dashboard');
     }
 }
-
-
-

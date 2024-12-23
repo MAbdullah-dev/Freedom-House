@@ -140,6 +140,7 @@
     </section>
 </div>
 @push('js')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var enrollmentData = @this.enrollmentData; // Get the data from Livewire component
@@ -176,13 +177,16 @@
                     align: 'center'
                 }
             };
-
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
-            chart.render();
-            document.addEventListener('renderChart', function() {
+            setTimeout(() => {
                 var chart = new ApexCharts(document.querySelector("#chart"), options);
                 chart.render();
-            })
+            }, 3000);
+            setTimeout(() => {
+                document.addEventListener('renderChart', function() {
+                    console.log('hihi');
+                    chart.render();
+                })
+            }, 3000);
         });
     </script>
 @endpush

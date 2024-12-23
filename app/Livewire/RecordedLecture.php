@@ -140,6 +140,7 @@ class RecordedLecture extends Component
         // If all lectures are watched and no review exists, trigger the review modal
         if ($totalLectures === $watchedLectures) {
             $this->dispatch('open-review-modal');
+            $this->dispatch('congratulation');
         }
     }
 
@@ -248,7 +249,6 @@ class RecordedLecture extends Component
                 ->where('type', 'congratulation')
                 ->where('message', '🎉 Congratulations! You have successfully completed your course. Well done! 👏')
                 ->exists();
-
             if (!$existingNotification) {
                 Notification::create([
                     'user_id' => $user->id,
