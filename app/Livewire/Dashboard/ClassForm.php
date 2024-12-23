@@ -32,7 +32,7 @@ class ClassForm extends Component
     protected $rules = [
         'type' => 'required|in:class,event',
         'course_id' => 'nullable|exists:courses,id',
-        'title' => 'required|string|max:255',
+        'title' => 'required|string|max:40|unique:classes,title',
         'description' => 'required|string',
         'class_type' => 'required_if:type,class|in:onsite,virtual',
         'teams_link' => 'nullable|url',

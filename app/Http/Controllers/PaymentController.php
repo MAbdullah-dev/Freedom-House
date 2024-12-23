@@ -58,8 +58,6 @@ class PaymentController extends Controller
                 'message' => 'You successfully purchased the course: ' . $courseName . ' 😊.',
                 'type' => 'purchase',
             ]);
-            // Optionally reduce available slots in the course if needed
-            // Course::where('id', $courseId)->decrement('capacity');
 
             return redirect()->route("onsite.course.details", $courseId)
                 ->with('success', 'Payment successful! You are enrolled in the course.');

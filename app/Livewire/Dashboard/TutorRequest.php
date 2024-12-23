@@ -97,15 +97,12 @@ class TutorRequest extends Component
 
             $this->alert('success', 'Tutor approved successfully and email sent.');
 
-            // Reset modal fields
             $this->approvalMessage = '';
         } else {
             $this->alert('error', 'Tutor not found.');
         }
 
-        // Reload tutors
         $this->loadTutors();
-        // Close modal
         $this->dispatch('hideApproveModal');
     }
 

@@ -34,13 +34,13 @@ class DashboardSettings extends Component
     public function updateProfile()
     {
         $this->validate([
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'userName' => 'required|string|max:255',
+            'firstName' => 'required|string|max:20',
+            'lastName' => 'required|string|max:20',
+            'userName' => 'required|string|max:20|unique:users,column,except,id',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string',
-            'coverPhoto' => 'nullable|image|max:1024',
-            'profilePhoto' => 'nullable|image|max:1024',
+            'coverPhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
+            'profilePhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
         ]);
 
         if ($this->coverPhoto) {

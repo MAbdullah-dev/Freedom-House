@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Vimeo\Laravel\Facades\Vimeo;
 
-class RecordedLacture extends Component
+class RecordedLecture extends Component
 {
     use LivewireAlert;
 
@@ -371,6 +371,6 @@ class RecordedLacture extends Component
     // Render the view
     public function render()
     {
-        return view('livewire.recorded-lacture');
+        return view('livewire.recorded-lecture');
     }
 }

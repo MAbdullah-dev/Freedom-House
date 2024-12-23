@@ -22,13 +22,6 @@
                         <a class="nav-link" :class="{ 'active': tab === 'trending' }"
                             @click="tab = 'trending'">Trending</a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a class="nav-link" :class="{ 'active': tab === 'onsite' }" @click="tab = 'onsite'">Onsite</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" :class="{ 'active': tab === 'virtual' }"
-                            @click="tab = 'virtual'">Virtual</a>
-                    </li> --}}
                 </ul>
 
                 <!-- Tab Content -->
@@ -45,14 +38,6 @@
                     <div x-show="tab === 'trending'">
                         <livewire:courses-cards.trending-cards />
                     </div>
-                    {{-- <!-- Onsite Tab -->
-                    <div x-show="tab === 'onsite'">
-                        <livewire:courses-cards.onsite-cards />
-                    </div>
-                    <!-- Virtual Tab -->
-                    <div x-show="tab === 'virtual'">
-                        <livewire:courses-cards.virtual-cards />
-                    </div> --}}
                 </div>
             </div>
         </div>
@@ -146,7 +131,14 @@
                                     <div class="card-img-top">
                                         <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
                                             alt="...">
-                                        <i class="fa-regular fa-bookmark"></i>
+                                        @if (Auth::check())
+                                        <i class="{{ Auth::user()->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
+                                            data-course-id="{{ $item->id }}" style="cursor: pointer;">
+                                        </i>
+                                        @else
+                                        <i class="fa-regular fa-bookmark" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#AuthCheckModal">
+                                        </i>
+                                        @endif
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $item->title }}</h5>
@@ -164,21 +156,13 @@
                                                     {{ $item->user->last_name }}</span>
                                             </div>
                                             <div class="tutor-meta-icon d-flex align-items-center gap-2">
-                                                {{-- <div class="meta-icon d-flex align-items-center">
-                                                    <i class="fa-regular fa-user" style="color: #757c8e;"></i>
-                                                    <span>11</span>
-                                                </div> --}}
-                                                {{-- <div class="meta-icon d-flex align-items-center">
-                                                    <i class="fa-regular fa-clock" style="color: #757c8e;"></i>
-                                                    <span>2h</span>
-                                                </div> --}}
+
                                             </div>
                                         </div>
                                         <p class="card-text">{{ $item->description }}
                                         </p>
                                         <div class="post-details">
                                             <div>
-                                                {{-- <span class="duration">2hr &nbsp;|&nbsp;</span> --}}
                                                 <span class="date">Published:
                                                     {{ $item->created_at->diffForHumans() }}</span>
                                             </div>

@@ -1,4 +1,4 @@
-<div class="recorded-lacture">
+<div class="recorded-lecture">
     <div class="container">
         <div class="top-bar d-flex align-items-center justify-content-between mt-5">
             <ul class="d-flex align-items-end gap-3 gap-md-4">
@@ -10,7 +10,10 @@
                 </li>
                 <li><i class="fa-regular fa-circle-play fa-sm video-player"></i> {{ $lectures->count() }}
                     Lectures</li>
-                {{-- <li><i class="fa-regular fa-clock fa-sm"></i> {{ $currentLecture->duration }} hours</li> --}}
+               <li>
+                <i class="fa-regular fa-clock fa-sm"></i>
+                {{ gmdate('H:i:s', $lectures->sum('video_duration')) }}
+            </li>
             </ul>
             <div class="controll-btn d-flex gap-4">
                 @php
@@ -29,19 +32,19 @@
 
                 <a class="button-primary {{ !$prevLectureId ? 'disabled' : '' }}"
                     {{ !$prevLectureId ? '' : 'wire:navigate' }}
-                    href="{{ $prevLectureId ? route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $prevLectureId]) : 'javascript:void(0)' }}">
+                    href="{{ $prevLectureId ? route('recorded.lecture', ['courseId' => $courseId, 'lectureId' => $prevLectureId]) : 'javascript:void(0)' }}">
                     <i class="fa-solid fa-arrow-left fa-xs"></i> Previous
                 </a>
 
                 <a class="button-secondary {{ !$nextLectureId ? 'disabled' : '' }}"
                     {{ !$nextLectureId ? '' : 'wire:navigate' }}
-                    href="{{ $nextLectureId ? route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $nextLectureId]) : 'javascript:void(0)' }}">
+                    href="{{ $nextLectureId ? route('recorded.lecture', ['courseId' => $courseId, 'lectureId' => $nextLectureId]) : 'javascript:void(0)' }}">
                     Next <i class="fa-solid fa-arrow-right fa-xs"></i>
                 </a>
             </div>
 
         </div>
-        <section class="lacture mt-5">
+        <section class="lecture mt-5">
             <div class="row">
                 <div class="col-12 col-xl-8">
                     <div class="iframe-container">
@@ -58,8 +61,8 @@
                     </div>
                 </div>
                 <div class="col-12 col-xl-4">
-                    <div class="lactures-detail my-xl-0 my-5">
-                        <div class="lacture-progress">
+                    <div class="lectures-detail my-xl-0 my-5">
+                        <div class="lecture-progress">
                             <div class="d-flex justify-content-between">
                                 <p>Course Content</p>
                                 <p>{{ $progressPercentage }}% completed</p>
@@ -98,7 +101,7 @@
                                         <div id="lecture-{{ $lecture->id }}"
                                             class="accordion-collapse collapse {{ $lecture->id === $currentLecture->id ? 'show' : '' }}">
                                             <a
-                                                href="{{ route('recorded.lacture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
+                                                href="{{ route('recorded.lecture', ['courseId' => $courseId, 'lectureId' => $lecture->id]) }}">
                                                 <div
                                                     class="accordion-body d-flex align-items-center justify-content-between text-success">
                                                     <div>

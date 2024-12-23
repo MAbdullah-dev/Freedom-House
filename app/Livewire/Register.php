@@ -24,10 +24,10 @@ class Register extends Component
     {
         // dd(request()->all());
         $this->validate([
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
+            'first_name' => 'required|string|max:20',
+            'last_name' => 'required|string|max:20',
             'email' => 'required|email|unique:users|max:100',
-            'phone' => 'required|string|max:15',
+            'phone' => 'required|string|max:20',
             'password' => 'required|min:8|same:confirm_password',
         ]);
 

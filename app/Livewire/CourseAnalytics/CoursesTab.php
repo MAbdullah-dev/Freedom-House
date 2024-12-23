@@ -15,9 +15,8 @@ class CoursesTab extends Component
     {
         $userId = Auth::id();
 
-        // Fetch all courses created by the logged-in user
         $courses = Course::where('user_id', $userId)
-            ->where('is_published', true) // Optional: Only published courses
+            ->where('is_published', true)
             ->get();
 
         // Process each course to calculate data

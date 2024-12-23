@@ -24,7 +24,7 @@ class Category extends Component
     }
 
     protected $rules = [
-        'category_name' => 'required|string|max:255|unique:categories',
+        'category_name' => 'required|string|max:30|unique:categories',
     ];
 
     public function createCategory()

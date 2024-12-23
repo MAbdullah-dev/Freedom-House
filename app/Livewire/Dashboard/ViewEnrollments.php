@@ -8,9 +8,9 @@ use Carbon\Carbon;
 
 class ViewEnrollments extends Component
 {
-    public $dateRange; // Captures the selected date range
-    public $classes = []; // Stores the filtered classes
-    public $selectedClass; // Stores the class selected for modal display
+    public $dateRange;
+    public $classes = [];
+    public $selectedClass;
 
     // Watch for changes to $dateRange and fetch classes automatically
     public function updatedDateRange()
