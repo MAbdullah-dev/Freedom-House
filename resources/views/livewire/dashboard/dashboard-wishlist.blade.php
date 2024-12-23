@@ -22,7 +22,8 @@
                     <h5 class="card-title">{{ $wishlist->course->title }}</h5>
                     <div class="tutor-meta-wrapper d-flex align-items-center gap-3">
                         <div class="tutor-data d-flex align-items-center gap-1">
-                            <img src="http://127.0.0.1:8000/assets/images/created_by.png" alt="Creator">
+                            <img src="{{ asset('storage/' . $wishlist->course->user->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
+                                alt="Creator">
                             <small>by</small>
                             <span>{{ $wishlist->course->user->first_name ?? 'N/A' }}
                                 {{ $wishlist->course->user->last_name ?? '' }}</span>

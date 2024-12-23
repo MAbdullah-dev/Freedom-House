@@ -142,7 +142,7 @@
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3">
                                                     <!-- Display the uploaded image or fallback to a placeholder image -->
-                                                    <img src="{{ $file ? $file->temporaryUrl() : asset('assets/images/dummy-course-img.png') }}"
+                                                    <img src="{{ $file ? $file->temporaryUrl() }}"
                                                         style="width: 250px; height: 150px" alt="Course Thumbnail"
                                                         id="previewImage">
                                                 </div>
@@ -238,7 +238,7 @@
                                             @foreach ($selectedTutors as $tutor)
                                                 <div class="instructor-card-wrapper my-3 d-flex align-items-center">
                                                     <div class="instructor-avatar">
-                                                        <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}"
+                                                        <img src="{{ asset('storage/' . $tutor->user->pfp) }}"
                                                             alt="Autumn Green" class="avatar-image">
                                                     </div>
                                                     <div class="instructor-info">
@@ -246,7 +246,7 @@
                                                             <span
                                                                 class="instructor-name">{{ $tutor->user->first_name }}
                                                                 {{ $tutor->user->last_name }}</span>
-                                                            <img src="https://freedomhousetraining.org/wp-content/plugins/tutor-pro/addons/tutor-multi-instructors/assets/images/crown.svg"
+                                                            <img src="{{ asset('storage/' . $tutor->user->pfp) }}"
                                                                 alt="Instructor Badge" class="instructor-badge">
                                                         </div>
                                                         <div class="instructor-email">{{ $tutor->user->email }}
@@ -330,19 +330,23 @@
                     </div>
                 </div>
                 <!-- Course Upload Tips -->
-               <div class="col-lg-4">
-                <div class="card p-3 mb-3 custom-upload-tips-card">
-                    <h5 class="card-title">Course Upload Tips</h5>
-                    <ul class="custom-upload-tips-list">
-                        <li><strong>Set Course Price</strong> – Recorded courses can be either paid or free.</li>
-                        <li><strong>Use 700x430 Thumbnail</strong> – Make sure the course thumbnail is the right size.</li>
-                        <li><strong>Upload a Course Video</strong> – Add a video that gives an overview of the course.</li>
-                        <li><strong>Use Course Builder</strong> – Create and organize lessons and classes.</li>
-                        <li><strong>Add Topics</strong> – Structure your course with topics for better navigation.</li>
-                        <li><strong>Set Prerequisites</strong> – Specify any required courses before enrolling in this one.</li>
-                    </ul>
+                <div class="col-lg-4">
+                    <div class="card p-3 mb-3 custom-upload-tips-card">
+                        <h5 class="card-title">Course Upload Tips</h5>
+                        <ul class="custom-upload-tips-list">
+                            <li><strong>Set Course Price</strong> – Recorded courses can be either paid or free.</li>
+                            <li><strong>Use 700x430 Thumbnail</strong> – Make sure the course thumbnail is the right
+                                size.</li>
+                            <li><strong>Upload a Course Video</strong> – Add a video that gives an overview of the
+                                course.</li>
+                            <li><strong>Use Course Builder</strong> – Create and organize lessons and classes.</li>
+                            <li><strong>Add Topics</strong> – Structure your course with topics for better navigation.
+                            </li>
+                            <li><strong>Set Prerequisites</strong> – Specify any required courses before enrolling in
+                                this one.</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
             </div>
         </form>
     </div>

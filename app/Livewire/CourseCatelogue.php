@@ -48,7 +48,7 @@ class CourseCatelogue extends Component
 
     public function render()
     {
-        $courses = Course::with(['user', 'categories'])
+        $courses = Course::with(['user', 'categories', 'ratings'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->when($this->search, function ($query) {
@@ -59,6 +59,7 @@ class CourseCatelogue extends Component
                     $categoryQuery->whereIn('categories.id', $this->selectedCategories);
                 });
             })
+            ->withAvg('ratings', 'rating')
             ->paginate(10);
 
 

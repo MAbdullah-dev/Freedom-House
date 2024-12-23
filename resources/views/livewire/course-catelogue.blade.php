@@ -144,22 +144,24 @@
                             <div class="col-sm-6 col-lg-4 ">
                                 <div class="card shadow">
                                     <div class="card-img-top">
-                                        <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
+                                        <img src="{{ asset('storage/' . $item->thumbnail) }}" class="card-img-top"
                                             alt="...">
                                         <i class="fa-regular fa-bookmark"></i>
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $item->title }}</h5>
                                         <div class="tutor-ratings d-flex align-items-center gap-1">
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= round($item->ratings_avg_rating))
+                                                    <i class="fa-solid fa-star" style="color: #eea015;"></i>
+                                                @else
+                                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                                                @endif
+                                            @endfor
                                         </div>
                                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                                             <div class="tutor-data d-flex align-items-center gap-1">
-                                                <img src="{{ asset('assets/images/created_by.png') }}" alt="">
+                                                <img src="{{ asset('storage/' . $item->user->pfp) }}" alt="">
                                                 <small>by</small><span>{{ $item->user->first_name }}
                                                     {{ $item->user->last_name }}</span>
                                             </div>

@@ -1,3 +1,10 @@
+@php
+    $user = auth()->user();
+    $tutorRequest = $user->tutor ?? null;
+    $isTutorVerified = $tutorRequest ? $user->tutor->is_verified : false;
+    $isAdmin = $user->role_id == 1;
+@endphp
+
 <div class="dashboard-head mt-5">
     <div class="container">
         <div class="inner d-flex align-items-center justify-content-between tutor-data flex-wrap pb-2">
@@ -5,7 +12,8 @@
             <div class="tutor-info">
                 <ul class="tutor-avatar d-flex align-items-center gap-3">
                     <li>
-                        <img src="{{ asset('assets/images/user.png') }}" alt="User" class="rounded-circle">
+                        <img src="{{ asset('storage/' . $user->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
+                            alt="User" class="rounded-circle">
                     </li>
                     <li>
                         <span>Hello,</span>
@@ -27,12 +35,6 @@
                     @endif
                 </button>
 
-                @php
-                    $user = auth()->user();
-                    $tutorRequest = $user->tutor ?? null;
-                    $isTutorVerified = $tutorRequest ? $user->tutor->is_verified : false;
-                    $isAdmin = $user->role_id == 1;
-                @endphp
 
                 @if ($isAdmin || ($tutorRequest && $isTutorVerified))
                     <button type="button" class="button-secondary"

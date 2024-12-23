@@ -37,7 +37,7 @@
                 <div class="row align-items-center z-1 ">
                     <div class="col-lg-3">
                         <div class="profile">
-                            <img src="{{ asset('assets/images/tutor-profile-image.jpg') }}" alt="">
+                            <img src="{{ asset('storage/' . $tutor->user->pfp) }}" alt="">
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -72,7 +72,7 @@
                         <div
                             class="profile-details-mobile d-block d-lg-none d-flex align-items-center justify-content-center flex-column">
                             <div class="profile">
-                                <img src="{{ asset('assets/images/tutor-profile-image.jpg') }}" alt="">
+                                <img src="{{ asset('storage/' . $tutor->user->pfp) }}" alt="">
                             </div>
                             <div class="profile-details d-flex flex-column align-items-center justify-content-center">
                                 <div class="details-profile">
@@ -112,7 +112,7 @@
                                 <div class="col-md-6  col-xl-4">
                                     <div class="card shadow">
                                         <div class="card-img-top">
-                                            <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                                            <img src="{{ asset('storage/' . $tutorCourse->thumbnail) }}"
                                                 class="card-img-top" alt="...">
                                             <i class="fa-regular fa-bookmark"></i>
                                         </div>
@@ -127,7 +127,7 @@
                                             </div>
                                             <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                                                 <div class="tutor-data d-flex align-items-center gap-1">
-                                                    <img src="{{ asset('assets/images/created_by.png') }}"
+                                                    <img src="{{ asset('storage/' . $tutorCourse->user->pfp) }}"
                                                         alt="">
                                                     <small>by</small><span>{{ $tutorCourse->user->first_name }}
                                                         {{ $tutorCourse->user->last_name }}</span>

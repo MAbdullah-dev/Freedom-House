@@ -115,7 +115,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="#" wire:click="logout">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </li>

@@ -22,8 +22,8 @@
                     @foreach ($courses as $course)
                         <div class="swiper-slide">
                             <div class="card shadow">
-                                <img src="{{ asset('assets/images/featured-card-1.png') }}" class="card-img-top"
-                                    alt="...">
+                                <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.jpg') }}"
+                                    class="card-img-top" alt="...">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ $course->title }}</h5>
                                     <p class="card-text my-3">{{ $course->description }}</p>

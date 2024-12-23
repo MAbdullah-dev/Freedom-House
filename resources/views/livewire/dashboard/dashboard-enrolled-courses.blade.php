@@ -30,7 +30,7 @@
                 @foreach ($enrolledCourses as $course)
                     <div class="card shadow">
                         <div class="card-img-top">
-                            <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                            <img src="{{ asset('storage/' . $course['course']->thumbnail) }}"
                                 alt="{{ $course['course']->title }}">
                         </div>
                         <div class="card-body">
@@ -61,7 +61,7 @@
                 @foreach ($activeCourses as $course)
                     <div class="card shadow">
                         <div class="card-img-top">
-                            <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                            <img src="{{ asset('storage/' . $course['course']->thumbnail) }}"
                                 alt="{{ $course['course']->title }}">
                         </div>
                         <div class="card-body">
@@ -90,7 +90,7 @@
                 @foreach ($completedCourses as $course)
                     <div class="card shadow">
                         <div class="card-img-top">
-                            <img src="{{ asset('assets/images/featured-card-1.png') }}"
+                            <img src="{{ asset('storage/' . $course['course']->thumbnail) }}"
                                 alt="{{ $course['course']->title }}">
                         </div>
                         <div class="card-body">

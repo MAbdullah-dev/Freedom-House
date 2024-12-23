@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{ $tutor->id }}</td>
                             <td>
-                                <img src="{{ asset('assets/images/dummy-profile-photo.png') }}" alt="Tutor Photo"
+                                <img src="{{ asset('storage/' . $tutor->user->pfp) }}" alt="Tutor Photo"
                                     style="width: 50px; height: 50px; border-radius: 50%;">
                             </td>
                             <td>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</td>

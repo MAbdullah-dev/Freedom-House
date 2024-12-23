@@ -35,7 +35,7 @@
                     <tr>
                         <td>
                             <div class="student-info d-flex align-items-center">
-                                <img src="{{ asset('assets/images/ourteam3-150x150-1.jpg.png') }}" alt="Profile Picture"
+                                <img src="{{ asset('storage/' . $student['user']->pfp) }}" alt="Profile Picture"
                                     class="profile-pic me-3">
                                 <div>
                                     <strong>{{ $student['user']->first_name . ' ' . $student['user']->last_name }}</strong><br>
@@ -47,16 +47,17 @@
                         <td class="text-center">{{ $student['course']->title }}</td>
                         <td>
                             @if ($student['course']->course_type === 'class_type')
-                            <span>No progress due to class type</span>
+                                <span>No progress due to class type</span>
                             @else
-                            <div>
-                                <label for="progress-{{ $student['course']->id }}" class="d-block">
-                                    Course Progress: {{ $student['progress'] }}%
-                                </label>
-                                <progress id="progress-{{ $student['course']->id }}" value="{{ $student['progress'] }}" max="100" class="w-100">
-                                    {{ $student['progress'] }}%
-                                </progress>
-                            </div>
+                                <div>
+                                    <label for="progress-{{ $student['course']->id }}" class="d-block">
+                                        Course Progress: {{ $student['progress'] }}%
+                                    </label>
+                                    <progress id="progress-{{ $student['course']->id }}"
+                                        value="{{ $student['progress'] }}" max="100" class="w-100">
+                                        {{ $student['progress'] }}%
+                                    </progress>
+                                </div>
                             @endif
                         </td>
                     </tr>

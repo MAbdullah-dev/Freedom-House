@@ -39,8 +39,8 @@ class DashboardSettings extends Component
             'userName' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string',
-            'coverPhoto' => 'nullable|image|max:1024',
-            'profilePhoto' => 'nullable|image|max:1024',
+            'coverPhoto' => 'nullable|image',
+            'profilePhoto' => 'nullable|image',
         ]);
 
         if ($this->coverPhoto) {

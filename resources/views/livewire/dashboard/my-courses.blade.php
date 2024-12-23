@@ -35,7 +35,7 @@
                     <div class="col-12 col-md-6 col-lg-4 mb-4">
                         <div class="card shadow">
                             <div class="card-img-top">
-                                <img src="{{ asset('assets/images/featured-card-1.png') }}" alt="Course"
+                                <img src="{{ asset('storage/' . $publishedCourse->thumbnail) }}" alt="Course"
                                     class="img-fluid">
                             </div>
                             <div class="card-body">
@@ -75,7 +75,7 @@
                     <div class="col-12 col-md-6 col-lg-4 mb-4">
                         <div class="card shadow">
                             <div class="card-img-top">
-                                <img src="{{ asset('assets/images/featured-card-1.png') }}" alt="Course"
+                                <img src="{{ asset('storage/' . $pendingCourse->thumbnail) }}" alt="Course"
                                     class="img-fluid">
                             </div>
                             <div class="card-body">
@@ -107,7 +107,7 @@
                     <div class="col-12 col-md-6 col-lg-4 mb-4">
                         <div class="card shadow">
                             <div class="card-img-top">
-                                <img src="{{ asset('assets/images/featured-card-1.png') }}" alt="Course"
+                                <img src="{{ asset('storage/' . $draftedCourse->thumbnail) }}" alt="Course"
                                     class="img-fluid">
                             </div>
                             <div class="card-body">

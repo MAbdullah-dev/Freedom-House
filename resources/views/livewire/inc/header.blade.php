@@ -66,7 +66,9 @@
             <div class="user-login">
                 @if (Auth::check())
                     <div class="login-icon">
-                        <i class="fa-solid fa-user"></i>
+                        <img class="login-icon-img"
+                            src="{{ asset('storage/' . Auth::user()->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
+                            alt="">
                     </div>
                     <div class="user-dropdown">
                         <span class="fs-5 mb-3 d-block">{{ Auth::user()->first_name }}</span>
