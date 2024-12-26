@@ -81,8 +81,8 @@
             @endif
         </section>
         <!-- Modal -->
-        <div wire:ignore.self class="modal fade" id="viewclassModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+        <div wire:ignore.self class="modal fade modal-lg" id="viewclassModal" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -93,7 +93,7 @@
                         <div wire:loading>
                             <p>Loading class details...</p>
                         </div>
-                        <div wire:loading.remove>
+                        <div class="enrollment-modal-details" wire:loading.remove>
                             @if ($selectedClass)
                                 <p><strong>Title:</strong> {{ $selectedClass->title }}</p>
                                 <p><strong>Description:</strong> {{ $selectedClass->description }}</p>
@@ -111,7 +111,7 @@
                                     <p><strong>Location:</strong> {{ $selectedClass->onsite_address }}</p>
                                 @else
                                     <p><strong>Virtual:</strong> <a href="{{ $selectedClass->teams_link }}"
-                                            target="_blank">{{ $selectedClass->teams_link }}</a></p>
+                                            target="_blank">Join Via Teams</a></p>
                                 @endif
                                 <p><strong>Booking Start Date:</strong> {{ $selectedClass->booking_start_date }}</p>
                                 <p><strong>Booking End Date:</strong> {{ $selectedClass->booking_end_date }}</p>

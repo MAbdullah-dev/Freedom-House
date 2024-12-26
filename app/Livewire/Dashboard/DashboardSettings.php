@@ -38,7 +38,7 @@ class DashboardSettings extends Component
             'lastName' => 'required|string|max:20',
             'userName' => 'required|string|max:20|unique:users,column,except,id',
             'phone' => 'nullable|string|max:20',
-            'bio' => 'nullable|string',
+            'bio' => 'nullable|string|max:255',
             'coverPhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
             'profilePhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
         ]);

@@ -78,7 +78,7 @@ class QuizCreate extends Component
     {
         $this->validate(
             [
-                'title' => 'required|string',
+                'title' => 'required|string|max:20',
                 'lecture_id' => 'required|integer|exists:lectures,id',
                 'description' => 'nullable|string',
                 'questions' => 'required|array|min:1',

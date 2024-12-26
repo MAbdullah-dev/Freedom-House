@@ -161,11 +161,11 @@ class CourseDetails extends Component
 
         try {
             // Use the user's Microsoft ID from Auth::user()->microsoft_id
-            $organizerId = $class->user->microsoft_id;
+            // $organizerId = $class->user->microsoft_id;
 
 
             // Add attendee to the event using the organizer's Microsoft ID
-            $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
+            // $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
 
             // Create a booking record
             Booking::create([

@@ -35,11 +35,9 @@ class EventCalendar extends Component
 
         $user = Auth::user();
 
-        // Always load event cards (for all users)
         $this->eventCards = Events::with('users')->get();
 
         if ($user) {
-            // Load user's specific calendar events
             $events = CalendarEvent::with(['event', 'class', 'user'])
                 ->where('user_id', $user->id)
                 ->orWhere(function ($query) use ($user) {
@@ -62,6 +60,8 @@ class EventCalendar extends Component
                         'description' => $source->description,
                         'spotsLeft' => $source->capacity,
                         'class_time' => $source->class_time,
+                        'onsite' => $source->onsite_address,
+                        'online' => $source->teams_link,
                         'type' => $isEvent ? 'event' : 'class',
                         'created_by' => optional($calendarEvent->user)->first_name,
                     ];
@@ -141,7 +141,7 @@ class EventCalendar extends Component
         $this->dispatch('close-modal');
         Notification::create([
             'user_id' => Auth::id(),
-            'message' => 'You successfully Enrolled in the free event: ' . $this->selectedEvent . ' 😊.',
+            'message' => 'You successfully Enrolled in the free event: ' . $this->selectedEvent['title'] . ' 😊.',
             'type' => 'booking',
         ]);
     }
