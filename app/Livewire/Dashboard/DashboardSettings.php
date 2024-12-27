@@ -26,6 +26,11 @@ class DashboardSettings extends Component
     public $newPassword_confirmation;
     public $timezone;
     public $timezoneOptions;
+    public $facebook;
+    public $twitter;
+    public $linkedin;
+    public $website;
+    public $github;
 
     public $activeTab = 'profile';
 
@@ -38,6 +43,11 @@ class DashboardSettings extends Component
         $this->phone = $this->user->phone;
         $this->bio = $this->user->bio;
         $this->timezone = $this->user->timezone ?? '';
+        $this->facebook = $this->user->facebook;
+        $this->twitter = $this->user->twitter;
+        $this->linkedin = $this->user->linkedin;
+        $this->website = $this->user->website;
+        $this->github = $this->user->github;
         $this->timezoneOptions = array_values(\DateTimeZone::listIdentifiers(\DateTimeZone::ALL));
         // dd($this->timezoneOptions);
     }
@@ -131,6 +141,26 @@ class DashboardSettings extends Component
         $this->alert('success', 'Password updated successfully!');
     }
 
+    public function updateSocialLinks()
+    {
+
+        $this->validate([
+            'facebook' => 'nullable|string|max:255',
+            'twitter' => 'nullable|string|max:255',
+            'linkedin' => 'nullable|string|max:255',
+            'website' => 'nullable|string|max:255',
+            'github' => 'nullable|string|max:255',
+        ]);
+
+        $this->user->facebook = $this->facebook;
+        $this->user->twitter = $this->twitter;
+        $this->user->linkedin = $this->linkedin;
+        $this->user->website = $this->website;
+        $this->user->github = $this->github;
+        $this->user->save();
+
+        $this->alert('success', 'Social links updated successfully!');
+    }
 
     public function render()
     {

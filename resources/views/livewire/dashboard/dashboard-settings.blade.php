@@ -97,10 +97,16 @@
                     <div class="col-md-6">
                         <label for="firstName">First Name</label>
                         <input type="text" class="form-control" id="firstName" wire:model="firstName">
+                        @error('firstName')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="lastName">Last Name</label>
                         <input type="text" class="form-control" id="lastName" wire:model="lastName">
+                        @error('lastName')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
@@ -108,22 +114,34 @@
                     <div class="col-md-6">
                         <label for="userName">User Name</label>
                         <input type="text" class="form-control" id="userName" wire:model="userName">
+                        @error('userName')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="phone">Phone Number</label>
                         <input type="text" class="form-control" id="phone" wire:model="phone">
+                        @error('phone')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="form-group mt-3">
                     <label for="bio">Bio</label>
                     <textarea id="bio" class="form-control" wire:model="bio"></textarea>
+                    @error('bio')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-group mt-3">
                     <label for="timezone">Timezone</label>
                     <select id="timezone" class="form-control" wire:model="timezone">
                         <option value="">Select Timezone</option>
+                        @error('timezone')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                         @foreach ($timezoneOptions as $tz)
                             <option value="{{ $tz }}" {{ $tz == $timezone ? 'selected' : '' }}>
                                 {{ $tz }}
@@ -183,7 +201,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="facebook"
-                        placeholder="http://facebook.com/username">
+                        placeholder="http://facebook.com/username" wire:model="facebook">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="twitter" class="d-flex align-items-center">
@@ -192,7 +210,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="twitter"
-                        placeholder="http://twitter.com/username">
+                        placeholder="http://twitter.com/username" wire:model="twitter">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="linkedin" class="d-flex align-items-center">
@@ -201,7 +219,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="linkedin"
-                        placeholder="http://linkedin.com/username">
+                        placeholder="http://linkedin.com/username" wire:model="linkedin">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="website" class="d-flex align-items-center">
@@ -209,7 +227,8 @@
                     </label>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <input type="url" class="form-control" id="website" placeholder="http://example.com">
+                    <input type="url" class="form-control" id="website" placeholder="http://example.com"
+                        wire:model="website">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="github" class="d-flex align-items-center">
@@ -218,7 +237,10 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="github"
-                        placeholder="http://github.com/username">
+                        placeholder="http://github.com/username" wire:model="github">
+                </div>
+                <div class="col-md-12 d-flex justify-content-end mt-3">
+                    <button class="button-primary" wire:click="updateSocialLinks">Submit</button>
                 </div>
             </div>
         </div>

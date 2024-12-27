@@ -92,13 +92,13 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help.admin' ? 'active' : '' }}"
                             href="{{ route('dashboard.help.admin') }}" wire:navigate>
-                            <i class="fa-regular fa-circle-question"></i>help requests
+                            <i class="fa-regular fa-circle-question"></i>Help requests
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.categories' ? 'active' : '' }}"
                             href="{{ route('dashboard.categories') }}" wire:navigate>
-                            <i class="fa-solid fa-table-list"></i> categories
+                            <i class="fa-solid fa-table-list"></i> Categories
                         </a>
                     </li>
                     <li class="nav-item">

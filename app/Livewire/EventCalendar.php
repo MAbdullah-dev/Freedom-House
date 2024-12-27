@@ -84,7 +84,7 @@ class EventCalendar extends Component
         $user = Auth::user();
         if ($user) {
             $userTimezone = $user->timezone;
-            $event['date'] = Carbon::parse($event['date'], 'UTC')->setTimezone($userTimezone)->toIso8601String();
+            $event['date'] = Carbon::parse($event['class_date'], 'UTC')->setTimezone($userTimezone)->toIso8601String();
             $event['class_time'] = Carbon::parse($event['class_time'], 'UTC')->setTimezone($userTimezone)->toTimeString();
             $event['booking_start_date'] = Carbon::parse($event['booking_start_date'], 'UTC')->setTimezone($userTimezone)->toDateString();
             $event['booking_end_date'] = Carbon::parse($event['booking_end_date'], 'UTC')->setTimezone($userTimezone)->toDateString();

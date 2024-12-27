@@ -31,6 +31,11 @@ return new class extends Migration
             $table->string('verification_token', 100)->nullable();
             $table->string('password_reset_token', 100)->nullable();
             $table->timestamp('password_token_created_at')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('website')->nullable();
+            $table->string('github')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
