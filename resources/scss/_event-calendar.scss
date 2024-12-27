@@ -23,16 +23,6 @@
                 .date-badge {
                     text-align: center;
 
-                    .day {
-                        background: linear-gradient(180deg,
-                                rgba(255, 255, 255, 0) 0%,
-                                rgba(208, 214, 219, 0.3) 100%);
-                        font-weight: 500;
-                        font-size: 20px;
-                        line-height: 24px;
-                        border-radius: 0px 0px 6px 6px;
-                    }
-
                     .month {
                         background-color: $primary-color;
                         color: #fff;
@@ -40,7 +30,19 @@
                         font-weight: 500;
                         line-height: 12px;
                         padding: 2px 20px;
-                        border-radius: 6px 6px 0px 0px;
+                        border-radius: 6px 6px 0 0;
+                    }
+
+                    .day {
+                        background: linear-gradient(
+                            180deg,
+                            rgba(255, 255, 255, 0) 0%,
+                            rgba(208, 214, 219, 0.3) 100%
+                        );
+                        font-weight: 500;
+                        font-size: 20px;
+                        line-height: 24px;
+                        border-radius: 0 0 6px 6px;
                     }
 
                     .event-count {
@@ -90,14 +92,6 @@
             color: $text-color !important;
         }
 
-        .fc-day-header {}
-
-        .fc-day-today {}
-
-        .fc-daygrid-day {
-            &.fc-day-today {}
-        }
-
         .fc-event {
             background-color: #87ceeb !important;
             color: #fff !important;
@@ -106,8 +100,6 @@
             white-space: nowrap;
             overflow: hidden;
             cursor: pointer;
-
-            .calendarEvent-details {}
         }
 
         .fc-daygrid-day {
@@ -116,64 +108,63 @@
             }
         }
     }
+}
 
-    .modal-content {
-        padding: 20px;
+.modal-content {
+    padding: 20px;
 
-        // .modal-header {
-        //     background: $primary-color;
-        // }
+    .modal-header {
+        background: $primary-color;
+    }
 
-        .modal-title {
-            font-size: 30px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
+    .modal-title {
+        font-size: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
-        .modal-body {
-            .event-details {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                row-gap: 30px;
+    .modal-body {
+        .event-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            row-gap: 30px;
+            p {
+                font-size: 20px;
+                // margin-bottom: 25px;
+                width: 45%;
 
-                p {
-                    font-size: 20px;
-                    // margin-bottom: 25px;
-                    width: 45%;
-
-                    strong {
-                        text-transform: capitalize;
-                    }
-
-                    span {
-                        display: block;
-                    }
-                }
-            }
-
-            .hosted-profile {
-                display: flex;
-                align-items: center;
-                gap: 20px;
-
-                img {
-                    width: 28px;
-                    height: 28px;
-                    border-radius: 50%;
+                strong {
+                    text-transform: capitalize;
                 }
 
-                p {
-                    font-size: 20px;
-                    font-weight: 600;
+                span {
+                    display: block;
                 }
             }
         }
 
-        .modal-footer {
-            button {
-                padding: 10px 50px;
+        .hosted-profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            img {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
             }
+
+            p {
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .modal-footer {
+        button {
+            padding: 10px 50px;
         }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Classe;
 use App\Models\Events;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -52,6 +53,10 @@ class MicrosoftGraphService
         try {
             $accessToken = $this->refreshAccessToken(Auth::user());
 
+            $userTimezone = Auth::user()->timezone;
+            $startTime = Carbon::parse($model->class_date . ' ' . $model->class_time, 'UTC')->setTimezone($userTimezone);
+            $endTime = $startTime->copy()->addHours(1);
+
             $eventData = [
                 'subject' => $model->title,
                 'body' => [
@@ -60,11 +65,11 @@ class MicrosoftGraphService
                 ],
                 'start' => [
                     'dateTime' => $model->class_date . 'T' . $model->class_time,
-                    'timeZone' => 'America/New_York',
+                    'timeZone' => $userTimezone,
                 ],
                 'end' => [
                     'dateTime' => $model->class_date . 'T' . $model->class_time,
-                    'timeZone' => 'America/New_York',
+                    'timeZone' => $userTimezone,
                 ],
                 'location' => [
                     'displayName' => 'Online',
@@ -114,7 +119,7 @@ class MicrosoftGraphService
     {
         try {
             $accessToken = $this->refreshAccessToken(Auth::user());
-
+            $userTimezone = Auth::user()->timezone ?? 'UTC';
             $durationInHours = 1;
             $startDateTime = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $model->class_date . 'T' . $model->class_time, 'America/New_York');
 
@@ -127,11 +132,11 @@ class MicrosoftGraphService
                 ],
                 'start' => [
                     'dateTime' => $startDateTime->toIso8601String(),
-                    'timeZone' => 'America/New_York',
+                    'timeZone' => $userTimezone,
                 ],
                 'end' => [
                     'dateTime' => $endDateTime->toIso8601String(),
-                    'timeZone' => 'America/New_York',
+                    'timeZone' => $userTimezone,
                 ],
                 'location' => [
                     'displayName' => $model->onsite_address,

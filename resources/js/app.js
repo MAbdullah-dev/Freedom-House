@@ -103,7 +103,7 @@ window.addEventListener("calendarEventSelected", (event) => {
     const location = document.querySelector("#calendarEventModal .location");
 
     if (selectedEvent.onsite) {
-        location.textContent = `Onsite Address: ${selectedEvent.onsite}`;
+        location.textContent = `${selectedEvent.onsite}`;
     } else if (selectedEvent.online) {
         location.innerHTML = `<a href="${selectedEvent.online}" target="_blank">Join via Teams</a>`;
     } else {

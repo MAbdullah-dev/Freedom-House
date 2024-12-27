@@ -18,7 +18,14 @@ class Register extends Component
 {
     use LivewireAlert;
 
-    public $first_name, $last_name, $email, $phone, $password, $confirm_password, $role_id;
+    public $first_name, $last_name, $email, $phone, $password, $confirm_password, $timezone;
+
+    protected $listeners = ['setTimezone'];
+
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
+    }
 
     public function register()
     {
@@ -47,6 +54,7 @@ class Register extends Component
                 'verification_token' => $verificationToken,
                 'microsoft_account' => false,
                 'role_id' => 3,
+                'timezone' => $this->timezone
             ]);
 
 

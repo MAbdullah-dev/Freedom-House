@@ -6,6 +6,7 @@ use App\Models\Classe;
 use App\Models\Events;
 use Livewire\Component;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ViewEnrollments extends Component
 {
@@ -17,6 +18,17 @@ class ViewEnrollments extends Component
     public $items = [];
 
     // Watch for changes to $dateRange and fetch classes automatically
+
+    private function convertClassToUserTimezone($class)
+    {
+        $userTimezone = Auth::user()->timezone;
+        $class->class_date = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toDateString();
+        $class->class_time = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toTimeString();
+        $class->booking_start_date = Carbon::parse($class->booking_start_date, 'UTC')->setTimezone($userTimezone)->toDateString();
+        $class->booking_end_date = Carbon::parse($class->booking_end_date, 'UTC')->setTimezone($userTimezone)->toDateString();
+        return $class;
+    }
+
     public function updatedDateRange()
     {
         if ($this->dateRange) {

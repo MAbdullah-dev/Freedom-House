@@ -1,16 +1,38 @@
 .dashboard-head {
+    @media (max-width: 472px) {
+        margin-top: 0 !important;
+    }
     .tutor-data {
         border-bottom: 1px solid #b2b4b7;
-
+        @media (max-width: 472px) {
+            flex-direction: column-reverse;
+        }
         .tutor-info {
             .tutor-avatar {
                 max-width: 100%;
+
+                @media (max-width: 472px) {
+                    flex-direction: column;
+                    li {
+                        text-align: center;
+                    }
+                }
 
                 img {
                     width: 96px;
                     height: 96px;
                     object-fit: cover;
                     border-radius: 50%;
+
+                    @media (max-width: 575px) {
+                        width: 65px;
+                        height: 65px;
+                    }
+
+                    @media (max-width: 472px) {
+                        width: 75px;
+                        height: 75px;
+                    }
                 }
 
                 span {
@@ -29,7 +51,16 @@
         }
 
         .tutor-notification-request {
+            @media (max-width: 472px) {
+                margin-bottom: 27px;
+                width: 100%;
+                justify-content: space-between;
+                flex-direction: row-reverse;
+            }
             .offcanvas-btn {
+                @media (max-width: 472px) {
+                    padding: 10px;
+                }
                 border: 0;
                 background-color: #fff;
                 padding: 15px;
@@ -53,9 +84,12 @@
                     }
                 }
             }
-
+            .button-secondary {
+                @media (max-width: 472px) {
+                    padding: 5px !important;
+                }
+            }
         }
-
     }
 
     .notification-request {

@@ -43,6 +43,7 @@ class CourseDetails extends Component
     public $isPaid;
     public $price;
     public $slots;
+    public $userTimezone;
 
     public function mount($id = null)
     {
@@ -51,6 +52,8 @@ class CourseDetails extends Component
             $this->loadCourseData();
             $this->loadClasses();
         }
+        $this->userTimezone = Auth::user()->timezone;
+        // dd($this->userTimezone);
     }
     public function fetch()
     {
@@ -81,7 +84,6 @@ class CourseDetails extends Component
 
     public function loadClasses()
     {
-        Log::info("Filters - Keyword: $this->searchKeyword, Location: $this->selectedLocation, Date: $this->selectedDate");
 
         $query = Classe::where('course_id', $this->courseId)->where('visibility', true);
 
@@ -94,19 +96,16 @@ class CourseDetails extends Component
         }
 
         if ($this->selectedDate) {
-            $query->whereDate('class_date', Carbon::parse($this->selectedDate)->format('Y-m-d'));
+            $selectedDateUTC = Carbon::parse($this->selectedDate)->utc();
+            $query->whereDate('class_date', $selectedDateUTC->format('Y-m-d'));
         }
 
-        Log::info('Query: ' . $query->toSql());
-        Log::info('Bindings: ' . json_encode($query->getBindings()));
-
-        $this->classes = $query->get();
-
-        Log::info($query->toSql());
-        Log::info($query->getBindings());
-
-
-        Log::info('Classes loaded: ' . $this->classes->count());
+        $this->classes = $query->get()->map(function ($class) {
+            $userTimezone = Auth::user()->timezone;
+            $class->class_date = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toDateString();
+            $class->class_time = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toTimeString();
+            return $class;
+        });
     }
 
 

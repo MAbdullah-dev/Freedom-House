@@ -38,6 +38,7 @@ class EventCalendar extends Component
         $this->eventCards = Events::with('users')->get();
 
         if ($user) {
+            $userTimezone = $user->timezone;
             $events = CalendarEvent::with(['event', 'class', 'user'])
                 ->where('user_id', $user->id)
                 ->orWhere(function ($query) use ($user) {
@@ -47,19 +48,19 @@ class EventCalendar extends Component
                         });
                 })
                 ->get()
-                ->map(function ($calendarEvent) {
+                ->map(function ($calendarEvent) use ($userTimezone) {
                     $isEvent = !is_null($calendarEvent->event_id);
                     $source = $isEvent ? $calendarEvent->event : $calendarEvent->class;
 
                     return [
                         'id' => $calendarEvent->id,
                         'title' => $source->title,
-                        'date' => Carbon::parse($source->class_date)->toIso8601String(),
-                        'start_date' => Carbon::parse($source->booking_start_date ?? $source->start_date)->toIso8601String(),
-                        'end_date' => Carbon::parse($source->booking_end_date ?? $source->end_date)->toIso8601String(),
+                        'date' => Carbon::parse($source->class_date, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                        'start_date' => Carbon::parse($source->booking_start_date ?? $source->start_date, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                        'end_date' => Carbon::parse($source->booking_end_date ?? $source->end_date, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
                         'description' => $source->description,
                         'spotsLeft' => $source->capacity,
-                        'class_time' => $source->class_time,
+                        'class_time' => Carbon::parse($source->class_time, 'UTC')->setTimezone($userTimezone)->toTimeString(),
                         'onsite' => $source->onsite_address,
                         'online' => $source->teams_link,
                         'type' => $isEvent ? 'event' : 'class',
@@ -79,6 +80,19 @@ class EventCalendar extends Component
 
     public function selectEvent($event, $type)
     {
+
+        $user = Auth::user();
+        if ($user) {
+            $userTimezone = $user->timezone;
+            $event['date'] = Carbon::parse($event['class_date'], 'UTC')->setTimezone($userTimezone)->toIso8601String();
+            $event['class_time'] = Carbon::parse($event['class_time'], 'UTC')->setTimezone($userTimezone)->toTimeString();
+            $event['booking_start_date'] = Carbon::parse($event['booking_start_date'], 'UTC')->setTimezone($userTimezone)->toDateString();
+            $event['booking_end_date'] = Carbon::parse($event['booking_end_date'], 'UTC')->setTimezone($userTimezone)->toDateString();
+            $event['timezone'] = $userTimezone;
+        } else {
+            $event['timezone'] = 'UTC';
+        }
+
         $this->selectedEvent = $event;
         $this->modalType = $type;
 
@@ -91,7 +105,6 @@ class EventCalendar extends Component
         $this->selectedEventId = $event['id'];
         $this->isPaid = $event['is_paid'];
         $this->price = $event['price'];
-
         $this->slots = $event['capacity'];
         $this->eventCards = Events::with('users')->get();
 

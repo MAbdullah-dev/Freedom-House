@@ -5,29 +5,8 @@
             <h6>M Abdullah</h6>
         </div>
         <div class="row">
-            <div class="col-xl-6 mb-3" wire:ignore>
+            <div class="col-xl-9 mb-3" wire:ignore>
                 <input type="text" class="mb-3" id="calendar-input" placeholder="Select date" />
-            </div>
-            <div class="col-xl-3 mb-3">
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button"
-                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-globe icon"></i>
-                        <span id="selected-timezone">-04:00</span>
-                    </button>
-                    <ul class="dropdown-menu custom-dropdown-menu w-100" id="timezoneList"
-                        aria-labelledby="dropdownMenuButton">
-                        <input type="text" id="timezoneSearchInput" class="form-control mb-2"
-                            placeholder="Search timezone">
-                        <li><a class="dropdown-item" href="#">Africa/Abidjan</a></li>
-                        <li><a class="dropdown-item" href="#">Africa/Accra</a></li>
-                        <li><a class="dropdown-item" href="#">Africa/Addis_Ababa</a></li>
-                        <li><a class="dropdown-item" href="#">Africa/Algiers</a></li>
-                        <li><a class="dropdown-item" href="#">Africa/Asmara</a></li>
-                        <li><a class="dropdown-item" href="#">Africa/Bamako</a></li>
-                        <li><a class="dropdown-item" href="#">Africa/Banjul</a></li>
-                    </ul>
-                </div>
             </div>
             @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
                 <div class="col-xl-3 mb-3">
@@ -170,25 +149,25 @@
         window.addEventListener('close-modal', event => {
             $('#viewclassModal').modal('hide');
         });
-        document.querySelectorAll('.dropdown-item').forEach(function(item) {
-            item.addEventListener('click', function(event) {
-                const selectedTimezone = event.target.textContent;
+        // document.querySelectorAll('.dropdown-item').forEach(function(item) {
+        //     item.addEventListener('click', function(event) {
+        //         const selectedTimezone = event.target.textContent;
 
-                document.getElementById('selected-timezone').textContent = selectedTimezone;
-            });
-        });
-        document.getElementById('timezoneSearchInput').addEventListener('keyup', function() {
-            var filter = this.value.toLowerCase();
-            var items = document.querySelectorAll('#timezoneList .dropdown-item');
+        //         document.getElementById('selected-timezone').textContent = selectedTimezone;
+        //     });
+        // });
+        // document.getElementById('timezoneSearchInput').addEventListener('keyup', function() {
+        //     var filter = this.value.toLowerCase();
+        //     var items = document.querySelectorAll('#timezoneList .dropdown-item');
 
-            items.forEach(function(item) {
-                if (item.textContent.toLowerCase().indexOf(filter) > -1) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
+        //     items.forEach(function(item) {
+        //         if (item.textContent.toLowerCase().indexOf(filter) > -1) {
+        //             item.style.display = '';
+        //         } else {
+        //             item.style.display = 'none';
+        //         }
+        //     });
+        // });
 
         flatpickr("#calendar-input", {
             mode: "range",

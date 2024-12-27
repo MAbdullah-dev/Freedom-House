@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Models\Course;
 use App\Models\Classe;
 use App\Models\Events;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -217,6 +218,11 @@ class ClassForm extends Component
 
     private function createClass()
     {
+
+        $userTimezone = Auth::user()->timezone;
+        $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
+        $utcClassDateTime = $classDateTime->setTimezone('UTC');
+
         $class = Classe::create([
             'title' => $this->title,
             'description' => $this->description,
@@ -230,8 +236,8 @@ class ClassForm extends Component
             'price' => $this->price,
             'capacity' => $this->capacity,
             'visibility' => $this->visibility,
-            'class_date' => $this->class_date,
-            'class_time' => $this->class_time,
+            'class_date' => $utcClassDateTime->toDateString(),
+            'class_time' => $utcClassDateTime->toTimeString(),
             'booking_start_date' => $this->booking_start_date,
             'booking_end_date' => $this->booking_end_date,
         ]);
@@ -272,6 +278,14 @@ class ClassForm extends Component
 
     private function createEvent()
     {
+
+        $userTimezone = Auth::user()->timezone;
+        $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
+        $utcClassDateTime = $classDateTime->setTimezone('UTC');
+        $bookingStartDateTime = Carbon::parse($this->booking_start_date, $userTimezone)->setTimezone('UTC');
+        $bookingEndDateTime = Carbon::parse($this->booking_end_date, $userTimezone)->setTimezone('UTC');
+
+
         $event = Events::create([
             'title' => $this->title,
             'description' => $this->description,
@@ -282,8 +296,8 @@ class ClassForm extends Component
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,
-            'class_date' => $this->class_date,
-            'class_time' => $this->class_time,
+            'class_date' => $utcClassDateTime->toDateString(),
+            'class_time' => $utcClassDateTime->toTimeString(),
             'booking_start_date' => $this->booking_start_date,
             'booking_end_date' => $this->booking_end_date,
         ]);
