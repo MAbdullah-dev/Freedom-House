@@ -6,23 +6,27 @@
     <h2 class="mb-4">Settings</h2>
     <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"
-                aria-controls="profile" aria-selected="true">Profile</a>
+            <a class="nav-link {{ $activeTab == 'profile' ? 'active' : '' }}" id="profile-tab" data-bs-toggle="tab"
+                href="#profile" role="tab" aria-controls="profile" aria-selected="true"
+                wire:click="changeTab('profile')">Profile</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="password-tab" data-bs-toggle="tab" href="#password" role="tab"
-                aria-controls="password" aria-selected="false">Password</a>
+            <a class="nav-link {{ $activeTab == 'password' ? 'active' : '' }}" id="password-tab" data-bs-toggle="tab"
+                href="#password" role="tab" aria-controls="password" aria-selected="false"
+                wire:click="changeTab('password')">Password</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="social-profile-tab" data-bs-toggle="tab" href="#social-profile" role="tab"
-                aria-controls="social-profile" aria-selected="false">Social Profile</a>
+            <a class="nav-link {{ $activeTab == 'social-profile' ? 'active' : '' }}" id="social-profile-tab"
+                data-bs-toggle="tab" href="#social-profile" role="tab" aria-controls="social-profile"
+                aria-selected="false" wire:click="changeTab('social-profile')">Social Profile</a>
         </li>
     </ul>
 
     <div class="tab-content">
         <!-- Profile Tab -->
 
-        <div id="profile" class="tab-pane fade show active" role="tabpanel" aria-labelledby="profile-tab">
+        <div id="profile" class="tab-pane fade {{ $activeTab == 'profile' ? 'show active' : '' }}" role="tabpanel"
+            aria-labelledby="profile-tab">
             {{-- Cover Photo Section --}}
             <div class="wrapper position-relative">
                 <div class="cover-photo-wrapper">
@@ -115,36 +119,62 @@
                     <label for="bio">Bio</label>
                     <textarea id="bio" class="form-control" wire:model="bio"></textarea>
                 </div>
+
+                <div class="form-group mt-3">
+                    <label for="timezone">Timezone</label>
+                    <select id="timezone" class="form-control" wire:model="timezone">
+                        <option value="">Select Timezone</option>
+                        @foreach ($timezoneOptions as $tz)
+                            <option value="{{ $tz }}" {{ $tz == $timezone ? 'selected' : '' }}>
+                                {{ $tz }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <button type="submit" class="btn button-primary mt-3">Update Profile</button>
             </form>
         </div>
 
         <!-- Password Tab -->
-        <div id="password" class="tab-pane fade password" role="tabpanel" aria-labelledby="password-tab">
-            <form action="">
+        <div id="password" class="tab-pane fade {{ $activeTab == 'password' ? 'show active' : '' }}"
+            role="tabpanel" aria-labelledby="password-tab">
+            <form wire:submit.prevent="updatePassword">
                 <div class="row">
                     <div class="form-group">
-                        <label for="currentPassword">current password</label>
-                        <input type="password" id="currentPassword" class="form-control"
-                            placeholder="current password">
+                        <label for="currentPassword">Current password</label>
+                        <input type="password" id="currentPassword" wire:model="currentPassword"
+                            class="form-control" placeholder="Current password">
+                        @error('currentPassword')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="form-group">
-                        <label for="currentPassword">New password</label>
-                        <input type="password" id="currentPassword" class="form-control" placeholder="new password">
+                        <label for="newPassword">New password</label>
+                        <input type="password" id="newPassword" wire:model="newPassword" class="form-control"
+                            placeholder="New password">
+                        @error('newPassword')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="form-group">
-                        <label for="currentPassword">current password</label>
-                        <input type="password" id="currentPassword" class="form-control"
-                            placeholder="confirm new password">
+                        <label for="newPasswordConfirmation">Confirm New Password</label>
+                        <input type="password" id="newPasswordConfirmation" wire:model="newPassword_confirmation"
+                            class="form-control" placeholder="Confirm new password">
+                        @error('newPassword_confirmation')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
-                <input type="submit" class="button-primary" value="Reset Password">
+                <button type="submit" class="btn button-primary">Reset Password</button>
             </form>
         </div>
 
+
+
         <!-- Social Profile Tab -->
-        <div id="social-profile" class="social-profile tab-pane fade" role="tabpanel"
-            aria-labelledby="social-profile-tab">
+        <div id="social-profile" class="tab-pane fade {{ $activeTab == 'social-profile' ? 'show active' : '' }}"
+            role="tabpanel" aria-labelledby="social-profile-tab">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="facebook" class="d-flex align-items-center">

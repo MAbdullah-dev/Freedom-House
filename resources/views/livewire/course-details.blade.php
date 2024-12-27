@@ -40,11 +40,10 @@
             @forelse ($classes as $class)
                 <div class="event-card">
                     <div class="event-card__date">
-                        <div class="day">{{ \Carbon\Carbon::parse($class->start_date)->format('d') }}</div>
-                        <div class="month">{{ \Carbon\Carbon::parse($class->start_date)->format('M') }}</div>
+                        <div class="day">{{ \Carbon\Carbon::parse($class->class_date)->format('d') }}</div>
+                        <div class="month">{{ \Carbon\Carbon::parse($class->class_date)->format('M') }}</div>
                         <div class="time">
-                            {{ \Carbon\Carbon::parse($class->start_date)->format('g:i A') }} -
-                            {{ \Carbon\Carbon::parse($class->end_date)->format('g:i A') }}
+                            {{ \Carbon\Carbon::parse($class->class_date . ' ' . $class->class_time)->format('g:i A') }}
                         </div>
                     </div>
                     <div class="event-card__info mx-4">

@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -20,6 +21,13 @@ class DashboardSettings extends Component
     public $userName;
     public $phone;
     public $bio;
+    public $currentPassword;
+    public $newPassword;
+    public $newPassword_confirmation;
+    public $timezone;
+    public $timezoneOptions;
+
+    public $activeTab = 'profile';
 
     public function mount()
     {
@@ -29,6 +37,15 @@ class DashboardSettings extends Component
         $this->userName = $this->user->username;
         $this->phone = $this->user->phone;
         $this->bio = $this->user->bio;
+        $this->timezone = $this->user->timezone ?? '';
+        $this->timezoneOptions = array_values(\DateTimeZone::listIdentifiers(\DateTimeZone::ALL));
+        // dd($this->timezoneOptions);
+    }
+
+
+    public function changeTab($tab)
+    {
+        $this->activeTab = $tab;
     }
 
     public function updateProfile()
@@ -36,11 +53,12 @@ class DashboardSettings extends Component
         $this->validate([
             'firstName' => 'required|string|max:20',
             'lastName' => 'required|string|max:20',
-            'userName' => 'required|string|max:20|unique:users,column,except,id',
+            'userName' => 'required|string|max:20|unique:users,username,' . $this->user->id,
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:255',
             'coverPhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
             'profilePhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
+            'timezone' => 'nullable|string|timezone',
         ]);
 
         if ($this->coverPhoto) {
@@ -58,6 +76,7 @@ class DashboardSettings extends Component
         $this->user->username = $this->userName;
         $this->user->phone = $this->phone;
         $this->user->bio = $this->bio;
+        $this->user->timezone = $this->timezone;
 
         $this->user->save();
 
@@ -85,6 +104,33 @@ class DashboardSettings extends Component
             $this->alert('success', 'Profile photo deleted successfully!');
         }
     }
+
+    public function updatePassword()
+    {
+        $this->validate([
+            'currentPassword' => 'required|string',
+            'newPassword' => 'required|string|min:8|confirmed',
+            'newPassword_confirmation' => 'required|string|min:8',
+        ]);
+
+        // Verify current password
+        if (!Hash::check($this->currentPassword, $this->user->password)) {
+            $this->alert('error', 'Current password is incorrect.');
+            return;
+        }
+
+        // Update password
+        $this->user->password = Hash::make($this->newPassword);
+        $this->user->save();
+
+        // Clear password fields after successful update
+        $this->currentPassword = '';
+        $this->newPassword = '';
+        $this->newPassword_confirmation = '';
+
+        $this->alert('success', 'Password updated successfully!');
+    }
+
 
     public function render()
     {

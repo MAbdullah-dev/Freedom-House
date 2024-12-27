@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('microsoft_id', 255)->nullable();
             $table->boolean('microsoft_account')->default(false);
             $table->timestamp('token_expires_at')->nullable();
+            $table->string('timezone')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('username')->nullable();

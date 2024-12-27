@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password_reset_token',
         'password_token_created_at',
         'role_id',
+        'timezone'
     ];
 
     protected $hidden = ['password', 'remember_token'];
