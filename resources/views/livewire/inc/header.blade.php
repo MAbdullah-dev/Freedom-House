@@ -4,7 +4,7 @@
 <header>
     <div class="container nav-bar d-flex align-items-center justify-content-between">
         <a href="">
-            <img src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
+            <img class="site-logo" src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
         </a>
         <div class="d-block d-xl-none" id="hamburger-icon">
             <i class="fa-solid fa-bars-staggered fa-xl"></i>
