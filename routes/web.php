@@ -103,6 +103,8 @@ Route::get('/dashboard/mycourses', MyCourses::class)->name('dashboard.mycourses'
 Route::get('/dashboard/announcements', Announcements::class)->name('dashboard.announcements');
 Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
 Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
-Route::get('/dashboard/create/class', ClassForm::class)->name('dashboard.create.class');
+Route::get('/dashboard/create/class/{eventId?}/{classId?}', ClassForm::class)->name('dashboard.create.class');
 // });
 Route::get('/dashboard/student/view/{id?}', StudentView::class)->name('dashboard.student.view');
+
+Route::get('/certificate', [PaymentController::class, 'certifictes'])->name('certificate.index');

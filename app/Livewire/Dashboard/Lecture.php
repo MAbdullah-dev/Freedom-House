@@ -5,7 +5,6 @@ namespace App\Livewire\Dashboard;
 use App\Jobs\FetchVimeoVideoDetailsJob;
 use App\Models\Course;
 use App\Models\Lecture as ModelsLecture;
-use Illuminate\Support\Facades\Log;
 use Vimeo\Laravel\Facades\Vimeo;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -79,34 +78,40 @@ class Lecture extends Component
 
     public function submit()
     {
-        try {
-            $this->validate(); // Perform the validation
+        $this->validate();
 
-            // Log each video file's size for debugging
-            foreach ($this->lectures as $index => $lecture) {
-                Log::info('Uploaded file size: ' . $lecture['video_file']->getSize() . ' bytes');
+        foreach ($this->lectures as $index => $lecture) {
+            // Upload video to Vimeo
+            $videoPath = $lecture['video_file']->store('temp_videos', 'local');
+            $videoFullPath = Storage::disk('local')->path($videoPath);
 
-                // Store the video file and link it to the lecture
-                $path = $lecture['video_file']->store('videos', 'public');
+            $response = Vimeo::upload($videoFullPath, [
+                'name' => $lecture['title'],
+                'description' => $lecture['description'],
+            ]);
 
-                // Add logic to store lecture details to the database
-                Lecture::create([
-                    'title' => $lecture['title'],
-                    'description' => $lecture['description'],
-                    'video_file' => $path,
-                    'order' => $index + 1, // Example of setting order (you can customize it)
-                ]);
-            }
+            // Get the video ID from the Vimeo response
+            $videoId = $response; // Vimeo returns the video ID or URL
 
-            // Show success message (you can integrate SweetAlert2 here)
-            // $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Lectures successfully uploaded!']);
+            // Delete temporary file
+            Storage::disk('local')->delete($videoPath);
 
-            // Reset fields after submission
-            $this->reset('lectures');
-        } catch (\Exception $e) {
-            Log::error('File upload error: ' . $e->getMessage());
-            // $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'An error occurred during upload. Please try again.']);
+            // Create lecture record in the database (without duration initially)
+            $lectureRecord = ModelsLecture::create([
+                'course_id' => $this->course_id,
+                'title' => $lecture['title'],
+                'description' => $lecture['description'],
+                'video_file' => $videoId, // Vimeo video ID
+                'video_duration' => null, // Initially null
+                'order' => $lecture['order'],
+            ]);
+
+            // Dispatch a job to fetch video details later
+            FetchVimeoVideoDetailsJob::dispatch($lectureRecord->id, $videoId);
         }
+
+        $this->alert('success', 'Lectures successfully uploaded to Vimeo! Video details will update soon.');
+        $this->resetFields();
     }
 
 

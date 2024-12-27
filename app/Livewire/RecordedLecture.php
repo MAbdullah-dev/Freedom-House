@@ -34,6 +34,10 @@ class RecordedLecture extends Component
     public $rating;
     public $review;
     public $showReviewModal = false;
+    public  $certificateData = null;
+    public $cetificatepathformodal;
+    public $allLecturesWatched = false;
+
 
     public function mount($courseId, $lectureId = null)
     {
@@ -67,6 +71,7 @@ class RecordedLecture extends Component
                 ->where('lecture_id', $lecture->id)
                 ->exists();
         }
+
         $this->progressPercentage = $this->getCourseProgress($courseId);
     }
 
@@ -113,6 +118,7 @@ class RecordedLecture extends Component
 
         // Check for course completion
         $this->checkCompletionAndRequestReview();
+        $this->checkCompletionAndGenerateCertificate();
     }
 
 
@@ -131,16 +137,19 @@ class RecordedLecture extends Component
             return;
         }
 
-        $totalLectures = $this->lectures->count();
+        // Retrieve the lecture IDs to avoid repeated database queries in the loop
+        $lectureIds = $this->lectures->pluck('id')->toArray();
+        $totalLectures = count($lectureIds); // Count directly from the array
+
+        // Check how many lectures the user has watched
         $watchedLectures = VideoActivity::where('user_id', $user->id)
-            ->whereIn('lecture_id', $this->lectures->pluck('id'))
+            ->whereIn('lecture_id', $lectureIds)
             ->where('watched', 1)
             ->count();
 
         // If all lectures are watched and no review exists, trigger the review modal
         if ($totalLectures === $watchedLectures) {
             $this->dispatch('open-review-modal');
-            $this->dispatch('congratulation');
         }
     }
 
@@ -161,7 +170,12 @@ class RecordedLecture extends Component
 
         // Close the modal and reset form
         $this->reset(['rating', 'review']);
+        $this->cetificatepathformodal = Certificate::where('user_id', Auth::id())->pluck('certificate_path');
+        if ($this->cetificatepathformodal) {
+            $this->cetificatepathformodal = $this->cetificatepathformodal->first();
+        }
         $this->dispatch('close-review-modal');
+        $this->dispatch('congratulation');
         $this->alert('success', 'Thank you for your review!');
         $user = Auth::user();
         foreach ($this->lectures as $lecture) {
@@ -222,41 +236,27 @@ class RecordedLecture extends Component
     {
         $user = Auth::user();
 
-        // Get all lectures for the course
-        $lectures = Lecture::where('course_id', $courseId)->get();
-
-        // Total number of lectures in the course
+        // Get the total number of lectures in the course
+        $lectures = Lecture::where('course_id', $courseId)->pluck('id');
         $totalLectures = $lectures->count();
 
         if ($totalLectures === 0) {
+            $this->allLecturesWatched = false;
             return 0; // Avoid division by zero
         }
 
         // Count watched lectures by the user
         $watchedLectures = VideoActivity::where('user_id', $user->id)
-            ->whereIn('lecture_id', $lectures->pluck('id'))
+            ->whereIn('lecture_id', $lectures)
+            ->where('watched', 1)
             ->count();
+
+        // Check if all lectures are watched
+        $this->allLecturesWatched = ($watchedLectures === $totalLectures);
 
         // Calculate progress percentage
         $progress = ($watchedLectures / $totalLectures) * 100;
-
-        // Round to 2 decimal places
-        $progress = round($progress, 2);
-
-        // Check for 100% progress and ensure the notification is sent only once
-        if ($progress == 100) {
-            $existingNotification = Notification::where('user_id', $user->id)
-                ->where('type', 'congratulation')
-                ->where('message', '🎉 Congratulations! You have successfully completed your course. Well done! 👏')
-                ->exists();
-            if (!$existingNotification) {
-                Notification::create([
-                    'user_id' => $user->id,
-                    'message' => '🎉 Congratulations! You have successfully completed your course. Well done! 👏',
-                    'type' => 'congratulation',
-                ]);
-            }
-        }
+        $progress = round($progress, 2); // Round to 2 decimal places
 
         // Save the progress in the database
         CourseProgress::updateOrCreate(
@@ -266,6 +266,8 @@ class RecordedLecture extends Component
 
         return $progress;
     }
+
+
 
 
     public function checkCompletionAndGenerateCertificate()
@@ -290,33 +292,40 @@ class RecordedLecture extends Component
 
         // If all lectures are watched, check and generate certificate
         if ($totalLectures === $watchedLectures) {
-            $existingCertificate = Certificate::firstOrCreate(
-                ['user_id' => $user->id, 'course_id' => $this->courseId],
-                ['certificate_path' => $this->generateCertificate($user, $this->courseId)]
-
-            );
-
             // Check if the certificate already exists
-            if ($existingCertificate->wasRecentlyCreated) {
+            $existingCertificate = Certificate::where('user_id', $user->id)
+                ->where('course_id', $this->courseId)
+                ->first();
+
+            if ($existingCertificate) {
+                // If the certificate exists, alert the user
+                $this->alert('info', 'Your certificate has already been generated.');
+            } else {
+                // Generate the certificate and store its path in the database
+                $certificatePath = $this->generateCertificate($user, $this->courseId);
+
+                // Store the certificate in the database if it's newly generated
+                Certificate::create([
+                    'user_id' => $user->id,
+                    'course_id' => $this->courseId,
+                    'certificate_path' => $certificatePath,
+                ]);
+
+                // Send the certificate emailcerev
                 try {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'message' => '📜 Your certificate is ready! Please check your email to download it. 📨',
-                        'type' => 'congratulation',
-                    ]);
-                    $this->sendCertificateEmail($user, $existingCertificate->certificate_path);
-                    $this->alert('success', 'Congratulations! Your certificate has been emailed.');
+                    $this->sendCertificateEmail($user, $certificatePath);
+                    $this->alert('success', 'Congratulations! Your certificate has been generated and emailed to you.');
                 } catch (\Exception $e) {
-                    Log::error("Email Sending Error for User {$user->id}, Certificate {$existingCertificate->certificate_path}: " . $e->getMessage());
+                    Log::error("Email Sending Error for User {$user->id}, Certificate Path: {$certificatePath}: " . $e->getMessage());
                     $this->alert('warning', 'Certificate generated but email could not be sent. Please contact support.');
                 }
-            } else {
-                $this->alert('info', 'Your certificate has already been issued.');
             }
         } else {
             $this->alert('warning', 'You need to complete all lectures to earn a certificate.');
         }
     }
+
+
 
     private function generateCertificate($user, $courseId)
     {
@@ -327,12 +336,20 @@ class RecordedLecture extends Component
 
         try {
             // Generate PDF and save it in storage
-            $pdf = Pdf::loadView('certificates.dummy', compact('user', 'course'));
+            $pdf = Pdf::loadView('certificates.dummy', compact('user', 'course'))
+                ->setPaper('a4', 'landscape') // Set the paper size and orientation
+                ->setOptions([
+                    'margin-left' => 10,
+                    'margin-right' => 10,
+                    'margin-top' => 10,
+                    'margin-bottom' => 10,
+                ]);
+
             $certificatePath = 'certificates/' . $user->id . '_' . $course->id . '_' . now()->timestamp . '.pdf';
-
-            // Ensure the directory exists and store the PDF
+            if ($pdf != null) {
+                $this->certificateData = base64_encode($pdf->output());
+            }
             Storage::disk('public')->put($certificatePath, $pdf->output());
-
             return Storage::url($certificatePath);
         } catch (\Exception $e) {
             Log::error("Certificate Generation Error for User {$user->id}, Course {$courseId}: " . $e->getMessage());
@@ -340,12 +357,27 @@ class RecordedLecture extends Component
         }
     }
 
+    public function showcertificate()
+    {
+        $this->cetificatepathformodal = Certificate::where('user_id', Auth::id())->pluck('certificate_path');
+        $this->cetificatepathformodal = $this->cetificatepathformodal->first();
+        $this->dispatch('showCertificateModal');
+        $this->dispatch('congratulation');
+    }
+    public function assigncertificate()
+    {
+        $this->cetificatepathformodal = Certificate::where('user_id', Auth::id())->pluck('certificate_path');
+        $this->cetificatepathformodal = $this->cetificatepathformodal->first();
+        $this->dispatch('close-review-modal');
+        $this->dispatch('congratulation');
+    }
+
     private function sendCertificateEmail($user, $certificatePath)
     {
         // Use public_path to get the absolute path for email attachment
         $certificateFullPath = public_path($certificatePath);
 
-        // Send the certificate email
+
         Mail::raw("Congratulations on completing the course! Your certificate is attached.", function ($message) use ($user, $certificateFullPath) {
             $message->to($user->email)
                 ->subject('Your Certificate of Completion')
@@ -366,7 +398,6 @@ class RecordedLecture extends Component
         }
         $this->checkCompletionAndGenerateCertificate();
     }
-
 
     // Render the view
     public function render()

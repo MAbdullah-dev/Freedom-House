@@ -128,9 +128,15 @@
                             </div>
 
                         </div>
-                        <button wire:click="sendCertificate" class="btn btn-success">
-                            Get Certificate
-                        </button>
+                        @if ($allLecturesWatched)
+                            <button wire:click="sendCertificate" class="btn btn-success">
+                                Get Certificate
+                            </button>
+                            <button wire:click="showcertificate" class="btn btn-success">
+                                Show Certificate
+                            </button>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -286,7 +292,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="reviewModalLabel">Course Review & Rating</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" id="review_modal_close"
+                        wire:click="assigncertificate"></button>
                 </div>
                 <div class="modal-body">
                     <form wire:submit.prevent="submitReview">
@@ -318,8 +325,26 @@
             </div>
         </div>
     </div>
-
-
+    <!-- Modal -->
+    <div style="z-index: " class="modal fade" id="certificateModal" tabindex="-1"
+        aria-labelledby="certificateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="certificateModalLabel">Your Certificate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if ($cetificatepathformodal != null)
+                        <iframe id="certificateFrame" src="{{ asset($cetificatepathformodal) }}" width="100%"
+                            height="500px" frameborder="0"></iframe>
+                    @else
+                        <p>No certificate available.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -332,29 +357,35 @@
         });
         Livewire.on('close-review-modal', () => {
             $('#reviewModal').modal('hide');
+            $('#certificateModal').modal('show');
         });
 
     });
     document.addEventListener('congratulation', function() {
+        // First confetti burst (from above, with full width)
         setTimeout(() => {
             confetti({
                 particleCount: 700,
-                spread: 200,
+                spread: 300, // adjust spread to fill the screen
                 origin: {
-                    y: 1.2
+                    x: 0, // x = 0.5 makes it centered horizontally
+                    y: 0, // y = 0 makes it start from the top
                 }
             });
         }, 200);
+
+        // Second confetti burst (slightly delayed)
         setTimeout(() => {
             confetti({
                 particleCount: 700,
-                spread: 200,
+                spread: 300,
                 origin: {
-                    y: 1
+                    x: 1, // Same center horizontally
+                    y: 0, // y = 0 for top of the page
                 }
             });
-        }, 500);
-    })
+        }, 200);
+    });
 </script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
@@ -372,5 +403,10 @@
             // Remove the event listener to prevent multiple calls
             player.off('timeupdate');
         }
+    });
+
+    document.addEventListener('showCertificateModal', function() {
+        $('#certificateModal').modal('show');
+        console.log('hi there');
     });
 </script>

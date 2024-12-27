@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Classe;
+use App\Models\Events;
 use Livewire\Component;
 use Carbon\Carbon;
 
@@ -11,16 +12,26 @@ class ViewEnrollments extends Component
     public $dateRange;
     public $classes = [];
     public $selectedClass;
+    public $selectedEvent;
+    public $events = [];
+    public $items = [];
 
     // Watch for changes to $dateRange and fetch classes automatically
     public function updatedDateRange()
     {
         if ($this->dateRange) {
+            // Ensure the date range is correctly formatted
             $dates = explode(' to ', $this->dateRange);
-            $startDate = Carbon::parse($dates[0])->startOfDay();
-            $endDate = isset($dates[1]) ? Carbon::parse($dates[1])->endOfDay() : $startDate->endOfDay();
+            if (count($dates) !== 2) {
+                session()->flash('error', 'Invalid date range format.');
+                return;
+            }
 
-            $this->classes = Classe::where(function ($query) use ($startDate, $endDate) {
+            $startDate = Carbon::parse($dates[0])->startOfDay();
+            $endDate = Carbon::parse($dates[1])->endOfDay();
+
+            // Fetch Classes
+            $classes = Classe::where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('booking_start_date', [$startDate, $endDate])
                     ->orWhereBetween('booking_end_date', [$startDate, $endDate])
                     ->orWhere(function ($query) use ($startDate, $endDate) {
@@ -30,28 +41,87 @@ class ViewEnrollments extends Component
             })
                 ->orderBy('booking_start_date', 'asc')
                 ->get();
+
+            // Fetch Events
+            $events = Events::where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('booking_start_date', [$startDate, $endDate])
+                    ->orWhereBetween('booking_end_date', [$startDate, $endDate])
+                    ->orWhere(function ($query) use ($startDate, $endDate) {
+                        $query->where('booking_start_date', '<=', $startDate)
+                            ->where('booking_end_date', '>=', $endDate);
+                    });
+            })
+                ->orderBy('booking_start_date', 'asc')
+                ->get();
+
+            // Merge Classes and Events using concat() and sort them by 'booking_start_date'
+            $this->items = $classes->concat($events)->sortBy(function ($item) {
+                return $item->booking_start_date;
+            });
+            // Map to a uniform structure (e.g., arrays with necessary fields)
+            $this->items = $this->items->map(function ($item) {
+                // dd($this->items);
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
+                    'date' => $item instanceof \App\Models\Classe ? $item->class_date : $item->event_date,
+                    'time' => $item instanceof \App\Models\Classe ? $item->class_time : $item->event_time,
+                    'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
+                    'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event', // Added model type for wire-click
+                ];
+            });
         }
     }
 
-    public function selectClass($classId)
+
+
+
+    public function selectItem($itemId, $modelType)
     {
-        $this->selectedClass = Classe::findOrFail($classId);
-        // dd($this->selectedClass);
+        if ($modelType === 'class') {
+            $this->selectedClass = Classe::findOrFail($itemId);
+            $this->selectedEvent = null; // Ensure the selected event is cleared
+        } elseif ($modelType === 'event') {
+            $this->selectedEvent = Events::findOrFail($itemId);
+            $this->selectedClass = null; // Ensure the selected class is cleared
+        } else {
+            session()->flash('error', 'Invalid model type selected.');
+        }
+    }
+    public function editItem()
+    {
+        $this->dispatch('close-modal'); // Close the modal after editing
+
+        if ($this->selectedClass) {
+            // Redirect to class edit route if a class is selected
+            return redirect()->route('dashboard.create.class', ['classId' => $this->selectedClass->id]);
+        } elseif ($this->selectedEvent) {
+            // Redirect to event edit route if an event is selected
+            return redirect()->route('dashboard.create.class', ['eventId' => $this->selectedEvent->id]);
+        } else {
+            // Optionally handle the case where no item is selected
+            session()->flash('error', 'No item selected for editing.');
+        }
     }
 
-    public function editClass()
+    public function deleteItem()
     {
-        $this->dispatch('close-modal');
-        return redirect()->route('dashboard.create.class', ['classId' => $this->selectedClass->id]);
-    }
-
-    public function deleteClass()
-    {
+        // Check if the selected item is a class
         if ($this->selectedClass) {
             $this->selectedClass->delete();
             $this->classes = Classe::all(); // Refresh class list
             $this->selectedClass = null;
             session()->flash('message', 'Class deleted successfully.');
+        }
+        // Check if the selected item is an event
+        elseif ($this->selectedEvent) {
+            $this->selectedEvent->delete();
+            $this->events = Events::all(); // Refresh events list
+            $this->selectedEvent = null;
+            session()->flash('message', 'Event deleted successfully.');
+        } else {
+            session()->flash('error', 'No item selected for deletion.');
         }
     }
 

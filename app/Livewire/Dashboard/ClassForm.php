@@ -28,6 +28,9 @@ class ClassForm extends Component
     public $price = 0, $capacity, $visibility = 1, $booking_start_date, $booking_end_date, $date_range, $class_date, $class_time;
     public $courses = [];
     public $classId;
+    public $eventId;
+    public $event_date;
+    public $event_time;
 
     protected $rules = [
         'type' => 'required|in:class,event',
@@ -54,17 +57,25 @@ class ClassForm extends Component
     ];
 
 
-    public function mount($classId = null)
+    public function mount($classId = null, $eventId = null)
     {
+        dd($eventId);
         if ($classId) {
             $this->classId = $classId;
-            $this->loadclassData();
+            $this->type = 'class'; // Set type to class
+            $this->loadClassData();
+        } elseif ($eventId) {
+            $this->eventId = $eventId;
+            $this->type = 'event'; // Set type to event
+            $this->loadEventData();
         }
         $this->loadcources();
     }
+
     public function loadclassData()
     {
         $class = Classe::find($this->classId);
+        dd($class);
         if ($class) {
             $this->type = 'class';
             $this->course_id = $class->course_id;
@@ -85,6 +96,28 @@ class ClassForm extends Component
             $this->class_time = $class->class_time;
         }
     }
+    public function loadEventData()
+    {
+        $event = Events::find($this->eventId);
+        if ($event) {
+            $this->course_id = $event->course_id;
+            $this->title = $event->title;
+            $this->description = $event->description;
+            $this->class_type = $event->event_type; // Assuming there's an event type field
+            $this->teams_link = $event->teams_link;
+            $this->onsite_address = $event->onsite_address;
+            $this->is_paid = $event->is_paid;
+            $this->price = $event->price;
+            $this->capacity = $event->capacity;
+            $this->visibility = $event->visibility;
+            $this->booking_start_date = $event->booking_start_date;
+            $this->booking_end_date = $event->booking_end_date;
+            $this->date_range = $this->booking_start_date . ' to ' . $this->booking_end_date;
+            $this->event_date = $event->event_date; // Assuming there's an event_date field
+            $this->event_time = $event->event_time; // Assuming there's an event_time field
+        }
+    }
+
     public function updateClass()
     {
         $this->validate([

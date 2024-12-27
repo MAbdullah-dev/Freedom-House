@@ -131,4 +131,8 @@ class PaymentController extends Controller
     {
         return redirect()->route('dashboard')->with('error', 'Payment canceled. Please try again.');
     }
+    public function certifictes()
+    {
+        return view('certificates.dummy');
+    }
 }

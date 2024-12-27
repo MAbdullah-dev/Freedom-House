@@ -41,31 +41,31 @@
     </section>
     <section class="enrollments my-5 mx-4">
         <section class="classes my-5">
-            @if (collect($classes)->isNotEmpty())
+            @if (collect($items)->isNotEmpty())
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Class Type</th>
-                                <th>class Date</th>
-                                <th>class Time</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Time</th>
                                 <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($classes as $class)
+                            @foreach ($items as $item)
                                 <tr>
-                                    <td>{{ $class->title }}</td>
-                                    <td>{{ ucfirst($class->class_type) }}</td>
-                                    <td>{{ $class->class_date }}</td>
-                                    <td>{{ $class->class_time }}</td>
-                                    <td>{{ $class->price ? '$' . number_format($class->price, 2) : 'Free' }}</td>
+                                    <td>{{ $item['title'] }}</td>
+                                    <td>{{ $item['type'] }}</td>
+                                    <td>{{ $item['date'] }}</td>
+                                    <td>{{ $item['time'] }}</td>
+                                    <td>{{ $item['price'] }}</td>
                                     <td>
-                                        <button class="button-primary" data-bs-toggle="modal"
-                                            data-bs-target="#viewclassModal"
-                                            wire:click="selectClass({{ $class->id }})">
+                                        <button class="button-primary"
+                                            wire:click="selectItem({{ $item['id'] }}, '{{ $item['model_type'] }}')"
+                                            data-bs-toggle="modal" data-bs-target="#viewItemModal">
                                             View
                                         </button>
                                     </td>
@@ -81,20 +81,29 @@
             @endif
         </section>
         <!-- Modal -->
-        <div wire:ignore.self class="modal fade modal-lg" id="viewclassModal" tabindex="-1"
+        <div wire:ignore.self class="modal fade modal-lg" id="viewItemModal" tabindex="-1"
             aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Class Details</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            @if ($selectedClass)
+                                Class Details
+                            @elseif ($selectedEvent)
+                                Event Details
+                            @else
+                                Details
+                            @endif
+                        </h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div wire:loading>
-                            <p>Loading class details...</p>
+                            <p>Loading details...</p>
                         </div>
                         <div class="enrollment-modal-details" wire:loading.remove>
                             @if ($selectedClass)
+                                <!-- Class Details -->
                                 <p><strong>Title:</strong> {{ $selectedClass->title }}</p>
                                 <p><strong>Description:</strong> {{ $selectedClass->description }}</p>
                                 <p><strong>Capacity:</strong> {{ $selectedClass->capacity }}</p>
@@ -118,29 +127,43 @@
                                 <p><strong>Price:</strong>
                                     {{ $selectedClass->price ? '$' . number_format($selectedClass->price, 2) : 'Free' }}
                                 </p>
+                            @elseif ($selectedEvent)
+                                <!-- Event Details -->
+                                <p><strong>Title:</strong> {{ $selectedEvent->title }}</p>
+                                <p><strong>Description:</strong> {{ $selectedEvent->description }}</p>
+                                <p><strong>Event Date:</strong>
+                                    {{ $selectedEvent->event_date ? \Carbon\Carbon::parse($selectedEvent->event_date)->format('F, d Y') : 'Not Set' }}
+                                </p>
+                                <p><strong>Event Time:</strong> {{ $selectedEvent->event_time ?? 'Not Set' }}</p>
+                                <p><strong>Location:</strong> {{ $selectedEvent->location ?? 'Not Set' }}</p>
+                                <p><strong>Price:</strong>
+                                    {{ $selectedEvent->price ? '$' . number_format($selectedEvent->price, 2) : 'Free' }}
+                                </p>
                             @else
-                                <p>No class details available.</p>
+                                <p>No details available.</p>
                             @endif
                         </div>
                     </div>
                     <div class="modal-footer d-flex align-items-center justify-content-between py-2">
-
                         <div class="icons d-flex align-items-center justify-content-center gap-3">
                             <!-- Edit Icon -->
-                            <i type="button" class="edit-icon fa-solid fa-pen-to-square" wire:click="editClass"></i>
-
+                            @if ($selectedClass || $selectedEvent)
+                                <i type="button" class="edit-icon fa-solid fa-pen-to-square" wire:click="editItem"></i>
+                            @endif
                             <!-- Delete Icon -->
-                            <i type="button" class="delete-icon fa-solid fa-trash" wire:click="deleteClass"></i>
+                            @if ($selectedClass || $selectedEvent)
+                                <i type="button" class="delete-icon fa-solid fa-trash" wire:click="deleteItem"></i>
+                            @endif
                         </div>
+
+                        <!-- Create Quiz Button (for Recorded Classes) -->
                         @if ($selectedClass && $selectedClass->class_type == 'recorded')
                             <button type="button" class="button-primary" wire:click="createQuiz">Create Quiz</button>
                         @endif
-
                     </div>
                 </div>
             </div>
         </div>
-
 </div>
 @script
     <script>
