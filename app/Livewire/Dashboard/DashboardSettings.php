@@ -68,7 +68,7 @@ class DashboardSettings extends Component
             'bio' => 'nullable|string|max:255',
             'coverPhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
             'profilePhoto' => 'nullable|image|mimes:jpeg,png,jpg|max:1024',
-            'timezone' => 'nullable|string|timezone',
+            'timezone' => 'required|string|timezone',
         ]);
 
         if ($this->coverPhoto) {

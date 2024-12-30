@@ -33,26 +33,23 @@ class ViewEnrollments extends Component
 
         // Map to a uniform structure
         $this->items = $this->items->map(function ($item) {
+            $userTimezone = Auth::user()->timezone;
+
             return [
                 'id' => $item->id,
                 'title' => $item->title,
                 'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
-                'date' => $item instanceof \App\Models\Classe ? $item->class_date : $item->event_date,
-                'time' => $item instanceof \App\Models\Classe ? $item->class_time : $item->event_time,
+                'date' => $item->class_date
+                    ? \Carbon\Carbon::parse($item->class_date)->setTimezone($userTimezone)->format('F j, Y')
+                    : 'Not Set',
+                'time' => $item->class_time
+                    ? \Carbon\Carbon::parse($item->class_time)->setTimezone($userTimezone)->format('h:i A')
+                    : 'Not Set',
                 'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
                 'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
             ];
         });
         $this->enrollments();
-    }
-    private function convertClassToUserTimezone($class)
-    {
-        $userTimezone = Auth::user()->timezone;
-        $class->class_date = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toDateString();
-        $class->class_time = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toTimeString();
-        $class->booking_start_date = Carbon::parse($class->booking_start_date, 'UTC')->setTimezone($userTimezone)->toDateString();
-        $class->booking_end_date = Carbon::parse($class->booking_end_date, 'UTC')->setTimezone($userTimezone)->toDateString();
-        return $class;
     }
 
     public function updatedDateRange()
@@ -107,8 +104,8 @@ class ViewEnrollments extends Component
                     'id' => $item->id,
                     'title' => $item->title,
                     'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
-                    'date' => $item instanceof \App\Models\Classe ? $item->class_date : $item->event_date,
-                    'time' => $item instanceof \App\Models\Classe ? $item->class_time : $item->event_time,
+                    'date' => $item instanceof \App\Models\Classe ? $item->class_date : $item->class_date,
+                    'time' => $item instanceof \App\Models\Classe ? $item->class_time : $item->class_time,
                     'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
                     'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event', // Added model type for wire-click
                 ];
