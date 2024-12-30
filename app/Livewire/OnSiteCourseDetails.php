@@ -114,7 +114,6 @@ class OnSiteCourseDetails extends Component
     {
         $this->isEnrolled = Booking::where('user_id', Auth::id())
             ->where('course_id', $this->courseId)
-            // ->where('payment_status', 'paid')
             ->exists();
     }
 

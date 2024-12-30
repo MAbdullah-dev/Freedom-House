@@ -18,7 +18,7 @@ class DashboardEnrolledCourses extends Component
         $userId = Auth::id(); // Get the logged-in user's ID
 
         // Fetch all courses the user has booked
-        $bookedCourses = Booking::where('user_id', $userId)->where('payment_status', 'paid')->get();
+        $bookedCourses = Booking::where('user_id', $userId)->get();
 
         foreach ($bookedCourses as $booking) {
             // Check progress for each course in the course_progress table

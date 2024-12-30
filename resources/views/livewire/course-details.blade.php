@@ -67,15 +67,34 @@
                                 FREE
                             @endif
                         </div>
-                        <button type="button" class="enroll-btn"
-                            @if ($this->isEnrolled($class->id)) disabled
-    @else
-        wire:click="prepareEnrollment({{ $class->id }})"
-        data-bs-toggle="modal"
-        data-bs-target="#enrollModal" @endif>
-                            {{ $this->isEnrolled($class->id) ? 'Enrolled' : 'Enroll Now' }}
-                        </button>
+
+                        @php
+                            $now = \Carbon\Carbon::now();
+                            $bookingStart = \Carbon\Carbon::parse($class->booking_start_date);
+                            $bookingEnd = \Carbon\Carbon::parse($class->booking_end_date);
+                            // @dd($now, $bookingStart, $bookingEnd);
+                        @endphp
+
+                        @if ($now->lt($bookingStart))
+                            <button type="button" class="enroll-btn" disabled>
+                                Booking Starts: {{ $bookingStart->format('F j, Y') }}
+                            </button>
+                        @elseif ($now->gt($bookingEnd))
+                            <button type="button" class="enroll-btn" disabled>
+                                Booking Closed
+                            </button>
+                        @else
+                            <button type="button" class="enroll-btn"
+                                @if ($this->isEnrolled($class->id)) disabled
+            @else
+                wire:click="prepareEnrollment({{ $class->id }})"
+                data-bs-toggle="modal"
+                data-bs-target="#enrollModal" @endif>
+                                {{ $this->isEnrolled($class->id) ? 'Enrolled' : 'Enroll Now' }}
+                            </button>
+                        @endif
                     </div>
+
                 </div>
             @empty
                 <p>No classes available for the selected criteria.</p>

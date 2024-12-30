@@ -115,7 +115,7 @@ class ViewEnrollments extends Component
     public function enrollments()
     {
         $this->enrollments = Booking::where('user_id', Auth::id())
-            ->with('class', 'event', 'course') // Eager load related models
+            ->with('class', 'event') // Eager load related models
             ->get();
     }
 
