@@ -107,6 +107,12 @@
                             <i class="fa-solid fa-tag"></i> Tags
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.emails' ? 'active' : '' }}"
+                            href="{{ route('dashboard.emails') }}" wire:navigate>
+                            <i class="fa-solid fa-tag"></i> Emails
+                        </a>
+                    </li>
                 @endif
                 <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.settings' ? 'active' : '' }}"

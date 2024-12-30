@@ -138,8 +138,11 @@
                     <div class="news-letter-content d-flex flex-column text-center">
                         <h6 class="mb-3">Join our list to learn more</h6>
                         <p>Sign up to get updates on courses and events.</p>
-                        <form action="" class="d-flex flex-column gap-3">
-                            <input type="text" placeholder="Enter Your Email">
+                        <form wire:submit.prevent="submitEmail" class="d-flex flex-column gap-3">
+                            <input type="email" wire:model="email" placeholder="Enter Your Email" required>
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                             <button type="submit" class="button-primary my-3">Submit</button>
                         </form>
                     </div>

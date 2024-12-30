@@ -3,7 +3,7 @@
         <!-- Single Course Selection -->
         <div class="mb-3">
             <label for="course_id" class="form-label">Course</label>
-            <select wire:model="course_id" class="form-control" id="course_id" required wire:change="fetchLectures">
+            <select wire:model="course_id" class="form-control" id="course_id" wire:change="fetchLectures">
                 <option value="">Select a course</option>
                 @foreach ($courses as $course)
                     <option value="{{ $course->id }}">{{ $course->title }}</option>
@@ -23,7 +23,7 @@
                 <div class="mb-3">
                     <label for="title_{{ $index }}" class="form-label">Title</label>
                     <input type="text" wire:model.defer="lectures.{{ $index }}.title" class="form-control"
-                        id="title_{{ $index }}" placeholder="Lecture Title" required>
+                        id="title_{{ $index }}" placeholder="Lecture Title">
                     @error('lectures.' . $index . '.title')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -43,7 +43,7 @@
                 <div class="mb-3">
                     <label for="video_file_{{ $index }}" class="form-label">Video File</label>
                     <input type="file" wire:model.defer="lectures.{{ $index }}.video_file"
-                        class="form-control" id="video_file_{{ $index }}" required>
+                        class="form-control" id="video_file_{{ $index }}">
                     <div wire:loading wire:target="lectures.{{ $index }}.video_file" class="mt-2 text-info">
                         Uploading...
                     </div>

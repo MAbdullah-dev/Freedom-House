@@ -24,10 +24,9 @@ class Lecture extends Component
 
     protected $rules = [
         'course_id' => 'required|exists:courses,id',
-        'lectures.*.title' => 'required|string|max:255',
+        '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ' => 'required|string|max:255',
         'lectures.*.description' => 'nullable|string',
-        'lectures.*.video_file' => 'required|file',
-        // Max 50MB
+        'lectures.*.video_file' => 'required|file|max:102400|mimetypes:video/mp4,video/avi,video/mov',
         'lectures.*.order' => 'required|integer|distinct|min:1',
     ];
 
@@ -81,6 +80,14 @@ class Lecture extends Component
     {
         $this->validate();
 
+        // Check for duplicate orders in the current lectures
+        $orders = array_column($this->lectures, 'order');
+        if (count($orders) !== count(array_unique($orders))) {
+            $this->alert('error', 'Lecture order must be unique within the same course.');
+            return;
+        }
+
+        // Proceed with the rest of the logic
         foreach ($this->lectures as $index => $lecture) {
             try {
                 // Upload video directly to Vimeo
@@ -114,9 +121,6 @@ class Lecture extends Component
         $this->alert('success', 'Lectures successfully uploaded to Vimeo! Video details will update soon.');
         $this->resetFields();
     }
-
-
-
 
     private function resetFields()
     {

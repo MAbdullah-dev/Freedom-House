@@ -42,6 +42,7 @@ use App\Livewire\RecordedLcture;
 use App\Models\Lecture;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
+use App\Livewire\Dashboard\Emails;
 use App\Livewire\Dashboard\StudentView;
 use App\Livewire\RecordedLecture;
 
@@ -73,6 +74,7 @@ Route::middleware(['checkrole:1'])->group(
         Route::get('dashboard/categories', Category::class)->name('dashboard.categories');
         Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
         Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
+        Route::get('dashboard/emails', Emails::class)->name('dashboard.emails');
     }
 );
 
