@@ -45,8 +45,7 @@ class StudentsTab extends Component
             ->pluck('id');
 
         // Start the query for bookings
-        $query = Booking::whereIn('course_id', $courses)
-            ->where('payment_status', 'paid');
+        $query = Booking::whereIn('course_id', $courses);
 
         // Apply the search filter if present
         if ($this->search) {

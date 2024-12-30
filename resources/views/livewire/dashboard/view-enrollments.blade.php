@@ -60,43 +60,64 @@
             @endif
         </section>
     @endif
-
     <section class="enrollments-table my-5 mx-4">
         <h4>Enrollments</h4>
         <div class="table-responsive">
-            <table class="table">
-                <thead>
+            <table class="table table-hover">
+                <thead class="table-dark">
                     <tr>
-                        <th>Order Number</th>
-                        <th>Class/Event/Course</th>
-                        <th>Payment Status</th>
-                        <th>Created At</th>
-                        <th>Updated At</th>
+                        <th>Order #</th>
+                        <th>Class/Event</th>
+                        <th>Payment</th>
+                        <th>Time</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($enrollments as $enrollment)
+                    @forelse ($enrollments as $enrollment)
                         <tr>
+                            <!-- Order Number -->
                             <td>{{ $enrollment->order_number }}</td>
+
+                            <!-- Class/Event Title -->
                             <td>
                                 @if ($enrollment->class_id)
-                                    {{ $enrollment->class->title }}
-                                    <!-- Assuming you have a 'title }}' attribute in the class model -->
-                                @elseif($enrollment->event_id)
-                                    {{ $enrollment->event->title }}
-                                    <!-- Assuming you have a 'title }}' attribute in the event model -->
-                                @elseif($enrollment->course_id)
-                                    {{ $enrollment->course->title }}
-                                    <!-- Assuming you have a 'title }}' attribute in the course model -->
+                                    <span class="badge bg-primary"
+                                        title="Class">{{ $enrollment->class->title }}</span>
+                                @elseif ($enrollment->event_id)
+                                    <span class="badge bg-success"
+                                        title="Event">{{ $enrollment->event->title }}</span>
                                 @else
-                                    No Enrollment
+                                    <span class="text-muted">No Enrollment</span>
                                 @endif
                             </td>
-                            <td>{{ $enrollment->payment_status }}</td>
-                            <td>{{ $enrollment->created_at->format('Y-m-d H:i:s') }}</td>
-                            <td>{{ $enrollment->updated_at->format('Y-m-d H:i:s') }}</td>
+
+                            <!-- Payment Status -->
+                            <td>
+                                @if ($enrollment->payment_status === 'paid')
+                                    <span class="badge bg-success">Paid</span>
+                                @else
+                                    <span class="badge bg-info">Free</span>
+                                @endif
+                            </td>
+
+                            <!-- Time and Date -->
+                            @if ($enrollment->class_id)
+                                <td>{{ \Carbon\Carbon::parse($enrollment->class->class_time)->format('g:i A') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($enrollment->class->class_date)->format('F j, Y') }}</td>
+                            @elseif ($enrollment->event_id)
+                                <td>{{ \Carbon\Carbon::parse($enrollment->event->class_time)->format('g:i A') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($enrollment->event->class_date)->format('F j, Y') }}</td>
+                            @else
+                                <td class="text-muted">-</td>
+                                <td class="text-muted">-</td>
+                            @endif
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No enrollments found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
