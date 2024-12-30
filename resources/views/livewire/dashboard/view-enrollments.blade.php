@@ -40,7 +40,15 @@
                                     <td>{{ $item['type'] }}</td>
                                     <td>{{ $item['date'] }}</td>
                                     <td>{{ $item['time'] }}</td>
-                                    <td>{{ $item['price'] }}</td>
+                                    <td>
+                                        @if ($item['price'] === 'Free' || $item['price'] === '$0.00')
+                                            <span class="badge bg-info">Free</span>
+                                        @else
+                                            <span class="badge bg-success">{{ $item['price'] }}</span>
+                                        @endif
+                                    </td>
+
+
                                     <td>
                                         <button class="button-primary"
                                             wire:click="selectItem({{ $item['id'] }}, '{{ $item['model_type'] }}')"
@@ -103,14 +111,18 @@
 
                             <!-- Time and Date -->
                             @if ($enrollment->class_id)
-                                <td>{{ \Carbon\Carbon::parse($enrollment->class->class_time)->format('g:i A') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($enrollment->class->class_date)->format('F j, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($enrollment->class->class_time, 'UTC')->setTimezone(Auth::user()->timezone)->format('g:i A') }}
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($enrollment->class->class_date, 'UTC')->setTimezone(Auth::user()->timezone)->format('F j, Y') }}
+                                </td>
                             @elseif ($enrollment->event_id)
-                                <td>{{ \Carbon\Carbon::parse($enrollment->event->class_time)->format('g:i A') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($enrollment->event->class_date)->format('F j, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($enrollment->event->class_time, 'UTC')->setTimezone(Auth::user()->timezone)->format('g:i A') }}
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($enrollment->event->class_date, 'UTC')->setTimezone(Auth::user()->timezone)->format('F j, Y') }}
+                                </td>
                             @else
-                                <td class="text-muted">-</td>
-                                <td class="text-muted">-</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
                             @endif
                         </tr>
                     @empty
@@ -122,7 +134,7 @@
             </table>
         </div>
     </section>
-    <!-- Modal -->
+    <!-- q -->
     <div wire:ignore.self class="modal fade modal-lg" id="viewItemModal" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -153,7 +165,11 @@
                             <p><strong>Class Date:</strong>
                                 {{ $selectedClass->class_date ? \Carbon\Carbon::parse($selectedClass->class_date)->format('F, d Y') : 'Not Set' }}
                             </p>
-                            <p><strong>Class Time:</strong> {{ $selectedClass->class_time ?? 'Not Set' }}</p>
+                            <p><strong>Class Time:</strong>
+                                {{ $selectedClass->class_time
+                                    ? \Carbon\Carbon::parse($selectedClass->class_time, 'UTC')->setTimezone(Auth::user()->timezone)->format('g:i A')
+                                    : 'Not Set' }}
+                            </p>
                             <p><strong>Student Capacity:</strong> {{ $selectedClass->capacity }}</p>
                             @if ($selectedClass->class_type == 'recorded')
                                 <p><strong>Video Link:</strong> <a href="{{ $selectedClass->recorded_video_url }}"
@@ -174,10 +190,19 @@
                             <p><strong>Title:</strong> {{ $selectedEvent->title }}</p>
                             <p><strong>Description:</strong> {{ $selectedEvent->description }}</p>
                             <p><strong>Event Date:</strong>
-                                {{ $selectedEvent->event_date ? \Carbon\Carbon::parse($selectedEvent->event_date)->format('F, d Y') : 'Not Set' }}
+                                {{ $selectedEvent->class_date ? \Carbon\Carbon::parse($selectedEvent->class_date)->format('F, d Y') : 'Not Set' }}
                             </p>
-                            <p><strong>Event Time:</strong> {{ $selectedEvent->event_time ?? 'Not Set' }}</p>
-                            <p><strong>Location:</strong> {{ $selectedEvent->location ?? 'Not Set' }}</p>
+                            <p><strong>Event Time:</strong>
+                                {{ $selectedEvent->class_time
+                                    ? \Carbon\Carbon::parse($selectedEvent->class_time, 'UTC')->setTimezone(Auth::user()->timezone)->format('g:i A')
+                                    : 'Not Set' }}
+                            </p>
+                            @if ($selectedEvent->onsite_address)
+                                <p><strong>Location:</strong> {{ $selectedEvent->onsite_address ?? 'Not Set' }}</p>
+                            @elseif ($selectedEvent->teams_link)
+                                <a href="{{ $selectedEvent->teams_link }}"><strong>Location: Join Via Teams</strong>
+                                </a>
+                            @endif
                             <p><strong>Price:</strong>
                                 {{ $selectedEvent->price ? '$' . number_format($selectedEvent->price, 2) : 'Free' }}
                             </p>
@@ -190,7 +215,8 @@
                     <div class="icons d-flex align-items-center justify-content-center gap-3">
                         <!-- Edit Icon -->
                         @if ($selectedClass || $selectedEvent)
-                            <i type="button" class="edit-icon fa-solid fa-pen-to-square" wire:click="editItem"></i>
+                            <i type="button" class="edit-icon fa-solid fa-pen-to-square" wire:click="editItem"
+                                data-bs-dismiss="modal"></i>
                         @endif
                         <!-- Delete Icon -->
                         @if ($selectedClass || $selectedEvent)
@@ -207,12 +233,15 @@
         </div>
     </div>
 </div>
-@script
+@push('js')
     <script>
         window.addEventListener('close-modal', event => {
-            $('#viewclassModal').modal('hide');
+            $('#viewItemModal').modal('hide');
         });
-
+    </script>
+@endpush
+@script
+    <script>
         flatpickr("#calendar-input", {
             mode: "range",
             dateFormat: "Y-m-d",
@@ -221,7 +250,7 @@
             minDate: "2024-01-01",
             maxDate: "2030-12-31",
             onClose: function(selectedDates, dateStr, instance) {
-                @this.set('dateRange', dateStr); // Update Livewire property directly
+                @this.set('dateRange', dateStr);
             }
         });
     </script>

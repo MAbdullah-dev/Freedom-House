@@ -8,7 +8,7 @@
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
                     </button> --}}
                     {{-- <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button> --}}
-                    @if (!$classId)
+                    @if (!$classId && !$eventId)
                         <button type="submit" class="btn button-submit custom-submit-button" wire:click="submit"
                             wire:loading.attr="disabled">
                             <span wire:loading wire:target="submit" class="spinner-border spinner-border-sm"
@@ -18,7 +18,7 @@
                             <span wire:loading wire:target="submit">Loading...</span>
                         </button>
                     @endif
-                    @if ($classId)
+                    @if ($classId || $eventId)
                         <button type="submit" class="btn button-submit custom-submit-button" wire:click="updateClass"
                             wire:loading.attr="disabled">
                             <span wire:loading wire:target="updateClass" class="spinner-border spinner-border-sm"
@@ -123,7 +123,7 @@
                             @if ($class_type === 'onsite')
                                 <div class="">
                                     <label for="onsiteAddress" class="form-label">Onsite Address</label>
-                                    <input wire:model="onsite_address" id="onsiteAddress"
+                                    <input wire:model.defer="onsite_address" id="onsiteAddress"
                                         class="form-control @if ($errors->has('onsite_address')) is-invalid @elseif ($onsite_address) is-valid @endif"
                                         type="text" placeholder="Enter Onsite Address">
                                     @error('onsite_address')

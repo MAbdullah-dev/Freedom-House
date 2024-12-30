@@ -31,19 +31,19 @@ class ViewEnrollments extends Component
             return $item->booking_start_date;
         });
 
-        // Map to a uniform structure
-        $this->items = $this->items->map(function ($item) {
-            $userTimezone = Auth::user()->timezone;
+        $userTimezone = Auth::user()->timezone;
 
+        // Map to a uniform structure
+        $this->items = $this->items->map(function ($item) use ($userTimezone) {
             return [
                 'id' => $item->id,
                 'title' => $item->title,
                 'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
                 'date' => $item->class_date
-                    ? \Carbon\Carbon::parse($item->class_date)->setTimezone($userTimezone)->format('F j, Y')
+                    ? \Carbon\Carbon::parse($item->class_date, 'UTC')->setTimezone($userTimezone)->format('F j, Y')
                     : 'Not Set',
                 'time' => $item->class_time
-                    ? \Carbon\Carbon::parse($item->class_time)->setTimezone($userTimezone)->format('h:i A')
+                    ? \Carbon\Carbon::parse($item->class_time, 'UTC')->setTimezone($userTimezone)->format('h:i A')
                     : 'Not Set',
                 'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
                 'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
@@ -114,10 +114,31 @@ class ViewEnrollments extends Component
     }
     public function enrollments()
     {
+        $userTimezone = Auth::user()->timezone;
+
         $this->enrollments = Booking::where('user_id', Auth::id())
-            ->with('class', 'event') // Eager load related models
-            ->get();
+            ->with(['class', 'event'])
+            ->get()
+            ->map(function ($enrollment) use ($userTimezone) {
+                $enrollment->order_number = $enrollment->order_number;
+                $enrollment->title = $enrollment->class_id
+                    ? $enrollment->class->title
+                    : ($enrollment->event_id ? $enrollment->event->title : 'No Enrollment');
+                $enrollment->payment_status = $enrollment->payment_status === 'paid' ? 'Paid' : 'Free';
+                $enrollment->time = $enrollment->class_id
+                    ? \Carbon\Carbon::parse($enrollment->class->class_time, 'UTC')->setTimezone($userTimezone)->format('h:i A')
+                    : ($enrollment->event_id
+                        ? \Carbon\Carbon::parse($enrollment->event->class_time, 'UTC')->setTimezone($userTimezone)->format('h:i A')
+                        : 'N/A');
+                $enrollment->date = $enrollment->class_id
+                    ? \Carbon\Carbon::parse($enrollment->class->class_date, 'UTC')->setTimezone($userTimezone)->format('F j, Y')
+                    : ($enrollment->event_id
+                        ? \Carbon\Carbon::parse($enrollment->event->class_date, 'UTC')->setTimezone($userTimezone)->format('F j, Y')
+                        : 'N/A');
+                return $enrollment;
+            });
     }
+
 
     public function selectItem($itemId, $modelType)
     {
@@ -133,7 +154,6 @@ class ViewEnrollments extends Component
     }
     public function editItem()
     {
-        $this->dispatch('close-modal'); // Close the modal after editing
 
         if ($this->selectedClass) {
             // Redirect to class edit route if a class is selected
@@ -145,6 +165,7 @@ class ViewEnrollments extends Component
             // Optionally handle the case where no item is selected
             session()->flash('error', 'No item selected for editing.');
         }
+        $this->dispatch('close-modal');
     }
 
     public function deleteItem()
@@ -154,16 +175,18 @@ class ViewEnrollments extends Component
             $this->selectedClass->delete();
             $this->classes = Classe::all(); // Refresh class list
             $this->selectedClass = null;
-            session()->flash('message', 'Class deleted successfully.');
+            $this->alert('success', 'Class deleted successfully.');
+            $this->dispatch('close-modal');
         }
         // Check if the selected item is an event
         elseif ($this->selectedEvent) {
             $this->selectedEvent->delete();
             $this->events = Events::all(); // Refresh events list
             $this->selectedEvent = null;
-            session()->flash('message', 'Event deleted successfully.');
+            $this->alert('success', 'Event deleted successfully.');
+            $this->dispatch('close-modal');
         } else {
-            session()->flash('error', 'No item selected for deletion.');
+            $this->alert('error', 'No item selected for deletion.');
         }
     }
 
