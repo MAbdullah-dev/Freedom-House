@@ -111,9 +111,9 @@
 
 <body>
     <div class="certificate-wrap"
-        style="background-image: url('data:image/png;base64,'{{ base64_encode(file_get_contents(public_path('assets/images/certificate.png'))) }}');">
+        style="background-image: url('data:image/webp;base64,'{{ base64_encode(file_get_contents(public_path('assets/images/certificate.webp'))) }}');">
         <div class="certificate-topheading">
-            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('assets/images/logo-img.png'))) }}"
+            <img src="data:image/webp;base64,{{ base64_encode(file_get_contents(public_path('assets/images/logo-img.webp'))) }}"
                 alt="Company Logo">
         </div>
         <div class="certificate-content">
@@ -128,7 +128,7 @@
             <table>
                 <tr>
                     <td>
-                        <img src="signature-tutor.png" alt="Tutor Signature">
+                        <img src="signature-tutor.webp" alt="Tutor Signature">
                         <p class="footer-label">Course Tutor</p>
                     </td>
                     <td>
@@ -136,7 +136,7 @@
                         <p>[Certificate ID]</p>
                     </td>
                     <td>
-                        <img src="signature-ceo.png" alt="CEO Signature">
+                        <img src="signature-ceo.webp" alt="CEO Signature">
                         <p class="footer-label">CEO</p>
                     </td>
                 </tr>

@@ -10,7 +10,7 @@
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="icon" href="{{ asset('assets/images/fav-icon.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('assets/images/fav-icon.webp') }}" type="image/webp">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.tiny.cloud/1/5iv0e4vx3nzuwf3ya5c4epexxpn19n8bs4mnku7wvh2598qz/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>

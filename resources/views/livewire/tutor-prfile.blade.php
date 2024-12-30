@@ -33,7 +33,7 @@
     <section class="banner">
         <div class="container">
             <div class="banner-image"
-                style="background-image: url('{{ asset('assets/images/tutor-profile-hero.jpg') }}'); background-size: cover">
+                style="background-image: url('{{ asset('assets/images/tutor-profile-hero.webp') }}'); background-size: cover">
                 <div class="row align-items-center z-1 ">
                     <div class="col-lg-3">
                         <div class="profile">

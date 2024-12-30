@@ -35,7 +35,7 @@
                     @elseif ($user->cover_photo)
                         <img src="{{ asset('storage/' . $user->cover_photo) }}" class="cover-photo" alt="Cover Photo">
                     @else
-                        <img src="{{ asset('assets/images/dummy-cover-photo.jpg') }}" class="cover-photo"
+                        <img src="{{ asset('assets/images/dummy-cover-photo.webp') }}" class="cover-photo"
                             alt="Cover Photo">
                     @endif
                     <button type="button" wire:click="deleteCoverPhoto" class="btn btn-danger btn-sm position-absolute"
@@ -61,7 +61,7 @@
                             <img src="{{ asset('storage/' . $user->pfp) }}" class="profile-photo rounded-circle"
                                 alt="Profile Photo">
                         @else
-                            <img src="{{ asset('assets/images/dummy-profile-photo.png') }}"
+                            <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}"
                                 class="profile-photo rounded-circle" alt="Profile Photo">
                         @endif
                         <button class="btn btn-light btn-circle" id="profileDropdown" data-bs-toggle="dropdown"

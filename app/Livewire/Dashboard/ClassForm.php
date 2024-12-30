@@ -48,19 +48,20 @@ class ClassForm extends Component
         'class_time' => 'required',
         'date_range' => 'required',
         'booking_start_date' => 'required|date',
-        'booking_end_date' => 'required|date',
+        'booking_end_date' => 'required|date|before:class_date',
     ];
 
     protected $messages = [
         'title.required' => 'Please provide a title for the class/event.',
         'booking_start_date.after_or_equal' => 'The booking start date must be today or later.',
         'booking_end_date.after' => 'The booking end date must be after the start date.',
+        'booking_end_date' => 'The booking end date must be before the actual class date.',
     ];
 
 
     public function mount($classId = null, $eventId = null)
     {
-        dd($eventId);
+        // dd($eventId);
         if ($classId) {
             $this->classId = $classId;
             $this->type = 'class'; // Set type to class
@@ -159,13 +160,21 @@ class ClassForm extends Component
     }
     public function updatedDateRange($value)
     {
-        // Parse the date range string into start_date and end_date
         $dates = explode(' to ', $value);
         if (count($dates) === 2) {
-            $this->booking_start_date = $dates[0];
-            $this->booking_end_date = $dates[1];
+            try {
+                $this->booking_start_date = Carbon::parse($dates[0])->toDateString();
+                $this->booking_end_date = Carbon::parse($dates[1])->toDateString();
+            } catch (\Exception $e) {
+                $this->reset(['booking_start_date', 'booking_end_date']);
+                $this->addError('date_range', 'Invalid date range format.');
+            }
+        } else {
+            $this->reset(['booking_start_date', 'booking_end_date']);
+            $this->addError('date_range', 'Invalid date range format.');
         }
     }
+
 
     public function dispatchClassTypeChanged()
     {

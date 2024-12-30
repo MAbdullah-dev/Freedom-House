@@ -66,7 +66,7 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="progress-course-img">
-                            <img src="{{ asset('assets/images/progress-course-img.png') }}" alt="">
+                            <img src="{{ asset('assets/images/progress-course-img.webp') }}" alt="">
                         </div>
                     </div>
                     <div class="col-lg-8">

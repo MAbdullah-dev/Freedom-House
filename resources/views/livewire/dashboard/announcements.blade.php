@@ -28,29 +28,32 @@
     <section class="filter-courses">
         <div wire:ignore class="row">
             <!-- Courses Select -->
-            <div  class="col-md-6">
+            <div class="col-md-6">
                 <label for="courseFilter" class="form-label">Courses</label>
-                <select class="form-select" id="courseFilter" wire:model="courseFilter" wire:change="filterAnnouncements">
+                <select class="form-select" id="courseFilter" wire:model="courseFilter"
+                    wire:change="filterAnnouncements">
                     <option value="">All</option>
-                    @foreach($courses as $course)
-                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                    @foreach ($courses as $course)
+                        <option value="{{ $course->id }}">{{ $course->title }}</option>
                     @endforeach
                 </select>
             </div>
-    
+
             <!-- Sort Order Select -->
             <div class="col-md-3">
                 <label for="sortOrderFilter" class="form-label">Sort Order</label>
-                <select class="form-select" id="sortOrderFilter" wire:model="sortOrderFilter" wire:change="filterAnnouncements">
+                <select class="form-select" id="sortOrderFilter" wire:model="sortOrderFilter"
+                    wire:change="filterAnnouncements">
                     <option value="DESC">DESC</option>
                     <option value="ASC">ASC</option>
                 </select>
             </div>
-    
+
             <!-- Date Input -->
             <div class="col-md-3">
                 <label for="dateFilter" class="form-label">Date</label>
-                <input type="date" class="form-control" wire:model="dateFilter" id="calendar-input-students-tab" wire:change="filterAnnouncements"/>
+                <input type="date" class="form-control" wire:model="dateFilter" id="calendar-input-students-tab"
+                    wire:change="filterAnnouncements" />
             </div>
         </div>
     </section>
@@ -67,19 +70,19 @@
                 </thead>
                 <tbody>
                     @if ($announcements->isEmpty())
-                    <!-- No Announcements -->
-                    <tr>
-                        <td colspan="2" class="text-center">
-                            <img src="{{ asset('assets/images/announcment.png') }}" alt="No Announcements" />
-                        </td>
-                    </tr>
+                        <!-- No Announcements -->
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <img src="{{ asset('assets/images/announcment.webp') }}" alt="No Announcements" />
+                            </td>
+                        </tr>
                     @else
-                    @foreach ($announcements as $announcement)
-                    <tr>
-                        <td>{{ $announcement->created_at->format('d M Y') }}</td>
-                        <td>{{ $announcement->subject }}</td>
-                    </tr>
-                    @endforeach
+                        @foreach ($announcements as $announcement)
+                            <tr>
+                                <td>{{ $announcement->created_at->format('d M Y') }}</td>
+                                <td>{{ $announcement->subject }}</td>
+                            </tr>
+                        @endforeach
                     @endif
                 </tbody>
             </table>
@@ -103,24 +106,30 @@
                             <select wire:model="selectedCourse" id="course" class="form-select">
                                 <option value="">-- Select a Course --</option>
                                 @foreach ($courses as $course)
-                                <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                    <option value="{{ $course->id }}">{{ $course->title }}</option>
                                 @endforeach
                             </select>
-                            @error('selectedCourse') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('selectedCourse')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <!-- Subject Field -->
                         <div class="mb-3">
                             <label for="subject" class="form-label">Subject</label>
                             <input type="text" wire:model="subject" id="subject" class="form-control">
-                            @error('subject') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('subject')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <!-- Message Field -->
                         <div class="mb-3">
                             <label for="message" class="form-label">Message</label>
                             <textarea wire:model="message" id="message" rows="4" class="form-control"></textarea>
-                            @error('message') <span class="text-danger">{{ $message }}</span> @enderror
+                            @error('message')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -145,7 +154,7 @@
 @push('js')
     <script>
         window.addEventListener('closeModal', event => {
-        $('#createAnnouncementModal').modal('hide');
+            $('#createAnnouncementModal').modal('hide');
         });
     </script>
 @endpush

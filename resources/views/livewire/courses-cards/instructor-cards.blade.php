@@ -10,7 +10,7 @@
                     <div class="instructor-card shadow">
                         <ul class="d-flex gap-4">
                             <li class="instructor-img my-3">
-                                <img src="{{ $tutor->user->pfp ?? asset('assets/images/dummy-profile-photo.png') }}"
+                                <img src="{{ $tutor->user->pfp ?? asset('assets/images/dummy-profile-photo.webp') }}"
                                     alt="Instructor Image">
                             </li>
                             <li class="card-details">

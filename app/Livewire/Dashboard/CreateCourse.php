@@ -22,7 +22,8 @@ class CreateCourse extends Component
     public $tags = [];
     public $tutors = [];
     public $file;
-    public $videoUrl;
+    // public $videoUrl;
+    public $videoFile; // New variable for video file upload
     public $learnDetails;
     public $audienceDetails;
     public $requirements;
@@ -48,7 +49,7 @@ class CreateCourse extends Component
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
             'file' => 'required|image|mimes:jpeg,png,jpg|max:1024',
-            'videoUrl' => 'required|url',
+            'videoFile' => 'required|file|mimes:mp4,mov,avi|max:10240', // New validation rule
             'learnDetails' => 'required|string',
             'audienceDetails' => 'required|string',
             'requirements' => 'required|string',
@@ -75,6 +76,13 @@ class CreateCourse extends Component
             $this->selectedTutors = [$authTutor];
         }
     }
+    public function uploadVideo()
+    {
+        if ($this->videoFile) {
+            return $this->videoFile->store('videos', 'public'); // Save video to the "public/videos" directory
+        }
+        return null;
+    }
 
     public function loadCourseData()
     {
@@ -88,7 +96,7 @@ class CreateCourse extends Component
         $this->learnDetails = $course->learning_outcomes;
         $this->audienceDetails = $course->target_audience;
         $this->requirements = $course->requirements;
-        $this->videoUrl = $course->video_url;
+        $this->videoFile = $course->video_path;
         $this->existingThumbnail = $course->thumbnail;
         $this->selectedTutors = $course->tutors;
         $this->is_paid = $course->is_paid;
@@ -134,13 +142,14 @@ class CreateCourse extends Component
         $this->validate();
 
         $filePath = $this->uploadThumbnail();
+        $videoPath = $this->uploadVideo(); // Upload video file and get the path
 
         $course = Course::create([
             'user_id' => Auth::id(),
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
-            'video_url' => $this->videoUrl,
+            'video_path' => $videoPath, // Save video path in the database
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
@@ -167,13 +176,18 @@ class CreateCourse extends Component
         $this->validate();
 
         $course = Course::findOrFail($this->courseId);
+
+        // Upload new thumbnail (if any)
         $filePath = $this->uploadThumbnail();
+
+        // Upload new video file (if any)
+        $videoPath = $this->uploadVideo();
 
         $course->update([
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
-            'video_url' => $this->videoUrl,
+            'video_path' => $videoPath ?: $course->video_path, // Keep existing video if no new upload
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
@@ -188,11 +202,14 @@ class CreateCourse extends Component
 
         $this->alert('success', 'Course updated successfully.');
     }
+
     public function saveAsDraft()
     {
         $this->validate();
 
         $filePath = $this->uploadThumbnail();
+        $videoPath = $this->uploadVideo(); // Upload video file and get the path
+
 
         $course = Course::create([
             'user_id' => Auth::id(),

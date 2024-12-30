@@ -102,7 +102,7 @@
                             <tr>
                                 <td class="d-flex align-items-center">
                                     <div class="review-img me-2">
-                                        <img src="{{ $review->user->profile_picture ?? asset('assets/images/default-avatar.png') }}"
+                                        <img src="{{ $review->user->profile_picture ?? asset('assets/images/dummy-profile-photo.webp') }}"
                                             alt="{{ $review->user->name }}" class="rounded-circle"
                                             style="width: 40px; height: 40px;">
                                     </div>

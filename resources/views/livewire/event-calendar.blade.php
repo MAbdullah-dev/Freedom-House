@@ -81,7 +81,7 @@
                             @if (isset($selectedEvent['users']['pfp']))
                                 <img src="{{ $selectedEvent['users']['pfp'] }}" alt="profile">
                             @else
-                                <img src="{{ asset('assets/images/dummy-profile-photo.png') }}" alt="profile">
+                                <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}" alt="profile">
                             @endif
                             <p class="m-0"> {{ $selectedEvent['users']['first_name'] ?? 'N/A' }}
                                 {{ $selectedEvent['users']['last_name'] ?? '' }}</p>

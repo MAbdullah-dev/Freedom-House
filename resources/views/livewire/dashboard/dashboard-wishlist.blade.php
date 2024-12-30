@@ -4,7 +4,7 @@
         @forelse ($wishlists as $wishlist)
             <div class="card shadow">
                 <div class="card-img-top">
-                    <img src="http://127.0.0.1:8000/assets/images/featured-card-1.png" alt="Featured Card">
+                    <img src="{{ asset('assets/images/featured-card-1.webp') }}" alt="Featured Card">
                     <i class="{{ $wishlist->course->id && Auth::check() && Auth::user()->wishlist->contains($wishlist->course->id)
                         ? 'fa-solid'
                         : 'fa-regular' }} fa-bookmark wishlist-icon"
@@ -22,7 +22,7 @@
                     <h5 class="card-title">{{ $wishlist->course->title }}</h5>
                     <div class="tutor-meta-wrapper d-flex align-items-center gap-3">
                         <div class="tutor-data d-flex align-items-center gap-1">
-                            <img src="{{ asset('storage/' . $wishlist->course->user->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
+                            <img src="{{ asset('storage/' . $wishlist->course->user->pfp) ?? asset('assets/images/dummy-profile-photo.webp') }}"
                                 alt="Creator">
                             <small>by</small>
                             <span>{{ $wishlist->course->user->first_name ?? 'N/A' }}

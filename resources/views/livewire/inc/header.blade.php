@@ -67,7 +67,7 @@
                 @if (Auth::check())
                     <div class="login-icon">
                         <img class="login-icon-img"
-                            src="{{ asset('storage/' . Auth::user()->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
+                            src="{{ asset('storage/' . Auth::user()->pfp) ?? asset('assets/images/dummy-profile-photo.webp') }}"
                             alt="">
                     </div>
                     <div class="user-dropdown">

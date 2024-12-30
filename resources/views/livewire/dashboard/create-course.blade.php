@@ -141,17 +141,17 @@
                                             <div class="col-md-4">
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3">
-                                                    <!-- Display the uploaded image or fallback to a placeholder image -->
-                                                    <img src="{{ $file ? $file->temporaryUrl() }}"
-                                                        style="width: 250px; height: 150px" alt="Course Thumbnail"
-                                                        id="previewImage">
+                                                    <!-- Display the uploaded image or fallback to a placeholder -->
+                                                    <img src="{{ $file ? $file->temporaryUrl() : asset('path/to/placeholder-image.webp') }}"
+                                                        style="width: 250px; height: 150px; object-fit: cover;"
+                                                        alt="Course Thumbnail" id="previewImage">
                                                 </div>
                                             </div>
                                             <div class="col-md-5 d-flex flex-column justify-content-center">
-                                                <p class="mb-1 text-secondary">Size: 700x430 pixels</p>
-                                                <p class="mb-2 text-secondary">File Support: JPG, PNG</p>
+                                                <p class="mb-1 text-secondary">Recommended Size: 700x430 pixels</p>
+                                                <p class="mb-2 text-secondary">Supported Formats: JPG, PNG</p>
 
-                                                <!-- Loader spinner that shows when the file is being uploaded -->
+                                                <!-- Loader spinner shown during upload -->
                                                 <div wire:loading wire:target="file"
                                                     class="spinner-border text-success" role="status">
                                                     <span class="visually-hidden">Uploading...</span>
@@ -162,12 +162,14 @@
                                                     class="custom-file-upload button-primary mt-3">
                                                     <i class="bi bi-upload me-1"></i> Upload Image
                                                 </label>
-                                                <input wire:model="file" id="file-upload" type="file" />
+                                                <input wire:model="file" id="file-upload" type="file"
+                                                    accept="image/png, image/jpeg" class="d-none" />
                                                 @error('file')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>
+
 
                                     </div>
                                 </div>
@@ -187,15 +189,15 @@
                                 aria-labelledby="headingVideo">
                                 <div class="accordion-body">
                                     <div class="mb-3">
-                                        <label for="videoUpload" class="form-label">Upload Video URL</label>
-                                        <input type="url"
-                                            class="form-control @if ($errors->has('videoUrl')) is-invalid @elseif ($videoUrl) is-valid @endif"
-                                            id="videoUpload" wire:model="videoUrl"
-                                            placeholder="https://example.com/video.mp4">
-                                        @error('videoUrl')
+                                        <label for="videoUpload" class="form-label">Upload Video File</label>
+                                        <input type="file"
+                                            class="form-control @if ($errors->has('videoFile')) is-invalid @elseif ($videoFile) is-valid @endif"
+                                            id="videoUpload" wire:model="videoFile" accept="video/*">
+                                        @error('videoFile')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+
 
                                 </div>
                             </div>

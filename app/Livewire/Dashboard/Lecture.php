@@ -26,7 +26,8 @@ class Lecture extends Component
         'course_id' => 'required|exists:courses,id',
         'lectures.*.title' => 'required|string|max:255',
         'lectures.*.description' => 'nullable|string',
-        'lectures.*.video_file' => 'required|file|mimetypes:video/mp4,video/quicktime', // Max 50MB
+        'lectures.*.video_file' => 'required|file',
+        // Max 50MB
         'lectures.*.order' => 'required|integer|distinct|min:1',
     ];
 
@@ -81,38 +82,39 @@ class Lecture extends Component
         $this->validate();
 
         foreach ($this->lectures as $index => $lecture) {
-            // Upload video to Vimeo
-            $videoPath = $lecture['video_file']->store('temp_videos', 'local');
-            $videoFullPath = Storage::disk('local')->path($videoPath);
+            try {
+                // Upload video directly to Vimeo
+                $response = Vimeo::upload($lecture['video_file']->getRealPath(), [
+                    'name' => $lecture['title'],
+                    'description' => $lecture['description'],
+                ]);
 
-            $response = Vimeo::upload($videoFullPath, [
-                'name' => $lecture['title'],
-                'description' => $lecture['description'],
-            ]);
+                // Get the video ID or URL from Vimeo's response
+                $videoId = $response;
 
-            // Get the video ID from the Vimeo response
-            $videoId = $response; // Vimeo returns the video ID or URL
+                // Create lecture record in the database (without duration initially)
+                $lectureRecord = ModelsLecture::create([
+                    'course_id' => $this->course_id,
+                    'title' => $lecture['title'],
+                    'description' => $lecture['description'],
+                    'video_file' => $videoId, // Vimeo video ID
+                    'video_duration' => null, // Initially null
+                    'order' => $lecture['order'],
+                ]);
 
-            // Delete temporary file
-            Storage::disk('local')->delete($videoPath);
-
-            // Create lecture record in the database (without duration initially)
-            $lectureRecord = ModelsLecture::create([
-                'course_id' => $this->course_id,
-                'title' => $lecture['title'],
-                'description' => $lecture['description'],
-                'video_file' => $videoId, // Vimeo video ID
-                'video_duration' => null, // Initially null
-                'order' => $lecture['order'],
-            ]);
-
-            // Dispatch a job to fetch video details later
-            FetchVimeoVideoDetailsJob::dispatch($lectureRecord->id, $videoId);
+                // Dispatch a job to fetch video details later
+                FetchVimeoVideoDetailsJob::dispatch($lectureRecord->id, $videoId);
+            } catch (\Exception $e) {
+                // Handle errors
+                $this->alert('error', 'Failed to upload video to Vimeo: ' . $e->getMessage());
+                return;
+            }
         }
 
         $this->alert('success', 'Lectures successfully uploaded to Vimeo! Video details will update soon.');
         $this->resetFields();
     }
+
 
 
 

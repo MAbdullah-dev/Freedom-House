@@ -24,7 +24,7 @@
                         </div>
                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                             <div class="tutor-data d-flex align-items-center gap-1">
-                                <img src="{{ $newCourse->user->pfp ?? asset('assets/images/dummy-profile-photo.png') }}"
+                                <img src="{{ $newCourse->user->pfp ?? asset('assets/images/dummy-profile-photo.webp') }}"
                                     alt="">
                                 <small>by</small><span>{{ $newCourse->user->first_name }}
                                     {{ $newCourse->user->last_name }}</span>

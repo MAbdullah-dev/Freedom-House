@@ -132,12 +132,13 @@
                                         <img src="{{ asset('storage/' . $item->thumbnail) }}" class="card-img-top"
                                             alt="...">
                                         @if (Auth::check())
-                                        <i class="{{ Auth::user()->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
-                                            data-course-id="{{ $item->id }}" style="cursor: pointer;">
-                                        </i>
+                                            <i class="{{ Auth::user()->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
+                                                data-course-id="{{ $item->id }}" style="cursor: pointer;">
+                                            </i>
                                         @else
-                                        <i class="fa-regular fa-bookmark" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#AuthCheckModal">
-                                        </i>
+                                            <i class="fa-regular fa-bookmark" style="cursor: pointer;"
+                                                data-bs-toggle="modal" data-bs-target="#AuthCheckModal">
+                                            </i>
                                         @endif
                                     </div>
                                     <div class="card-body">
@@ -192,7 +193,7 @@
 
     <style>
         .course-catelogue-main {
-            background-image: url('{{ asset('assets/images/course.png') }}');
+            background-image: url('{{ asset('assets/images/course.webp') }}');
         }
     </style>
 

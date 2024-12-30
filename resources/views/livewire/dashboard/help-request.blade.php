@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-5">
                 <div class="help-img">
-                    <img class="w-100" src="{{ asset('assets/images/help-img.png') }}" alt="">
+                    <img class="w-100" src="{{ asset('assets/images/help-img.webp') }}" alt="">
                 </div>
             </div>
         </div>

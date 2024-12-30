@@ -211,11 +211,15 @@
                                     <input type="text" wire:model.lazy="date_range" id="calendar-input"
                                         class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"
                                         placeholder="@if ($date_range) {{ $date_range }} @else Select Date Range (e.g., YYYY-MM-DD to YYYY-MM-DD) @endif">
-                                    @error('date_range')
-                                        <li class="text-danger"><span class="small">{{ $message }}</span></li>
-                                    @enderror
                                 </div>
                             </div>
+                            @error('date_range')
+                                <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                            @enderror
+                            @error('booking_end_date')
+                                <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                            @enderror
+
                         </form>
                     </div>
                 </div>

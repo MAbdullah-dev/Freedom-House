@@ -197,7 +197,7 @@
                                     <form action="#" method="post" class="w-100">
                                         <div class="d-flex align-items-start gap-3 w-100">
                                             <div class="comment-avatar">
-                                                <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}"
+                                                <img src="{{ asset('assets/images/autumn-150x150.webp.webp') }}"
                                                     alt="User Avatar">
                                             </div>
                                             <div class="comment-textarea">

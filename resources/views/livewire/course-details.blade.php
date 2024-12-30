@@ -1,5 +1,5 @@
 <div class="course-details">
-    <section class="hero" style="background-image: url('{{ asset('assets/images/course.png') }}');">
+    <section class="hero" style="background-image: url('{{ asset('assets/images/course.webp') }}');">
         <div class="container">
             <div class="inner">
                 <div class="hero-details">

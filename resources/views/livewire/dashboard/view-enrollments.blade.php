@@ -1,25 +1,25 @@
 <div class="view-enrollments py-5 px-4">
-    <section class="enrollments mx-4">
-        <div class="tutor-avatar d-flex align-items-center gap-2 mb-5">
-            <img src="{{ asset('storage/' . Auth::user()->pfp) }}" alt="tutor" />
-            <h6>M Abdullah</h6>
-        </div>
-        <div class="row">
-            <div class="col-xl-9 mb-3" wire:ignore>
-                <input type="text" class="mb-3" id="calendar-input" placeholder="Select date" />
+    @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+        <section class="enrollments mx-4">
+            <div class="tutor-avatar d-flex align-items-center gap-2 mb-5">
+                <img src="{{ asset('storage/' . Auth::user()->pfp) }}" alt="tutor" />
+                <h6>M Abdullah</h6>
             </div>
-            @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
-                <div class="col-xl-3 mb-3">
-                    <a href="{{ route('dashboard.create.class') }}" type="button" class="button-primary w-100">
-                        <i class="fa-solid fa-plus"></i> New
-                        Class/Event
-                    </a>
+            <div class="row">
+                <div class="col-xl-9 mb-3" wire:ignore>
+                    <input type="text" class="mb-3" id="calendar-input" placeholder="Select date" />
                 </div>
-            @endif
-        </div>
-    </section>
-    <section class="enrollments my-5 mx-4">
-        <section class="classes my-5">
+                @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+                    <div class="col-xl-3 mb-3">
+                        <a href="{{ route('dashboard.create.class') }}" type="button" class="button-primary w-100">
+                            <i class="fa-solid fa-plus"></i> New
+                            Class/Event
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </section>
+        <section class="classes enrollments my-5 mx-4">
             @if (collect($items)->isNotEmpty())
                 <div class="table-responsive">
                     <table class="table">
@@ -55,119 +55,142 @@
                 </div>
             @else
                 <div class="no-enrollment-img d-flex justify-content-center align-content-center mt-5">
-                    <img src="{{ asset('assets/images/no-enrollment.png') }}" alt="no-enrollment" />
+                    <img src="{{ asset('assets/images/no-enrollment.webp') }}" alt="no-enrollment" />
                 </div>
             @endif
         </section>
-        <!-- Modal -->
-        <div wire:ignore.self class="modal fade modal-lg" id="viewItemModal" tabindex="-1"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">
-                            @if ($selectedClass)
-                                Class Details
-                            @elseif ($selectedEvent)
-                                Event Details
-                            @else
-                                Details
-                            @endif
-                        </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div wire:loading>
-                            <p>Loading details...</p>
-                        </div>
-                        <div class="enrollment-modal-details" wire:loading.remove>
-                            @if ($selectedClass)
-                                <!-- Class Details -->
-                                <p><strong>Title:</strong> {{ $selectedClass->title }}</p>
-                                <p><strong>Description:</strong> {{ $selectedClass->description }}</p>
-                                <p><strong>Capacity:</strong> {{ $selectedClass->capacity }}</p>
-                                <p><strong>Class Type:</strong> {{ ucfirst($selectedClass->class_type) }}</p>
-                                <p><strong>Class Date:</strong>
-                                    {{ $selectedClass->class_date ? \Carbon\Carbon::parse($selectedClass->class_date)->format('F, d Y') : 'Not Set' }}
-                                </p>
-                                <p><strong>Class Time:</strong> {{ $selectedClass->class_time ?? 'Not Set' }}</p>
-                                <p><strong>Student Capacity:</strong> {{ $selectedClass->capacity }}</p>
-                                @if ($selectedClass->class_type == 'recorded')
-                                    <p><strong>Video Link:</strong> <a href="{{ $selectedClass->recorded_video_url }}"
-                                            target="_blank">{{ $selectedClass->recorded_video_url }}</a></p>
-                                @elseif ($selectedClass->class_type == 'onsite')
-                                    <p><strong>Location:</strong> {{ $selectedClass->onsite_address }}</p>
-                                @else
-                                    <p><strong>Virtual:</strong> <a href="{{ $selectedClass->teams_link }}"
-                                            target="_blank">Join Via Teams</a></p>
-                                @endif
-                                <p><strong>Booking Start Date:</strong> {{ $selectedClass->booking_start_date }}</p>
-                                <p><strong>Booking End Date:</strong> {{ $selectedClass->booking_end_date }}</p>
-                                <p><strong>Price:</strong>
-                                    {{ $selectedClass->price ? '$' . number_format($selectedClass->price, 2) : 'Free' }}
-                                </p>
-                            @elseif ($selectedEvent)
-                                <!-- Event Details -->
-                                <p><strong>Title:</strong> {{ $selectedEvent->title }}</p>
-                                <p><strong>Description:</strong> {{ $selectedEvent->description }}</p>
-                                <p><strong>Event Date:</strong>
-                                    {{ $selectedEvent->event_date ? \Carbon\Carbon::parse($selectedEvent->event_date)->format('F, d Y') : 'Not Set' }}
-                                </p>
-                                <p><strong>Event Time:</strong> {{ $selectedEvent->event_time ?? 'Not Set' }}</p>
-                                <p><strong>Location:</strong> {{ $selectedEvent->location ?? 'Not Set' }}</p>
-                                <p><strong>Price:</strong>
-                                    {{ $selectedEvent->price ? '$' . number_format($selectedEvent->price, 2) : 'Free' }}
-                                </p>
-                            @else
-                                <p>No details available.</p>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="modal-footer d-flex align-items-center justify-content-between py-2">
-                        <div class="icons d-flex align-items-center justify-content-center gap-3">
-                            <!-- Edit Icon -->
-                            @if ($selectedClass || $selectedEvent)
-                                <i type="button" class="edit-icon fa-solid fa-pen-to-square" wire:click="editItem"></i>
-                            @endif
-                            <!-- Delete Icon -->
-                            @if ($selectedClass || $selectedEvent)
-                                <i type="button" class="delete-icon fa-solid fa-trash" wire:click="deleteItem"></i>
-                            @endif
-                        </div>
+    @endif
 
-                        <!-- Create Quiz Button (for Recorded Classes) -->
-                        @if ($selectedClass && $selectedClass->class_type == 'recorded')
-                            <button type="button" class="button-primary" wire:click="createQuiz">Create Quiz</button>
+    <section class="enrollments-table my-5 mx-4">
+        <h4>Enrollments</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Class/Event/Course</th>
+                        <th>Payment Status</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($enrollments as $enrollment)
+                        <tr>
+                            <td>{{ $enrollment->order_number }}</td>
+                            <td>
+                                @if ($enrollment->class_id)
+                                    {{ $enrollment->class->title }}
+                                    <!-- Assuming you have a 'title }}' attribute in the class model -->
+                                @elseif($enrollment->event_id)
+                                    {{ $enrollment->event->title }}
+                                    <!-- Assuming you have a 'title }}' attribute in the event model -->
+                                @elseif($enrollment->course_id)
+                                    {{ $enrollment->course->title }}
+                                    <!-- Assuming you have a 'title }}' attribute in the course model -->
+                                @else
+                                    No Enrollment
+                                @endif
+                            </td>
+                            <td>{{ $enrollment->payment_status }}</td>
+                            <td>{{ $enrollment->created_at->format('Y-m-d H:i:s') }}</td>
+                            <td>{{ $enrollment->updated_at->format('Y-m-d H:i:s') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade modal-lg" id="viewItemModal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        @if ($selectedClass)
+                            Class Details
+                        @elseif ($selectedEvent)
+                            Event Details
+                        @else
+                            Details
+                        @endif
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div wire:loading>
+                        <p>Loading details...</p>
+                    </div>
+                    <div class="enrollment-modal-details" wire:loading.remove>
+                        @if ($selectedClass)
+                            <!-- Class Details -->
+                            <p><strong>Title:</strong> {{ $selectedClass->title }}</p>
+                            <p><strong>Description:</strong> {{ $selectedClass->description }}</p>
+                            <p><strong>Capacity:</strong> {{ $selectedClass->capacity }}</p>
+                            <p><strong>Class Type:</strong> {{ ucfirst($selectedClass->class_type) }}</p>
+                            <p><strong>Class Date:</strong>
+                                {{ $selectedClass->class_date ? \Carbon\Carbon::parse($selectedClass->class_date)->format('F, d Y') : 'Not Set' }}
+                            </p>
+                            <p><strong>Class Time:</strong> {{ $selectedClass->class_time ?? 'Not Set' }}</p>
+                            <p><strong>Student Capacity:</strong> {{ $selectedClass->capacity }}</p>
+                            @if ($selectedClass->class_type == 'recorded')
+                                <p><strong>Video Link:</strong> <a href="{{ $selectedClass->recorded_video_url }}"
+                                        target="_blank">{{ $selectedClass->recorded_video_url }}</a></p>
+                            @elseif ($selectedClass->class_type == 'onsite')
+                                <p><strong>Location:</strong> {{ $selectedClass->onsite_address }}</p>
+                            @else
+                                <p><strong>Virtual:</strong> <a href="{{ $selectedClass->teams_link }}"
+                                        target="_blank">Join Via Teams</a></p>
+                            @endif
+                            <p><strong>Booking Start Date:</strong> {{ $selectedClass->booking_start_date }}</p>
+                            <p><strong>Booking End Date:</strong> {{ $selectedClass->booking_end_date }}</p>
+                            <p><strong>Price:</strong>
+                                {{ $selectedClass->price ? '$' . number_format($selectedClass->price, 2) : 'Free' }}
+                            </p>
+                        @elseif ($selectedEvent)
+                            <!-- Event Details -->
+                            <p><strong>Title:</strong> {{ $selectedEvent->title }}</p>
+                            <p><strong>Description:</strong> {{ $selectedEvent->description }}</p>
+                            <p><strong>Event Date:</strong>
+                                {{ $selectedEvent->event_date ? \Carbon\Carbon::parse($selectedEvent->event_date)->format('F, d Y') : 'Not Set' }}
+                            </p>
+                            <p><strong>Event Time:</strong> {{ $selectedEvent->event_time ?? 'Not Set' }}</p>
+                            <p><strong>Location:</strong> {{ $selectedEvent->location ?? 'Not Set' }}</p>
+                            <p><strong>Price:</strong>
+                                {{ $selectedEvent->price ? '$' . number_format($selectedEvent->price, 2) : 'Free' }}
+                            </p>
+                        @else
+                            <p>No details available.</p>
                         @endif
                     </div>
                 </div>
+                <div class="modal-footer d-flex align-items-center justify-content-between py-2">
+                    <div class="icons d-flex align-items-center justify-content-center gap-3">
+                        <!-- Edit Icon -->
+                        @if ($selectedClass || $selectedEvent)
+                            <i type="button" class="edit-icon fa-solid fa-pen-to-square" wire:click="editItem"></i>
+                        @endif
+                        <!-- Delete Icon -->
+                        @if ($selectedClass || $selectedEvent)
+                            <i type="button" class="delete-icon fa-solid fa-trash" wire:click="deleteItem"></i>
+                        @endif
+                    </div>
+
+                    <!-- Create Quiz Button (for Recorded Classes) -->
+                    @if ($selectedClass && $selectedClass->class_type == 'recorded')
+                        <button type="button" class="button-primary" wire:click="createQuiz">Create Quiz</button>
+                    @endif
+                </div>
             </div>
         </div>
+    </div>
 </div>
 @script
     <script>
         window.addEventListener('close-modal', event => {
             $('#viewclassModal').modal('hide');
         });
-        // document.querySelectorAll('.dropdown-item').forEach(function(item) {
-        //     item.addEventListener('click', function(event) {
-        //         const selectedTimezone = event.target.textContent;
-
-        //         document.getElementById('selected-timezone').textContent = selectedTimezone;
-        //     });
-        // });
-        // document.getElementById('timezoneSearchInput').addEventListener('keyup', function() {
-        //     var filter = this.value.toLowerCase();
-        //     var items = document.querySelectorAll('#timezoneList .dropdown-item');
-
-        //     items.forEach(function(item) {
-        //         if (item.textContent.toLowerCase().indexOf(filter) > -1) {
-        //             item.style.display = '';
-        //         } else {
-        //             item.style.display = 'none';
-        //         }
-        //     });
-        // });
 
         flatpickr("#calendar-input", {
             mode: "range",

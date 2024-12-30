@@ -1,5 +1,5 @@
 <div class="about-us">
-    <section class="about-us-main" style="background-image: url('{{ asset('assets/images/Section.png') }}');">
+    <section class="about-us-main" style="background-image: url('{{ asset('assets/images/Section.webp') }}');">
         <div class="container">
             <div class="inner d-flex flex-column justify-content-center align-items-center">
                 <h3>FREEDOM HOUSE RECOVERY CENTER</h3>
@@ -48,7 +48,7 @@
             <div class="card-container">
                 @foreach ($tutors as $tutor)
                     <div class="card">
-                        <img src="{{ asset('storage/' . $tutor->user->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
+                        <img src="{{ asset('storage/' . $tutor->user->pfp) ?? asset('assets/images/dummy-profile-photo.assets/images/Section.webp') }}"
                             alt="" class="card-img-top img-fluid">
                         <div class="card-body text-center">
                             <h5>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</h5>
@@ -60,7 +60,7 @@
                     </div>
                 @endforeach
                 {{-- <div class="card">
-                    <img src="{{ asset('assets/images/image (1).png') }}" alt="" class="card-img-top img-fluid">
+                    <img src="{{ asset('assets/images/image (1).assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
                     <div class="card-body text-center">
                         <h5>Autumn Green</h5>
                         <span>Behavioral Health Trainer</span>
@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <img src="{{ asset('assets/images/image.png') }}" alt="" class="card-img-top img-fluid">
+                    <img src="{{ asset('assets/images/image.assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
                     <div class="card-body text-center">
                         <h5>Autumn Green</h5>
                         <span>Behavioral Health Trainer</span>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <img src="{{ asset('assets/images/image (1).png') }}" alt="" class="card-img-top img-fluid">
+                    <img src="{{ asset('assets/images/image (1).assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
                     <div class="card-body text-center">
                         <h5>Autumn Green</h5>
                         <span>Behavioral Health Trainer</span>
@@ -90,7 +90,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <img src="{{ asset('assets/images/image (2).png') }}" alt="" class="card-img-top img-fluid">
+                    <img src="{{ asset('assets/images/image (2).assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
                     <div class="card-body text-center">
                         <h5>Autumn Green</h5>
                         <span>Behavioral Health Trainer</span>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Booking;
 use App\Models\Classe;
 use App\Models\Events;
 use Livewire\Component;
@@ -16,9 +17,34 @@ class ViewEnrollments extends Component
     public $selectedEvent;
     public $events = [];
     public $items = [];
+    public $enrollments;
 
     // Watch for changes to $dateRange and fetch classes automatically
+    public function mount()
+    {
+        // Load all classes and events by default
+        $classes = Classe::where('user_id', Auth::id())->get();
+        $events = Events::where('user_id', Auth::id())->get();
 
+        // Merge Classes and Events
+        $this->items = $classes->concat($events)->sortBy(function ($item) {
+            return $item->booking_start_date;
+        });
+
+        // Map to a uniform structure
+        $this->items = $this->items->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
+                'date' => $item instanceof \App\Models\Classe ? $item->class_date : $item->event_date,
+                'time' => $item instanceof \App\Models\Classe ? $item->class_time : $item->event_time,
+                'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
+                'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
+            ];
+        });
+        $this->enrollments();
+    }
     private function convertClassToUserTimezone($class)
     {
         $userTimezone = Auth::user()->timezone;
@@ -48,10 +74,12 @@ class ViewEnrollments extends Component
                     ->orWhereBetween('booking_end_date', [$startDate, $endDate])
                     ->orWhere(function ($query) use ($startDate, $endDate) {
                         $query->where('booking_start_date', '<=', $startDate)
-                            ->where('booking_end_date', '>=', $endDate);
+                            ->where('booking_end_date', '>=', $endDate)
+                        ;
                     });
             })
                 ->orderBy('booking_start_date', 'asc')
+                ->where('user_id', Auth::id())
                 ->get();
 
             // Fetch Events
@@ -60,10 +88,12 @@ class ViewEnrollments extends Component
                     ->orWhereBetween('booking_end_date', [$startDate, $endDate])
                     ->orWhere(function ($query) use ($startDate, $endDate) {
                         $query->where('booking_start_date', '<=', $startDate)
-                            ->where('booking_end_date', '>=', $endDate);
+                            ->where('booking_end_date', '>=', $endDate)
+                        ;
                     });
             })
                 ->orderBy('booking_start_date', 'asc')
+                ->where('user_id', Auth::id())
                 ->get();
 
             // Merge Classes and Events using concat() and sort them by 'booking_start_date'
@@ -85,9 +115,12 @@ class ViewEnrollments extends Component
             });
         }
     }
-
-
-
+    public function enrollments()
+    {
+        $this->enrollments = Booking::where('user_id', Auth::id())
+            ->with('class', 'event', 'course') // Eager load related models
+            ->get();
+    }
 
     public function selectItem($itemId, $modelType)
     {

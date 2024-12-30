@@ -15,7 +15,7 @@ class Course extends Model
         'title',
         'description',
         'thumbnail',
-        'video_url',
+        'video_path',
         'learning_outcomes',
         'target_audience',
         'requirements',

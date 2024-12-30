@@ -1,5 +1,5 @@
 <div class="home">
-    <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.png') }}');">
+    <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.webp') }}');">
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>
             <h1 class="my-5">FREEDOM HOUSE UNIVERSITY</h1>
@@ -22,7 +22,7 @@
                     @foreach ($courses as $course)
                         <div class="swiper-slide">
                             <div class="card shadow">
-                                <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.jpg') }}"
+                                <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
                                     class="card-img-top" alt="...">
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ $course->title }}</h5>
@@ -127,7 +127,7 @@
                 </div>
             </div>
             <div class="benifit-img">
-                <img src="{{ asset('assets/images/benifit-img.png') }}" alt="">
+                <img src="{{ asset('assets/images/benifit-img.webp') }}" alt="">
             </div>
         </div>
     </section>

@@ -32,7 +32,7 @@
                         </div>
                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                             <div class="tutor-data d-flex align-items-center gap-1">
-                                <img src="{{ $mostPopularCourse->user->pfp ?? asset('assets/images/dummy-profile-photo.png') }}"
+                                <img src="{{ $mostPopularCourse->user->pfp ?? asset('assets/images/dummy-profile-photo.webp') }}"
                                     alt="">
                                 <small>by</small><span>{{ $mostPopularCourse->user->first_name }}
                                     {{ $mostPopularCourse->user->last_name }}</span>
