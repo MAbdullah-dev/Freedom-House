@@ -22,7 +22,7 @@ class CreateCourse extends Component
     public $tags = [];
     public $tutors = [];
     public $file;
-    // public $videoUrl;
+    // public $ ;
     public $videoFile; // New variable for video file upload
     public $learnDetails;
     public $audienceDetails;
@@ -216,7 +216,7 @@ class CreateCourse extends Component
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
-            'video_url' => $this->videoUrl,
+            'video_path' => $this->videoFile ? $videoPath : null,
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
@@ -250,6 +250,30 @@ class CreateCourse extends Component
     public function updateIsPaid()
     {
         $this->dispatch('refreshComponent');
+    }
+    public function previewCourse()
+    {
+        $this->validate();
+
+        // Store course data in the session for preview
+        session()->put('preview_course', [
+            'courseTitle' => $this->courseTitle,
+            'description' => $this->description,
+            // 'category' => $this->categorylist->whereIn('id', $this->category)->pluck('name')->toArray(),
+            // 'tags' => $this->tagslist->whereIn('id', $this->tags)->pluck('name')->toArray(),
+            // 'tutors' => $this->selectedTutors->pluck('user.name')->toArray(),
+            'learnDetails' => $this->learnDetails,
+            'audienceDetails' => $this->audienceDetails,
+            'requirements' => $this->requirements,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'courseType' => $this->courseType,
+            'thumbnail' => $this->file ? $this->uploadThumbnail() : $this->existingThumbnail,
+            'video' => $this->videoFile ? $this->uploadVideo() : $this->videoFile,
+        ]);
+
+        // Redirect to the preview page
+        return redirect()->route('dashboard.course.preview');
     }
 
     public function render()

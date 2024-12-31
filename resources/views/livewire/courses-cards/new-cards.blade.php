@@ -5,6 +5,9 @@
     </div>
     <div class="swiper-wrapper">
         @foreach ($newCourses as $newCourse)
+            @php
+                $averageRating = round($newCourse->average_rating);
+            @endphp
             <div class="swiper-slide">
                 <div class="card shadow">
                     <div class="card-img-top">
@@ -16,11 +19,10 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $newCourse->title }}</h5>
                         <div class="tutor-ratings d-flex align-items-center gap-1">
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="{{ $i <= $averageRating ? 'fa-solid' : 'fa-regular' }} fa-star"
+                                    style="color: #eea015;"></i>
+                            @endfor
                         </div>
                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                             <div class="tutor-data d-flex align-items-center gap-1">

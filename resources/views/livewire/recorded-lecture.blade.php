@@ -130,10 +130,23 @@
                         </div>
                         @if ($allLecturesWatched)
                             <button wire:click="sendCertificate" class="btn btn-success">
-                                Get Certificate
+                                <span wire:loading wire:target="sendCertificate">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span> Get Certificate
+                                </span>
+                                <span wire:loading.remove wire:target="sendCertificate">
+                                    Get Certificate
+                                </span>
                             </button>
+
                             <button wire:click="showcertificate" class="btn btn-success">
-                                Show Certificate
+                                <span wire:loading wire:target="showcertificate">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span> Show Certificate
+                                </span>
+                                <span wire:loading.remove wire:target="showcertificate">
+                                    Show Certificate
+                                </span>
                             </button>
                         @endif
 
@@ -346,6 +359,29 @@
         </div>
     </div>
 </div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+    console.log('ggg');
+
+    var iframe = document.getElementById('vimeo-player');
+    var player = new Vimeo.Player(iframe);
+
+    player.on('timeupdate', function(data) {
+        // Check if 10 seconds or less remain in the video
+        if (data.duration - data.seconds <= 10) {
+            // Notify Livewire or backend when 10 seconds remain
+            @this.call('markAsWatched', {{ $currentLecture->id }});
+
+            // Remove the event listener to prevent multiple calls
+            player.off('timeupdate');
+        }
+    });
+
+    document.addEventListener('showCertificateModal', function() {
+        $('#certificateModal').modal('show');
+        console.log('hi there');
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -385,28 +421,5 @@
                 }
             });
         }, 200);
-    });
-</script>
-<script src="https://player.vimeo.com/api/player.js"></script>
-<script>
-    // console.log('ggg');
-
-    var iframe = document.getElementById('vimeo-player');
-    var player = new Vimeo.Player(iframe);
-
-    player.on('timeupdate', function(data) {
-        // Check if 10 seconds or less remain in the video
-        if (data.duration - data.seconds <= 10) {
-            // Notify Livewire or backend when 10 seconds remain
-            @this.call('markAsWatched', {{ $currentLecture->id }});
-
-            // Remove the event listener to prevent multiple calls
-            player.off('timeupdate');
-        }
-    });
-
-    document.addEventListener('showCertificateModal', function() {
-        $('#certificateModal').modal('show');
-        console.log('hi there');
     });
 </script>

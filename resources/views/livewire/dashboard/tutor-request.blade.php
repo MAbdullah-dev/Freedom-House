@@ -1,19 +1,5 @@
 <div class="tutorRequest py-5 px-4">
     <h2 class="mb-4">Course Requests</h2>
-
-    <!-- Display flash messages -->
-    @if (session()->has('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <section class="tag-list mt-5">
         <div class="table-responsive">
             <table class="table">
@@ -60,14 +46,30 @@
                             </td>
                             <td>
                                 <button class="btn btn-outline-success"
-                                    wire:click="openApproveModal({{ $tutor->id }})">
-                                    Approve
+                                    wire:click="openApproveModal({{ $tutor->id }})" wire:loading.attr="disabled"
+                                    wire:target="openApproveModal({{ $tutor->id }})"
+                                    @if ($tutor->is_verified == 1) disabled @endif>
+                                    <span wire:loading.remove wire:target="openApproveModal({{ $tutor->id }})">
+                                        Approve
+                                    </span>
+                                    <span wire:loading wire:target="openApproveModal({{ $tutor->id }})">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </span>
                                 </button>
                             </td>
                             <td>
                                 <button class="btn btn-outline-danger"
-                                    wire:click="openRejectModal({{ $tutor->id }})">
-                                    Reject
+                                    wire:click="openRejectModal({{ $tutor->id }})" wire:loading.attr="disabled"
+                                    wire:target="openRejectModal({{ $tutor->id }})"
+                                    @if ($tutor->is_verified == 3) disabled @endif>
+                                    <span wire:loading.remove wire:target="openRejectModal({{ $tutor->id }})">
+                                        Reject
+                                    </span>
+                                    <span wire:loading wire:target="openRejectModal({{ $tutor->id }})">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </span>
                                 </button>
                             </td>
                             <td>
@@ -82,6 +84,7 @@
             </table>
         </div>
     </section>
+
     <!-- Approve Modal -->
     <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -96,7 +99,9 @@
                             <label for="approvalMessage" class="form-label">Approval Message:</label>
                             <textarea class="form-control" id="approvalMessage" wire:model="approvalMessage" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-success">Approve Tutor</button>
+                        <button type="submit" class="btn btn-success">
+                            Approve Tutor
+                        </button>
                     </form>
                 </div>
             </div>
@@ -117,7 +122,9 @@
                             <label for="rejectionReason" class="form-label">Rejection Reason:</label>
                             <textarea class="form-control" id="rejectionReason" wire:model="rejectionReason" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-danger">Reject Tutor</button>
+                        <button type="submit" class="btn btn-danger">
+                            Reject Tutor
+                        </button>
                     </form>
                 </div>
             </div>

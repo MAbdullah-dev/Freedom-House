@@ -18,10 +18,15 @@ class MostPopularCards extends Component
 
     public function loadMostPopularCourses()
     {
-        $this->mostPopularCourses = Course::with(['user', 'tutors'])
+        $this->mostPopularCourses = Course::with(['user', 'reviews'])
             ->where('is_published', true)
             ->where('is_drafted', false)
-            ->get();
+            ->get()
+            ->map(function ($course) {
+                // Calculate the average rating
+                $course->average_rating = round($course->reviews->avg('rating') ?? 0, 1); // Rounded to one decimal
+                return $course;
+            });
     }
 
     public function toggleWishlist($courseId)

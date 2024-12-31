@@ -9,6 +9,7 @@
                     <option value="{{ $course->id }}">{{ $course->title }}</option>
                 @endforeach
             </select>
+            <div wire:loading wire:target="course_id" class="text-info mt-2">Loading lectures...</div>
             @error('course_id')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -45,7 +46,7 @@
                     <input type="file" wire:model.defer="lectures.{{ $index }}.video_file"
                         class="form-control" id="video_file_{{ $index }}">
                     <div wire:loading wire:target="lectures.{{ $index }}.video_file" class="mt-2 text-info">
-                        Uploading...
+                        Uploading video...
                     </div>
                     @error('lectures.' . $index . '.video_file')
                         <span class="text-danger">{{ $message }}</span>
@@ -68,6 +69,9 @@
                                 @endif
                             @endfor
                         </select>
+                        <div wire:loading wire:target="lectures.{{ $index }}.order" class="text-info mt-2">
+                            Updating order...
+                        </div>
                         @error('lectures.' . $index . '.order')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -77,7 +81,13 @@
                 <!-- Remove Lecture Block -->
                 <button type="button" class="btn btn-outline-danger"
                     wire:click.prevent="removeLectureBlock({{ $index }})">
-                    Remove Lecture
+                    <span wire:loading.remove wire:target="removeLectureBlock({{ $index }})">
+                        Remove Lecture
+                    </span>
+                    <span wire:loading wire:target="removeLectureBlock({{ $index }})">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Remove
+                        Lecture
+                    </span>
                 </button>
             </div>
         @endforeach
@@ -85,10 +95,18 @@
         <!-- Add and Submit Buttons -->
         <div class="d-flex justify-content-between">
             <button type="button" class="button-secondary" wire:click.prevent="addLectureBlock">
-                Add More Lectures
+                <span wire:loading.remove wire:target="addLectureBlock">Add More Lectures</span>
+                <span wire:loading wire:target="addLectureBlock">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Add More
+                    Lectures
+                </span>
             </button>
             <button type="submit" class="button-primary">
-                Submit Lectures
+                <span wire:loading.remove wire:target="submit">Submit Lectures</span>
+                <span wire:loading wire:target="submit">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submit
+                    Lectures
+                </span>
             </button>
         </div>
     </form>

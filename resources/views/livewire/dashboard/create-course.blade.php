@@ -7,7 +7,8 @@
                     <button type="button" class="btn button-draft custom-draft-button" wire:click="saveAsDraft">
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
                     </button>
-                    <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button>
+                    <button type="button" class="btn button-preview me-2 custom-preview-button"
+                        wire:click="previewCourse">Preview</button>
                     <button type="submit" class="btn button-submit custom-submit-button" wire:click="submitCourse"
                         wire:loading.attr="disabled">
                         <span wire:loading wire:target="submitCourse" class="spinner-border spinner-border-sm"

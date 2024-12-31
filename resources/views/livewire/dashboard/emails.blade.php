@@ -3,7 +3,6 @@
 
     <!-- Table to display emails -->
     <div class="table-responsive">
-
         <table class="table">
             <thead>
                 <tr>
@@ -24,6 +23,14 @@
 
     <!-- Export Button -->
     <div class="d-flex justify-content-end mt-4">
-        <button wire:click="exportCsv" class="button-primary">Export as CSV</button>
+        <!-- Check if exporting is in progress -->
+        <button wire:click="exportCsv" class="button-primary" wire:loading.attr="disabled">
+            <!-- Show spinner when loading -->
+            <span wire:loading.remove>Export as CSV</span>
+            <span wire:loading>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Exporting...
+            </span>
+        </button>
     </div>
 </div>

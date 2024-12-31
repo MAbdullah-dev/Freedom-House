@@ -126,6 +126,9 @@
                 <div class="col-lg-12 col-xl-9">
                     <div class="row gy-4">
                         @foreach ($courses as $item)
+                            @php
+                                $averageRating = round($item->average_rating);
+                            @endphp
                             <div class="col-sm-6 col-lg-4 ">
                                 <div class="card shadow">
                                     <div class="card-img-top">
@@ -145,11 +148,8 @@
                                         <h5 class="card-title">{{ $item->title }}</h5>
                                         <div class="tutor-ratings d-flex align-items-center gap-1">
                                             @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= round($item->ratings_avg_rating))
-                                                    <i class="fa-solid fa-star" style="color: #eea015;"></i>
-                                                @else
-                                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                                @endif
+                                                <i class="{{ $i <= $averageRating ? 'fa-solid' : 'fa-regular' }} fa-star"
+                                                    style="color: #eea015;"></i>
                                             @endfor
                                         </div>
                                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
@@ -186,7 +186,6 @@
             <div class="inner">
                 <h2>POPULAR INSTRUCTORS</h2>
                 <livewire:courses-cards.instructor-cards />
-
             </div>
         </div>
     </div>

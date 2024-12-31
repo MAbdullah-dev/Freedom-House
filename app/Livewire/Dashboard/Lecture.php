@@ -24,7 +24,7 @@ class Lecture extends Component
 
     protected $rules = [
         'course_id' => 'required|exists:courses,id',
-        '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ' => 'required|string|max:255',
+        'lectures.*.title' => 'required|string|max:255', // Moved 'title' inside the lectures array
         'lectures.*.description' => 'nullable|string',
         'lectures.*.video_file' => 'required|file|max:102400|mimetypes:video/mp4,video/avi,video/mov',
         'lectures.*.order' => 'required|integer|distinct|min:1',

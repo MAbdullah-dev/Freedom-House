@@ -68,7 +68,7 @@ class CourseCatelogue extends Component
 
     public function render()
     {
-        $courses = Course::with(['user', 'categories', 'ratings'])
+        $courses = Course::with(['user', 'categories', 'reviews'])
             ->where('is_published', true)
             ->where('is_drafted', false)
             ->when($this->search, function ($query) {
@@ -79,8 +79,12 @@ class CourseCatelogue extends Component
                     $categoryQuery->whereIn('categories.id', $this->selectedCategories);
                 });
             })
-            ->withAvg('ratings', 'rating')
-            ->paginate(10);
+            ->get()
+            ->map(function ($course) {
+                $course->average_rating = round($course->reviews->avg('rating') ?? 0, 1); // Calculate average rating
+                return $course;
+            });
+
 
 
         return view('livewire.course-catelogue', [

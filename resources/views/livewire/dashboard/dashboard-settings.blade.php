@@ -151,7 +151,13 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="btn button-primary mt-3">Update Profile</button>
+                <button type="submit" class="button-primary mt-3" wire:loading.attr="disabled">
+                    <span wire:loading.remove>Update Profile</span>
+                    <span wire:loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Updating...
+                    </span>
+                </button>
             </form>
         </div>
 
@@ -185,7 +191,15 @@
                         @enderror
                     </div>
                 </div>
-                <button type="submit" class="btn button-primary">Reset Password</button>
+
+                <!-- Submit Button with Loader -->
+                <button type="submit" class=" button-primary" wire:loading.attr="disabled">
+                    <span wire:loading.remove>Reset Password</span>
+                    <span wire:loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Resetting...
+                    </span>
+                </button>
             </form>
         </div>
 
@@ -241,7 +255,13 @@
                         placeholder="http://github.com/username" wire:model="github">
                 </div>
                 <div class="col-md-12 d-flex justify-content-end mt-3">
-                    <button class="button-primary" wire:click="updateSocialLinks">Submit</button>
+                    <button class="button-primary" wire:click="updateSocialLinks" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Submit</span>
+                        <span wire:loading>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Updating...
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>

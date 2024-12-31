@@ -362,7 +362,7 @@ class RecordedLecture extends Component
         $this->cetificatepathformodal = Certificate::where('user_id', Auth::id())->pluck('certificate_path');
         $this->cetificatepathformodal = $this->cetificatepathformodal->first();
         $this->dispatch('showCertificateModal');
-        $this->dispatch('congratulation');
+        // $this->dispatch('congratulation');
     }
     public function assigncertificate()
     {
