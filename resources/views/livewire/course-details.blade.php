@@ -1,5 +1,5 @@
 <div class="course-details">
-    <section class="hero" style="background-image: url('{{ asset('assets/images/course.webp') }}');">
+    <section class="hero" style="background-image: url('{{ asset('storage/' . $coursePhoto) }}');">
         <div class="container">
             <div class="inner">
                 <div class="hero-details">
@@ -137,7 +137,9 @@
     <section class="course-video">
         <div class="container">
             <div class="video">
-                <iframe src="https://www.youtube.com/embed/some-video-id" frameborder="0" allowfullscreen></iframe>
+                <iframe src="{{ asset('storage/' . $courseVideo) }}" frameborder="0" allowfullscreen></iframe>
+
+                {{-- <video controls src="{{ asset('storage/' . $courseVideo) }}"></video> --}}
             </div>
             <div class="course-details-tabs mt-5">
                 <!-- Tab Navigation -->

@@ -93,7 +93,8 @@
                                 <h4 class="mb-3">Hosted by:</h4>
                                 <div class="hosted-profile">
                                     @if (isset($selectedEvent['users']['pfp']))
-                                        <img src="{{ $selectedEvent['users']['pfp'] }}" alt="profile">
+                                        <img src="{{ asset('storage/' . $selectedEvent['users']['pfp']) }}"
+                                            alt="profile">
                                     @else
                                         <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}"
                                             alt="profile">

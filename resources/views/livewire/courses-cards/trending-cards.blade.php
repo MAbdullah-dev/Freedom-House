@@ -8,7 +8,8 @@
             <div class="swiper-slide">
                 <div class="card shadow">
                     <div class="card-img-top">
-                        <img src="{{ $trendingCourse->thumbnail }}" class="card-img-top" alt="...">
+                        <img src="{{ asset('storage/' . $trendingCourse->thumbnail) }}" class="card-img-top"
+                            alt="...">
                         <i class="{{ Auth::check() && Auth::user()->wishlist->contains($trendingCourse) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
                             data-course-id="{{ $trendingCourse->id }}" style="cursor: pointer;">
                         </i>
@@ -24,7 +25,7 @@
                         </div>
                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                             <div class="tutor-data d-flex align-items-center gap-1">
-                                <img src="{{ $trendingCourse->user->pfp ?? asset('assets/images/dummy-profile-photo.webp') }}"
+                                <img src="{{ $trendingCourse->user->pfp ? asset('storage/' . $trendingCourse->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                     alt="">
                                 <small>by</small><span>{{ $trendingCourse->user->first_name }}
                                     {{ $trendingCourse->user->last_name }}</span>

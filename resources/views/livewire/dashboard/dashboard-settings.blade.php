@@ -86,13 +86,17 @@
                     </div>
                     {{-- </div> --}}
                 </div>
-                @error('profilePhoto')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <!-- Update Profile Form -->
             <form wire:submit.prevent="updateProfile">
+                @error('coverPhoto')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+                @error('profilePhoto')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="firstName">First Name</label>

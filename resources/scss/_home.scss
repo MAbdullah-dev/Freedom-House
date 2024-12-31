@@ -63,10 +63,9 @@
                 position: absolute;
                 left: 0;
                 bottom: -5px;
-                background-color: #F4461F;
+                background-color: #f4461f;
             }
             span {
-
                 // border-bottom: 4px solid $primary-color;
             }
         }
@@ -77,7 +76,7 @@
                 margin: 40px 20px;
                 border: none;
 
-                img {
+                .card-img-top {
                     border-radius: 30px;
                     object-fit: cover;
                     padding: 15px;

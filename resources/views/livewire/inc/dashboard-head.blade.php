@@ -12,8 +12,8 @@
             <div class="tutor-info">
                 <ul class="tutor-avatar d-flex align-items-center gap-3">
                     <li>
-                        <img src="{{ asset('storage/' . $user->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
-                            alt="User" class="rounded-circle">
+                        <img
+                            src="{{ $user->pfp ? asset('storage/' . $user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}">
                     </li>
                     <li>
                         <span>Hello,</span>

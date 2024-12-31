@@ -171,7 +171,7 @@ a {
 }
 
 .loading-spinner {
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -192,6 +192,19 @@ a {
     animation: spin 1s linear infinite;
     margin: 200px auto;
     z-index: 11;
+}
+
+.card-img-top {
+    // border-top-left-radius: 15px;
+    // border-top-right-radius: 15px;
+
+    img {
+        // width: 100%;
+        // object-fit: cover;
+        // // border-radius: 15px 15px 0 0;
+        object-position: 0;
+        height: 250px;
+    }
 }
 
 @keyframes spin {
