@@ -80,6 +80,7 @@ class EventCalendar extends Component
 
     public function selectEvent($event, $type)
     {
+        $this->selectedEvent = null;
 
         $user = Auth::user();
         if ($user) {
@@ -107,8 +108,6 @@ class EventCalendar extends Component
         $this->price = $event['price'];
         $this->slots = $event['capacity'];
         $this->eventCards = Events::with('users')->get();
-
-        Log::info('Selected event is_paid value: ' . $this->isPaid);
     }
 
     public function enroll()

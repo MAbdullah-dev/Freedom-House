@@ -139,15 +139,16 @@
                     <label for="timezone">Timezone</label>
                     <select id="timezone" class="form-control" wire:model="timezone">
                         <option value="">Select Timezone</option>
-                        @error('timezone')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
+
                         @foreach ($timezoneOptions as $tz)
                             <option value="{{ $tz }}" {{ $tz == $timezone ? 'selected' : '' }}>
                                 {{ $tz }}
                             </option>
                         @endforeach
                     </select>
+                    @error('timezone')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <button type="submit" class="btn button-primary mt-3">Update Profile</button>
