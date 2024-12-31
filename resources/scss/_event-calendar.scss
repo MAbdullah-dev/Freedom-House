@@ -34,9 +34,11 @@
                     }
 
                     .day {
-                        background: linear-gradient(180deg,
-                                rgba(255, 255, 255, 0) 0%,
-                                rgba(208, 214, 219, 0.3) 100%);
+                        background: linear-gradient(
+                            180deg,
+                            rgba(255, 255, 255, 0) 0%,
+                            rgba(208, 214, 219, 0.3) 100%
+                        );
                         font-weight: 500;
                         font-size: 20px;
                         line-height: 24px;
@@ -106,42 +108,44 @@
             }
         }
     }
+}
 
-    .modal-content {
-        padding: 20px;
+.modal-content {
+    padding: 20px;
 
-        .modal-header {
-            background: $primary-color;
-        }
+    .modal-header {
+        background: $primary-color;
+    }
 
-        .modal-title {
-            font-size: 30px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
+    .modal-title {
+        font-size: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
-        .modal-body {
-            .event-details {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                row-gap: 30px;
+    .modal-body {
+        .event-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            row-gap: 30px;
 
-                p {
-                    font-size: 20px;
-                    // margin-bottom: 25px;
-                    width: 45%;
+            p {
+                font-size: 20px;
+                // margin-bottom: 25px;
+                width: 45%;
 
-                    strong {
-                        text-transform: capitalize;
-                    }
+                strong {
+                    text-transform: capitalize;
+                }
 
-                    span {
-                        display: block;
-                    }
+                span {
+                    display: block;
                 }
             }
+        }
 
+        .hosted {
             .hosted-profile {
                 display: flex;
                 align-items: center;
@@ -159,11 +163,11 @@
                 }
             }
         }
+    }
 
-        .modal-footer {
-            button {
-                padding: 10px 50px;
-            }
+    .modal-footer {
+        button {
+            padding: 10px 50px;
         }
     }
 }

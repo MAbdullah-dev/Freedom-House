@@ -11,7 +11,8 @@
             <div class="swiper-slide">
                 <div class="card shadow">
                     <div class="card-img-top">
-                        <img src="{{ $mostPopularCourse->thumbnail }}" class="card-img-top" alt="...">
+                        <img src="{{ asset('storage/' . $mostPopularCourse->thumbnail) }}" class="card-img-top"
+                            alt="...">
 
                         <!-- Wishlist Icon with Dynamic Class Toggle -->
                         @if (Auth::check())
@@ -34,7 +35,7 @@
                         </div>
                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                             <div class="tutor-data d-flex align-items-center gap-1">
-                                <img src="{{ $mostPopularCourse->user->pfp ?? asset('assets/images/dummy-profile-photo.webp') }}"
+                                <img src="{{ $mostPopularCourse->user->pfp ? asset('storage/' . $mostPopularCourse->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                     alt="">
                                 <small>by</small><span>{{ $mostPopularCourse->user->first_name }}
                                     {{ $mostPopularCourse->user->last_name }}</span>

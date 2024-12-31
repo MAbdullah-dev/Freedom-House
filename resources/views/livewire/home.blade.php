@@ -22,8 +22,37 @@
                     @foreach ($courses as $course)
                         <div class="swiper-slide">
                             <div class="card shadow">
-                                <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
-                                    class="card-img-top" alt="...">
+                                <div class="card-img-top">
+
+                                    <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
+                                        class="card-img-top" alt="...">
+                                </div>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">{{ $course->title }}</h5>
+                                    <p class="card-text my-3">{{ $course->description }}</p>
+                                    <div class="card-btn">
+                                        @if ($course->course_type == 'recorded')
+                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
+                                                href="{{ route('onsite.course.details', $course->id) }}">Learn
+                                                more...</a>
+                                        @else
+                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
+                                                href="{{ route('course.details', $course->id) }}">Learn
+                                                more...</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                    @foreach ($courses as $course)
+                        <div class="swiper-slide">
+                            <div class="card shadow">
+                                <div class="card-img-top">
+
+                                    <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
+                                        class="card-img-top" alt="...">
+                                </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ $course->title }}</h5>
                                     <p class="card-text my-3">{{ $course->description }}</p>

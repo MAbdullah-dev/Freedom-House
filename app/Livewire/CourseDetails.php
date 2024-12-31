@@ -44,6 +44,8 @@ class CourseDetails extends Component
     public $price;
     public $slots;
     public $userTimezone;
+    public $coursePhoto;
+    public $courseVideo;
 
     public function mount($id = null)
     {
@@ -76,10 +78,12 @@ class CourseDetails extends Component
         $course = Course::findOrFail($this->courseId);
 
         $this->courseTitle = $course->title;
+        $this->coursePhoto = $course->thumbnail;
         $this->courseDescription = $course->description;
         $this->learningOutcomes = $course->learning_outcomes;
         $this->targetAudience = $course->target_audience;
         $this->requirements = $course->requirements;
+        $this->courseVideo = $course->video_path;
     }
 
     public function loadClasses()

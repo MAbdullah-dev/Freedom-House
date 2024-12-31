@@ -1,3 +1,6 @@
+@php
+    $user = Auth::user();
+@endphp
 <div class="course-catalogue">
     <section class="course-catelogue-main">
         <div class="container d-flex flex-column justify-content-center align-items-center">
@@ -154,7 +157,8 @@
                                         </div>
                                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                                             <div class="tutor-data d-flex align-items-center gap-1">
-                                                <img src="{{ asset('storage/' . $item->user->pfp) }}" alt="">
+                                                <img src="{{ $item->user->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                                    alt="">
                                                 <small>by</small><span>{{ $item->user->first_name }}
                                                     {{ $item->user->last_name }}</span>
                                             </div>

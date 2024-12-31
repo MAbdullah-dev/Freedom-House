@@ -48,7 +48,7 @@ class CreateCourse extends Component
             'category.*' => 'exists:categories,id',
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'file' => 'required|image|mimes:jpeg,png,jpg|max:1024',
+            'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:1024',
             'videoFile' => 'required|file|mimes:mp4,mov,avi|max:10240', // New validation rule
             'learnDetails' => 'required|string',
             'audienceDetails' => 'required|string',
@@ -135,6 +135,7 @@ class CreateCourse extends Component
         } else {
             $this->createCourse();
         }
+        $this->redirect(route('dashboard.mycourses'));
     }
 
     public function createCourse()

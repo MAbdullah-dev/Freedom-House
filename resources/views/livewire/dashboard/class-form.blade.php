@@ -9,17 +9,17 @@
                     </button> --}}
                     {{-- <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button> --}}
                     @if (!$classId && !$eventId)
-                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="submit"
+                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="save"
                             wire:loading.attr="disabled">
-                            <span wire:loading wire:target="submit" class="spinner-border spinner-border-sm"
+                            <span wire:loading wire:target="save" class="spinner-border spinner-border-sm"
                                 aria-hidden="true"></span>
                             <span wire:loading.remove
-                                wire:target="submit">{{ $type === 'class' ? 'Create Class' : 'Create Event' }}</span>
-                            <span wire:loading wire:target="submit">Loading...</span>
+                                wire:target="save">{{ $type === 'class' ? 'Create Class' : 'Create Event' }}</span>
+                            <span wire:loading wire:target="save">Loading...</span>
                         </button>
                     @endif
                     @if ($classId || $eventId)
-                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="updateClass"
+                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="save"
                             wire:loading.attr="disabled">
                             <span wire:loading wire:target="updateClass" class="spinner-border spinner-border-sm"
                                 aria-hidden="true"></span>

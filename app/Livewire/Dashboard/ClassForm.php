@@ -114,14 +114,11 @@ class ClassForm extends Component
     {
         $this->validate();
 
-        // Convert the class-related dates to UTC before saving
         $userTimezone = Auth::user()->timezone;
 
-        // Convert class date and time
         $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
         $utcClassDateTime = $classDateTime->setTimezone('UTC');
 
-        // Convert booking start and end dates
         $bookingStartDate = Carbon::parse($this->booking_start_date, $userTimezone)->setTimezone('UTC');
         $bookingEndDate = Carbon::parse($this->booking_end_date, $userTimezone)->setTimezone('UTC');
 
@@ -237,7 +234,7 @@ class ClassForm extends Component
         ]);
 
         $this->alert('success', 'Event created successfully!');
-        $this->redirect(route("dashboard.events"));
+        $this->redirect(route("dashboard.enrollments"));
     }
 
     public function save()
@@ -256,6 +253,33 @@ class ClassForm extends Component
             }
         }
     }
+
+    public function dispatchTypeChanged()
+    {
+        if ($this->type === 'class') {
+            $this->course_id = null;
+            $this->description = null;
+        } elseif ($this->type === 'event') {
+            $this->course_id = null;
+        }
+    }
+
+    public function dispatchClassTypeChanged()
+    {
+        if ($this->class_type === 'virtual') {
+            $this->onsite_address = null;
+        } elseif ($this->class_type === 'onsite') {
+            $this->date_range = null;
+        }
+    }
+
+    public function dispatchIsPaidChanged()
+    {
+        if ($this->is_paid === 'free') {
+            $this->price = null;
+        }
+    }
+
 
 
     public function render()

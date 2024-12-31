@@ -32,7 +32,7 @@
         <div class="tab-pane fade {{ $activeTab === 'published' ? 'show active' : '' }}" id="published" role="tabpanel">
             <div class="row">
                 @foreach ($publishedCourses as $publishedCourse)
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="col-12 col-md-6 col-xl-4 mb-4">
                         <div class="card shadow">
                             <div class="card-img-top">
                                 <img src="{{ asset('storage/' . $publishedCourse->thumbnail) }}" alt="Course"

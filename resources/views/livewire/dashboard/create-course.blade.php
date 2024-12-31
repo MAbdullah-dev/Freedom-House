@@ -82,8 +82,8 @@
                                                 class="form-control @if ($errors->has('courseType')) is-invalid @elseif ($courseType) is-valid @endif"
                                                 required wire:change="updateCourseType">
                                                 <option value="">Select course type</option>
-                                                <option value="classtype">Class Type</option>
-                                                <option value="recorded">Recorded</option>
+                                                <option value="classtype">Classes Based(Virtual & Onsite)</option>
+                                                <option value="recorded">Recorded Lectures</option>
                                             </select>
                                             @error('courseType')
                                                 <span class="text-danger">{{ $message }}</span>
@@ -143,7 +143,7 @@
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3">
                                                     <!-- Display the uploaded image or fallback to a placeholder -->
-                                                    <img src="{{ $file ? $file->temporaryUrl() : asset('path/to/placeholder-image.webp') }}"
+                                                    <img src="{{ $file ? $file->temporaryUrl() : asset('assets/images/dummy-course-img.webp') }}"
                                                         style="width: 250px; height: 150px; object-fit: cover;"
                                                         alt="Course Thumbnail" id="previewImage">
                                                 </div>
@@ -190,7 +190,8 @@
                                 aria-labelledby="headingVideo">
                                 <div class="accordion-body">
                                     <div class="mb-3">
-                                        <label for="videoUpload" class="form-label">Upload Video File</label>
+                                        <label for="videoUpload" class="form-label button-primary">Upload Video
+                                            File</label>
                                         <input type="file"
                                             class="form-control @if ($errors->has('videoFile')) is-invalid @elseif ($videoFile) is-valid @endif"
                                             id="videoUpload" wire:model="videoFile" accept="video/*">
@@ -241,16 +242,18 @@
                                             @foreach ($selectedTutors as $tutor)
                                                 <div class="instructor-card-wrapper my-3 d-flex align-items-center">
                                                     <div class="instructor-avatar">
-                                                        <img src="{{ asset('storage/' . $tutor->user->pfp) }}"
-                                                            alt="Autumn Green" class="avatar-image">
+                                                        <img height="50px" width="50px"
+                                                            src="{{ asset('storage/' . $tutor->user->pfp) }}"
+                                                            alt="instructor img" class="avatar-image me-2">
                                                     </div>
                                                     <div class="instructor-info">
                                                         <div class="instructor-header">
                                                             <span
                                                                 class="instructor-name">{{ $tutor->user->first_name }}
                                                                 {{ $tutor->user->last_name }}</span>
-                                                            <img src="{{ asset('storage/' . $tutor->user->pfp) }}"
-                                                                alt="Instructor Badge" class="instructor-badge">
+                                                            {{-- <img height="50px" width="50px"
+                                                                src="{{ asset('storage/' . $tutor->user->pfp) }}"
+                                                                alt="Instructor Badge" class="instructor-badge"> --}}
                                                         </div>
                                                         <div class="instructor-email">{{ $tutor->user->email }}
                                                         </div>
