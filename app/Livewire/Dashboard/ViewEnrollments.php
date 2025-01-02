@@ -8,6 +8,7 @@ use App\Models\Events;
 use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class ViewEnrollments extends Component
 {
@@ -19,21 +20,19 @@ class ViewEnrollments extends Component
     public $items = [];
     public $enrollments;
 
-    // Watch for changes to $dateRange and fetch classes automatically
+    use LivewireAlert;
+
     public function mount()
     {
-        // Load all classes and events by default
         $classes = Classe::where('user_id', Auth::id())->get();
         $events = Events::where('user_id', Auth::id())->get();
 
-        // Merge Classes and Events
         $this->items = $classes->concat($events)->sortBy(function ($item) {
             return $item->booking_start_date;
         });
 
         $userTimezone = Auth::user()->timezone;
 
-        // Map to a uniform structure
         $this->items = $this->items->map(function ($item) use ($userTimezone) {
             return [
                 'id' => $item->id,
@@ -55,7 +54,6 @@ class ViewEnrollments extends Component
     public function updatedDateRange()
     {
         if ($this->dateRange) {
-            // Ensure the date range is correctly formatted
             $dates = explode(' to ', $this->dateRange);
             if (count($dates) !== 2) {
                 session()->flash('error', 'Invalid date range format.');
@@ -65,7 +63,6 @@ class ViewEnrollments extends Component
             $startDate = Carbon::parse($dates[0])->startOfDay();
             $endDate = Carbon::parse($dates[1])->endOfDay();
 
-            // Fetch Classes
             $classes = Classe::where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('booking_start_date', [$startDate, $endDate])
                     ->orWhereBetween('booking_end_date', [$startDate, $endDate])
@@ -79,7 +76,6 @@ class ViewEnrollments extends Component
                 ->where('user_id', Auth::id())
                 ->get();
 
-            // Fetch Events
             $events = Events::where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('booking_start_date', [$startDate, $endDate])
                     ->orWhereBetween('booking_end_date', [$startDate, $endDate])
@@ -93,13 +89,10 @@ class ViewEnrollments extends Component
                 ->where('user_id', Auth::id())
                 ->get();
 
-            // Merge Classes and Events using concat() and sort them by 'booking_start_date'
             $this->items = $classes->concat($events)->sortBy(function ($item) {
                 return $item->booking_start_date;
             });
-            // Map to a uniform structure (e.g., arrays with necessary fields)
             $this->items = $this->items->map(function ($item) {
-                // dd($this->items);
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
@@ -107,7 +100,7 @@ class ViewEnrollments extends Component
                     'date' => $item instanceof \App\Models\Classe ? $item->class_date : $item->class_date,
                     'time' => $item instanceof \App\Models\Classe ? $item->class_time : $item->class_time,
                     'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
-                    'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event', // Added model type for wire-click
+                    'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
                 ];
             });
         }
@@ -144,10 +137,10 @@ class ViewEnrollments extends Component
     {
         if ($modelType === 'class') {
             $this->selectedClass = Classe::findOrFail($itemId);
-            $this->selectedEvent = null; // Ensure the selected event is cleared
+            $this->selectedEvent = null;
         } elseif ($modelType === 'event') {
             $this->selectedEvent = Events::findOrFail($itemId);
-            $this->selectedClass = null; // Ensure the selected class is cleared
+            $this->selectedClass = null;
         } else {
             session()->flash('error', 'Invalid model type selected.');
         }
@@ -156,13 +149,13 @@ class ViewEnrollments extends Component
     {
 
         if ($this->selectedClass) {
-            // Redirect to class edit route if a class is selected
+
             return redirect()->route('dashboard.create.class', ['classId' => $this->selectedClass->id]);
         } elseif ($this->selectedEvent) {
-            // Redirect to event edit route if an event is selected
-            return redirect()->route('dashboard.create.class', ['eventId' => $this->selectedEvent->id]);
+
+            return redirect()->route('dashboard.create.event', ['eventId' => $this->selectedEvent->id]);
         } else {
-            // Optionally handle the case where no item is selected
+
             session()->flash('error', 'No item selected for editing.');
         }
         $this->dispatch('close-modal');
@@ -170,18 +163,16 @@ class ViewEnrollments extends Component
 
     public function deleteItem()
     {
-        // Check if the selected item is a class
+
         if ($this->selectedClass) {
             $this->selectedClass->delete();
-            $this->classes = Classe::all(); // Refresh class list
+            $this->classes = Classe::all();
             $this->selectedClass = null;
             $this->alert('success', 'Class deleted successfully.');
             $this->dispatch('close-modal');
-        }
-        // Check if the selected item is an event
-        elseif ($this->selectedEvent) {
+        } elseif ($this->selectedEvent) {
             $this->selectedEvent->delete();
-            $this->events = Events::all(); // Refresh events list
+            $this->events = Events::all();
             $this->selectedEvent = null;
             $this->alert('success', 'Event deleted successfully.');
             $this->dispatch('close-modal');

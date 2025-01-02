@@ -47,6 +47,13 @@ class ClassForm extends Component
         'booking_end_date' => 'required|date|before:class_date',
     ];
 
+    protected $messages = [
+        'title.required' => 'Please provide a title for the class/event.',
+        'booking_start_date.after_or_equal' => 'The booking start date must be today or later.',
+        'booking_end_date.after' => 'The booking end date must be after the start date.',
+        'booking_end_date' => 'The booking end date must be before the actual class date.',
+    ];
+
     public function mount($classId = null, $eventId = null)
     {
         if ($classId) {
@@ -59,6 +66,23 @@ class ClassForm extends Component
             $this->loadEventData();
         }
         $this->loadCourses();
+    }
+
+    public function updatedDateRange($value)
+    {
+        $dates = explode(' to ', $value);
+        if (count($dates) === 2) {
+            try {
+                $this->booking_start_date = Carbon::parse($dates[0])->toDateString();
+                $this->booking_end_date = Carbon::parse($dates[1])->toDateString();
+            } catch (\Exception $e) {
+                $this->reset(['booking_start_date', 'booking_end_date']);
+                $this->addError('date_range', 'Invalid date range format.');
+            }
+        } else {
+            $this->reset(['booking_start_date', 'booking_end_date']);
+            $this->addError('date_range', 'Invalid date range format.');
+        }
     }
 
     public function loadClassData()
@@ -88,6 +112,7 @@ class ClassForm extends Component
 
     public function loadEventData()
     {
+
         $event = Events::find($this->eventId);
         if ($event) {
             $this->type = 'event';
@@ -112,8 +137,19 @@ class ClassForm extends Component
 
     public function updateClass()
     {
-        $this->validate();
-
+        $this->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'class_date' => 'required|date',
+            'class_time' => 'required|date_format:H:i',
+            'booking_start_date' => 'required|date',
+            'booking_end_date' => 'required|date|after:booking_start_date|before:class_date',
+            'price' => 'nullable|numeric|min:0',
+            'capacity' => 'nullable|integer|min:1',
+            'class_type' => 'required|string|in:virtual,onsite,recorded',
+            'onsite_address' => 'nullable|string|max:255',
+            'teams_link' => 'nullable|url',
+        ]);
         $userTimezone = Auth::user()->timezone;
 
         $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
@@ -205,8 +241,27 @@ class ClassForm extends Component
             'class_id' => $class->id,
         ]);
 
-        $this->alert('success', 'Class created successfully!');
-        $this->redirect(route("dashboard.classes"));
+        if (Auth::user()->microsoft_account == true) {
+            $attendees = [
+                ['email' => Auth::user()->email, 'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name],
+            ];
+            $graphService = new MicrosoftGraphService();
+            $success = false;
+            if ($class->class_type == 'virtual') {
+                $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
+            } else {
+                $success = $graphService->createCalendarEvent($class) ? true : false;
+            }
+            if ($success) {
+                $this->alert('success', 'Class created successfully!');
+                $this->redirect(route("dashboard.enrollments"));
+            } else {
+                $this->alert('error', 'Failed to create class.');
+            }
+        } else {
+            $this->alert('success', 'Class created successfully!');
+            $this->redirect(route("dashboard.enrollments"));
+        }
     }
 
     private function createEvent()
@@ -218,7 +273,6 @@ class ClassForm extends Component
         $event = Events::create([
             'title' => $this->title,
             'description' => $this->description,
-            'course_id' => $this->course_id,
             'user_id' => Auth::id(),
             'class_type' => $this->class_type,
             'teams_link' => $this->teams_link,
@@ -233,8 +287,33 @@ class ClassForm extends Component
             'booking_end_date' => $this->booking_end_date,
         ]);
 
-        $this->alert('success', 'Event created successfully!');
-        $this->redirect(route("dashboard.enrollments"));
+        CalendarEvent::create([
+            'user_id' => Auth::id(),
+            'event_id' => $event->id,
+        ]);
+
+        if (Auth::user()->microsoft_account == true) {
+            $attendees = [
+                ['email' => Auth::user()->email, 'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name],
+            ];
+            $graphService = new MicrosoftGraphService();
+            $success = false;
+
+            if ($event->class_type == 'virtual') {
+                $success = $graphService->createCalendarEventWithTeamsMeeting($event, $attendees) ? true : false;
+            } else {
+                $success = $graphService->createCalendarEvent($event) ? true : false;
+            }
+            if ($success) {
+                $this->alert('success', 'Event created successfully!');
+                $this->redirect(route("calendar"));
+            } else {
+                $this->alert('error', 'Failed to create class.');
+            }
+        } else {
+            $this->alert('success', 'Event created successfully!');
+            $this->redirect(route("dashboard.enrollments"));
+        }
     }
 
     public function save()

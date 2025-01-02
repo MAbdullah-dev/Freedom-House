@@ -9,8 +9,6 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Mail\EmailVerificationMail;
 use App\Models\Notification;
-use App\Models\Role;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 

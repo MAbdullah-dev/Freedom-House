@@ -135,7 +135,7 @@
                             <div class="col-sm-6 col-lg-4 ">
                                 <div class="card shadow">
                                     <div class="card-img-top">
-                                        <img src="{{ asset('storage/' . $item->thumbnail) }}" class="card-img-top"
+                                        <img src="{{ asset('storage/' . $item->thumbnail) }}" class=""
                                             alt="...">
                                         @if (Auth::check())
                                             <i class="{{ Auth::user()->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
@@ -157,7 +157,7 @@
                                         </div>
                                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                                             <div class="tutor-data d-flex align-items-center gap-1">
-                                                <img src="{{ $item->user->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                                <img src="{{ $item->user->pfp ? asset('storage/' . $item->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                                     alt="">
                                                 <small>by</small><span>{{ $item->user->first_name }}
                                                     {{ $item->user->last_name }}</span>

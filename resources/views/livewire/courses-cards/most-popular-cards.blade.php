@@ -11,8 +11,9 @@
             <div class="swiper-slide">
                 <div class="card shadow">
                     <div class="card-img-top">
-                        <img src="{{ asset('storage/' . $mostPopularCourse->thumbnail) }}" class="card-img-top"
-                            alt="...">
+                        <img src="{{ asset('storage/' . $mostPopularCourse->thumbnail) }}"
+                            class="
+                        " alt="...">
 
                         <!-- Wishlist Icon with Dynamic Class Toggle -->
                         @if (Auth::check())

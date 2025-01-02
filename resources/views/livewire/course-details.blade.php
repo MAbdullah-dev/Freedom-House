@@ -111,7 +111,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> --}}
                 <div class="modal-header">
-                    <h5 class="modal-title" id="enrollModalLabel">Enroll in {{ $selectedClassTitle }}</h5>
+                    <h5 class="modal-title text-white" id="enrollModalLabel">Enroll in {{ $selectedClassTitle }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -127,8 +127,12 @@
                     <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button"
                         wire:click="enroll({{ $selectedClassId }}, '{{ $isPaid }}', {{ $price }})"
-                        class="button-primary">
-                        Enroll Now
+                        class="button-primary" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Enroll Now</span>
+                        <span wire:loading>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Enrolling...
+                        </span>
                     </button>
                 </div>
             </div>

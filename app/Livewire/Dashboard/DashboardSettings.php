@@ -66,8 +66,8 @@ class DashboardSettings extends Component
             'userName' => 'required|string|max:20|unique:users,username,' . $this->user->id,
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:255',
-            'coverPhoto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
-            'profilePhoto' => 'nullable|image|mimes:jpeg,png,jpgc,webp|max:1024',
+            'coverPhoto' => 'required|image|mimes:jpeg,png,jpg,webp|max:1024',
+            'profilePhoto' => 'required|image|mimes:jpeg,png,jpgc,webp|max:1024',
             'timezone' => 'required|string|timezone',
         ]);
 

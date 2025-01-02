@@ -10,7 +10,7 @@
                     <div class="instructor-card shadow">
                         <ul class="d-flex gap-4">
                             <li class="instructor-img my-3">
-                                <img src="{{ $tutor->user->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                <img src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                     alt="Instructor Image">
                             </li>
                             <li class="card-details">
@@ -22,7 +22,7 @@
                                     <span>Instructor rating</span>
                                 </div> --}}
                                 <div class="instructor-data d-flex flex-column my-2">
-                                    <span class="instructor-data-span"><strong>0</strong> students</span>
+                                    {{-- <span class="instructor-data-span"><strong>0</strong> students</span> --}}
                                     <span
                                         class="instructor-data-span"><strong>{{ $tutor->user->courses()->count() }}</strong>
                                         courses</span>

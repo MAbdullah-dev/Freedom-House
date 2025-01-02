@@ -11,8 +11,7 @@
             <div class="swiper-slide">
                 <div class="card shadow">
                     <div class="card-img-top">
-                        <img src="{{ asset('storage/' . $trendingCourse->thumbnail) }}" class="card-img-top"
-                            alt="...">
+                        <img src="{{ asset('storage/' . $trendingCourse->thumbnail) }}" class="" alt="...">
                         <i class="{{ Auth::check() && Auth::user()->wishlist->contains($trendingCourse) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
                             data-course-id="{{ $trendingCourse->id }}" style="cursor: pointer;">
                         </i>

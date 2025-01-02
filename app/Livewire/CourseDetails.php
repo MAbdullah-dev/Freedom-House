@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Classe;
 use App\Models\Course;
 use App\Models\Booking;
+use App\Models\CalendarEvent;
 use App\Models\Notification;
 use App\Services\MicrosoftGraphService;
 use Carbon\Carbon;
@@ -54,7 +55,7 @@ class CourseDetails extends Component
             $this->loadCourseData();
             $this->loadClasses();
         }
-        $this->userTimezone = Auth::user()->timezone;
+        $userTimezone = Auth::check() ? Auth::user()->timezone : 'UTC';
         // dd($this->userTimezone);
     }
     public function fetch()
@@ -105,7 +106,7 @@ class CourseDetails extends Component
         }
 
         $this->classes = $query->get()->map(function ($class) {
-            $userTimezone = Auth::user()->timezone;
+            $userTimezone = Auth::check() && Auth::user()->timezone ? Auth::user()->timezone : 'UTC';
             $class->class_date = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toDateString();
             $class->class_time = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toTimeString();
             return $class;
@@ -144,49 +145,51 @@ class CourseDetails extends Component
 
         $class = Classe::find($this->selectedClassId);
 
-        if (!$class || !$class->microsoft_event_id) {
-            $this->alert('error', 'Class not found or missing Microsoft Event ID!');
+        if (!$class) {
+            $this->alert('error', 'Class not found!');
             return;
         }
 
         $user = Auth::user();
-        if (!$user->microsoft_id) {
-            $this->alert('error', 'User Microsoft ID not found!');
-            return;
-        }
-
-        $attendees = [
-            [
-                'email' => $user->email,
-                'name' => $user->first_name . ' ' . $user->last_name,
-            ]
-        ];
 
         try {
-            // Use the user's Microsoft ID from Auth::user()->microsoft_id
-            // $organizerId = $class->user->microsoft_id;
+            if ($class->microsoft_event_id && $user->microsoft_account) {
+                $attendees = [
+                    [
+                        'email' => $user->email,
+                        'name' => $user->first_name . ' ' . $user->last_name,
+                    ]
+                ];
 
+                $organizerId = $class->user->microsoft_id;
 
-            // Add attendee to the event using the organizer's Microsoft ID
-            // $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
+                $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
+            }
 
-            // Create a booking record
-            Booking::create([
-                'class_id' => $this->selectedClassId,
-                'course_id' => null,
-                'user_id' => $user->id,
-                'payment_status' => 'free',
-                'order_number' => uniqid('FREE_'),
-            ]);
-
-            // Update class capacity
-            $class->decrement('capacity');
+            $this->createBookingAndCalendarEvent($class, $user);
 
             $this->alert('success', 'Successfully enrolled in the class!');
         } catch (\Exception $e) {
             Log::error('Failed to enroll user in class: ' . $e->getMessage());
             $this->alert('error', 'Failed to enroll in the class.');
         }
+    }
+
+    private function createBookingAndCalendarEvent($class, $user)
+    {
+        Booking::create([
+            'class_id' => $class->id,
+            'user_id' => $user->id,
+            'payment_status' => 'free',
+            'order_number' => uniqid('FREE_'),
+        ]);
+
+        CalendarEvent::create([
+            'user_id' => $user->id,
+            'class_id' => $class->id,
+        ]);
+
+        $class->decrement('capacity');
     }
 
 

@@ -48,8 +48,10 @@
             <div class="card-container">
                 @foreach ($tutors as $tutor)
                     <div class="card">
-                        <img src="{{ asset('storage/' . $tutor->user->pfp) ?? asset('assets/images/dummy-profile-photo.assets/images/Section.webp') }}"
-                            alt="" class="card-img-top img-fluid">
+                        <div class="card-img-top">
+                            <img src="{{ asset('storage/' . $tutor->user->pfp) ?? asset('assets/images/dummy-profile-photo.assets/images/Section.webp') }}"
+                                alt="" class="">
+                        </div>
                         <div class="card-body text-center">
                             <h5>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</h5>
                             <span>{{ $tutor->specialization }}</span>

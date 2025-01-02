@@ -23,9 +23,8 @@
                         <div class="swiper-slide">
                             <div class="card shadow">
                                 <div class="card-img-top">
-
                                     <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
-                                        class="card-img-top" alt="...">
+                                        class="" alt="...">
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ $course->title }}</h5>
