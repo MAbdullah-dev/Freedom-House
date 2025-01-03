@@ -126,7 +126,7 @@
                 <div class="modal-footer">
                     <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button"
-                        wire:click="enroll({{ $selectedClassId }}, '{{ $isPaid }}', {{ $price }})"
+                        wire:click="enroll({{ $selectedClassId }}, '{{ $isPaid }}', {{ $isPaid ? $price : 0 }})"
                         class="button-primary" wire:loading.attr="disabled">
                         <span wire:loading.remove>Enroll Now</span>
                         <span wire:loading>

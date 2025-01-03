@@ -153,7 +153,7 @@ class CourseDetails extends Component
         $user = Auth::user();
 
         try {
-            if ($class->microsoft_event_id && $user->microsoft_account) {
+            if ($class->microsoft_event_id) {
                 $attendees = [
                     [
                         'email' => $user->email,
@@ -162,12 +162,20 @@ class CourseDetails extends Component
                 ];
 
                 $organizerId = $class->user->microsoft_id;
-
                 $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
+                $this->alert('success', 'Successfully enrolled in the class!');
+            } elseif ($user->microsoft_account && !$class->microsoft_event_id) {
+                $this->createCalendarEventForUser($class, $user);
             }
 
-            $this->createBookingAndCalendarEvent($class, $user);
+            Notification::create([
+                'user_id' => Auth::id(),
+                'message' => 'You successfully purchased the event: ' . $class->title . ' 😊.',
+                'type' => 'booking',
+            ]);
 
+            $this->createBookingAndCalendarEvent($class, $user);
+            $this->dispatch('close-modal');
             $this->alert('success', 'Successfully enrolled in the class!');
         } catch (\Exception $e) {
             Log::error('Failed to enroll user in class: ' . $e->getMessage());
@@ -192,7 +200,30 @@ class CourseDetails extends Component
         $class->decrement('capacity');
     }
 
+    private function createCalendarEventForUser($class, $user)
+    {
+        try {
+            $attendees = [
+                [
+                    'email' => $user->email,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ]
+            ];
 
+            $this->microsoftGraphService->createUserCalendarEvent(
+                $class->title,
+                $class->description,
+                $class->class_date . ' ' . $class->class_time,
+                Carbon::parse($class->class_date . ' ' . $class->class_time)->addHour()->toDateTimeString(),
+                $class->onsite_address,
+                $attendees
+            );
+            Log::info('Calendar event created for user successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error creating calendar event for user: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 
     private function redirectToStripeCheckout()
     {
@@ -220,7 +251,7 @@ class CourseDetails extends Component
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&class_id=' . $this->selectedClassId . '&course_id=' . $this->courseId,
+                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&class_id=' . $this->selectedClassId,
                 'cancel_url' => route('payment.cancel') . '?class_id=' . $this->selectedClassId,
             ]);
 

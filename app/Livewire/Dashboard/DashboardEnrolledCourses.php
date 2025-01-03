@@ -15,23 +15,23 @@ class DashboardEnrolledCourses extends Component
 
     public function mount()
     {
-        $userId = Auth::id(); // Get the logged-in user's ID
+        $userId = Auth::id();
 
-        // Fetch all courses the user has booked
         $bookedCourses = Booking::where('user_id', $userId)->get();
 
         foreach ($bookedCourses as $booking) {
-            // Check progress for each course in the course_progress table
+
             $progress = CourseProgress::where('user_id', $userId)
                 ->where('course_id', $booking->course_id)
-                ->value('progress') ?? 0; // Default to 0 if no progress record exists
+                ->value('progress') ?? 0;
 
             $courseData = [
                 'course' => $booking->course,
                 'progress' => $progress
             ];
+            // dd($courseData);
 
-            // Categorize the courses based on their progress
+
             if ($progress == 0) {
                 $this->enrolledCourses[] = $courseData;
             } elseif ($progress > 0 && $progress < 100) {

@@ -177,6 +177,8 @@ class ClassForm extends Component
                 'booking_end_date' => $bookingEndDate->toDateString(),
             ]);
 
+            $this->updateCalendarEvent($class->microsoft_event_id);
+
             $this->alert('success', 'Class updated successfully!');
             $this->redirect(route("dashboard.enrollments"));
         } elseif ($this->eventId) {
@@ -198,8 +200,33 @@ class ClassForm extends Component
                 'booking_end_date' => $bookingEndDate->toDateString(),
             ]);
 
+            $this->updateCalendarEvent($event->microsoft_event_id);
+
             $this->alert('success', 'Event updated successfully!');
             $this->redirect(route("dashboard.enrollments"));
+        }
+    }
+
+    private function updateCalendarEvent($microsoftEventId)
+    {
+        if ($microsoftEventId) {
+            $attendees = [
+                [
+                    'email' => Auth::user()->email,
+                    'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
+                ]
+            ];
+
+            $this->microsoftGraphService->updateCalendarEvent(
+                $microsoftEventId,
+                $this->title,
+                $this->description,
+                $this->class_date . ' ' . $this->class_time,
+                Carbon::parse($this->class_date . ' ' . $this->class_time)->addHour()->toDateTimeString(),
+                $this->onsite_address,
+                $attendees,
+                $this->class_type === 'virtual'
+            );
         }
     }
 

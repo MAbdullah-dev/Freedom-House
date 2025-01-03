@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\CalendarEvent;
 use App\Models\Events;
 use App\Models\Notification;
+use App\Services\MicrosoftGraphService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +17,14 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class EventCalendar extends Component
 {
+
+    protected $microsoftGraphService;
+
+    public function __construct()
+    {
+        $this->microsoftGraphService = app(MicrosoftGraphService::class);
+    }
+
     use LivewireAlert;
 
     public $modalType;
@@ -51,6 +60,7 @@ class EventCalendar extends Component
                 ->map(function ($calendarEvent) use ($userTimezone) {
                     $isEvent = !is_null($calendarEvent->event_id);
                     $source = $isEvent ? $calendarEvent->event : $calendarEvent->class;
+
 
                     return [
                         'id' => $calendarEvent->id,
@@ -112,7 +122,6 @@ class EventCalendar extends Component
 
     public function enroll()
     {
-        Log::info("Enroll button clicked!");
         if ($this->isPaid == 'paid') {
             $this->redirectToStripeCheckout();
         } else {
@@ -127,35 +136,85 @@ class EventCalendar extends Component
             return;
         }
 
+        $user = Auth::user();
+        $event = Events::find($this->selectedEventId);
+
+        try {
+            if ($event->microsoft_event_id) {
+                $attendees = [
+                    [
+                        'email' => $user->email,
+                        'name' => $user->first_name . ' ' . $user->last_name,
+                    ]
+                ];
+
+                $organizerId = $event->user->microsoft_id ?? null;
+                if ($organizerId) {
+                    $this->microsoftGraphService->addDynamicAttendees($event, $attendees, $organizerId);
+                } else {
+                    throw new \Exception('Organizer Microsoft ID is missing.');
+                }
+            } elseif ($user->microsoft_account && !$event->microsoft_event_id) {
+                $this->createCalendarEventForUser($event, $user);
+            }
+
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => 'You successfully enrolled in the event: ' . $event->title . ' 😊.',
+                'type' => 'booking',
+            ]);
+
+            $this->alert('success', 'Successfully enrolled in the event!');
+        } catch (\Exception $e) {
+            Log::error('Failed to enroll user in event: ' . $e->getMessage());
+            $this->alert('error', 'Failed to enroll in the event.');
+            return;
+        }
+
         Booking::create([
             'event_id' => $this->selectedEventId,
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'payment_status' => 'free',
             'order_number' => uniqid('FREE_'),
         ]);
 
         CalendarEvent::create([
             'event_id' => $this->selectedEventId,
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        $event = Events::find($this->selectedEventId);
         if ($event && $event->capacity > 0) {
             $event->decrement('capacity');
-        } else {
-            $this->alert('error', 'No slots available for this event!');
-            return;
         }
 
-        $this->alert('success', 'You have successfully enrolled in the free event!');
         $this->dispatch('close-modal');
-        Notification::create([
-            'user_id' => Auth::id(),
-            'message' => 'You successfully Enrolled in the free event: ' . $this->selectedEvent['title'] . ' 😊.',
-            'type' => 'booking',
-        ]);
+    }
+
+    private function createCalendarEventForUser($event, $user)
+    {
+        try {
+            $attendees = [
+                [
+                    'email' => $user->email,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ]
+            ];
+
+            $this->microsoftGraphService->createUserCalendarEvent(
+                $event->title,
+                $event->description,
+                $event->event_date . ' ' . $event->event_time,
+                Carbon::parse($event->event_date . ' ' . $event->event_time)->addHour()->toDateTimeString(),
+                $event->location,
+                $attendees
+            );
+            Log::info('Calendar event created for user successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error creating calendar event for user: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     private function redirectToStripeCheckout()

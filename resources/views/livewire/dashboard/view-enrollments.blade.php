@@ -3,7 +3,7 @@
         <section class="enrollments mx-4">
             <div class="tutor-avatar d-flex align-items-center gap-2 mb-5">
                 <img src="{{ asset('storage/' . Auth::user()->pfp) }}" alt="tutor" />
-                <h6>M Abdullah</h6>
+                <h6>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}<h6>
             </div>
             <div class="row">
                 <div class="col-xl-9 mb-3" wire:ignore>

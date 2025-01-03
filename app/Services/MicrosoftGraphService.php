@@ -122,8 +122,8 @@ class MicrosoftGraphService
             $userTimezone = Auth::user()->timezone ?? 'UTC';
             $durationInHours = 1;
             $startDateTime = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $model->class_date . 'T' . $model->class_time, 'America/New_York');
-
             $endDateTime = $startDateTime->copy()->addHours($durationInHours);
+
             $eventData = [
                 'subject' => $model->title,
                 'body' => [
@@ -213,5 +213,108 @@ class MicrosoftGraphService
         Log::info('Access token retrieved successfully', ['response' => $tokenResponse->json()]);
 
         return $tokenResponse->json('access_token');
+    }
+
+    public function createUserCalendarEvent($title, $description, $startDateTime, $endDateTime, $location, $attendees)
+    {
+        try {
+            $accessToken = $this->refreshAccessToken(Auth::user());
+
+            $userTimezone = Auth::user()->timezone ?? 'UTC';
+
+            $eventData = [
+                'subject' => $title,
+                'body' => [
+                    'contentType' => 'HTML',
+                    'content' => $description ?? 'No description provided.',
+                ],
+                'start' => [
+                    'dateTime' => Carbon::parse($startDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'end' => [
+                    'dateTime' => Carbon::parse($endDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'location' => [
+                    'displayName' => $location,
+                ],
+                'attendees' => $this->formatAttendees($attendees),
+                'allowNewTimeProposals' => true,
+                'isOnlineMeeting' => false,
+            ];
+
+            $response = Http::withToken($accessToken)->post('https://graph.microsoft.com/v1.0/me/events', $eventData);
+
+            if ($response->failed()) {
+                Log::error('Error creating calendar event: ' . $response->body());
+                throw new \Exception('Error creating calendar event: ' . $response->body());
+            }
+
+            Log::info('Calendar event created successfully', ['response' => $response->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error creating calendar event: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function updateCalendarEvent($eventId, $title, $description, $startDateTime, $endDateTime, $location, $attendees, $isOnlineMeeting = false)
+    {
+        try {
+            $accessToken = $this->refreshAccessToken(Auth::user());
+
+            $userTimezone = Auth::user()->timezone ?? 'UTC';
+
+            // Retrieve existing attendees
+            $existingEventResponse = Http::withToken($accessToken)->get('https://graph.microsoft.com/v1.0/me/events/' . $eventId);
+            if ($existingEventResponse->failed()) {
+                Log::error('Error retrieving existing event: ' . $existingEventResponse->body());
+                throw new \Exception('Error retrieving existing event: ' . $existingEventResponse->body());
+            }
+            $existingEvent = $existingEventResponse->json();
+            $existingAttendees = $existingEvent['attendees'] ?? [];
+
+            $eventData = [
+                'subject' => $title,
+                'body' => [
+                    'contentType' => 'HTML',
+                    'content' => $description ?? 'No description provided.',
+                ],
+                'start' => [
+                    'dateTime' => Carbon::parse($startDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'end' => [
+                    'dateTime' => Carbon::parse($endDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'location' => [
+                    'displayName' => $location,
+                ],
+                'attendees' => $existingAttendees,
+                'allowNewTimeProposals' => false,
+            ];
+
+            if ($isOnlineMeeting) {
+                $eventData['isOnlineMeeting'] = true;
+                $eventData['onlineMeetingProvider'] = 'teamsForBusiness';
+            }
+
+            $response = Http::withToken($accessToken)->patch('https://graph.microsoft.com/v1.0/me/events/' . $eventId . '?sendUpdates=all', $eventData);
+
+            if ($response->failed()) {
+                Log::error('Error updating calendar event: ' . $response->body());
+                throw new \Exception('Error updating calendar event: ' . $response->body());
+            }
+
+            Log::info('Calendar event updated successfully', ['response' => $response->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error updating calendar event: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }
