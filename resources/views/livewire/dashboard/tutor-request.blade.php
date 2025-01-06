@@ -10,6 +10,7 @@
                         <th>Tutor Name</th>
                         <th>Specialization</th>
                         <th>Bio</th>
+                        <th>Microsoft Account</th>
                         <th>Verified</th>
                         <th>CV</th>
                         <th>Approve</th>
@@ -28,6 +29,11 @@
                             <td>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</td>
                             <td>{{ $tutor->specialization }}</td>
                             <td>{{ $tutor->user->bio }}</td>
+                            @if ($tutor->user->microsoft_account)
+                                <td>True</td>
+                            @else
+                                <td>False</td>
+                            @endif
                             <td>
                                 <span
                                     class="badge text-white {{ $tutor->is_verified == 1 ? 'bg-success' : ($tutor->is_verified == 3 ? 'bg-danger' : 'bg-secondary') }}">

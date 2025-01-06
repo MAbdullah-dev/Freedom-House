@@ -4,7 +4,7 @@
         @forelse ($wishlists as $wishlist)
             <div class="card shadow">
                 <div class="card-img-top">
-                    <img src="{{ asset('assets/images/featured-card-1.webp') }}" alt="Featured Card">
+                    <img src="{{ asset('storage/' . $wishlist->course->thumbnail) }}" alt="Featured Card">
                     <i class="{{ $wishlist->course->id && Auth::check() && Auth::user()->wishlist->contains($wishlist->course->id)
                         ? 'fa-solid'
                         : 'fa-regular' }} fa-bookmark wishlist-icon"
@@ -29,7 +29,15 @@
                                 {{ $wishlist->course->user->last_name ?? '' }}</span>
                         </div>
                     </div>
-                    <a href="#" class="button-primary text-center">Start Learning</a>
+
+                    @if ($wishlist->course->course_type == 'classtype')
+                        <a href="{{ route('course.details', $wishlist->course->id) }}"
+                            class="button-primary text-center">Start Learning</a>
+                    @elseif ($wishlist->course->course_type == 'recorded')
+                        <a href="{{ route('onsite.course.details', $wishlist->course->id) }}"
+                            class="button-primary text-center">Start Learning</a>
+                    @endif
+
                 </div>
             </div>
         @empty
