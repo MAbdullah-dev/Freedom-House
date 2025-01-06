@@ -3,11 +3,55 @@
 ?>
 <header>
     <div class="container nav-bar d-flex align-items-center justify-content-between">
-        <a href="">
+        <a href=""> v
             <img class="site-logo" src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
         </a>
-        <div class="d-block d-xl-none" id="hamburger-icon">
-            <i class="fa-solid fa-bars-staggered fa-xl"></i>
+        <div class="d-flex align-items-center gap-3 d-block d-xl-none">
+            <div class="d-block d-xl-none" id="hamburger-icon">
+                <i class="fa-solid fa-bars-staggered fa-xl"></i>
+            </div>
+            <div class="user-login">
+                @if (Auth::check())
+                    <div class="login-icon">
+                        <img class="login-icon-img"
+                            src="{{ Auth::user()->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                            alt="">
+                    </div>
+                    <div class="user-dropdown">
+                        <span class="fs-5 mb-3 d-block">{{ Auth::user()->first_name }}</span>
+                        <ul>
+                            <li>
+                                <a href="{{ route('dashboard') }}" wire:navigate>
+                                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dashboard.settings') }}" wire:navigate>
+                                    <i class="fa-solid fa-user"></i> My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('dashboard.wishlist') }}" wire:navigate>
+                                    <i class="fa-solid fa-heart"></i> Wishlist
+                                </a>
+                            </li>
+                        </ul>
+                        <hr>
+                        <ul>
+                            <li>
+                                <a href="{{ route('dashboard.settings') }}" wire:navigate>
+                                    <i class="fa-solid fa-gear"></i> Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" wire:click="logout">
+                                    <i class="fa-solid fa-right-from-bracket cursor-pointer"></i> Log Out
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
+            </div>
         </div>
         <nav class="d-none d-xl-flex align-items-center">
             <ul class="d-flex align-items-center gap-3">
@@ -103,7 +147,6 @@
                             </li>
                         </ul>
                     </div>
-
             </div>
         @else
             <div class="nav-btn d-flex gap-2">
@@ -133,34 +176,35 @@
                     <hr>
                     <div class="category-grid">
                         <div class="row">
-                            <div class="col-lg-6">
-                                <div>
-                                    <b>Mental Health</b>
-                                    <ul>
-                                        <li><a href="#">- Adult Mental Health First Aid</a></li>
-                                        <li><a href="#">- Youth Mental Health First Aid</a></li>
-                                        <li><a href="#">- Question. Persuade. Refer.</a></li>
-                                        <li><a href="#">- Mindset</a></li>
-                                    </ul>
+                            @foreach ($categories as $category)
+                                <div class="col-lg-6">
+                                    <div>
+                                        <b>{{ $category->category_name }}</b>
+                                        <ul>
+                                            @foreach ($category->courses as $course)
+                                                @if ($uniqueCourses->contains('id', $course->id))
+                                                    <li>
+                                                        @if ($course->course_type == 'recorded')
+                                                            <a
+                                                                href="{{ route('onsite.course.details', $course->id) }}">{{ $course->title }}</a>
+                                                        @else
+                                                            <a
+                                                                href="{{ route('course.details', $course->id) }}">{{ $course->title }}</a>
+                                                        @endif
+                                                    </li>
+                                                    @php
+                                                        $uniqueCourses = $uniqueCourses->reject(function ($c) use (
+                                                            $course,
+                                                        ) {
+                                                            return $c->id === $course->id;
+                                                        });
+                                                    @endphp
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div>
-                                    <b>Substance Use Disorder</b>
-                                    <ul>
-                                        <li><a href="#">- Recovery-Oriented System of Care</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div>
-                                    <b>Ethics</b>
-                                    <ul>
-                                        <li><a href="#">- Maintaining Professional Boundaries</a></li>
-                                        <li><a href="#">- Clinical Documentation</a></li>
-                                        <li><a href="#">- QI Orientation</a></li>
-                                        <li><a href="#">- Documentation for Authorization</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
