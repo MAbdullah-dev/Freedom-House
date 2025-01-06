@@ -85,6 +85,7 @@
             </div>
         </div>
     </div>
+
     <!-- Become an Instructor Modal -->
     <div wire:ignore.self class="modal fade" id="instructorModal" tabindex="-1" aria-labelledby="instructorModalLabel"
         aria-hidden="true">
@@ -147,15 +148,10 @@
         </div>
     </div>
 </div>
-
-
 @push('js')
     <script>
         window.addEventListener('close-modal', event => {
             $('#instructorModal').modal('hide');
         });
-        // $('#offcanvasRight').on('hide.bs.offcanvas', function(e) {
-        //     e.preventDefault(); // Prevent offcanvas from closing
-        // });
     </script>
 @endpush

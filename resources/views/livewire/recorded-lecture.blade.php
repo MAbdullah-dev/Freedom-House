@@ -402,10 +402,10 @@
         setTimeout(() => {
             confetti({
                 particleCount: 700,
-                spread: 300, // adjust spread to fill the screen
+                spread: 300,
                 origin: {
-                    x: 0, // x = 0.5 makes it centered horizontally
-                    y: 0, // y = 0 makes it start from the top
+                    x: 0,
+                    y: 0,
                 }
             });
         }, 200);
@@ -416,8 +416,8 @@
                 particleCount: 700,
                 spread: 300,
                 origin: {
-                    x: 1, // Same center horizontally
-                    y: 0, // y = 0 for top of the page
+                    x: 1,
+                    y: 0,
                 }
             });
         }, 200);
