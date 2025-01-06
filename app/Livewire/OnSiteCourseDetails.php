@@ -22,6 +22,7 @@ class OnSiteCourseDetails extends Component
     public $price;
     public $isEnrolled;
     public $isPaid;
+    public $course;
 
     public $lectures = [];
     public $showFullDescription = false;
@@ -34,11 +35,13 @@ class OnSiteCourseDetails extends Component
             $this->loadLectures();
             $this->checkEnrollment();
         }
+        $this->course = Course::findOrFail($this->courseId)->with('lectures', 'bookings', 'reviews')->first();
     }
 
     public function loadCourseData()
     {
         $course = Course::findOrFail($this->courseId);
+        // dd($course);
 
         $this->courseTitle = $course->title;
         $this->courseDescription = $course->description;
