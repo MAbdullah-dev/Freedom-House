@@ -91,6 +91,7 @@ class RecordedLecture extends Component
     {
         $user = Auth::user();
 
+        // Mark the lecture as watched
         $activity = VideoActivity::where('user_id', $user->id)
             ->where('lecture_id', $lectureId)
             ->first();
@@ -108,18 +109,31 @@ class RecordedLecture extends Component
 
         $this->alert('success', 'Video marked as watched!');
 
+        // Refresh watched status for all lectures
         foreach ($this->lectures as $lecture) {
             $lecture->watched = VideoActivity::where('user_id', $user->id)
                 ->where('lecture_id', $lecture->id)
                 ->exists();
         }
 
+        // Update the course progress
         $this->progressPercentage = $this->getCourseProgress($this->courseId);
 
-        // Check for course completion
-        $this->checkCompletionAndRequestReview();
-        $this->checkCompletionAndGenerateCertificate();
+        // Trigger certificate generation only if the user is on the last lecture and progress is 100%
+        if ($this->isLastLecture() && $this->progressPercentage == 100) {
+            $this->checkCompletionAndGenerateCertificate();
+        }
+
+        // Optionally, show the review modal on the last lecture
+        if ($this->isLastLecture() && $this->progressPercentage == 100) {
+            $this->checkCompletionAndRequestReview();
+        }
     }
+    private function isLastLecture()
+    {
+        return $this->currentLectureId === $this->lectures->last()->id;
+    }
+
 
 
     // Method to open the modal when the user completes all lectures

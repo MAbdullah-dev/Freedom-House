@@ -3,7 +3,7 @@
 ?>
 <header>
     <div class="container nav-bar d-flex align-items-center justify-content-between">
-        <a href=""> v
+        <a href="{{ route('home') }}">
             <img class="site-logo" src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
         </a>
         <div class="d-flex align-items-center gap-3 d-block d-xl-none">
