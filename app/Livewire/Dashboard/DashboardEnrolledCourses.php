@@ -20,24 +20,25 @@ class DashboardEnrolledCourses extends Component
         $bookedCourses = Booking::where('user_id', $userId)->get();
 
         foreach ($bookedCourses as $booking) {
+            $course = $booking->course;
 
-            $progress = CourseProgress::where('user_id', $userId)
-                ->where('course_id', $booking->course_id)
-                ->value('progress') ?? 0;
+            if ($course) {
+                $progress = CourseProgress::where('user_id', $userId)
+                    ->where('course_id', $booking->course_id)
+                    ->value('progress') ?? 0;
 
-            $courseData = [
-                'course' => $booking->course,
-                'progress' => $progress
-            ];
-            // dd($courseData);
+                $courseData = [
+                    'course' => $course,
+                    'progress' => $progress
+                ];
 
-
-            if ($progress == 0) {
-                $this->enrolledCourses[] = $courseData;
-            } elseif ($progress > 0 && $progress < 100) {
-                $this->activeCourses[] = $courseData;
-            } elseif ($progress == 100) {
-                $this->completedCourses[] = $courseData;
+                if ($progress == 0) {
+                    $this->enrolledCourses[] = $courseData;
+                } elseif ($progress > 0 && $progress < 100) {
+                    $this->activeCourses[] = $courseData;
+                } elseif ($progress == 100) {
+                    $this->completedCourses[] = $courseData;
+                }
             }
         }
     }

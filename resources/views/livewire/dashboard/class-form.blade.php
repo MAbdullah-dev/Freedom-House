@@ -182,7 +182,7 @@
                             {{-- class_time and event_time --}}
                             <div class="mb-3">
                                 <label for="classtime"
-                                    class="form-label">{{ $type === 'class' ? 'Class Date' : 'Event date' }}</label>
+                                    class="form-label">{{ $type === 'class' ? 'Class Time' : 'Event Time' }}</label>
                                 <input wire:model="class_time" id="classtime"
                                     class="form-control @if ($errors->has('class_time')) is-invalid @elseif ($capacity) is-valid @endif"
                                     type="time" placeholder="Enter class Date">
@@ -258,6 +258,19 @@
                 const endDate = selectedDates[1] ? selectedDates[1].toLocaleString('en-CA') : '';
                 @this.set('date_range', startDate + (endDate ? ' to ' + endDate : ''));
             }
+        });
+
+        flatpickr("#classDate", {
+            dateFormat: "Y-m-d",
+            altFormat: "F j, Y",
+            defaultDate: new Date(),
+        });
+
+        flatpickr("#classtime", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
         });
     </script>
 @endscript

@@ -110,6 +110,10 @@ class ViewEnrollments extends Component
         $userTimezone = Auth::user()->timezone;
 
         $this->enrollments = Booking::where('user_id', Auth::id())
+            ->where(function ($query) {
+                $query->whereNotNull('class_id')
+                    ->orWhereNotNull('event_id');
+            })
             ->with(['class', 'event'])
             ->get()
             ->map(function ($enrollment) use ($userTimezone) {

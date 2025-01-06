@@ -81,7 +81,6 @@ class ClassForm extends Component
             }
         } else {
             $this->reset(['booking_start_date', 'booking_end_date']);
-            $this->addError('date_range', 'Invalid date range format.');
         }
     }
 
