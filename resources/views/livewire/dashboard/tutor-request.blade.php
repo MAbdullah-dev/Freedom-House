@@ -23,8 +23,8 @@
                         <tr>
                             <td>{{ $tutor->id }}</td>
                             <td>
-                                <img src="{{ asset('storage/' . $tutor->user->pfp) }}" alt="Tutor Photo"
-                                    style="width: 50px; height: 50px; border-radius: 50%;">
+                                <img src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                    alt="Tutor Photo" style="width: 50px; height: 50px; border-radius: 50%;">
                             </td>
                             <td>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</td>
                             <td>{{ $tutor->specialization }}</td>

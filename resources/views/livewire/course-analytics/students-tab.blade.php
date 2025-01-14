@@ -35,8 +35,8 @@
                     <tr>
                         <td>
                             <div class="student-info d-flex align-items-center">
-                                <img src="{{ asset('storage/' . $student['user']->pfp) }}" alt="Profile Picture"
-                                    class="profile-pic me-3">
+                                <img src="{{ $student['user']->pfp ? asset('storage/' . $student['user']->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                    alt="Profile Picture" class="profile-pic me-3">
                                 <div>
                                     <strong>{{ $student['user']->first_name . ' ' . $student['user']->last_name }}</strong><br>
                                     <small class="text-muted">{{ $student['user']->email }}</small>

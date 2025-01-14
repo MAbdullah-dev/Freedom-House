@@ -2,7 +2,8 @@
     @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
         <section class="enrollments mx-4">
             <div class="tutor-avatar d-flex align-items-center gap-2 mb-5">
-                <img src="{{ asset('storage/' . Auth::user()->pfp) }}" alt="tutor" />
+                <img src=" {{ Auth::user()->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                    alt="tutor" />
                 <h6>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}<h6>
             </div>
             <div class="row">

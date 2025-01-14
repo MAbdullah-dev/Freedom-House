@@ -243,7 +243,7 @@
                                                 <div class="instructor-card-wrapper my-3 d-flex align-items-center">
                                                     <div class="instructor-avatar">
                                                         <img height="50px" width="50px"
-                                                            src="{{ asset('storage/' . $tutor->user->pfp) }}"
+                                                            src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                                             alt="instructor img" class="avatar-image me-2">
                                                     </div>
                                                     <div class="instructor-info">
