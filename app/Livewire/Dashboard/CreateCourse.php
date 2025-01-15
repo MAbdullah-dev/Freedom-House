@@ -184,11 +184,10 @@ class CreateCourse extends Component
 
         $course = Course::findOrFail($this->courseId);
 
-        $filePath = $this->file
+        $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
             ? $this->uploadThumbnail()
             : $this->existingThumbnail;
-
-        $videoPath = $this->videoFile
+        $videoPath = $this->videoFile instanceof \Illuminate\Http\UploadedFile
             ? $this->uploadVideo()
             : $this->videoFile;
 
@@ -286,7 +285,12 @@ class CreateCourse extends Component
         // Redirect to the preview page
         return redirect()->route('dashboard.course.preview');
     }
-
+    // public function updatedVideoFile()
+    // {
+    //     $this->validate([
+    //         'videoFile' => 'mimes:mp4,avi,mov|max:10240', // File validation
+    //     ]);
+    // }
     public function render()
     {
         return view('livewire.dashboard.create-course')->layout('components.layouts.createCourse');

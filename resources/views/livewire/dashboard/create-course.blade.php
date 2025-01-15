@@ -183,7 +183,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingVideo">
                                 <button
-                                    class="accordion-button @if ($errors->has('videoFile') || $videoFile) '' @else collapsed @endif"
+                                    class="accordion-button {{ $errors->has('videoFile') || $videoFile ? '' : 'collapsed' }}"
                                     type="button" data-bs-toggle="collapse" data-bs-target="#collapseVideo"
                                     aria-expanded="{{ $errors->has('videoFile') || $videoFile ? 'true' : 'false' }}"
                                     aria-controls="collapseVideo">
@@ -191,7 +191,7 @@
                                 </button>
                             </h2>
                             <div id="collapseVideo"
-                                class="accordion-collapse collapse @if ($errors->has('videoFile') || $videoFile) show @endif"
+                                class="accordion-collapse collapse {{ $errors->has('videoFile') || $videoFile ? 'show' : '' }}"
                                 aria-labelledby="headingVideo">
                                 <div class="accordion-body">
                                     <div class="row align-items-center">
@@ -209,7 +209,7 @@
                                             </div>
 
                                             <input type="file"
-                                                class="form-control @if ($errors->has('videoFile')) is-invalid @elseif ($videoFile) is-valid @endif"
+                                                class="form-control {{ $errors->has('videoFile') ? 'is-invalid' : ($videoFile ? 'is-valid' : '') }}"
                                                 id="videoUpload" wire:model="videoFile" accept="video/*">
 
                                             @error('videoFile')
@@ -222,11 +222,11 @@
                                             @if ($videoFile)
                                                 <div class="mt-3">
                                                     <label class="form-label">Video Preview:</label>
-
                                                     @if (method_exists($videoFile, 'temporaryUrl'))
                                                         <!-- Display video using temporaryUrl() for newly uploaded file -->
                                                         <video controls class="w-100 rounded border"
-                                                            style="max-height: 250px;">
+                                                            style="max-height: 250px;"
+                                                            wire:key="video-{{ $videoFile->getClientOriginalName() }}">
                                                             <source src="{{ $videoFile->temporaryUrl() }}"
                                                                 type="video/mp4">
                                                             Your browser does not support the video tag.
@@ -243,10 +243,12 @@
                                                 </div>
                                             @endif
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <!-- Instructors -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="add_instructors">
