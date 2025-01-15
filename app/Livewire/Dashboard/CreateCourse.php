@@ -38,6 +38,7 @@ class CreateCourse extends Component
     public $tutorList = [];
 
     public $existingThumbnail;
+    public $existingVideo;
 
 protected function rules()
 {
@@ -65,6 +66,7 @@ protected function rules()
     {
         if ($this->videoFile instanceof \Illuminate\Http\UploadedFile) {
             return $this->videoFile->store('videos', 'public'); // Save video to the "public/videos" directory
+            
         }
         return null;
     }
@@ -94,6 +96,7 @@ protected function rules()
             $this->tutors = [$authTutor->id];
             $this->selectedTutors = [$authTutor];
         }
+
     }
 
     public function loadCourseData()
@@ -108,7 +111,7 @@ protected function rules()
         $this->learnDetails = $course->learning_outcomes;
         $this->audienceDetails = $course->target_audience;
         $this->requirements = $course->requirements;
-        $this->videoFile = $course->video_path;
+        $this->existingVideo = $course->video_path;
         $this->existingThumbnail = $course->thumbnail;
         $this->selectedTutors = $course->tutors;
         $this->is_paid = $course->is_paid;
@@ -182,11 +185,11 @@ public function updateCourse()
 
     $course = Course::findOrFail($this->courseId);
 
-    $filePath = $this->file
+    $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
     ? $this->uploadThumbnail()
     : $this->existingThumbnail;
 
-    $videoPath = $this->videoFile
+    $videoPath = $this->videoFile instanceof \Illuminate\Http\UploadedFile
         ? $this->uploadVideo()
         : $this->videoFile;
 
@@ -202,6 +205,8 @@ public function updateCourse()
         'price' => $this->price,
         'course_type' => $this->courseType,
     ]);
+
+    $this->videoFile = $videoPath;
 
     $course->categories()->sync($this->category);
     $course->tags()->sync($this->tags);

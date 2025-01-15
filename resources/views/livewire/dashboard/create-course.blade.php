@@ -181,31 +181,68 @@
                         <!-- Video Section -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingVideo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseVideo" aria-expanded="false"
+                                <button
+                                    class="accordion-button {{ $errors->has('videoFile') || $videoFile ? '' : 'collapsed' }}"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseVideo"
+                                    aria-expanded="{{ $errors->has('videoFile') || $videoFile ? 'true' : 'false' }}"
                                     aria-controls="collapseVideo">
                                     Video
                                 </button>
                             </h2>
-                            <div id="collapseVideo" class="accordion-collapse collapse"
+                            <div id="collapseVideo"
+                                class="accordion-collapse collapse {{ $errors->has('videoFile') || $videoFile ? 'show' : '' }}"
                                 aria-labelledby="headingVideo">
-                                <div class="accordion-body d-flex justify-content-between">
+                                <div class="accordion-body">
+                                    <div class="row align-items-center">
+                                        <!-- Upload Button -->
+                                        <div class="col-md-6">
+                                            <label for="videoUpload" class="form-label button-primary">Upload Video
+                                                File</label>
 
-                                    <div class="mb-3">
-                                        <label for="videoUpload" class="form-label button-primary">Upload New Video
-                                            File</label>
-                                        <input type="file"
-                                            class="form-control @if ($errors->has('videoFile')) is-invalid @elseif ($videoFile) is-valid @endif"
-                                            id="videoUpload" wire:model="videoFile" accept="video/*">
-                                        @error('videoFile')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div>
-                                        @if ($videoFile)
-                                            <iframe src="{{ asset('storage/' . $videoFile) }}"
-                                                frameborder="0"></iframe>
-                                        @endif
+                                            <!-- Loader -->
+                                            <div wire:loading wire:target="videoFile" class="text-center mb-2">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Uploading...</span>
+                                                </div>
+                                                <p>Uploading...</p>
+                                            </div>
+
+                                            <input type="file"
+                                                class="form-control {{ $errors->has('videoFile') ? 'is-invalid' : ($videoFile ? 'is-valid' : '') }}"
+                                                id="videoUpload" wire:model="videoFile" accept="video/*">
+
+                                            @error('videoFile')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Video Preview -->
+                                        <div class="col-md-6 text-center">
+                                            @if ($videoFile)
+                                                <div class="mt-3">
+                                                    <label class="form-label">Video Preview:</label>
+                                                    @if (method_exists($videoFile, 'temporaryUrl'))
+                                                        <!-- Display video using temporaryUrl() for newly uploaded file -->
+                                                        <video controls class="w-100 rounded border"
+                                                            style="max-height: 250px;"
+                                                            wire:key="video-{{ $videoFile->getClientOriginalName() }}">
+                                                            <source src="{{ $videoFile->temporaryUrl() }}"
+                                                                type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @else
+                                                        <!-- Display existing video file from storage or database -->
+                                                        <video controls class="w-100 rounded border"
+                                                            style="max-height: 250px;">
+                                                            <source src="{{ asset('storage/' . $videoFile) }}"
+                                                                type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
