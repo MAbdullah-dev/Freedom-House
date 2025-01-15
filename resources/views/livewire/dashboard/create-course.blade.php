@@ -143,9 +143,10 @@
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3">
                                                     <!-- Display the uploaded image or fallback to a placeholder -->
-                                                    <img src="{{ $file ? $file->temporaryUrl() : asset('assets/images/dummy-course-img.webp') }}"
+                                                    <img src="{{ $file ? $file->temporaryUrl() : ($existingThumbnail ? asset('storage/' . $existingThumbnail) : asset('assets/images/dummy-course-img.webp')) }}"
                                                         style="width: 250px; height: 150px; object-fit: cover;"
                                                         alt="Course Thumbnail" id="previewImage">
+
                                                 </div>
                                             </div>
                                             <div class="col-md-5 d-flex flex-column justify-content-center">
@@ -188,9 +189,10 @@
                             </h2>
                             <div id="collapseVideo" class="accordion-collapse collapse"
                                 aria-labelledby="headingVideo">
-                                <div class="accordion-body">
+                                <div class="accordion-body d-flex justify-content-between">
+
                                     <div class="mb-3">
-                                        <label for="videoUpload" class="form-label button-primary">Upload Video
+                                        <label for="videoUpload" class="form-label button-primary">Upload New Video
                                             File</label>
                                         <input type="file"
                                             class="form-control @if ($errors->has('videoFile')) is-invalid @elseif ($videoFile) is-valid @endif"
@@ -199,11 +201,16 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-
-
+                                    <div>
+                                        @if ($videoFile)
+                                            <iframe src="{{ asset('storage/' . $videoFile) }}"
+                                                frameborder="0"></iframe>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- Instructors -->
                         <div class="accordion-item">
