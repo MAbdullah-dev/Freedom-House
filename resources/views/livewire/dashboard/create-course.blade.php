@@ -148,6 +148,7 @@
                                                     <img src="{{ $file && method_exists($file, 'temporaryUrl') ? $file->temporaryUrl() : ($file ? asset('storage/' . $file) : asset('assets/images/dummy-course-img.webp')) }}"
                                                         style="width: 250px; height: 150px; object-fit: cover;"
                                                         alt="Course Thumbnail" id="previewImage">
+
                                                 </div>
                                             </div>
                                             <div class="col-md-5 d-flex flex-column justify-content-center">
@@ -284,7 +285,7 @@
                                                 <div class="instructor-card-wrapper my-3 d-flex align-items-center">
                                                     <div class="instructor-avatar">
                                                         <img height="50px" width="50px"
-                                                            src="{{ asset('storage/' . $tutor->user->pfp) }}"
+                                                            src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                                             alt="instructor img" class="avatar-image me-2">
                                                     </div>
                                                     <div class="instructor-info">

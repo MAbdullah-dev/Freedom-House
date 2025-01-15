@@ -48,8 +48,10 @@ class CreateCourse extends Component
             'category.*' => 'exists:categories,id',
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'file' => ($this->existingThumbnail ? 'nullable' : 'required') . '|image|mimes:jpeg,png,jpg,webp|max:1024',
-            'videoFile' => ($this->videoFile || $this->video_path ? 'nullable' : 'required') . '|file|mimes:mp4,mov,avi|max:10240',
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',  // No condition needed here
+            'videoFile' => ($this->videoFile instanceof \Illuminate\Http\UploadedFile)
+                ? 'nullable|file|mimes:mp4,mov,avi|max:10240'
+                : 'nullable|string',
             'learnDetails' => 'required|string',
             'audienceDetails' => 'required|string',
             'requirements' => 'required|string',
@@ -58,6 +60,23 @@ class CreateCourse extends Component
             'price' => 'required_if:is_paid,Paid|min:0',
         ];
     }
+
+    public function uploadVideo()
+    {
+        if ($this->videoFile instanceof \Illuminate\Http\UploadedFile) {
+            return $this->videoFile->store('videos', 'public'); // Save video to the "public/videos" directory
+        }
+        return null;
+    }
+    public function uploadThumbnail()
+    {
+        if ($this->file instanceof \Illuminate\Http\UploadedFile) {
+            return $this->file->store('uploads', 'public');
+        }
+
+        return null;
+    }
+
 
 
     public function mount($courseId = null)
@@ -76,13 +95,6 @@ class CreateCourse extends Component
             $this->tutors = [$authTutor->id];
             $this->selectedTutors = [$authTutor];
         }
-    }
-    public function uploadVideo()
-    {
-        if ($this->videoFile) {
-            return $this->videoFile->store('videos', 'public'); // Save video to the "public/videos" directory
-        }
-        return null;
     }
 
     public function loadCourseData()
@@ -121,14 +133,7 @@ class CreateCourse extends Component
             ->get();
     }
 
-    public function uploadThumbnail()
-    {
-        if ($this->file) {
-            return $this->file->store('uploads', 'public');
-        }
 
-        return $this->existingThumbnail;
-    }
 
     public function submitCourse()
     {
@@ -173,25 +178,19 @@ class CreateCourse extends Component
         $this->redirect(route('dashboard.mycourses'));
     }
 
-
     public function updateCourse()
     {
-        dd($this->existingThumbnail);
         $this->validate();
 
         $course = Course::findOrFail($this->courseId);
 
+        $filePath = $this->file
+            ? $this->uploadThumbnail()
+            : $this->existingThumbnail;
 
-        // Upload new thumbnail (if any)
-        if ($this->file) {
-            $filePath = $this->uploadThumbnail();
-        } else {
-            $filePath = $this->existingThumbnail;
-        }
-        $filePath = $this->file ? $this->uploadThumbnail() : $this->existingThumbnail;
-
-        // Upload new video file (if any)
-        $videoPath = $this->videoFile ? $this->uploadVideo() : $course->video_path;
+        $videoPath = $this->videoFile
+            ? $this->uploadVideo()
+            : $this->videoFile;
 
         $course->update([
             'title' => $this->courseTitle,
@@ -212,6 +211,7 @@ class CreateCourse extends Component
 
         $this->alert('success', 'Course updated successfully.');
     }
+
 
 
     public function saveAsDraft()

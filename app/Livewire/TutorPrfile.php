@@ -40,7 +40,7 @@ class TutorPrfile extends Component
     {
         return Course::where('user_id', $this->tutorId)
             ->with('user')
-            ->paginate(6); // Adjust the number of items per page
+            ->paginate(6); 
     }
 
     public function render()
