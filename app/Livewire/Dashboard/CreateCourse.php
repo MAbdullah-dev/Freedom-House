@@ -48,8 +48,8 @@ class CreateCourse extends Component
             'category.*' => 'exists:categories,id',
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:1024',
-            'videoFile' => 'required|file|mimes:mp4,mov,avi|max:10240', // New validation rule
+            'file' => ($this->existingThumbnail ? 'nullable' : 'required') . '|image|mimes:jpeg,png,jpg,webp|max:1024',
+            'videoFile' => ($this->videoFile || $this->video_path ? 'nullable' : 'required') . '|file|mimes:mp4,mov,avi|max:10240',
             'learnDetails' => 'required|string',
             'audienceDetails' => 'required|string',
             'requirements' => 'required|string',
@@ -58,6 +58,7 @@ class CreateCourse extends Component
             'price' => 'required_if:is_paid,Paid|min:0',
         ];
     }
+
 
     public function mount($courseId = null)
     {
@@ -93,6 +94,7 @@ class CreateCourse extends Component
         $this->category = $course->categories->pluck('id')->toArray();
         $this->tags = $course->tags->pluck('id')->toArray();
         $this->tutors = $course->tutors->pluck('user_id')->toArray();
+        $this->file = $course->thumbnail;
         $this->learnDetails = $course->learning_outcomes;
         $this->audienceDetails = $course->target_audience;
         $this->requirements = $course->requirements;
@@ -174,21 +176,28 @@ class CreateCourse extends Component
 
     public function updateCourse()
     {
+        dd($this->existingThumbnail);
         $this->validate();
 
         $course = Course::findOrFail($this->courseId);
 
+
         // Upload new thumbnail (if any)
-        $filePath = $this->uploadThumbnail();
+        if ($this->file) {
+            $filePath = $this->uploadThumbnail();
+        } else {
+            $filePath = $this->existingThumbnail;
+        }
+        $filePath = $this->file ? $this->uploadThumbnail() : $this->existingThumbnail;
 
         // Upload new video file (if any)
-        $videoPath = $this->uploadVideo();
+        $videoPath = $this->videoFile ? $this->uploadVideo() : $course->video_path;
 
         $course->update([
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
-            'video_path' => $videoPath ?: $course->video_path, // Keep existing video if no new upload
+            'video_path' => $videoPath,
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
@@ -203,6 +212,7 @@ class CreateCourse extends Component
 
         $this->alert('success', 'Course updated successfully.');
     }
+
 
     public function saveAsDraft()
     {

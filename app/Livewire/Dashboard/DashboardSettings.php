@@ -67,7 +67,7 @@ class DashboardSettings extends Component
             'phone' => 'nullable|string|max:20',
             'bio' => 'nullable|string|max:255',
             'coverPhoto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
-            'profilePhoto' => 'required|image|mimes:jpeg,png,jpgc,webp|max:1024',
+            'profilePhoto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
             'timezone' => 'required|string|timezone',
         ]);
 

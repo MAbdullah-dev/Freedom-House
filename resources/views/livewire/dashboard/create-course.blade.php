@@ -18,9 +18,11 @@
                         <span wire:loading wire:target="submitCourse">Loading...</span>
                     </button>
 
-                    <a href="{{ url()->previous() }}" class="custom-close-link ms-1">
-                        <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
-                    </a>
+                    <div wire:ignore>
+                        <a href="{{ url()->previous() }}" class="custom-close-link ms-1">
+                            <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,7 +145,7 @@
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3">
                                                     <!-- Display the uploaded image or fallback to a placeholder -->
-                                                    <img src="{{ $file ? $file->temporaryUrl() : asset('assets/images/dummy-course-img.webp') }}"
+                                                    <img src="{{ $file && method_exists($file, 'temporaryUrl') ? $file->temporaryUrl() : ($file ? asset('storage/' . $file) : asset('assets/images/dummy-course-img.webp')) }}"
                                                         style="width: 250px; height: 150px; object-fit: cover;"
                                                         alt="Course Thumbnail" id="previewImage">
                                                 </div>
@@ -171,7 +173,6 @@
                                             </div>
                                         </div>
 
-
                                     </div>
                                 </div>
                             </div>
@@ -180,31 +181,71 @@
                         <!-- Video Section -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingVideo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseVideo" aria-expanded="false"
+                                <button
+                                    class="accordion-button @if ($errors->has('videoFile') || $videoFile) '' @else collapsed @endif"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseVideo"
+                                    aria-expanded="{{ $errors->has('videoFile') || $videoFile ? 'true' : 'false' }}"
                                     aria-controls="collapseVideo">
                                     Video
                                 </button>
                             </h2>
-                            <div id="collapseVideo" class="accordion-collapse collapse"
+                            <div id="collapseVideo"
+                                class="accordion-collapse collapse @if ($errors->has('videoFile') || $videoFile) show @endif"
                                 aria-labelledby="headingVideo">
                                 <div class="accordion-body">
-                                    <div class="mb-3">
-                                        <label for="videoUpload" class="form-label button-primary">Upload Video
-                                            File</label>
-                                        <input type="file"
-                                            class="form-control @if ($errors->has('videoFile')) is-invalid @elseif ($videoFile) is-valid @endif"
-                                            id="videoUpload" wire:model="videoFile" accept="video/*">
-                                        @error('videoFile')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                    <div class="row align-items-center">
+                                        <!-- Upload Button -->
+                                        <div class="col-md-6">
+                                            <label for="videoUpload" class="form-label button-primary">Upload Video
+                                                File</label>
+
+                                            <!-- Loader -->
+                                            <div wire:loading wire:target="videoFile" class="text-center mb-2">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Uploading...</span>
+                                                </div>
+                                                <p>Uploading...</p>
+                                            </div>
+
+                                            <input type="file"
+                                                class="form-control @if ($errors->has('videoFile')) is-invalid @elseif ($videoFile) is-valid @endif"
+                                                id="videoUpload" wire:model="videoFile" accept="video/*">
+
+                                            @error('videoFile')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Video Preview -->
+                                        <div class="col-md-6 text-center">
+                                            @if ($videoFile)
+                                                <div class="mt-3">
+                                                    <label class="form-label">Video Preview:</label>
+
+                                                    @if (method_exists($videoFile, 'temporaryUrl'))
+                                                        <!-- Display video using temporaryUrl() for newly uploaded file -->
+                                                        <video controls class="w-100 rounded border"
+                                                            style="max-height: 250px;">
+                                                            <source src="{{ $videoFile->temporaryUrl() }}"
+                                                                type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @else
+                                                        <!-- Display existing video file from storage or database -->
+                                                        <video controls class="w-100 rounded border"
+                                                            style="max-height: 250px;">
+                                                            <source src="{{ asset('storage/' . $videoFile) }}"
+                                                                type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
-
                         <!-- Instructors -->
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="add_instructors">
