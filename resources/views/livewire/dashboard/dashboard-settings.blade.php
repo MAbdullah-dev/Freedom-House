@@ -3,7 +3,14 @@
 // dd(Auth::user()->role_id);
 ?>
 <div class="settings px-4 py-5">
-    <h2 class="mb-4">Settings</h2>
+    <div class="d-flex justify-content-between">
+        <h2 class="mb-4">Settings</h2>
+        <a type="button" href='{{ route('microsoft.redirect') }}'
+            class="button-secondary d-flex align-items-center justify-content-center">
+            <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
+            <span class="ms-2">Connect with Microsoft</span>
+        </a>
+    </div>
     <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link {{ $activeTab == 'profile' ? 'active' : '' }}" id="profile-tab" data-bs-toggle="tab"

@@ -206,7 +206,7 @@
                             <div class="row">
                                 <div class="mb-3" wire:ignore>
                                     <label for="calendar-input" class="form-label">
-                                        {{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}
+                                        {{ $type === 'class' ? 'Bookings Start Date to End Date' : 'Booking Start Date to End Date' }}
                                     </label>
                                     <input type="text" wire:model.lazy="date_range" id="calendar-input"
                                         class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"

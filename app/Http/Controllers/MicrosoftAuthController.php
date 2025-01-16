@@ -19,6 +19,7 @@ class MicrosoftAuthController extends Controller
         $redirectUri = env('AZURE_REDIRECT_URI');
         $scopes = 'openid profile email offline_access User.read OnlineMeetings.ReadWrite Calendars.ReadWrite';
         $state = csrf_token();
+        $action = $request->input('action', 'login');
 
         $url = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?" . http_build_query([
             'client_id' => $clientId,
@@ -27,6 +28,7 @@ class MicrosoftAuthController extends Controller
             'response_mode' => 'query',
             'scope' => $scopes,
             'state' => $state,
+            'action' => $action,
         ]);
 
         return redirect($url);
@@ -99,9 +101,6 @@ class MicrosoftAuthController extends Controller
             $updateData
         );
 
-
-        // $role = Role::findOrFail($role_id);
-        // $user->roles()->attach($role->id);
 
         Log::info('User created or updated from Microsoft login', ['user' => $user]);
 

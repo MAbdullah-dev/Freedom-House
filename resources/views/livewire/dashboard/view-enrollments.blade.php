@@ -31,7 +31,7 @@
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Price</th>
-                                <th>Action</th>
+                                <th class="">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,10 +51,12 @@
 
 
                                     <td>
-                                        <button class="button-primary"
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#attendee-modal"
+                                            class="attendee-btn"><i class="fa-solid fa-user"></i></button>
+                                        <button class="view-btn"
                                             wire:click="selectItem({{ $item['id'] }}, '{{ $item['model_type'] }}')"
                                             data-bs-toggle="modal" data-bs-target="#viewItemModal">
-                                            View
+                                            <i class="fa-regular fa-eye"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -135,12 +137,12 @@
             </table>
         </div>
     </section>
-    <!-- q -->
+    <!-- modal -->
     <div wire:ignore.self class="modal fade modal-lg" id="viewItemModal" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header text-white">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">
                         @if ($selectedClass)
                             Class Details
@@ -229,6 +231,50 @@
                     @if ($selectedClass && $selectedClass->class_type == 'recorded')
                         <button type="button" class="button-primary" wire:click="createQuiz">Create Quiz</button>
                     @endif
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="attendee-modal" tabindex="-1" role="dialog" aria-labelledby="attendeeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                {{-- <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> --}}
+                <div class="modal-body p-0">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="text-muted py-2" id="attendeeModalLabel">Attendees</h5>
+                                <button type="button" class="btn button-primary w-100 mb-2">+ Add Attendee</button>
+                                <input type="search" class="form-control" placeholder="🔍 Find Attendees">
+                                <div class="attendee-list">
+                                    <div class="attendee py-4">
+                                        <div class="row">
+                                            <hr>
+                                            <div class="col-8">
+                                                <input class="form-control mb-3" type="text" value="Brian M">
+                                                <input class="form-control mb-3" type="text" value="1234567890">
+                                                <select class="form-control mb-3 text-muted">
+                                                    <option value="">Free</option>
+                                                    <option value="">Unpaid</option>
+                                                    <option value="">Pending</option>
+                                                    <option value="">Paid</option>
+                                                    <option value="">Refunded</option>
+                                                </select>
+                                            </div>
+                                            <hr>
+                                            <div class="col-4 text-right">
+                                                {{-- <button type="button" class="btn btn-danger">Remove Attendee</button>
+                                                <button type="button" class="btn btn-primary">Edit Attendee</button> --}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

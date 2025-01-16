@@ -19,6 +19,7 @@ class ViewEnrollments extends Component
     public $events = [];
     public $items = [];
     public $enrollments;
+    public $booking_payment_methods;
 
     use LivewireAlert;
 
@@ -26,6 +27,8 @@ class ViewEnrollments extends Component
     {
         $classes = Classe::where('user_id', Auth::id())->get();
         $events = Events::where('user_id', Auth::id())->get();
+
+
 
         $this->items = $classes->concat($events)->sortBy(function ($item) {
             return $item->booking_start_date;
@@ -52,59 +55,54 @@ class ViewEnrollments extends Component
     }
 
     public function updatedDateRange()
-    {
-        if ($this->dateRange) {
-            $dates = explode(' to ', $this->dateRange);
-            if (count($dates) !== 2) {
-                session()->flash('error', 'Invalid date range format.');
-                return;
-            }
+{
+    if ($this->dateRange) {
+        // Split the date range into start and end dates
+        $dates = explode(' to ', $this->dateRange);
 
-            $startDate = Carbon::parse($dates[0])->startOfDay();
-            $endDate = Carbon::parse($dates[1])->endOfDay();
-
-            $classes = Classe::where(function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('booking_start_date', [$startDate, $endDate])
-                    ->orWhereBetween('booking_end_date', [$startDate, $endDate])
-                    ->orWhere(function ($query) use ($startDate, $endDate) {
-                        $query->where('booking_start_date', '<=', $startDate)
-                            ->where('booking_end_date', '>=', $endDate)
-                        ;
-                    });
-            })
-                ->orderBy('booking_start_date', 'asc')
-                ->where('user_id', Auth::id())
-                ->get();
-
-            $events = Events::where(function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('booking_start_date', [$startDate, $endDate])
-                    ->orWhereBetween('booking_end_date', [$startDate, $endDate])
-                    ->orWhere(function ($query) use ($startDate, $endDate) {
-                        $query->where('booking_start_date', '<=', $startDate)
-                            ->where('booking_end_date', '>=', $endDate)
-                        ;
-                    });
-            })
-                ->orderBy('booking_start_date', 'asc')
-                ->where('user_id', Auth::id())
-                ->get();
-
-            $this->items = $classes->concat($events)->sortBy(function ($item) {
-                return $item->booking_start_date;
-            });
-            $this->items = $this->items->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
-                    'date' => $item instanceof \App\Models\Classe ? $item->class_date : $item->class_date,
-                    'time' => $item instanceof \App\Models\Classe ? $item->class_time : $item->class_time,
-                    'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
-                    'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
-                ];
-            });
+        if (count($dates) !== 2) {
+            session()->flash('error', 'Invalid date range format.');
+            return;
         }
+
+        // Parse start and end dates
+        $startDate = Carbon::parse($dates[0])->startOfDay();
+        $endDate = Carbon::parse($dates[1])->endOfDay();
+
+        // Query Classes
+        $classes = Classe::whereDate('class_date', '>=', $startDate)
+            ->whereDate('class_date', '<=', $endDate)
+            ->where('user_id', Auth::id())
+            ->orderBy('class_date', 'asc')
+            ->get();
+
+        // Query Events
+        $events = Events::whereDate('class_date', '>=', $startDate)
+            ->whereDate('class_date', '<=', $endDate)
+            ->where('user_id', Auth::id())
+            ->orderBy('class_date', 'asc')
+            ->get();
+
+        // Combine and sort results by `class_date`
+        $this->items = $classes->concat($events)->sortBy(function ($item) {
+            return $item->class_date;
+        });
+
+        // Map items to the desired format
+        $this->items = $this->items->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
+                'date' => $item->class_date,
+                'time' => $item->class_time,
+                'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
+                'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
+            ];
+        });
     }
+}
+
     public function enrollments()
     {
         $userTimezone = Auth::user()->timezone;

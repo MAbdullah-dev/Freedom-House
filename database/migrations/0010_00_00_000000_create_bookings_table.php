@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->enum('payment_status', ['free', 'paid',]);
+            $table->enum('payment_status', ['free', 'paid', 'pending', 'refunded', 'unpaid'])->default('free');
             $table->string('order_number')->unique();
             $table->foreignId('class_id')->nullable()->constrained('classes')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('event_id')->nullable()->constrained('events')->cascadeOnDelete()->cascadeOnUpdate();

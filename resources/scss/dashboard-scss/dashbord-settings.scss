@@ -23,6 +23,15 @@
             }
         }
     }
+    .button-secondary {
+        font-size: 14px !important;
+        padding: 10px !important;
+        img {
+            height: 24px;
+            width: 24px;
+            display: inline-block;
+        }
+    }
 
     .tab-content {
         margin-top: 32px;

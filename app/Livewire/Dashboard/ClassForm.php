@@ -234,6 +234,7 @@ class ClassForm extends Component
         $this->courses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
+            ->where('course_type', 'classtype')
             ->where('user_id', Auth::id())
             ->get();
     }
