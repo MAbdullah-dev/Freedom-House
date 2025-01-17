@@ -51,8 +51,13 @@
 
 
                                     <td>
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#attendee-modal"
-                                            class="attendee-btn"><i class="fa-solid fa-user"></i></button>
+                                        <button type="button" wire:click="loadAttendees({{ $item['id'] }})"
+                                            data-bs-toggle="modal" data-bs-target="#attendee-modal"
+                                            class="attendee-btn">
+                                            <i class="fa-solid fa-user"></i>
+                                        </button>
+
+
                                         <button class="view-btn"
                                             wire:click="selectItem({{ $item['id'] }}, '{{ $item['model_type'] }}')"
                                             data-bs-toggle="modal" data-bs-target="#viewItemModal">
@@ -235,13 +240,10 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="attendee-modal" tabindex="-1" role="dialog" aria-labelledby="attendeeModalLabel"
-        aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="attendee-modal" tabindex="-1" role="dialog"
+        aria-labelledby="attendeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
-                {{-- <div class="modal-header border-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div> --}}
                 <div class="modal-body p-0">
                     <div class="container-fluid">
                         <div class="row">
@@ -250,27 +252,52 @@
                                 <button type="button" class="btn button-primary w-100 mb-2">+ Add Attendee</button>
                                 <input type="search" class="form-control" placeholder="🔍 Find Attendees">
                                 <div class="attendee-list">
-                                    <div class="attendee py-4">
-                                        <div class="row">
+                                    @foreach ($attendees as $attendee)
+                                        <div class="attendee py-4">
                                             <hr>
-                                            <div class="col-8">
-                                                <input class="form-control mb-3" type="text" value="Brian M">
-                                                <input class="form-control mb-3" type="text" value="1234567890">
-                                                <select class="form-control mb-3 text-muted">
-                                                    <option value="">Free</option>
-                                                    <option value="">Unpaid</option>
-                                                    <option value="">Pending</option>
-                                                    <option value="">Paid</option>
-                                                    <option value="">Refunded</option>
-                                                </select>
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <input class="form-control mb-3" type="text"
+                                                        value="{{ $attendee->user->first_name }} {{ $attendee->user->last_name }}"
+                                                        @if (!$isEditing || $attendee->id !== $editAttendeeId) disabled @endif>
+                                                    <input class="form-control mb-3" type="text"
+                                                        value="{{ $attendee->user->phone }}"
+                                                        @if (!$isEditing || $attendee->id !== $editAttendeeId) disabled @endif>
+                                                    <select class="form-control mb-3 text-muted"
+                                                        @if (!$isEditing || $attendee->id !== $editAttendeeId) disabled @endif>
+                                                        <option value="free"
+                                                            {{ $attendee->payment_status === 'free' ? 'selected' : '' }}>
+                                                            Free</option>
+                                                        <option value="unpaid"
+                                                            {{ $attendee->payment_status === 'unpaid' ? 'selected' : '' }}>
+                                                            Unpaid</option>
+                                                        <option value="pending"
+                                                            {{ $attendee->payment_status === 'pending' ? 'selected' : '' }}>
+                                                            Pending</option>
+                                                        <option value="paid"
+                                                            {{ $attendee->payment_status === 'paid' ? 'selected' : '' }}>
+                                                            Paid</option>
+                                                        <option value="refunded"
+                                                            {{ $attendee->payment_status === 'refunded' ? 'selected' : '' }}>
+                                                            Refunded</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    @if (!$isEditing || $attendee->id !== $editAttendeeId)
+                                                        <button class="btn w-100 my-3 btn-primary"
+                                                            wire:click="enableEdit({{ $attendee->id }})">Edit
+                                                            Attendee</button>
+                                                    @else
+                                                        <button class="btn w-100 my-3 btn-success"
+                                                            wire:click="saveAttendee({{ $attendee->id }})">Save
+                                                            Attendee</button>
+                                                    @endif
+                                                    <button class="btn w-100 btn-danger">Delete Attendee</button>
+                                                </div>
                                             </div>
                                             <hr>
-                                            <div class="col-4 text-right">
-                                                {{-- <button type="button" class="btn btn-danger">Remove Attendee</button>
-                                                <button type="button" class="btn btn-primary">Edit Attendee</button> --}}
-                                            </div>
                                         </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -279,6 +306,8 @@
             </div>
         </div>
     </div>
+
+
 </div>
 @push('js')
     <script>

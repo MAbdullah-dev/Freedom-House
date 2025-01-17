@@ -1,15 +1,18 @@
 <?php
 // dd(Auth::user()->role_id == 2 || Auth::user()->role_id == 1);
 // dd(Auth::user()->role_id);
+// dd(session()->all());
 ?>
 <div class="settings px-4 py-5">
     <div class="d-flex justify-content-between">
         <h2 class="mb-4">Settings</h2>
-        <a type="button" href='{{ route('microsoft.redirect') }}'
-            class="button-secondary d-flex align-items-center justify-content-center">
-            <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
-            <span class="ms-2">Connect with Microsoft</span>
-        </a>
+        <div class="ms-button">
+            <a type="button" href='{{ route('microsoft.redirect') }}'
+                class="button-secondary d-flex align-items-center justify-content-center">
+                <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
+                <span class="ms-2">Connect with Microsoft</span>
+            </a>
+        </div>
     </div>
     <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
         <li class="nav-item">

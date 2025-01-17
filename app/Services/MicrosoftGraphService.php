@@ -15,7 +15,7 @@ class MicrosoftGraphService
     public function refreshAccessToken(User $user)
     {
         try {
-            $refreshToken = session('refresh_token');
+            $refreshToken = $user->refresh_token;
 
             if (!$refreshToken) {
                 throw new \Exception('No refresh token found in session.');

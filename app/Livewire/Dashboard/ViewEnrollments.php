@@ -20,15 +20,43 @@ class ViewEnrollments extends Component
     public $items = [];
     public $enrollments;
     public $booking_payment_methods;
+    public $itemId;
+    public $attendees = [];
+        public $isEditing = false; // State to toggle edit mode
+    public $editAttendeeId = null; // Store the ID of the attendee being edited
+
+
 
     use LivewireAlert;
+
+    protected $listeners = ['loadAttendees'];
+
+
+    public function loadAttendees($itemId)
+    {
+        $this->itemId = $itemId;
+      $this->attendees = Booking::with('user')
+            ->where('class_id', $this->itemId)
+            ->get();
+    }
+    public function enableEdit($attendeeId)
+    {
+        $this->isEditing = true;
+        $this->editAttendeeId = $attendeeId; // Set the ID of the attendee being edited
+    }
+
+    public function saveAttendee($attendeeId)
+    {
+        // Here you can implement the logic to save the changes made to the attendee
+        $this->isEditing = false;
+        $this->editAttendeeId = null;
+        $this->loadAttendees($this->itemId); // Reload the attendees after saving
+    }
 
     public function mount()
     {
         $classes = Classe::where('user_id', Auth::id())->get();
         $events = Events::where('user_id', Auth::id())->get();
-
-
 
         $this->items = $classes->concat($events)->sortBy(function ($item) {
             return $item->booking_start_date;
