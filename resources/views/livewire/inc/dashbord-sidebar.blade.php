@@ -26,12 +26,14 @@
                         <i class="fas fa-heart"></i> Wishlist
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help' ? 'active' : '' }}"
-                        href="{{ route('dashboard.help') }}" wire:navigate>
-                        <i class="fas fa-question-circle"></i> Help Request
-                    </a>
-                </li>
+                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help' ? 'active' : '' }}"
+                            href="{{ route('dashboard.help') }}" wire:navigate>
+                            <i class="fas fa-question-circle"></i> Help Request
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrollments' ? 'active' : '' }}"
                         href="{{ route('dashboard.enrollments') }}" wire:navigate>

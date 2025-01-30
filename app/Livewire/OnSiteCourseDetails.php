@@ -71,6 +71,7 @@ class OnSiteCourseDetails extends Component
         Booking::create([
             'course_id' => $this->courseId,
             'class_id' => null,
+            'phone_number' => Auth::user()->phone,
             'user_id' => Auth::id(),
             'payment_status' => 'free',
             'order_number' => uniqid('FREE_'),

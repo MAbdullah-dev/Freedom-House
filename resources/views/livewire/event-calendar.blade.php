@@ -113,7 +113,7 @@
                 <div class="modal-footer">
                     <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
                     @if (auth()->check() && isset($selectedEvent['users']) && $selectedEvent['users']['id'] == auth()->user()->id)
-                        <button type="button" class="button-primary" disabled>Enroll Now</button>
+                        <button type="button" class="btn btn-secondary" disabled>Enroll Now</button>
                     @else
                         <button type="button" class="button-primary" wire:click="enroll">Enroll Now</button>
                     @endif

@@ -73,7 +73,6 @@ class MicrosoftAuthController extends Controller
 
         // checking if the ms account is already linked to a different user
         $existingUser = User::where('microsoft_id', $microsoftUser['id'])
-            ->where('id', '!=', $user->id)
             ->first();
 
         if ($existingUser) {

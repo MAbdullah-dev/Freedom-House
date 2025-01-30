@@ -13,44 +13,122 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 class ViewEnrollments extends Component
 {
     public $dateRange;
-    public $classes = [];
     public $selectedClass;
     public $selectedEvent;
-    public $events = [];
-    public $items = [];
     public $enrollments;
     public $booking_payment_methods;
     public $itemId;
+    public $isEditing = false;
+    public $editAttendeeId = null;
+    public $classes = [];
+    public $events = [];
+    public $items = [];
     public $attendees = [];
-        public $isEditing = false; // State to toggle edit mode
-    public $editAttendeeId = null; // Store the ID of the attendee being edited
-
-
+    public $newAttendees = [];
+    public $attendeeData = [];
+    public $selectedModelId;
+    public $selectedModelType;
 
     use LivewireAlert;
 
     protected $listeners = ['loadAttendees'];
 
+    public function addAttendeeField()
+    {
+         if (empty($this->newAttendees)) {
+             $this->newAttendees = [['email' => '', 'phone' => '' , 'payment_status' => 'unpaid']];
+         }else{
+             $this->alert('warning', 'You can only add one attendee at a time.');
+         }
+    }
 
-    public function loadAttendees($itemId)
+    public function loadAttendees($itemId, $modelType)
     {
         $this->itemId = $itemId;
-      $this->attendees = Booking::with('user')
-            ->where('class_id', $this->itemId)
-            ->get();
-    }
-    public function enableEdit($attendeeId)
-    {
-        $this->isEditing = true;
-        $this->editAttendeeId = $attendeeId; // Set the ID of the attendee being edited
+
+        if ($modelType === 'class') {
+            $this->attendees = Booking::where('class_id', $this->itemId)->get()->map(function ($attendee) {
+                return [
+                    'id' => $attendee->id,
+                    'email' => $attendee->email,
+                    'phone' => $attendee->phone,
+                    'payment_status' => $attendee->payment_status,
+                ];
+            })->toArray();
+        } elseif ($modelType === 'event') {
+            $this->attendees = Booking::where('event_id', $this->itemId)->get()->map(function ($attendee) {
+                return [
+                    'id' => $attendee->id,
+                    'email' => $attendee->email,
+                    'phone' => $attendee->phone,
+                    'payment_status' => $attendee->payment_status,
+                ];
+            })->toArray();
+        }
     }
 
-    public function saveAttendee($attendeeId)
+
+    public function openAttendeeModal($id, $modelType)
     {
-        // Here you can implement the logic to save the changes made to the attendee
+        $this->selectedModelId = $id;
+        $this->selectedModelType = $modelType;
+
+        if ($modelType === 'class') {
+            $this->attendees = Booking::where('class_id', $id)->with('user')->get();
+        } elseif ($modelType === 'event') {
+            $this->attendees = Booking::where('event_id', $id)->with('user')->get();
+        }
+
+        $this->dispatch('open-attendee-modal');
+    }
+
+    public function enableEdit($attendeeId)
+    {
+        $this->editAttendeeId = $attendeeId;
+        $this->isEditing = true;
+
+        // Find the attendee in the `attendees` array
+        $attendee = collect($this->attendees)->firstWhere('id', $attendeeId);
+
+        if ($attendee) {
+            $this->attendeeData = [
+                'email' => $attendee['email'],
+                'phone' => $attendee['phone'],
+                'payment_status' => $attendee['payment_status'],
+            ];
+        } else {
+            $this->alert('error', 'Attendee not found.');
+            $this->isEditing = false;
+            $this->editAttendeeId = null;
+        }
+    }
+
+
+   public function saveAttendee($attendeeId)
+    {
+        $attendee = Booking::find($attendeeId);
+
+        if ($attendee && $this->attendeeData) {
+            $attendee->update([
+                'email' => $this->attendeeData['email'],
+                'phone' => $this->attendeeData['phone'],
+                'payment_status' => $this->attendeeData['payment_status'],
+            ]);
+        }
+
         $this->isEditing = false;
         $this->editAttendeeId = null;
-        $this->loadAttendees($this->itemId); // Reload the attendees after saving
+        $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
+    }
+
+
+    public function deleteAttendee($attendeeId)
+    {
+        $attendee = Booking::find($attendeeId);
+        if ($attendee) {
+            $attendee->delete();
+        }
+       $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
     }
 
     public function mount()
@@ -83,53 +161,53 @@ class ViewEnrollments extends Component
     }
 
     public function updatedDateRange()
-{
-    if ($this->dateRange) {
-        // Split the date range into start and end dates
-        $dates = explode(' to ', $this->dateRange);
+    {
+        if ($this->dateRange) {
+            // Split the date range into start and end dates
+            $dates = explode(' to ', $this->dateRange);
 
-        if (count($dates) !== 2) {
-            session()->flash('error', 'Invalid date range format.');
-            return;
+            if (count($dates) !== 2) {
+                session()->flash('error', 'Invalid date range format.');
+                return;
+            }
+
+            // Parse start and end dates
+            $startDate = Carbon::parse($dates[0])->startOfDay();
+            $endDate = Carbon::parse($dates[1])->endOfDay();
+
+            // Query Classes
+            $classes = Classe::whereDate('class_date', '>=', $startDate)
+                ->whereDate('class_date', '<=', $endDate)
+                ->where('user_id', Auth::id())
+                ->orderBy('class_date', 'asc')
+                ->get();
+
+            // Query Events
+            $events = Events::whereDate('class_date', '>=', $startDate)
+                ->whereDate('class_date', '<=', $endDate)
+                ->where('user_id', Auth::id())
+                ->orderBy('class_date', 'asc')
+                ->get();
+
+            // Combine and sort results by `class_date`
+            $this->items = $classes->concat($events)->sortBy(function ($item) {
+                return $item->class_date;
+            });
+
+            // Map items to the desired format
+            $this->items = $this->items->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
+                    'date' => $item->class_date,
+                    'time' => $item->class_time,
+                    'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
+                    'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
+                ];
+            });
         }
-
-        // Parse start and end dates
-        $startDate = Carbon::parse($dates[0])->startOfDay();
-        $endDate = Carbon::parse($dates[1])->endOfDay();
-
-        // Query Classes
-        $classes = Classe::whereDate('class_date', '>=', $startDate)
-            ->whereDate('class_date', '<=', $endDate)
-            ->where('user_id', Auth::id())
-            ->orderBy('class_date', 'asc')
-            ->get();
-
-        // Query Events
-        $events = Events::whereDate('class_date', '>=', $startDate)
-            ->whereDate('class_date', '<=', $endDate)
-            ->where('user_id', Auth::id())
-            ->orderBy('class_date', 'asc')
-            ->get();
-
-        // Combine and sort results by `class_date`
-        $this->items = $classes->concat($events)->sortBy(function ($item) {
-            return $item->class_date;
-        });
-
-        // Map items to the desired format
-        $this->items = $this->items->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'type' => $item instanceof \App\Models\Classe ? 'Class' : 'Event',
-                'date' => $item->class_date,
-                'time' => $item->class_time,
-                'price' => $item->price ? '$' . number_format($item->price, 2) : 'Free',
-                'model_type' => $item instanceof \App\Models\Classe ? 'class' : 'event',
-            ];
-        });
     }
-}
 
     public function enrollments()
     {
@@ -162,7 +240,6 @@ class ViewEnrollments extends Component
             });
     }
 
-
     public function selectItem($itemId, $modelType)
     {
         if ($modelType === 'class') {
@@ -175,6 +252,7 @@ class ViewEnrollments extends Component
             session()->flash('error', 'Invalid model type selected.');
         }
     }
+
     public function editItem()
     {
 
@@ -211,6 +289,34 @@ class ViewEnrollments extends Component
         }
     }
 
+    public function saveManualAttendees()
+    {
+        // dd($this->selectedModelId);
+    foreach ($this->newAttendees as $newAttendee) {
+                $validatedData = \Validator::make($newAttendee, [
+            'email' => 'required|email',
+            'phone' => 'required|string|max:15',
+            'payment_status' => 'required',
+        ])->validate();
+        Booking::create([
+            'class_id' => $this->selectedModelType == 'class' ? $this->selectedModelId : null,
+            'event_id' => $this->selectedModelType == 'event' ? $this->selectedModelId : null,
+            'email' => $newAttendee['email'],
+            'phone' => $newAttendee['phone'],
+            'payment_status' => $newAttendee['payment_status'],
+            'type' => 'manual',
+            'order_number' => 'MAN_' . strtoupper(uniqid()), // Generate order number
+            'created_by' => Auth::id(),
+        ]);
+    }
+
+    $this->newAttendees = [];
+    $this->alert('success', 'Manual attendees saved successfully.');
+    $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
+
+    }
+
+
     public function createQuiz()
     {
         if ($this->selectedClass && $this->selectedClass->class_type == 'recorded') {
@@ -218,7 +324,6 @@ class ViewEnrollments extends Component
             return redirect()->route('quizzes.create', ['class_id' => $this->selectedClass->id]);
         }
     }
-
 
     public function render()
     {

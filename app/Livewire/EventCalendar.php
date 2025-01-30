@@ -174,6 +174,7 @@ class EventCalendar extends Component
         Booking::create([
             'event_id' => $this->selectedEventId,
             'user_id' => $user->id,
+            'phone' => $user->phone,
             'payment_status' => 'free',
             'order_number' => uniqid('FREE_'),
         ]);

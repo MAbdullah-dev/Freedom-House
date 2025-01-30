@@ -15,6 +15,11 @@ class Booking extends Model
         'user_id',
         'order_number',
         'course_id',
+        'type',
+        'email',
+        'payment_status',
+        'created_by',
+        'phone',
     ];
 
     public function user()

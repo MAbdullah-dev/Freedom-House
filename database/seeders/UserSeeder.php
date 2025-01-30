@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
                 'username' => 'admin',
                 'phone' => '1234567890',
                 'bio' => 'I am the administrator of this platform.',
-                'password' => Hash::make('12345678'), // Replace with a strong password
+                'password' => Hash::make('12345678'), 
                 'pfp' => null,
                 'cover_photo' => null,
                 'role_id' => 1,

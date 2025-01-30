@@ -17,8 +17,12 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->foreignId('class_id')->nullable()->constrained('classes')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('event_id')->nullable()->constrained('events')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->foreignId('course_id')->nullable()->constrained('courses')->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->enum('type', ['automated', 'manual'])->default('automated');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
             $table->timestamps();
         });
     }
