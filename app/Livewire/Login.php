@@ -33,7 +33,7 @@ class Login extends Component
 
                 session([
                     'user_id' => $user->id,
-                    'role_ids' => $user->roles()->pluck('id')->toArray(),
+                    // 'role_ids' => $user->roles()->pluck('id')->toArray(),
                 ]);
 
 

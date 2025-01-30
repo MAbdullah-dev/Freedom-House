@@ -2,7 +2,7 @@
     <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.webp') }}');">
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>
-            <h1 class="my-5">FREEDOM HOUSE UNIVERSITY</h1>
+            <h1 class="my-5">FREEDOM HOUSE UNIVERSITYY</h1>
             <div class="hero-cta-btn d-flex mt-2 gap-2 flex-wrap justify-content-center  ">
                 <a href="#">Upcoming TRAINING</a>
                 <a href="#">REGISTRATION</a>
@@ -25,32 +25,6 @@
                                 <div class="card-img-top">
                                     <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
                                         class="" alt="...">
-                                </div>
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">{{ $course->title }}</h5>
-                                    <p class="card-text my-3">{{ $course->description }}</p>
-                                    <div class="card-btn">
-                                        @if ($course->course_type == 'recorded')
-                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
-                                                href="{{ route('onsite.course.details', $course->id) }}">Learn
-                                                more...</a>
-                                        @else
-                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
-                                                href="{{ route('course.details', $course->id) }}">Learn
-                                                more...</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                    @foreach ($courses as $course)
-                        <div class="swiper-slide">
-                            <div class="card shadow">
-                                <div class="card-img-top">
-
-                                    <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
-                                        class="card-img-top" alt="...">
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ $course->title }}</h5>

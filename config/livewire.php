@@ -63,7 +63,7 @@ return [
     |
     */
     'temporary_file_upload' => [
-        'disk' => null,        // Example: 'local', 's3'              | Default: 'default'
+        'disk' => 'local',        // Example: 'local', 's3'              | Default: 'default'
         'rules' => ['file', 'mimes:jpeg,png,jpg,svg,mp4,avi,mkv,mov,wmv,flv,webm,webp,txt,docx,docx,pdf', 'max:102400'],
         'directory' => null,   // Example: 'tmp'                      | Default: 'livewire-tmp'
         'middleware' => null,  // Example: 'throttle:5,1'             | Default: 'throttle:60,1'

@@ -47,6 +47,7 @@ class PaymentController extends Controller
             $booking = Booking::create([
                 'course_id' => $courseId,
                 'user_id' => $userId,
+                'phone_number' => $user->phone,
                 'class_id' => null,
                 'payment_status' => 'paid',
                 'order_number' => uniqid('PAID_COURSE_'),
@@ -87,6 +88,7 @@ class PaymentController extends Controller
                 $booking = Booking::create([
                     'class_id' => $classId,
                     'course_id' => null,
+                'phone_number' => $user->phone,
                     'user_id' => $userId,
                     'payment_status' => 'paid',
                     'order_number' => uniqid('PAID_CLASS_'),
@@ -139,6 +141,7 @@ class PaymentController extends Controller
                 $booking = Booking::create([
                     'event_id' => $eventId,
                     'user_id' => $userId,
+                    'phone_number' => $user->phone,
                     'payment_status' => 'paid',
                     'order_number' => uniqid('PAID_EVENT_'),
                 ]);

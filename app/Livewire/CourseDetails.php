@@ -188,6 +188,7 @@ class CourseDetails extends Component
         Booking::create([
             'class_id' => $class->id,
             'user_id' => $user->id,
+            'phone_number' => $user->phone,
             'payment_status' => 'free',
             'order_number' => uniqid('FREE_'),
         ]);

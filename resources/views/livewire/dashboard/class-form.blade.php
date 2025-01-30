@@ -174,7 +174,7 @@
                                     class="form-label">{{ $type === 'class' ? 'Class Date' : 'Event date' }}</label>
                                 <input wire:model="class_date" id="classDate"
                                     class="form-control @if ($errors->has('class_date')) is-invalid @elseif ($capacity) is-valid @endif"
-                                    type="date" placeholder="Enter class Date">
+                                    placeholder="Enter class Date">
                                 @error('class_date')
                                     <li class="text-danger"><span class="small">{{ $message }}</span></li>
                                 @enderror
@@ -185,7 +185,7 @@
                                     class="form-label">{{ $type === 'class' ? 'Class Time' : 'Event Time' }}</label>
                                 <input wire:model="class_time" id="classtime"
                                     class="form-control @if ($errors->has('class_time')) is-invalid @elseif ($capacity) is-valid @endif"
-                                    type="time" placeholder="Enter class Date">
+                                    placeholder="Enter class Date">
                                 @error('class_time')
                                     <li class="text-danger"><span class="small">{{ $message }}</span></li>
                                 @enderror
@@ -206,7 +206,7 @@
                             <div class="row">
                                 <div class="mb-3" wire:ignore>
                                     <label for="calendar-input" class="form-label">
-                                        {{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}
+                                        {{ $type === 'class' ? 'Bookings Start Date to End Date' : 'Booking Start Date to End Date' }}
                                     </label>
                                     <input type="text" wire:model.lazy="date_range" id="calendar-input"
                                         class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"

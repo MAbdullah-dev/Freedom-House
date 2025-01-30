@@ -297,7 +297,16 @@
             }
         }
     }
-
+    .view-btn,
+    .attendee-btn {
+        background-color: transparent;
+        color: #104627;
+        font-size: 18px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        border: none;
+        margin: 0 4px;
+    }
     // Responsive adjustments
     @media (max-width: 992px) {
         .enrollments {
