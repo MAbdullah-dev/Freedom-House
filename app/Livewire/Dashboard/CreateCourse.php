@@ -66,7 +66,7 @@ class CreateCourse extends Component
     {
         if ($this->videoFile instanceof \Illuminate\Http\UploadedFile) {
             return $this->videoFile->store('videos', 'public'); // Save video to the "public/videos" directory
-            
+
         }
         return null;
     }
@@ -97,7 +97,6 @@ class CreateCourse extends Component
             $this->tutors = [$authTutor->id];
             $this->selectedTutors = [$authTutor];
         }
-
     }
 
     public function loadCourseData()
@@ -187,52 +186,24 @@ class CreateCourse extends Component
 
         $course = Course::findOrFail($this->courseId);
 
-<<<<<<< HEAD
         $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
             ? $this->uploadThumbnail()
             : $this->existingThumbnail;
+
         $videoPath = $this->videoFile instanceof \Illuminate\Http\UploadedFile
             ? $this->uploadVideo()
             : $this->videoFile;
-
-        $course->update([
-            'title' => $this->courseTitle,
-            'description' => $this->description,
-            'thumbnail' => $filePath,
-            'video_path' => $videoPath,
-            'learning_outcomes' => $this->learnDetails,
-            'requirements' => $this->requirements,
-            'target_audience' => $this->audienceDetails,
-            'is_paid' => $this->is_paid,
-            'price' => $this->price,
-            'course_type' => $this->courseType,
-        ]);
-=======
-    $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
-    ? $this->uploadThumbnail()
-    : $this->existingThumbnail;
-
-    $videoPath = $this->videoFile instanceof \Illuminate\Http\UploadedFile
-        ? $this->uploadVideo()
-        : $this->videoFile;
->>>>>>> bfddf00789829f49474d718d9b69fac43dad3d8c
 
         $course->categories()->sync($this->category);
         $course->tags()->sync($this->tags);
         $course->tutors()->sync($this->tutors);
 
-<<<<<<< HEAD
-        $this->alert('success', 'Course updated successfully.');
+        $this->videoFile = $videoPath;
+
+        $course->categories()->sync($this->category);
+        $course->tags()->sync($this->tags);
+        $course->tutors()->sync($this->tutors);
     }
-=======
-    $this->videoFile = $videoPath;
-
-    $course->categories()->sync($this->category);
-    $course->tags()->sync($this->tags);
-    $course->tutors()->sync($this->tutors);
->>>>>>> bfddf00789829f49474d718d9b69fac43dad3d8c
-
-
 
     public function saveAsDraft()
     {
