@@ -18,9 +18,11 @@
                         <span wire:loading wire:target="submitCourse">Loading...</span>
                     </button>
 
-                    <a href="{{ url()->previous() }}" class="custom-close-link ms-1">
-                        <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
-                    </a>
+                    <div wire:ignore>
+                        <a href="{{ url()->previous() }}" class="custom-close-link ms-1">
+                            <i class="fa-duotone fa-solid fa-xmark fa-2xl text-secondary"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,7 +145,7 @@
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3">
                                                     <!-- Display the uploaded image or fallback to a placeholder -->
-                                                    <img src="{{ $file ? $file->temporaryUrl() : ($existingThumbnail ? asset('storage/' . $existingThumbnail) : asset('assets/images/dummy-course-img.webp')) }}"
+                                                    <img src="{{ $file && method_exists($file, 'temporaryUrl') ? $file->temporaryUrl() : ($file ? asset('storage/' . $file) : asset('assets/images/dummy-course-img.webp')) }}"
                                                         style="width: 250px; height: 150px; object-fit: cover;"
                                                         alt="Course Thumbnail" id="previewImage">
 
@@ -171,7 +173,6 @@
                                                 @enderror
                                             </div>
                                         </div>
-
 
                                     </div>
                                 </div>
@@ -247,7 +248,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <!-- Instructors -->
                         <div class="accordion-item">

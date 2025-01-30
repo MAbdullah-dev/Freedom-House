@@ -40,37 +40,37 @@ class CreateCourse extends Component
     public $existingThumbnail;
     public $existingVideo;
 
-protected function rules()
-{
-    return [
-        'courseTitle' => 'required|string|max:35|unique:courses,title,' . $this->courseId,
-        'description' => 'required|string',
-        'category' => 'array|min:1',
-        'category.*' => 'exists:categories,id',
-        'tags' => 'required|array|min:1',
-        'tags.*' => 'exists:tags,id',
-        'file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',  // No condition needed here
-        'videoFile' => ($this->videoFile instanceof \Illuminate\Http\UploadedFile)
-            ? 'nullable|file|mimes:mp4,mov,avi|max:10240'
-            : 'nullable|string',
-        'learnDetails' => 'required|string',
-        'audienceDetails' => 'required|string',
-        'requirements' => 'required|string',
-        'courseType' => 'required',
-        'is_paid' => 'nullable|required_if:courseType,recorded',
-        'price' => 'required_if:is_paid,Paid|min:0',
-    ];
-}
+    protected function rules()
+    {
+        return [
+            'courseTitle' => 'required|string|max:35|unique:courses,title,' . $this->courseId,
+            'description' => 'required|string',
+            'category' => 'array|min:1',
+            'category.*' => 'exists:categories,id',
+            'tags' => 'required|array|min:1',
+            'tags.*' => 'exists:tags,id',
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',  // No condition needed here
+            'videoFile' => ($this->videoFile instanceof \Illuminate\Http\UploadedFile)
+                ? 'nullable|file|mimes:mp4,mov,avi|max:10240'
+                : 'nullable|string',
+            'learnDetails' => 'required|string',
+            'audienceDetails' => 'required|string',
+            'requirements' => 'required|string',
+            'courseType' => 'required',
+            'is_paid' => 'nullable|required_if:courseType,recorded',
+            'price' => 'required_if:is_paid,Paid|min:0',
+        ];
+    }
 
     public function uploadVideo()
     {
         if ($this->videoFile instanceof \Illuminate\Http\UploadedFile) {
             return $this->videoFile->store('videos', 'public'); // Save video to the "public/videos" directory
-            
+
         }
         return null;
     }
-        public function uploadThumbnail()
+    public function uploadThumbnail()
     {
         if ($this->file instanceof \Illuminate\Http\UploadedFile) {
             return $this->file->store('uploads', 'public');
@@ -78,6 +78,7 @@ protected function rules()
 
         return null;
     }
+
 
 
     public function mount($courseId = null)
@@ -96,7 +97,6 @@ protected function rules()
             $this->tutors = [$authTutor->id];
             $this->selectedTutors = [$authTutor];
         }
-
     }
 
     public function loadCourseData()
@@ -108,6 +108,7 @@ protected function rules()
         $this->category = $course->categories->pluck('id')->toArray();
         $this->tags = $course->tags->pluck('id')->toArray();
         $this->tutors = $course->tutors->pluck('user_id')->toArray();
+        $this->file = $course->thumbnail;
         $this->learnDetails = $course->learning_outcomes;
         $this->audienceDetails = $course->target_audience;
         $this->requirements = $course->requirements;
@@ -179,42 +180,30 @@ protected function rules()
         $this->redirect(route('dashboard.mycourses'));
     }
 
-public function updateCourse()
-{
-    $this->validate();
+    public function updateCourse()
+    {
+        $this->validate();
 
-    $course = Course::findOrFail($this->courseId);
+        $course = Course::findOrFail($this->courseId);
 
-    $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
-    ? $this->uploadThumbnail()
-    : $this->existingThumbnail;
+        $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
+            ? $this->uploadThumbnail()
+            : $this->existingThumbnail;
 
-    $videoPath = $this->videoFile instanceof \Illuminate\Http\UploadedFile
-        ? $this->uploadVideo()
-        : $this->videoFile;
+        $videoPath = $this->videoFile instanceof \Illuminate\Http\UploadedFile
+            ? $this->uploadVideo()
+            : $this->videoFile;
 
-    $course->update([
-        'title' => $this->courseTitle,
-        'description' => $this->description,
-        'thumbnail' => $filePath,
-        'video_path' => $videoPath,
-        'learning_outcomes' => $this->learnDetails,
-        'requirements' => $this->requirements,
-        'target_audience' => $this->audienceDetails,
-        'is_paid' => $this->is_paid,
-        'price' => $this->price,
-        'course_type' => $this->courseType,
-    ]);
+        $course->categories()->sync($this->category);
+        $course->tags()->sync($this->tags);
+        $course->tutors()->sync($this->tutors);
 
-    $this->videoFile = $videoPath;
+        $this->videoFile = $videoPath;
 
-    $course->categories()->sync($this->category);
-    $course->tags()->sync($this->tags);
-    $course->tutors()->sync($this->tutors);
-
-    $this->alert('success', 'Course updated successfully.');
-}
-
+        $course->categories()->sync($this->category);
+        $course->tags()->sync($this->tags);
+        $course->tutors()->sync($this->tutors);
+    }
 
     public function saveAsDraft()
     {
@@ -288,7 +277,12 @@ public function updateCourse()
         // Redirect to the preview page
         return redirect()->route('dashboard.course.preview');
     }
-
+    // public function updatedVideoFile()
+    // {
+    //     $this->validate([
+    //         'videoFile' => 'mimes:mp4,avi,mov|max:10240', // File validation
+    //     ]);
+    // }
     public function render()
     {
         return view('livewire.dashboard.create-course')->layout('components.layouts.createCourse');
