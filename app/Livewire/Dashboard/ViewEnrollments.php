@@ -9,9 +9,17 @@ use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Services\MicrosoftGraphService;
 
 class ViewEnrollments extends Component
 {
+    protected $microsoftGraphService;
+
+    public function __construct()
+    {
+        $this->microsoftGraphService = new MicrosoftGraphService();
+    }
+
     public $dateRange;
     public $selectedClass;
     public $selectedEvent;
@@ -103,7 +111,6 @@ class ViewEnrollments extends Component
         }
     }
 
-
    public function saveAttendee($attendeeId)
     {
         $attendee = Booking::find($attendeeId);
@@ -114,6 +121,41 @@ class ViewEnrollments extends Component
                 'phone' => $this->attendeeData['phone'],
                 'payment_status' => $this->attendeeData['payment_status'],
             ]);
+
+            if ($this->selectedModelType == 'class') {
+                $class = Classe::find($this->selectedModelId);
+                if ($class && $class->microsoft_event_id) {
+                    $attendees = [
+                        [
+                            'email' => $this->attendeeData['email'],
+                            'name' => $this->attendeeData['name'] ?? 'Attendee',
+                        ]
+                    ];
+                   try {
+                        $this->microsoftGraphService->updateDynamicAttendees($class, $attendees, Auth::user()->microsoft_id);
+                        $this->alert('success', 'Attendee updated successfully in Microsoft event.');
+                    } catch (\Exception $e) {
+                        $this->alert('error', 'Failed to update attendee in Microsoft event.');
+                    }
+                }
+            } elseif ($this->selectedModelType == 'event') {
+                $event = Events::find($this->selectedModelId);
+                if ($event && $event->microsoft_event_id) {
+                    $attendees = [
+                        [
+                            'email' => $this->attendeeData['email'],
+                            'name' => $this->attendeeData['name'] ?? 'Attendee',
+                        ]
+                    ];
+                    try {
+                        $this->microsoftGraphService->updateDynamicAttendees($event, $attendees, Auth::user()->microsoft_id);
+                        $this->alert('success', 'Attendee updated successfully in Microsoft event.');
+                    } catch (\Exception $e) {
+                        $this->alert('error', 'Failed to update attendee in Microsoft event.');
+                    }
+                }
+            }
+
         }
 
         $this->isEditing = false;
@@ -121,13 +163,47 @@ class ViewEnrollments extends Component
         $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
     }
 
-
     public function deleteAttendee($attendeeId)
     {
         $attendee = Booking::find($attendeeId);
         if ($attendee) {
             $attendee->delete();
         }
+
+        if ($this->selectedModelType == 'class') {
+                $class = Classe::find($this->selectedModelId);
+                if ($class && $class->microsoft_event_id) {
+                    $attendees = [
+                        [
+                            'email' => $attendee->email,
+                            'name' => $attendee->name ?? 'Attendee',
+                        ]
+                    ];
+                    try {
+                        $this->microsoftGraphService->deleteDynamicAttendees($class, $attendees, Auth::user()->microsoft_id);
+                        $this->alert('success', 'Attendee deleted successfully from Microsoft event.');
+                    } catch (\Exception $e) {
+                        $this->alert('error', 'Failed to delete attendee from Microsoft event.');
+                    }
+                }
+            } elseif ($this->selectedModelType == 'event') {
+                $event = Events::find($this->selectedModelId);
+                if ($event && $event->microsoft_event_id) {
+                    $attendees = [
+                        [
+                            'email' => $attendee->email,
+                            'name' => $attendee->name ?? 'Attendee',
+                        ]
+                    ];
+                    try {
+                        $this->microsoftGraphService->deleteDynamicAttendees($event, $attendees, Auth::user()->microsoft_id);
+                        $this->alert('success', 'Attendee deleted successfully from Microsoft event.');
+                    } catch (\Exception $e) {
+                        $this->alert('error', 'Failed to delete attendee from Microsoft event.');
+                    }
+                }
+            }
+
        $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
     }
 
@@ -292,7 +368,7 @@ class ViewEnrollments extends Component
     public function saveManualAttendees()
     {
         // dd($this->selectedModelId);
-    foreach ($this->newAttendees as $newAttendee) {
+     foreach ($this->newAttendees as $newAttendee) {
                 $validatedData = \Validator::make($newAttendee, [
             'email' => 'required|email',
             'phone' => 'required|string|max:15',
@@ -308,14 +384,36 @@ class ViewEnrollments extends Component
             'order_number' => 'MAN_' . strtoupper(uniqid()), // Generate order number
             'created_by' => Auth::id(),
         ]);
+        if ($this->selectedModelType == 'class') {
+                $class = Classe::find($this->selectedModelId);
+                if ($class && $class->microsoft_event_id) {
+                    $attendees = [
+                        [
+                            'email' => $newAttendee['email'],
+                            'name' => $newAttendee['name'] ?? 'Attendee',
+                        ]
+                    ];
+                    $this->microsoftGraphService->addDynamicAttendees($class, $attendees, Auth::user()->microsoft_id);
+                }
+            } elseif ($this->selectedModelType == 'event') {
+                $event = Events::find($this->selectedModelId);
+                if ($event && $event->microsoft_event_id) {
+                    $attendees = [
+                        [
+                            'email' => $newAttendee['email'],
+                            'name' => $newAttendee['name'] ?? 'Attendee',
+                        ]
+                    ];
+                    $this->microsoftGraphService->addDynamicAttendees($event, $attendees, Auth::user()->microsoft_id);
+                }
+            }
+     }
+
+     $this->newAttendees = [];
+     $this->alert('success', 'Manual attendees saved successfully.');
+     $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
+
     }
-
-    $this->newAttendees = [];
-    $this->alert('success', 'Manual attendees saved successfully.');
-    $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
-
-    }
-
 
     public function createQuiz()
     {
