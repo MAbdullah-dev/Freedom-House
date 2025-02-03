@@ -317,4 +317,66 @@ class MicrosoftGraphService
             throw $e;
         }
     }
+
+    public function updateDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
+    {
+        try {
+            $accessToken = $this->getAccessTokenWithPermissions();
+
+            if (!$model->microsoft_event_id) {
+                throw new \Exception('Microsoft Event ID not found for the class.');
+            }
+
+            $attendeesData = $this->formatAttendees($attendees);
+
+            $updateResponse = Http::withToken($accessToken)
+                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
+                    'attendees' => $attendeesData,
+                ]);
+
+            if ($updateResponse->failed()) {
+                Log::error('Error updating event: ' . $updateResponse->body());
+                throw new \Exception('Error updating event: ' . $updateResponse->body());
+            }
+
+            Log::info('Event updated successfully with new attendees', ['response' => $updateResponse->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error updating dynamic attendees: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function deleteDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
+    {
+        try {
+            $accessToken = $this->getAccessTokenWithPermissions();
+
+            if (!$model->microsoft_event_id) {
+                throw new \Exception('Microsoft Event ID not found for the class.');
+            }
+
+            $attendeesData = $this->formatAttendees($attendees);
+
+            $updateResponse = Http::withToken($accessToken)
+                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
+                    'attendees' => $attendeesData,
+                ]);
+
+            if ($updateResponse->failed()) {
+                Log::error('Error deleting event attendees: ' . $updateResponse->body());
+                throw new \Exception('Error deleting event attendees: ' . $updateResponse->body());
+            }
+
+            Log::info('Event attendees deleted successfully', ['response' => $updateResponse->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error deleting dynamic attendees: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+
 }
