@@ -1,4 +1,7 @@
 <div class="home">
+    @push('title')
+        Home
+    @endpush
     <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.webp') }}');">
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>

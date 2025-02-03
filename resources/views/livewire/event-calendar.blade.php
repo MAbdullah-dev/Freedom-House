@@ -1,4 +1,7 @@
 <div>
+    @push('title')
+        Calendar
+    @endpush
     <section class="event-calendar my-5">
         <div class="container">
             <div class="row">

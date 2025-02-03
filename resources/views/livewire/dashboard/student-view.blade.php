@@ -1,4 +1,7 @@
 <section class="student-view py-5 px-4">
+    @push('title')
+        Student View
+    @endpush
     <a href="#" class="mb-4 d-block text-black"><i class="fa-solid fa-arrow-left me-2"></i>Back</a>
     <div class="user-profile mb-5">
         <div class="cover-picture">

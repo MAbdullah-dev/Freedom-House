@@ -2,6 +2,9 @@
     $user = Auth::user();
 @endphp
 <div class="course-catalogue">
+    @push('title')
+        Course Catalog
+    @endpush
     <section class="course-catelogue-main">
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <h3>PROGRAMS WE OFFER</h3>

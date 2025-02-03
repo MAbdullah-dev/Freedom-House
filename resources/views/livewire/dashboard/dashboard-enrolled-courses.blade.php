@@ -1,4 +1,7 @@
 <div class="course-section py-5 px-4">
+    @push('title')
+        Enrolled Courses
+    @endpush
     <h2 class="mb-4">Enrolled Courses</h2>
     <!-- Nav Tabs -->
     <ul class="nav nav-tabs" id="courseTabs" role="tablist">

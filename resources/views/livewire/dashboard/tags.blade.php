@@ -1,4 +1,7 @@
 <div class="tag-management px-4 py-5">
+     @push('title')
+        Tag Management
+    @endpush
     <!-- Create Tag Section -->
     <section class="create-tag">
         <form wire:submit.prevent="createTag">

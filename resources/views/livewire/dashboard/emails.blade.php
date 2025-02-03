@@ -1,4 +1,7 @@
-<div class="email py-5 px-4">
+<div class="email py-5 px-4">.
+    @push('title')
+        Emails
+    @endpush
     <h3>GUEST EMAILS</h3>
 
     <!-- Table to display emails -->

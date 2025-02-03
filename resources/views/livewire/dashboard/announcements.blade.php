@@ -1,4 +1,7 @@
 <div class="announcements py-5 px-4">
+    @push('title')
+        Announcements
+    @endpush
     <!-- Announcement Card Section -->
     <section class="announcement-card p-3 mb-4">
         <div class="d-flex flex-wrap align-content-center justify-content-center">

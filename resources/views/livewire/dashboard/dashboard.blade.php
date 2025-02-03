@@ -1,4 +1,7 @@
 <div class="dashboard py-5 px-4">
+    @push('title')
+        dashboard
+    @endpush
     <section class="courses-info-section">
         <div class="inner">
             <h4 class="mb-4">Dashboard</h4>
