@@ -45,6 +45,7 @@ class CourseCatelogue extends Component
         $this->search = '';
         $this->selectedCategories = [];
         $this->resetPage();
+        $this->dispatch('clearCategoryFilters');
     }
     public function toggleWishlist($courseId)
     {

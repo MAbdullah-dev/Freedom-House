@@ -17,7 +17,7 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     @livewireStyles
-    <title>{{ $title ?? 'Page Title' }}</title>
+    <title>Freedom House</title>
 </head>
 
 <body>

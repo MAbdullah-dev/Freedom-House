@@ -14,16 +14,13 @@ class TagSeeder extends Seeder
     public function run(): void
     {
         $tags = [
-            ['name' => 'Laravel'],
-            ['name' => 'PHP'],
-            ['name' => 'JavaScript'],
-            ['name' => 'Vue.js'],
-            ['name' => 'React'],
-            ['name' => 'CSS'],
-            ['name' => 'HTML'],
-            ['name' => 'MySQL'],
-            ['name' => 'SEO'],
-            ['name' => 'Web Development'],
+            ['name' => 'Featured'],
+            ['name' => 'New'],
+            ['name' => 'Most Popular'],
+            ['name' => 'Trending'],
+            ['name' => 'Top Rated'],
+            ['name' => 'Editor\'s Choice'],
+            ['name' => 'Best Seller'],
         ];
         foreach ($tags as $tag) {
             Tag::create($tag);

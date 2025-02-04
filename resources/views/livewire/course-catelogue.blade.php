@@ -99,7 +99,7 @@
                                 <label for="substance-use">Substance Use Disorder</label>
                             </li>
                         </ul>
-                        <button class="btn filter-btn" @click="clearFilters()">
+                        <button class="btn filter-btn" wire:click="clearFilters">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters
                         </button>
                     </div>
@@ -229,6 +229,12 @@
                     spaceBetween: 0,
                 },
             }
+        });
+
+        document.addEventListener('clearCategoryFilters', () => {
+            document.querySelectorAll('.filter input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
         });
     </script>
 @endscript

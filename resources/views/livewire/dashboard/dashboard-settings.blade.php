@@ -1,7 +1,7 @@
 <div class="settings px-4 py-5">
     <div class="d-flex justify-content-between">
         <h2 class="mb-4">Settings</h2>
-        @if (!Auth::user()->microsoft_acc)
+        @if (!Auth::user()->microsoft_account)
             <div class="ms-button">
                 <a type="button" href='{{ route('microsoft.redirect') }}'
                     class="button-secondary d-flex align-items-center justify-content-center">

@@ -4,6 +4,7 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Notification;
 use App\Models\Tutor;
+use App\Models\TutorFile;
 use Illuminate\Support\Facades\Mail;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -11,9 +12,9 @@ use Livewire\Component;
 class TutorRequest extends Component
 {
     public $tutors;
-    public $rejectionReason = ''; // For the rejection reason
-    public $approvalMessage = ''; // For the approval message
-    public $tutorId = null; // Store tutor ID for rejection or approval
+    public $rejectionReason = '';
+    public $approvalMessage = '';
+    public $tutorId = null;
 
     use LivewireAlert;
 
@@ -77,22 +78,22 @@ class TutorRequest extends Component
     public function submitApproval()
     {
         $tutor = Tutor::find($this->tutorId);
+        $user = $tutor->user;
+
 
         if ($tutor) {
-            // Approve the tutor request
             $tutor->update(['is_verified' => 1]);
+            $user->update(['role_id' => '2']);
 
-            // Send approval email
             Mail::raw($this->approvalMessage ?: "Congratulations! Your tutor request has been approved 🎉", function ($message) use ($tutor) {
-                $message->to($tutor->user->email)  // Send to tutor's email from user table
+                $message->to($tutor->user->email)
                     ->subject('Your Tutor Request Has Been Approved');
             });
 
-            // Create approval notification
             Notification::create([
                 'user_id' => $tutor->user_id,
                 'message' => "congratulations ! Your tutor request has been approved 🎉 . Please check your email for details.",
-                'type' => 'congratulation',
+                'type' => 'congratulations',
             ]);
 
             $this->alert('success', 'Tutor approved successfully and email sent.');
