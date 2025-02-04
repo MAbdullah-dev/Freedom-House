@@ -1,4 +1,7 @@
 <div class="my-course py-5 px-4 w-100">
+    @push('title')
+        My Courses
+    @endpush
     <h2 class="mb-4">My Courses</h2>
 
     <!-- Nav Tabs -->

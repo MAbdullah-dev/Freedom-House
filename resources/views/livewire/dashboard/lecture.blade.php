@@ -1,4 +1,7 @@
 <div class="lecture_upload px-4 py-5">
+     @push('title')
+        Lecture Upload
+    @endpush
     <form wire:submit.prevent="submit">
         <!-- Single Course Selection -->
         <div class="mb-3">

@@ -1,4 +1,7 @@
 <div class="class_form">
+    @push('title')
+        {{ $type === 'class' ? 'Create Class' : 'Create Event' }}
+    @endpush
     <header class="custom-header">
         <div class="container-fluid px-5">
             <div class="header-wrapper d-flex justify-content-between align-items-center mb-2">

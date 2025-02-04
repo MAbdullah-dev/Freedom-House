@@ -1,4 +1,7 @@
 <div class="wishlist py-5 px-4">
+    @push('title')
+        WishList
+    @endpush
     <h2 class="mb-4">WishList</h2>
     <div class="wishlist-cards d-flex flex-wrap gap-4">
         @forelse ($wishlists as $wishlist)

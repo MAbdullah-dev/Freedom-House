@@ -1,4 +1,7 @@
 <div class="help-request px-4">
+     @push('title')
+        Help Request
+    @endpush
     <section class="help-request-alert py-5 px-4 mt-3">
         <div class="row align-items-center justify-content-center flex-wrap">
             <div class="col-md-7">

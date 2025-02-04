@@ -1,4 +1,7 @@
 <div class="settings px-4 py-5">
+    @push('title')
+        Settings
+    @endpush
     <div class="d-flex justify-content-between">
         <h2 class="mb-4">Settings</h2>
         @if (!Auth::user()->microsoft_account)

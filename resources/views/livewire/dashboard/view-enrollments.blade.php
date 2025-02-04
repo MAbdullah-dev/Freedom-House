@@ -1,4 +1,7 @@
 <div class="view-enrollments py-5 px-4">
+    @push('title')
+        View Enrollments
+    @endpush
     @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
         <section class="enrollments mx-4">
             <div class="tutor-avatar d-flex align-items-center gap-2 mb-5">

@@ -1,4 +1,7 @@
 <div class="about-us">
+    @push('title')
+        About-us
+    @endpush
     <section class="about-us-main" style="background-image: url('{{ asset('assets/images/Section.webp') }}');">
         <div class="container">
             <div class="inner d-flex flex-column justify-content-center align-items-center">
