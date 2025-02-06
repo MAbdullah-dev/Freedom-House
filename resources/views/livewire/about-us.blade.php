@@ -52,8 +52,9 @@
                 @foreach ($tutors as $tutor)
                     <div class="card">
                         <div class="card-img-top">
-                            <img
-                                src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/image (3).webp') }}">
+                            {{-- <img
+                                src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/image (3).webp') }}"> --}}
+                            <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}" alt="">
                         </div>
                         <div class="card-body text-center">
                             <h5>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</h5>
