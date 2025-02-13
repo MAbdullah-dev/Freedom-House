@@ -140,8 +140,9 @@
                             @enderror
                         </div>
 
-
-                        <button type="submit" class="button-primary w-100">Submit</button>
+                        <!-- Disable submit button while uploading -->
+                        <button type="submit" class="button-primary w-100" wire:loading.attr="disabled"
+                            wire:target="file_path">Submit</button>
                     </form>
                 </div>
             </div>
