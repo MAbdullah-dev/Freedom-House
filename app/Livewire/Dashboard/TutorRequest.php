@@ -6,6 +6,7 @@ use App\Models\Notification;
 use App\Models\Tutor;
 use App\Models\TutorFile;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
@@ -105,6 +106,14 @@ class TutorRequest extends Component
 
         $this->loadTutors();
         $this->dispatch('hideApproveModal');
+    }
+    public function downloadFile($filePath)
+    {
+        if (Storage::disk('private')->exists($filePath)) {
+            return Storage::disk('private')->download($filePath);
+        } else {
+            $this->alert('error', 'File not found.');
+        }
     }
 
     public function render()
