@@ -1,8 +1,8 @@
-on: 
+on:
   push:
     branches:
       -  main
-    
+
 name: 🚀 Deploy website on push
 jobs:
   web-deploy:
@@ -11,10 +11,10 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
-    
+
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        server: ftp.diligenttechnologies.co
-        username: lms@lms.diligenttechnologies.co
-        password: freedom123!@#
+        server: ftp.stellixsoft.com
+        username: lmsdemo@lmsdemo.stellixsoft.com
+        password: Pana$onic786
