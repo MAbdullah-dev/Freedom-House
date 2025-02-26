@@ -17,4 +17,4 @@ jobs:
       with:
         server: ftp.stellixsoft.com
         username: lmsdemo@lmsdemo.stellixsoft.com
-        password:Lms!@#123
+        password: Lms!@#123
