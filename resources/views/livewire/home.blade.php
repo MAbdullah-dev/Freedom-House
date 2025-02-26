@@ -4,7 +4,7 @@
     @endpush
     <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.webp') }}');">
         <div class="container d-flex flex-column justify-content-center align-items-center">
-            <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>
+            <h3>FREEDOM HOUSE TRAINING SYSYTEMM</h3>
             <h1 class="my-5">FREEDOM HOUSE UNIVERSITY</h1>
             <div class="hero-cta-btn d-flex mt-2 gap-2 flex-wrap justify-content-center  ">
                 <a href="#">Upcoming TRAINING</a>
