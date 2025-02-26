@@ -1,5 +1,5 @@
 <div class="CourseRequest py-5 px-4">
-     @push('title')
+    @push('title')
         Course Requests
     @endpush
     <h2 class="mb-4">Course Requests</h2>
