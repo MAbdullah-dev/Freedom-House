@@ -143,7 +143,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Course</h5>
+                    <h5 class="modal-title text-white">Delete Course</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form wire:submit.prevent="destroyCourse">

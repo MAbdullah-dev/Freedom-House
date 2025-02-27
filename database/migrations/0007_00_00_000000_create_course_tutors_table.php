@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('course_tutors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade')->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->cascadeOnUpdate();
             $table->timestamps();
         });

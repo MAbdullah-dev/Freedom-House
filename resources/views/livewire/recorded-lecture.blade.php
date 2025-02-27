@@ -17,15 +17,9 @@
             </ul>
             <div class="controll-btn d-flex gap-4">
                 @php
-                    $prevLecture = $lectures
-                        ->where('id', '<', $currentLecture->id)
-                        ->sortByDesc('id')
-                        ->first();
+                    $prevLecture = $lectures->where('id', '<', $currentLecture->id)->sortByDesc('id')->first();
                     $prevLectureId = $prevLecture ? $prevLecture->id : null;
-                    $nextLecture = $lectures
-                        ->where('id', '>', $currentLecture->id)
-                        ->sortByDesc('id')
-                        ->first();
+                    $nextLecture = $lectures->where('id', '>', $currentLecture->id)->sortByDesc('id')->first();
                     $nextLectureId = $nextLecture ? $nextLecture->id : null;
                 @endphp
 
@@ -304,7 +298,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="reviewModalLabel">Course Review & Rating</h5>
+                    <h5 class="modal-title text-white" id="reviewModalLabel">Course Review & Rating</h5>
                     <button type="button" class="btn-close" id="review_modal_close"
                         wire:click="assigncertificate"></button>
                 </div>
@@ -344,7 +338,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="certificateModalLabel">Your Certificate</h5>
+                    <h5 class="modal-title text-white" id="certificateModalLabel">Your Certificate</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

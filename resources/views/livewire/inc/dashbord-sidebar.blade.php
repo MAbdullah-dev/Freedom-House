@@ -65,7 +65,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.lectures' ? 'active' : '' }}"
                             href="{{ route('dashboard.lectures') }}" wire:navigate>
-                            <i class="fa-solid fa-video"></i> upload Lectures
+                            <i class="fa-solid fa-video"></i> Upload Lectures
                         </a>
                     </li>
                     <li class="nav-item">
@@ -112,7 +112,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.emails' ? 'active' : '' }}"
                             href="{{ route('dashboard.emails') }}" wire:navigate>
-                            <i class="fa-solid fa-tag"></i> Emails
+                            <i class="fas fa-newspaper"></i> Newsletter
                         </a>
                     </li>
                 @endif

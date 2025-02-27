@@ -1,5 +1,5 @@
 <div class="tag-management px-4 py-5">
-     @push('title')
+    @push('title')
         Tag Management
     @endpush
     <!-- Create Tag Section -->
@@ -9,7 +9,7 @@
                 <div class="col-md-8 mt-3">
                     <input type="text" wire:model="name" placeholder="Create tag" class="form-control" />
                     @error('name')
-                        <span class="error">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="col-md-4 mt-3">
@@ -67,7 +67,7 @@
             <div class="modal-content">
                 <form wire:submit.prevent="updateTag">
                     <div class="modal-header">
-                        <h5 class="modal-title">Update Tag</h5>
+                        <h5 class="modal-title text-white">Update Tag</h5>
                         <button type="button" class="btn-close" wire:click="closeModal"
                             data-bs-dismiss="modal"></button>
                     </div>
@@ -92,7 +92,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Tag</h5>
+                    <h5 class="modal-title text-white">Delete Tag</h5>
                     <button type="button" class="btn-close" wire:click="closeModal" data-bs-dismiss="modal"></button>
                 </div>
                 <form wire:submit.prevent="destroyTag">

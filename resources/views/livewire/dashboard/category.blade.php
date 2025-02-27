@@ -70,7 +70,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteCategoryModalLabel">Delete Category</h5>
+                    <h5 class="modal-title text-white" id="deleteCategoryModalLabel">Delete Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                         aria-label="Close"></button>
                 </div>
@@ -93,7 +93,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                    <h5 class="modal-title text-white" id="editCategoryModalLabel">Edit Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                         aria-label="Close"></button>
                 </div>
