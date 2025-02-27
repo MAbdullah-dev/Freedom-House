@@ -4,12 +4,14 @@
     @endpush
     <section class="about-us-main" style="background-image: url('{{ asset('assets/images/Section.webp') }}');">
         <div class="container">
+            <div class="content-wrapper">
             <div class="inner d-flex flex-column justify-content-center align-items-center">
                 <h3>FREEDOM HOUSE RECOVERY CENTER</h3>
                 <h1 class="my-3">WHO WE ARE</h1>
                 <div class="description mt-2">
                     <p>We envision our community becoming self-sustaining, healthy and productive. We believe people can
                         live full, enriched lives in recovery.</p>
+                </div>
                 </div>
             </div>
         </div>
@@ -52,8 +54,9 @@
                 @foreach ($tutors as $tutor)
                     <div class="card">
                         <div class="card-img-top">
-                            <img
-                                src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/image (3).webp') }}">
+                            {{-- <img
+                                src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/image (3).webp') }}"> --}}
+                            <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}" alt="">
                         </div>
                         <div class="card-body text-center">
                             <h5>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</h5>
