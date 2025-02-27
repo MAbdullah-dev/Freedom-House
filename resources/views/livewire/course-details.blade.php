@@ -1,5 +1,5 @@
 <div class="course-details">
-    <section class="hero" style="background-image: url('{{ asset('assets/images/course.png') }}');">
+    <section class="hero" style="background-image: url('{{ asset('storage/' . $coursePhoto) }}');">
         <div class="container">
             <div class="inner">
                 <div class="hero-details">
@@ -67,15 +67,34 @@
                                 FREE
                             @endif
                         </div>
-                        <button type="button" class="enroll-btn"
-                            @if ($this->isEnrolled($class->id)) disabled
-    @else
-        wire:click="prepareEnrollment({{ $class->id }})"
-        data-bs-toggle="modal"
-        data-bs-target="#enrollModal" @endif>
-                            {{ $this->isEnrolled($class->id) ? 'Enrolled' : 'Enroll Now' }}
-                        </button>
+
+                        @php
+                            $now = \Carbon\Carbon::now();
+                            $bookingStart = \Carbon\Carbon::parse($class->booking_start_date);
+                            $bookingEnd = \Carbon\Carbon::parse($class->booking_end_date);
+                            // @dd($now, $bookingStart, $bookingEnd);
+                        @endphp
+
+                        @if ($now->lt($bookingStart))
+                            <button type="button" class="enroll-btn" disabled>
+                                Booking Starts: {{ $bookingStart->format('F j, Y') }}
+                            </button>
+                        @elseif ($now->gt($bookingEnd))
+                            <button type="button" class="enroll-btn" disabled>
+                                Booking Closed
+                            </button>
+                        @else
+                            <button type="button" class="enroll-btn"
+                                @if ($this->isEnrolled($class->id)) disabled
+            @else
+                wire:click="prepareEnrollment({{ $class->id }})"
+                data-bs-toggle="modal"
+                data-bs-target="#enrollModal" @endif>
+                                {{ $this->isEnrolled($class->id) ? 'Enrolled' : 'Enroll Now' }}
+                            </button>
+                        @endif
                     </div>
+
                 </div>
             @empty
                 <p>No classes available for the selected criteria.</p>
@@ -92,7 +111,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> --}}
                 <div class="modal-header">
-                    <h5 class="modal-title" id="enrollModalLabel">Enroll in {{ $selectedClassTitle }}</h5>
+                    <h5 class="modal-title text-white" id="enrollModalLabel">Enroll in {{ $selectedClassTitle }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -107,9 +126,13 @@
                 <div class="modal-footer">
                     <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button"
-                        wire:click="enroll({{ $selectedClassId }}, '{{ $isPaid }}', {{ $price }})"
-                        class="button-primary">
-                        Enroll Now
+                        wire:click="enroll({{ $selectedClassId }}, '{{ $isPaid }}', {{ $isPaid ? $price : 0 }})"
+                        class="button-primary" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Enroll Now</span>
+                        <span wire:loading>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Enrolling...
+                        </span>
                     </button>
                 </div>
             </div>
@@ -118,7 +141,9 @@
     <section class="course-video">
         <div class="container">
             <div class="video">
-                <iframe src="https://www.youtube.com/embed/some-video-id" frameborder="0" allowfullscreen></iframe>
+                <iframe src="{{ asset('storage/' . $courseVideo) }}" frameborder="0" allowfullscreen></iframe>
+
+                {{-- <video controls src="{{ asset('storage/' . $courseVideo) }}"></video> --}}
             </div>
             <div class="course-details-tabs mt-5">
                 <!-- Tab Navigation -->

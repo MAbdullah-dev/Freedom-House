@@ -128,9 +128,28 @@
                             </div>
 
                         </div>
-                        <button wire:click="sendCertificate" class="btn btn-success">
-                            Get Certificate
-                        </button>
+                        @if ($allLecturesWatched)
+                            <button wire:click="sendCertificate" class="btn btn-success">
+                                <span wire:loading wire:target="sendCertificate">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span> Get Certificate
+                                </span>
+                                <span wire:loading.remove wire:target="sendCertificate">
+                                    Get Certificate
+                                </span>
+                            </button>
+
+                            <button wire:click="showcertificate" class="btn btn-success">
+                                <span wire:loading wire:target="showcertificate">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span> Show Certificate
+                                </span>
+                                <span wire:loading.remove wire:target="showcertificate">
+                                    Show Certificate
+                                </span>
+                            </button>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -191,7 +210,7 @@
                                     <form action="#" method="post" class="w-100">
                                         <div class="d-flex align-items-start gap-3 w-100">
                                             <div class="comment-avatar">
-                                                <img src="{{ asset('assets/images/autumn-150x150.webp.png') }}"
+                                                <img src="{{ asset('assets/images/autumn-150x150.webp.webp') }}"
                                                     alt="User Avatar">
                                             </div>
                                             <div class="comment-textarea">
@@ -286,7 +305,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="reviewModalLabel">Course Review & Rating</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" id="review_modal_close"
+                        wire:click="assigncertificate"></button>
                 </div>
                 <div class="modal-body">
                     <form wire:submit.prevent="submitReview">
@@ -318,47 +338,30 @@
             </div>
         </div>
     </div>
-
-
+    <!-- Modal -->
+    <div style="z-index: " class="modal fade" id="certificateModal" tabindex="-1"
+        aria-labelledby="certificateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="certificateModalLabel">Your Certificate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @if ($cetificatepathformodal != null)
+                        <iframe id="certificateFrame" src="{{ asset($cetificatepathformodal) }}" width="100%"
+                            height="500px" frameborder="0"></iframe>
+                    @else
+                        <p>No certificate available.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-        Livewire.on('open-review-modal', () => {
-            setTimeout(() => {
-                $('#reviewModal').modal('show');
-            }, 2000);
-        });
-        Livewire.on('close-review-modal', () => {
-            $('#reviewModal').modal('hide');
-        });
-
-    });
-    document.addEventListener('congratulation', function() {
-        setTimeout(() => {
-            confetti({
-                particleCount: 700,
-                spread: 200,
-                origin: {
-                    y: 1.2
-                }
-            });
-        }, 200);
-        setTimeout(() => {
-            confetti({
-                particleCount: 700,
-                spread: 200,
-                origin: {
-                    y: 1
-                }
-            });
-        }, 500);
-    })
-</script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
-    // console.log('ggg');
+    console.log('ggg');
 
     var iframe = document.getElementById('vimeo-player');
     var player = new Vimeo.Player(iframe);
@@ -372,5 +375,51 @@
             // Remove the event listener to prevent multiple calls
             player.off('timeupdate');
         }
+    });
+
+    document.addEventListener('showCertificateModal', function() {
+        $('#certificateModal').modal('show');
+        console.log('hi there');
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        Livewire.on('open-review-modal', () => {
+            setTimeout(() => {
+                $('#reviewModal').modal('show');
+            }, 2000);
+        });
+        Livewire.on('close-review-modal', () => {
+            $('#reviewModal').modal('hide');
+            $('#certificateModal').modal('show');
+        });
+
+    });
+    document.addEventListener('congratulation', function() {
+        // First confetti burst (from above, with full width)
+        setTimeout(() => {
+            confetti({
+                particleCount: 700,
+                spread: 300,
+                origin: {
+                    x: 0,
+                    y: 0,
+                }
+            });
+        }, 200);
+
+        // Second confetti burst (slightly delayed)
+        setTimeout(() => {
+            confetti({
+                particleCount: 700,
+                spread: 300,
+                origin: {
+                    x: 1,
+                    y: 0,
+                }
+            });
+        }, 200);
     });
 </script>

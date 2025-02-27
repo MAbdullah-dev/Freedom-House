@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CalendarEvent extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-       'user_id', 'class_id', 'event_id'
+        'user_id',
+        'class_id',
+        'event_id'
     ];
     public function user()
     {

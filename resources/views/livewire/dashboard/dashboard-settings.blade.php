@@ -1,7 +1,3 @@
-<?php
-// dd(Auth::user()->role_id == 2 || Auth::user()->role_id == 1);
-// dd(Auth::user()->role_id);
-?>
 <div class="settings px-4 py-5">
     @push('title')
         Settings
@@ -49,7 +45,7 @@
                     @elseif ($user->cover_photo)
                         <img src="{{ asset('storage/' . $user->cover_photo) }}" class="cover-photo" alt="Cover Photo">
                     @else
-                        <img src="{{ asset('assets/images/dummy-cover-photo.jpg') }}" class="cover-photo"
+                        <img src="{{ asset('assets/images/dummy-cover-photo.webp') }}" class="cover-photo"
                             alt="Cover Photo">
                     @endif
                     <button type="button" wire:click="deleteCoverPhoto" class="btn btn-danger btn-sm position-absolute"
@@ -75,7 +71,7 @@
                             <img src="{{ asset('storage/' . $user->pfp) }}" class="profile-photo rounded-circle"
                                 alt="Profile Photo">
                         @else
-                            <img src="{{ asset('assets/images/dummy-profile-photo.png') }}"
+                            <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}"
                                 class="profile-photo rounded-circle" alt="Profile Photo">
                         @endif
                         <button class="btn btn-light btn-circle" id="profileDropdown" data-bs-toggle="dropdown"
@@ -100,21 +96,31 @@
                     </div>
                     {{-- </div> --}}
                 </div>
-                @error('profilePhoto')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
+
             </div>
 
             <!-- Update Profile Form -->
             <form wire:submit.prevent="updateProfile">
+                @error('coverPhoto')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+                @error('profilePhoto')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <div class="form-row">
                     <div class="col-md-6">
                         <label for="firstName">First Name</label>
                         <input type="text" class="form-control" id="firstName" wire:model="firstName">
+                        @error('firstName')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="lastName">Last Name</label>
                         <input type="text" class="form-control" id="lastName" wire:model="lastName">
+                        @error('lastName')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
@@ -122,31 +128,50 @@
                     <div class="col-md-6">
                         <label for="userName">User Name</label>
                         <input type="text" class="form-control" id="userName" wire:model="userName">
+                        @error('userName')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="phone">Phone Number</label>
                         <input type="text" class="form-control" id="phone" wire:model="phone">
+                        @error('phone')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="form-group mt-3">
                     <label for="bio">Bio</label>
                     <textarea id="bio" class="form-control" wire:model="bio"></textarea>
+                    @error('bio')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-group mt-3">
                     <label for="timezone">Timezone</label>
                     <select id="timezone" class="form-control" wire:model="timezone">
                         <option value="">Select Timezone</option>
+
                         @foreach ($timezoneOptions as $tz)
                             <option value="{{ $tz }}" {{ $tz == $timezone ? 'selected' : '' }}>
                                 {{ $tz }}
                             </option>
                         @endforeach
                     </select>
+                    @error('timezone')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
-                <button type="submit" class="btn button-primary mt-3">Update Profile</button>
+                <button type="submit" class="button-primary mt-3" wire:loading.attr="disabled">
+                    <span wire:loading.remove>Update Profile</span>
+                    <span wire:loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Updating...
+                    </span>
+                </button>
             </form>
         </div>
 
@@ -180,7 +205,15 @@
                         @enderror
                     </div>
                 </div>
-                <button type="submit" class="btn button-primary">Reset Password</button>
+
+                <!-- Submit Button with Loader -->
+                <button type="submit" class=" button-primary" wire:loading.attr="disabled">
+                    <span wire:loading.remove>Reset Password</span>
+                    <span wire:loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Resetting...
+                    </span>
+                </button>
             </form>
         </div>
 
@@ -197,7 +230,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="facebook"
-                        placeholder="http://facebook.com/username">
+                        placeholder="http://facebook.com/username" wire:model="facebook">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="twitter" class="d-flex align-items-center">
@@ -206,7 +239,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="twitter"
-                        placeholder="http://twitter.com/username">
+                        placeholder="http://twitter.com/username" wire:model="twitter">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="linkedin" class="d-flex align-items-center">
@@ -215,7 +248,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="linkedin"
-                        placeholder="http://linkedin.com/username">
+                        placeholder="http://linkedin.com/username" wire:model="linkedin">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="website" class="d-flex align-items-center">
@@ -223,7 +256,8 @@
                     </label>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <input type="url" class="form-control" id="website" placeholder="http://example.com">
+                    <input type="url" class="form-control" id="website" placeholder="http://example.com"
+                        wire:model="website">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="github" class="d-flex align-items-center">
@@ -232,7 +266,16 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <input type="url" class="form-control" id="github"
-                        placeholder="http://github.com/username">
+                        placeholder="http://github.com/username" wire:model="github">
+                </div>
+                <div class="col-md-12 d-flex justify-content-end mt-3">
+                    <button class="button-primary" wire:click="updateSocialLinks" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Submit</span>
+                        <span wire:loading>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Updating...
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>

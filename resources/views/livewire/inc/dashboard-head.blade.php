@@ -12,8 +12,8 @@
             <div class="tutor-info">
                 <ul class="tutor-avatar d-flex align-items-center gap-3">
                     <li>
-                        <img src="{{ asset('storage/' . $user->pfp) ?? asset('assets/images/dummy-profile-photo.png') }}"
-                            alt="User" class="rounded-circle">
+                        <img
+                            src="{{ $user->pfp ? asset('storage/' . $user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}">
                     </li>
                     <li>
                         <span>Hello,</span>
@@ -85,6 +85,7 @@
             </div>
         </div>
     </div>
+
     <!-- Become an Instructor Modal -->
     <div wire:ignore.self class="modal fade" id="instructorModal" tabindex="-1" aria-labelledby="instructorModalLabel"
         aria-hidden="true">
@@ -139,23 +140,19 @@
                             @enderror
                         </div>
 
-
-                        <button type="submit" class="button-primary w-100">Submit</button>
+                        <!-- Disable submit button while uploading -->
+                        <button type="submit" class="button-primary w-100" wire:loading.attr="disabled"
+                            wire:target="file_path">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 @push('js')
     <script>
         window.addEventListener('close-modal', event => {
             $('#instructorModal').modal('hide');
         });
-        // $('#offcanvasRight').on('hide.bs.offcanvas', function(e) {
-        //     e.preventDefault(); // Prevent offcanvas from closing
-        // });
     </script>
 @endpush

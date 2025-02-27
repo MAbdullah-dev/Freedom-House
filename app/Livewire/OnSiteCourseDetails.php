@@ -22,6 +22,7 @@ class OnSiteCourseDetails extends Component
     public $price;
     public $isEnrolled;
     public $isPaid;
+    public $course;
 
     public $lectures = [];
     public $showFullDescription = false;
@@ -34,11 +35,13 @@ class OnSiteCourseDetails extends Component
             $this->loadLectures();
             $this->checkEnrollment();
         }
+        $this->course = Course::findOrFail($this->courseId)->with('lectures', 'bookings', 'reviews')->first();
     }
 
     public function loadCourseData()
     {
         $course = Course::findOrFail($this->courseId);
+        // dd($course);
 
         $this->courseTitle = $course->title;
         $this->courseDescription = $course->description;
@@ -68,6 +71,7 @@ class OnSiteCourseDetails extends Component
         Booking::create([
             'course_id' => $this->courseId,
             'class_id' => null,
+            'phone_number' => Auth::user()->phone,
             'user_id' => Auth::id(),
             'payment_status' => 'free',
             'order_number' => uniqid('FREE_'),
@@ -114,7 +118,6 @@ class OnSiteCourseDetails extends Component
     {
         $this->isEnrolled = Booking::where('user_id', Auth::id())
             ->where('course_id', $this->courseId)
-            // ->where('payment_status', 'paid')
             ->exists();
     }
 

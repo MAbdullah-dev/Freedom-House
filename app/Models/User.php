@@ -5,14 +5,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'username',
@@ -27,6 +26,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'microsoft_id',
         'microsoft_account',
         'verification_token',
+        'refresh_token',
+        'token_expires_at',
         'email_verified_at',
         'password_reset_token',
         'password_token_created_at',
@@ -39,10 +40,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasVerifiedEmail()
     {
         return !is_null($this->email_verified_at);
-    }
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'roles_users')->select('roles.id');
     }
 
     public function courses()

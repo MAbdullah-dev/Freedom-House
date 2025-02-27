@@ -5,10 +5,15 @@
     </div>
     <div class="swiper-wrapper">
         @foreach ($mostPopularCourses as $mostPopularCourse)
+            @php
+                $averageRating = round($mostPopularCourse->average_rating);
+            @endphp
             <div class="swiper-slide">
                 <div class="card shadow">
                     <div class="card-img-top">
-                        <img src="{{ $mostPopularCourse->thumbnail }}" class="card-img-top" alt="...">
+                        <img src="{{ asset('storage/' . $mostPopularCourse->thumbnail) }}"
+                            class="
+                        " alt="...">
 
                         <!-- Wishlist Icon with Dynamic Class Toggle -->
                         @if (Auth::check())
@@ -24,15 +29,14 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $mostPopularCourse->title }}</h5>
                         <div class="tutor-ratings d-flex align-items-center gap-1">
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="{{ $i <= $averageRating ? 'fa-solid' : 'fa-regular' }} fa-star"
+                                    style="color: #eea015;"></i>
+                            @endfor
                         </div>
                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                             <div class="tutor-data d-flex align-items-center gap-1">
-                                <img src="{{ $mostPopularCourse->user->pfp ?? asset('assets/images/dummy-profile-photo.png') }}"
+                                <img src="{{ $mostPopularCourse->user->pfp ? asset('storage/' . $mostPopularCourse->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                     alt="">
                                 <small>by</small><span>{{ $mostPopularCourse->user->first_name }}
                                     {{ $mostPopularCourse->user->last_name }}</span>

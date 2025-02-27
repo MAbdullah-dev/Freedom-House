@@ -30,6 +30,10 @@
                         vertical-align: top;
                         border-bottom: 1px solid #cdcfd5;
 
+                        img {
+                            object-fit: cover;
+                        }
+
                         button {
                             width: max-content;
                         }

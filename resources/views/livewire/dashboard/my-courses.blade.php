@@ -1,4 +1,7 @@
 <div class="my-course py-5 px-4 w-100">
+    @push('title')
+        My Courses
+    @endpush
     <h2 class="mb-4">My Courses</h2>
 
     <!-- Nav Tabs -->
@@ -32,7 +35,7 @@
         <div class="tab-pane fade {{ $activeTab === 'published' ? 'show active' : '' }}" id="published" role="tabpanel">
             <div class="row">
                 @foreach ($publishedCourses as $publishedCourse)
-                    <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="col-12 col-md-6 col-xl-4 mb-4">
                         <div class="card shadow">
                             <div class="card-img-top">
                                 <img src="{{ asset('storage/' . $publishedCourse->thumbnail) }}" alt="Course"
@@ -84,7 +87,8 @@
                             <div class="card-footer d-flex justify-content-between align-items-center">
                                 <p>Price: <span>{{ $pendingCourse->price ?? 'Free' }}</span></p>
                                 <p>
-                                    <a href="#" class="edit-link">
+                                    <a href="{{ route('dashboard.create.course', ['courseId' => $pendingCourse->id]) }}"
+                                        class="edit-link">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
                                     <a href="#" class="delete-link" data-bs-toggle="modal"
@@ -116,12 +120,13 @@
                             <div class="card-footer d-flex justify-content-between align-items-center">
                                 <p>Price: <span>{{ $draftedCourse->price ?? 'Free' }}</span></p>
                                 <p>
-                                    <a href="#" class="edit-link">
+                                    <a href="{{ route('dashboard.create.course', ['courseId' => $publishedCourse->id]) }}"
+                                        class="edit-link">
                                         <i class="fa-regular fa-pen-to-square"></i>
                                     </a>
                                     <a href="#" class="delete-link" data-bs-toggle="modal"
                                         data-bs-target="#deleteCourseModal"
-                                        wire:click.prevent="confirmDelete({{ $draftedCourse->id }})">
+                                        wire:click.prevent="confirmDelete({{ $publishedCourse->id }})">
                                         <i class="fa-regular fa-trash-can"></i>
                                     </a>
                                 </p>

@@ -15,11 +15,16 @@ class NewCards extends Component
     }
     public function loadNewCourses()
     {
-        $this->newCourses = Course::with(['user', 'tutors'])
+        $this->newCourses = Course::with(['user', 'reviews'])
             ->where('is_published', true)
             ->where('is_drafted', false)
-            ->get();
+            ->get()
+            ->map(function ($course) {
+                $course->average_rating = round($course->reviews->avg('rating') ?? 0, 1); // Rounded to 1 decimal
+                return $course;
+            });
     }
+
     public function toggleWishlist($courseId)
     {
         $user = Auth::user();

@@ -87,9 +87,3 @@
         </form>
     </div>
 </section>
-
-
-<script>
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    Livewire.emit('setTimezone', timezone);
-</script>

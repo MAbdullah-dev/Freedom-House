@@ -11,6 +11,12 @@
                         {{ session('status') }}
                     </div>
                 @endif
+                @if ($errors->has('msg'))
+                    <div class="alert alert-warning">
+                        {{ $errors->first('msg') }}
+                    </div>
+                @endif
+
 
 
 

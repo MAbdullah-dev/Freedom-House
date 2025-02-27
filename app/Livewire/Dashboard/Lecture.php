@@ -5,7 +5,6 @@ namespace App\Livewire\Dashboard;
 use App\Jobs\FetchVimeoVideoDetailsJob;
 use App\Models\Course;
 use App\Models\Lecture as ModelsLecture;
-use Illuminate\Support\Facades\Log;
 use Vimeo\Laravel\Facades\Vimeo;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -25,9 +24,9 @@ class Lecture extends Component
 
     protected $rules = [
         'course_id' => 'required|exists:courses,id',
-        'lectures.*.title' => 'required|string|max:255',
+        'lectures.*.title' => 'required|string|max:255', // Moved 'title' inside the lectures array
         'lectures.*.description' => 'nullable|string',
-        'lectures.*.video_file' => 'required|file|mimetypes:video/mp4,video/quicktime', // Max 50MB
+        'lectures.*.video_file' => 'required|file|max:102400|mimetypes:video/mp4,video/avi,video/mov',
         'lectures.*.order' => 'required|integer|distinct|min:1',
     ];
 
@@ -79,37 +78,49 @@ class Lecture extends Component
 
     public function submit()
     {
-        try {
-            $this->validate(); // Perform the validation
+        $this->validate();
 
-            // Log each video file's size for debugging
-            foreach ($this->lectures as $index => $lecture) {
-                Log::info('Uploaded file size: ' . $lecture['video_file']->getSize() . ' bytes');
+        // Check for duplicate orders in the current lectures
+        $orders = array_column($this->lectures, 'order');
+        if (count($orders) !== count(array_unique($orders))) {
+            $this->alert('error', 'Lecture order must be unique within the same course.');
+            return;
+        }
 
-                // Store the video file and link it to the lecture
-                $path = $lecture['video_file']->store('videos', 'public');
+        // Proceed with the rest of the logic
+        foreach ($this->lectures as $index => $lecture) {
+            try {
+                // Upload video directly to Vimeo
+                $response = Vimeo::upload($lecture['video_file']->getRealPath(), [
+                    'name' => $lecture['title'],
+                    'description' => $lecture['description'],
+                ]);
 
-                // Add logic to store lecture details to the database
-                Lecture::create([
+                // Get the video ID or URL from Vimeo's response
+                $videoId = $response;
+
+                // Create lecture record in the database (without duration initially)
+                $lectureRecord = ModelsLecture::create([
+                    'course_id' => $this->course_id,
                     'title' => $lecture['title'],
                     'description' => $lecture['description'],
-                    'video_file' => $path,
-                    'order' => $index + 1, // Example of setting order (you can customize it)
+                    'video_file' => $videoId, // Vimeo video ID
+                    'video_duration' => null, // Initially null
+                    'order' => $lecture['order'],
                 ]);
+
+                // Dispatch a job to fetch video details later
+                FetchVimeoVideoDetailsJob::dispatch($lectureRecord->id, $videoId);
+            } catch (\Exception $e) {
+                // Handle errors
+                $this->alert('error', 'Failed to upload video to Vimeo: ' . $e->getMessage());
+                return;
             }
-
-            // Show success message (you can integrate SweetAlert2 here)
-            // $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Lectures successfully uploaded!']);
-
-            // Reset fields after submission
-            $this->reset('lectures');
-        } catch (\Exception $e) {
-            Log::error('File upload error: ' . $e->getMessage());
-            // $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'An error occurred during upload. Please try again.']);
         }
+
+        $this->alert('success', 'Lectures successfully uploaded to Vimeo! Video details will update soon.');
+        $this->resetFields();
     }
-
-
 
     private function resetFields()
     {

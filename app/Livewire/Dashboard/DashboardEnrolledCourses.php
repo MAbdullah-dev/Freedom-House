@@ -15,29 +15,30 @@ class DashboardEnrolledCourses extends Component
 
     public function mount()
     {
-        $userId = Auth::id(); // Get the logged-in user's ID
+        $userId = Auth::id();
 
-        // Fetch all courses the user has booked
-        $bookedCourses = Booking::where('user_id', $userId)->where('payment_status', 'paid')->get();
+        $bookedCourses = Booking::where('user_id', $userId)->get();
 
         foreach ($bookedCourses as $booking) {
-            // Check progress for each course in the course_progress table
-            $progress = CourseProgress::where('user_id', $userId)
-                ->where('course_id', $booking->course_id)
-                ->value('progress') ?? 0; // Default to 0 if no progress record exists
+            $course = $booking->course;
 
-            $courseData = [
-                'course' => $booking->course,
-                'progress' => $progress
-            ];
+            if ($course) {
+                $progress = CourseProgress::where('user_id', $userId)
+                    ->where('course_id', $booking->course_id)
+                    ->value('progress') ?? 0;
 
-            // Categorize the courses based on their progress
-            if ($progress == 0) {
-                $this->enrolledCourses[] = $courseData;
-            } elseif ($progress > 0 && $progress < 100) {
-                $this->activeCourses[] = $courseData;
-            } elseif ($progress == 100) {
-                $this->completedCourses[] = $courseData;
+                $courseData = [
+                    'course' => $course,
+                    'progress' => $progress
+                ];
+
+                if ($progress == 0) {
+                    $this->enrolledCourses[] = $courseData;
+                } elseif ($progress > 0 && $progress < 100) {
+                    $this->activeCourses[] = $courseData;
+                } elseif ($progress == 100) {
+                    $this->completedCourses[] = $courseData;
+                }
             }
         }
     }

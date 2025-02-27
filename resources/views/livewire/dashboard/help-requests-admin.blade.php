@@ -1,4 +1,7 @@
 <div class="help-requests-admin py-5 px-4">
+    @push('title')
+        Help Requests
+    @endpush
     <h4 class="mb-4">Help Requests of Students</h4>
     <section class="help-requests">
         <div class="table-responsive">

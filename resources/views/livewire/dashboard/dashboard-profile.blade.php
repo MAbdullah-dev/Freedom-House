@@ -1,4 +1,7 @@
 <div class="profile py-5 px-4">
+    @push('title')
+        My Profile
+    @endpush
     <h2 class="mb-4">My Profile</h2>
     <ul class="profile-details">
         <li>

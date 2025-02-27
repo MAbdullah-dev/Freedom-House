@@ -15,10 +15,14 @@ class TrendingCards extends Component
     }
     public function loadTrendingCourses()
     {
-        $this->trendingCourses = Course::with(['user', 'tutors'])
+        $this->trendingCourses = Course::with(['user', 'reviews'])
             ->where('is_published', true)
             ->where('is_drafted', false)
-            ->get();
+            ->get()
+            ->map(function ($course) {
+                $course->average_rating = round($course->reviews->avg('rating') ?? 0, 1); // Rounded to 1 decimal
+                return $course;
+            });
     }
     public function toggleWishlist($courseId)
     {

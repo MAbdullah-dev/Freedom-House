@@ -1,4 +1,7 @@
 <div class="dashboard py-5 px-4">
+    @push('title')
+        dashboard
+    @endpush
     <section class="courses-info-section">
         <div class="inner">
             <h4 class="mb-4">Dashboard</h4>
@@ -10,7 +13,7 @@
                             <i class="fa-brands fa-google-scholar"></i>
                         </div>
                         <div class="number">
-                            3
+                            {{ $studentCount }}
                         </div>
                         <span>Total Student</span>
                     </div>
@@ -19,7 +22,7 @@
                             <i class="fa-solid fa-boxes-stacked"></i>
                         </div>
                         <div class="number">
-                            3
+                            {{ $totalCourses }}
                         </div>
                         <span>Total courses</span>
                     </div>
@@ -32,7 +35,7 @@
                             <i class="fa-solid fa-book-open-reader"></i>
                         </div>
                         <div class="number">
-                            3
+                            {{ $bookedCoursesCount }}
                         </div>
                         <span>Enrolled Courses</span>
                     </div>
@@ -41,7 +44,7 @@
                             <i class="fa-solid fa-graduation-cap"></i>
                         </div>
                         <div class="number">
-                            3
+                            {{ $inProgressCoursesCount }}
                         </div>
                         <span>Active Courses</span>
                     </div>
@@ -51,7 +54,7 @@
                             </i>
                         </div>
                         <div class="number">
-                            3
+                            {{ $completedCoursesCount }}
                         </div>
                         <span>Completed Courses</span>
                     </div>
@@ -60,126 +63,101 @@
         </div>
     </section>
     <section class="course-progress py-2">
-        <h4 class="my-5">In Progress Course</h4>
-        <div class="progress-wrapper py-2">
-            <div class="inner p-2">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="progress-course-img">
-                            <img src="{{ asset('assets/images/progress-course-img.png') }}" alt="">
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <div class="progress-course-detail gap-1">
-                            <div class="progress-course-rating d-flex align-items-center my-3">
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <span>4.80 <span>(10.00)</span></span>
+        <h4 class="my-5">In Progress Courses</h4>
+        @if ($inProgressCourses->isEmpty())
+            <div class="text-center py-5">
+                <p>No courses are currently in progress.</p>
+            </div>
+        @else
+            @foreach ($inProgressCourses as $progress)
+                <div class="progress-wrapper py-2">
+                    <div class="inner p-2">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="progress-course-img">
+                                    <img src="{{ $progress->course->thumbnail ?? asset('assets/images/progress-course-img.webp') }}"
+                                        alt="">
+                                </div>
                             </div>
-                            <h4>The Complete Web Development Bootcamp</h4>
-                            <div class="lessons-complete my-1">completed <span> 0 of 0 Lessons</span> </div>
-                            <div class="course-progress-bar d-flex align-items-center my-2 gap-1">
-                                <progress id="file" value="32" max="100">32%</progress>
-                                <p><span>0%</span>complete</p>
+                            <div class="col-lg-8">
+                                <div class="progress-course-detail gap-1">
+                                    <div class="progress-course-rating d-flex align-items-center my-3">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i class="fa-regular fa-star"
+                                                style="color: {{ $i <= floor($progress->course->reviews->first()->average_rating ?? 0) ? '#eea015' : '#ddd' }};"></i>
+                                        @endfor
+                                        <span>
+                                            {{ number_format($progress->course->reviews->first()->average_rating ?? 0, 2) }}
+                                            <span>({{ $progress->course->reviews->first()->review_count ?? 0 }})</span>
+                                        </span>
+                                    </div>
+                                    <h4>{{ $progress->course->title }}</h4>
+                                    <div class="lessons-complete my-1">Completed <span>{{ $progress->progress }}% of
+                                            100%</span></div>
+                                    <div class="course-progress-bar d-flex align-items-center my-2 gap-1">
+                                        <progress id="file" value="{{ $progress->progress }}"
+                                            max="100">{{ $progress->progress }}%</progress>
+                                        <p><span>{{ $progress->progress }}%</span> Complete</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            @endforeach
+        @endif
     </section>
+
     @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
         <section class="tutor-course-detail py-3 mt-3">
             <div class="inner">
                 <h4 class="mb-4">My Courses</h4>
-                <div class="table-responsive">
-                    <div class="card-table">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Course Name</th>
-                                    <th scope="col">Enrolled</th>
-                                    <th scope="col">Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <a href="">
-                                            The Complete Web Development Bootcamp
-                                        </a>
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                        <span>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="">
-                                            The Complete Web Development Bootcamp
-                                        </a>
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                        <span>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="">
-                                            The Complete Web Development Bootcamp
-                                        </a>
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                        <span>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="">
-                                            The Complete Web Development Bootcamp
-                                        </a>
-                                    </td>
-                                    <td>3</td>
-                                    <td>
-                                        <span>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                            <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                @if ($courses->isEmpty())
+                    <p class="text-center">No courses available at the moment.</p>
+                @else
+                    <div class="table-responsive">
+                        <div class="card-table">
+                            <table class="table table-striped align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Course Name</th>
+                                        <th scope="col">Students Enrolled</th>
+                                        <th scope="col">Highest Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($courses as $course)
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('course.details', $course->id) }}"
+                                                    class="text-decoration-none">
+                                                    {{ $course->title }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $course->enrolled_students ?? 0 }}</td>
+                                            <td>
+                                                @if ($course->reviews->isNotEmpty())
+                                                    @php
+                                                        $highestRating = $course->reviews->first()->highest_rating ?? 0;
+                                                    @endphp
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <i class="fa-regular fa-star"
+                                                            style="color: {{ $i <= $highestRating ? '#eea015' : '#ddd' }};"></i>
+                                                    @endfor
+                                                    <span>({{ number_format($highestRating, 1) }})</span>
+                                                @else
+                                                    <span>No Ratings</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-
+                @endif
             </div>
         </section>
     @endif
+
 </div>

@@ -48,7 +48,7 @@
                     img {
                         height: 36px;
                         width: 36px;
-                        object-fit: contain;
+                        object-fit: cover;
                         border-radius: 50%;
                     }
                     small {
@@ -111,7 +111,7 @@
             margin-bottom: -50%;
             border-radius: 10px;
             border-radius: 10px;
-            img{
+            img {
                 border: 10px solid #fff;
                 border-radius: 10px;
                 height: 275px;
@@ -143,11 +143,10 @@
             }
         }
     }
-    .tutor-profile-content{
-
-        .profile-details-mobile{
+    .tutor-profile-content {
+        .profile-details-mobile {
             .profile-details {
-                color: #757575 ;
+                color: #757575;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -156,7 +155,7 @@
             .profile {
                 // margin-bottom: -50%;
                 border-radius: 10px;
-                img{
+                img {
                     border: 10px solid #fff;
                     border-radius: 10px;
                     height: 275px;
@@ -166,12 +165,12 @@
                     max-width: 100%;
                 }
             }
-            .profile-details{
-                h3{
-                    color:#000;
+            .profile-details {
+                h3 {
+                    color: #000;
                 }
-                p{
-                    span{
+                p {
+                    span {
                         color: #000;
                     }
                 }
@@ -179,26 +178,24 @@
         }
     }
     @media screen and (max-width: 992px) {
-        .banner{
-            .row{
+        .banner {
+            .row {
                 display: none;
             }
         }
-        .tutor-profile-content{
+        .tutor-profile-content {
             margin-top: -150px;
         }
-
     }
     @media screen and (max-width: 576px) {
-        .tutor-profile-content{
-            .tutor-user-profile-content{
-                p{
+        .tutor-profile-content {
+            .tutor-user-profile-content {
+                p {
                     font-size: 12px;
                     line-height: 20px;
                     font-weight: 500;
                 }
             }
         }
-
     }
 }

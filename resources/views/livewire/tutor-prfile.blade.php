@@ -1,43 +1,13 @@
 <div class="tutor-profile">
-    {{-- <section class="tutor-profile-hero">
-        <div class="container">
-            <div class="inner position-relative">
-                <div class="hero-img"></div>
-                <div class="hero-overlay position-absolute">
-                    <div class="tutor-data d-flex align-items-start">
-                        <div class="profile-pic">
-                            <img src="{{ asset('assets/images/tutor-profile-image.jpg') }}" alt="">
-                        </div>
-                        <div class="tutor-detail ms-2 mt-5">
-                            <h3>Niki Shafer</h3>
-                            <span>{{ $tutorCourses->count() }} courses</span>
-                            <span>.</span>
-                            <span>48 students</span>
-                        </div>
-                        <div class="ratings d-flex ms-auto align-items-center mt-5">
-                            <div class="rating-stars">
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                            </div>
-                            <span class="rating-digits">4.80 </span>
-                            <span>(10.00)</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
     <section class="banner">
         <div class="container">
             <div class="banner-image"
-                style="background-image: url('{{ asset('assets/images/tutor-profile-hero.jpg') }}'); background-size: cover">
+                style="background-image: url('{{ asset('storage/' . $tutor->user->cover_photo) }}'); background-size: cover">
                 <div class="row align-items-center z-1 ">
                     <div class="col-lg-3">
                         <div class="profile">
-                            <img src="{{ asset('storage/' . $tutor->user->pfp) }}" alt="">
+                            <img src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                alt="">
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -72,7 +42,8 @@
                         <div
                             class="profile-details-mobile d-block d-lg-none d-flex align-items-center justify-content-center flex-column">
                             <div class="profile">
-                                <img src="{{ asset('storage/' . $tutor->user->pfp) }}" alt="">
+                                <img src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                    alt="">
                             </div>
                             <div class="profile-details d-flex flex-column align-items-center justify-content-center">
                                 <div class="details-profile">
@@ -127,7 +98,7 @@
                                             </div>
                                             <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                                                 <div class="tutor-data d-flex align-items-center gap-1">
-                                                    <img src="{{ asset('storage/' . $tutorCourse->user->pfp) }}"
+                                                    <img src="{{ $tutorCourse->user->pfp ? asset('storage/' . $tutorCourse->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
                                                         alt="">
                                                     <small>by</small><span>{{ $tutorCourse->user->first_name }}
                                                         {{ $tutorCourse->user->last_name }}</span>

@@ -1,5 +1,8 @@
 <div class="home">
-    <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.png') }}');">
+    @push('title')
+        Home
+    @endpush
+    <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.webp') }}');">
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <div class="content-wrapper">
             <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>
@@ -24,8 +27,10 @@
                     @foreach ($courses as $course)
                         <div class="swiper-slide">
                             <div class="card shadow">
-                                <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.jpg') }}"
-                                    class="card-img-top" alt="...">
+                                <div class="card-img-top">
+                                    <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
+                                        class="" alt="...">
+                                </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title">{{ $course->title }}</h5>
                                     <p class="card-text my-3">{{ $course->description }}</p>
@@ -129,7 +134,7 @@
                 </div>
             </div>
             <div class="benifit-img">
-                <img src="{{ asset('assets/images/benifit-img.png') }}" alt="">
+                <img src="{{ asset('assets/images/benifit-img.webp') }}" alt="">
             </div>
         </div>
     </section>
@@ -140,8 +145,11 @@
                     <div class="news-letter-content d-flex flex-column text-center">
                         <h6 class="mb-3">Join our list to learn more</h6>
                         <p>Sign up to get updates on courses and events.</p>
-                        <form action="" class="d-flex flex-column gap-3">
-                            <input type="text" placeholder="Enter Your Email">
+                        <form wire:submit.prevent="submitEmail" class="d-flex flex-column gap-3">
+                            <input type="email" wire:model="email" placeholder="Enter Your Email" required>
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                             <button type="submit" class="button-primary my-3">Submit</button>
                         </form>
                     </div>

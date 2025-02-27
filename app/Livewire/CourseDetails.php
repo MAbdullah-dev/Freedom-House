@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Classe;
 use App\Models\Course;
 use App\Models\Booking;
+use App\Models\CalendarEvent;
 use App\Models\Notification;
 use App\Services\MicrosoftGraphService;
 use Carbon\Carbon;
@@ -44,6 +45,8 @@ class CourseDetails extends Component
     public $price;
     public $slots;
     public $userTimezone;
+    public $coursePhoto;
+    public $courseVideo;
 
     public function mount($id = null)
     {
@@ -52,7 +55,7 @@ class CourseDetails extends Component
             $this->loadCourseData();
             $this->loadClasses();
         }
-        $this->userTimezone = Auth::user()->timezone;
+        $userTimezone = Auth::check() ? Auth::user()->timezone : 'UTC';
         // dd($this->userTimezone);
     }
     public function fetch()
@@ -76,10 +79,12 @@ class CourseDetails extends Component
         $course = Course::findOrFail($this->courseId);
 
         $this->courseTitle = $course->title;
+        $this->coursePhoto = $course->thumbnail;
         $this->courseDescription = $course->description;
         $this->learningOutcomes = $course->learning_outcomes;
         $this->targetAudience = $course->target_audience;
         $this->requirements = $course->requirements;
+        $this->courseVideo = $course->video_path;
     }
 
     public function loadClasses()
@@ -101,7 +106,7 @@ class CourseDetails extends Component
         }
 
         $this->classes = $query->get()->map(function ($class) {
-            $userTimezone = Auth::user()->timezone;
+            $userTimezone = Auth::check() && Auth::user()->timezone ? Auth::user()->timezone : 'UTC';
             $class->class_date = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toDateString();
             $class->class_time = Carbon::parse($class->class_date . ' ' . $class->class_time, 'UTC')->setTimezone($userTimezone)->toTimeString();
             return $class;
@@ -140,44 +145,37 @@ class CourseDetails extends Component
 
         $class = Classe::find($this->selectedClassId);
 
-        if (!$class || !$class->microsoft_event_id) {
-            $this->alert('error', 'Class not found or missing Microsoft Event ID!');
+        if (!$class) {
+            $this->alert('error', 'Class not found!');
             return;
         }
 
         $user = Auth::user();
-        if (!$user->microsoft_id) {
-            $this->alert('error', 'User Microsoft ID not found!');
-            return;
-        }
-
-        $attendees = [
-            [
-                'email' => $user->email,
-                'name' => $user->first_name . ' ' . $user->last_name,
-            ]
-        ];
 
         try {
-            // Use the user's Microsoft ID from Auth::user()->microsoft_id
-            // $organizerId = $class->user->microsoft_id;
+            if ($class->microsoft_event_id) {
+                $attendees = [
+                    [
+                        'email' => $user->email,
+                        'name' => $user->first_name . ' ' . $user->last_name,
+                    ]
+                ];
 
+                $organizerId = $class->user->microsoft_id;
+                $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
+                $this->alert('success', 'Successfully enrolled in the class!');
+            } elseif ($user->microsoft_account && !$class->microsoft_event_id) {
+                $this->createCalendarEventForUser($class, $user);
+            }
 
-            // Add attendee to the event using the organizer's Microsoft ID
-            // $this->microsoftGraphService->addDynamicAttendees($class, $attendees, $organizerId);
-
-            // Create a booking record
-            Booking::create([
-                'class_id' => $this->selectedClassId,
-                'course_id' => null,
-                'user_id' => $user->id,
-                'payment_status' => 'free',
-                'order_number' => uniqid('FREE_'),
+            Notification::create([
+                'user_id' => Auth::id(),
+                'message' => 'You successfully purchased the event: ' . $class->title . ' 😊.',
+                'type' => 'booking',
             ]);
 
-            // Update class capacity
-            $class->decrement('capacity');
-
+            $this->createBookingAndCalendarEvent($class, $user);
+            $this->dispatch('close-modal');
             $this->alert('success', 'Successfully enrolled in the class!');
         } catch (\Exception $e) {
             Log::error('Failed to enroll user in class: ' . $e->getMessage());
@@ -185,7 +183,48 @@ class CourseDetails extends Component
         }
     }
 
+    private function createBookingAndCalendarEvent($class, $user)
+    {
+        Booking::create([
+            'class_id' => $class->id,
+            'user_id' => $user->id,
+            'phone_number' => $user->phone,
+            'payment_status' => 'free',
+            'order_number' => uniqid('FREE_'),
+        ]);
 
+        CalendarEvent::create([
+            'user_id' => $user->id,
+            'class_id' => $class->id,
+        ]);
+
+        $class->decrement('capacity');
+    }
+
+    private function createCalendarEventForUser($class, $user)
+    {
+        try {
+            $attendees = [
+                [
+                    'email' => $user->email,
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                ]
+            ];
+
+            $this->microsoftGraphService->createUserCalendarEvent(
+                $class->title,
+                $class->description,
+                $class->class_date . ' ' . $class->class_time,
+                Carbon::parse($class->class_date . ' ' . $class->class_time)->addHour()->toDateTimeString(),
+                $class->onsite_address,
+                $attendees
+            );
+            Log::info('Calendar event created for user successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error creating calendar event for user: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 
     private function redirectToStripeCheckout()
     {
@@ -213,7 +252,7 @@ class CourseDetails extends Component
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&class_id=' . $this->selectedClassId . '&course_id=' . $this->courseId,
+                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&class_id=' . $this->selectedClassId,
                 'cancel_url' => route('payment.cancel') . '?class_id=' . $this->selectedClassId,
             ]);
 

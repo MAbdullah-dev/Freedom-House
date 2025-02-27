@@ -137,7 +137,7 @@
 
                 img {
                     max-width: 100%;
-                    height: auto;
+                    // height: auto;
                     border-radius: 5px;
                 }
 
@@ -172,8 +172,6 @@
                 }
             }
         }
-
-
     }
 
     @media (max-width: 1200px) {
@@ -183,7 +181,6 @@
                     flex: 1 1 45%;
                     max-width: 45%;
                 }
-
             }
         }
     }
@@ -247,6 +244,5 @@
                 letter-spacing: 2px;
             }
         }
-
     }
 }

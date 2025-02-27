@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('title')->unique();
             $table->text('description');
             $table->string('thumbnail');
-            $table->string('video_url');
+            $table->string('video_path');
             $table->text('learning_outcomes');
             $table->text('target_audience');
             $table->text('requirements');

@@ -9,8 +9,6 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Mail\EmailVerificationMail;
 use App\Models\Notification;
-use App\Models\Role;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -18,14 +16,7 @@ class Register extends Component
 {
     use LivewireAlert;
 
-    public $first_name, $last_name, $email, $phone, $password, $confirm_password, $timezone;
-
-    protected $listeners = ['setTimezone'];
-
-    public function setTimezone($timezone)
-    {
-        $this->timezone = $timezone;
-    }
+    public $first_name, $last_name, $email, $phone, $password, $confirm_password;
 
     public function register()
     {
@@ -54,7 +45,7 @@ class Register extends Component
                 'verification_token' => $verificationToken,
                 'microsoft_account' => false,
                 'role_id' => 3,
-                'timezone' => $this->timezone
+                'timezone' => 'UTC',
             ]);
 
 
@@ -67,12 +58,9 @@ class Register extends Component
                 'message' => '🎉 Welcome to our platform! We are thrilled to have you on board. 🚀',
                 'type' => 'general',
             ]);
-            // session()->flash('success', 'Registration successful! Please check your email to verify your account.');
             $this->resetForm();
-            // return redirect()->route('login');
         } catch (\Exception $e) {
             DB::rollBack();
-            // session()->flash('error', 'Something went wrong. Please try again.');
             $this->alert('error', 'Something went wrong. Please try again.');
             return;
         }

@@ -1,4 +1,7 @@
 <div class="container mt-4">
+    @push('title')
+        view lectures
+    @endpush
     <!-- Course Name -->
     <h3 class="mb-4">{{ $course->title }}</h3>
 

@@ -15,21 +15,21 @@ class TutorSeeder extends Seeder
     {
         $tutors = [
             [
-                'user_id' => 2,
+                'user_id' => 1,
                 'specialization' => 'Mathematics, Physics',
                 'preferred_teaching_method' => 'Online',
                 'is_verified' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'user_id' => 3,
-                'specialization' => 'Computer Science, Programming',
-                'preferred_teaching_method' => 'In-Person',
-                'is_verified' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'user_id' => 3,
+            //     'specialization' => 'Computer Science, Programming',
+            //     'preferred_teaching_method' => 'In-Person',
+            //     'is_verified' => true,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
         ];
 
         foreach ($tutors as $tutor) {

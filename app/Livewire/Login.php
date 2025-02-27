@@ -33,11 +33,11 @@ class Login extends Component
 
                 session([
                     'user_id' => $user->id,
-                    'role_ids' => $user->roles()->pluck('id')->toArray(),
+                    // 'role_ids' => $user->roles()->pluck('id')->toArray(),
                 ]);
 
 
-                return redirect()->route('home');
+                return redirect()->route('dashboard.settings');
             } else {
                 $this->alert('warning', 'Please verify your email address before logging in.');
 

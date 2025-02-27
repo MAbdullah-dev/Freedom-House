@@ -3,7 +3,7 @@
         <div class="container">
             <div class="inner">
                 <h3>Course Description</h3>
-                <h1 class="onsite-course-title mb-5">Understanding Personality Disorders</h1>
+                <h1 class="onsite-course-title mb-5">{{ $course->title }}</h1>
                 <p class="onsite-course-subdescription">
                     This course offers an introduction into personality disorders. There is discussion around each
                     personality disorder cluster,
@@ -48,10 +48,11 @@
 
                 <div class="col-md-6 onsite-course-meta">
                     <ul class="onsite-meta-list">
-                        <li><i class="bi bi-bar-chart"></i> All Levels</li>
-                        <li><i class="bi bi-person"></i> 0 Total Enrolled</li>
-                        <li><i class="bi bi-clock"></i> 1 hour Duration</li>
-                        <li><i class="bi bi-arrow-clockwise"></i> 2024-06-24 Last Updated</li>
+                        {{-- <li><i class="bi bi-bar-chart"></i> All Levels</li> --}}
+                        <li><i class="bi bi-person"></i> {{ $course->bookings->count() }}</li>
+                        <li><i class="bi bi-clock"></i> {{ gmdate('H:i:s', $course->lectures->sum('video_duration')) }}
+                            Duration</li>
+                        <li><i class="bi bi-arrow-clockwise"></i> {{ $course->updated_at }} Last Updated</li>
                         <li><i class="bi bi-award"></i> Certificate of completion</li>
                     </ul>
 
@@ -167,12 +168,39 @@
                         <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="new-tab">
                             <div class="course-details__widget">
                                 <h3 class="text-left d-flex my-4 fs-5">Student Ratings & Reviews</h3>
-                                <div class="d-flex flex-column align-items-center ">
-                                    <img src="{{ asset('assets/svgs/emptystate.svg') }}" alt="">
-                                    <span class="text-secondary">No Review Yet</span>
-                                </div>
+
+                                @if ($course->reviews->isNotEmpty())
+                                    <div class="reviews-section">
+                                        @foreach ($course->reviews as $review)
+                                            <div class="card mb-3 shadow-sm">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <h5 class="mb-0">{{ $review->user->first_name }}
+                                                            {{ $review->user->last_name }}</h5>
+                                                        <div class="rating">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <i
+                                                                    class="bi {{ $i <= $review->rating ? 'bi-star-fill text-warning' : 'bi-star text-muted' }}"></i>
+                                                            @endfor
+                                                        </div>
+                                                    </div>
+                                                    <p class="mt-2 mb-1 text-secondary">{{ $review->review }}</p>
+                                                    <small
+                                                        class="text-muted">{{ $review->created_at->format('F j, Y, g:i a') }}</small>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <div class="d-flex flex-column align-items-center">
+                                        <img src="{{ asset('assets/svgs/emptystate.svg') }}" alt=""
+                                            class="img-fluid mb-3" style="max-width: 200px;">
+                                        <span class="text-secondary">No Reviews Yet</span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

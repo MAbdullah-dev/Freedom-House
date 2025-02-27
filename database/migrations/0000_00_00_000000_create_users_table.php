@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->string('microsoft_id', 255)->nullable();
             $table->boolean('microsoft_account')->default(false);
+            $table->text('refresh_token')->nullable();
             $table->timestamp('token_expires_at')->nullable();
-            $table->string('timezone')->nullable();
+            $table->string('timezone')->default('UTC');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('username')->nullable();
@@ -27,10 +28,15 @@ return new class extends Migration
             $table->string('pfp')->nullable();
             $table->string('cover_photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->integer('role_id');
+            $table->integer('role_id')->default(3);
             $table->string('verification_token', 100)->nullable();
             $table->string('password_reset_token', 100)->nullable();
             $table->timestamp('password_token_created_at')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('website')->nullable();
+            $table->string('github')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

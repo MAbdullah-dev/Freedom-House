@@ -26,12 +26,14 @@
                         <i class="fas fa-heart"></i> Wishlist
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help' ? 'active' : '' }}"
-                        href="{{ route('dashboard.help') }}" wire:navigate>
-                        <i class="fas fa-question-circle"></i> Help Request
-                    </a>
-                </li>
+                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help' ? 'active' : '' }}"
+                            href="{{ route('dashboard.help') }}" wire:navigate>
+                            <i class="fas fa-question-circle"></i> Help Request
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrollments' ? 'active' : '' }}"
                         href="{{ route('dashboard.enrollments') }}" wire:navigate>
@@ -63,7 +65,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.lectures' ? 'active' : '' }}"
                             href="{{ route('dashboard.lectures') }}" wire:navigate>
-                            <i class="fa-solid fa-video"></i> Recorded Lecture
+                            <i class="fa-solid fa-video"></i> upload Lectures
                         </a>
                     </li>
                     <li class="nav-item">
@@ -92,19 +94,25 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help.admin' ? 'active' : '' }}"
                             href="{{ route('dashboard.help.admin') }}" wire:navigate>
-                            <i class="fa-regular fa-circle-question"></i>help requests
+                            <i class="fa-regular fa-circle-question"></i>Help requests
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.categories' ? 'active' : '' }}"
                             href="{{ route('dashboard.categories') }}" wire:navigate>
-                            <i class="fa-solid fa-table-list"></i> categories
+                            <i class="fa-solid fa-table-list"></i> Categories
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.tags' ? 'active' : '' }}"
                             href="{{ route('dashboard.tags') }}" wire:navigate>
                             <i class="fa-solid fa-tag"></i> Tags
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.emails' ? 'active' : '' }}"
+                            href="{{ route('dashboard.emails') }}" wire:navigate>
+                            <i class="fa-solid fa-tag"></i> Emails
                         </a>
                     </li>
                 @endif

@@ -4,15 +4,13 @@ namespace App\Livewire\Dashboard;
 
 use App\Services\MicrosoftGraphService;
 use App\Models\CalendarEvent;
-use Livewire\Component;
 use App\Models\Course;
 use App\Models\Classe;
 use App\Models\Events;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
-
-use function Laravel\Prompts\alert;
+use Livewire\Component;
 
 class ClassForm extends Component
 {
@@ -29,6 +27,7 @@ class ClassForm extends Component
     public $price = 0, $capacity, $visibility = 1, $booking_start_date, $booking_end_date, $date_range, $class_date, $class_time;
     public $courses = [];
     public $classId;
+    public $eventId;
 
     protected $rules = [
         'type' => 'required|in:class,event',
@@ -45,25 +44,47 @@ class ClassForm extends Component
         'class_time' => 'required',
         'date_range' => 'required',
         'booking_start_date' => 'required|date',
-        'booking_end_date' => 'required|date',
+        'booking_end_date' => 'required|date|before:class_date',
     ];
 
     protected $messages = [
         'title.required' => 'Please provide a title for the class/event.',
         'booking_start_date.after_or_equal' => 'The booking start date must be today or later.',
         'booking_end_date.after' => 'The booking end date must be after the start date.',
+        'booking_end_date' => 'The booking end date must be before the actual class date.',
     ];
 
-
-    public function mount($classId = null)
+    public function mount($classId = null, $eventId = null)
     {
         if ($classId) {
             $this->classId = $classId;
-            $this->loadclassData();
+            $this->type = 'class';
+            $this->loadClassData();
+        } elseif ($eventId) {
+            $this->eventId = $eventId;
+            $this->type = 'event';
+            $this->loadEventData();
         }
-        $this->loadcources();
+        $this->loadCourses();
     }
-    public function loadclassData()
+
+    public function updatedDateRange($value)
+    {
+        $dates = explode(' to ', $value);
+        if (count($dates) === 2) {
+            try {
+                $this->booking_start_date = Carbon::parse($dates[0])->toDateString();
+                $this->booking_end_date = Carbon::parse($dates[1])->toDateString();
+            } catch (\Exception $e) {
+                $this->reset(['booking_start_date', 'booking_end_date']);
+                $this->addError('date_range', 'Invalid date range format.');
+            }
+        } else {
+            $this->reset(['booking_start_date', 'booking_end_date']);
+        }
+    }
+
+    public function loadClassData()
     {
         $class = Classe::find($this->classId);
         if ($class) {
@@ -73,119 +94,153 @@ class ClassForm extends Component
             $this->description = $class->description;
             $this->class_type = $class->class_type;
             $this->teams_link = $class->teams_link;
-            $this->onsite_address = $class->onsite_address;
+            $this->onsite_address = $class->class_type === 'onsite' ? $class->onsite_address : null;
             $this->is_paid = $class->is_paid;
             $this->price = $class->price;
             $this->capacity = $class->capacity;
             $this->visibility = $class->visibility;
-            $this->booking_start_date = $class->booking_start_date;
-            $this->booking_end_date = $class->booking_end_date;
+
+            $userTimezone = Auth::user()->timezone;
+            $this->booking_start_date = Carbon::parse($class->booking_start_date, 'UTC')->setTimezone($userTimezone)->toDateString();
+            $this->booking_end_date = Carbon::parse($class->booking_end_date, 'UTC')->setTimezone($userTimezone)->toDateString();
             $this->date_range = $this->booking_start_date . ' to ' . $this->booking_end_date;
-            // $this->recorded_video_url = $class->recorded_video_url;
-            $this->class_date = $class->class_date;
-            $this->class_time = $class->class_time;
+            $this->class_date = Carbon::parse($class->class_date, 'UTC')->setTimezone($userTimezone)->toDateString();
+            $this->class_time = Carbon::parse($class->class_time, 'UTC')->setTimezone($userTimezone)->format('H:i');
         }
     }
+
+    public function loadEventData()
+    {
+
+        $event = Events::find($this->eventId);
+        if ($event) {
+            $this->type = 'event';
+            $this->course_id = $event->course_id;
+            $this->title = $event->title;
+            $this->description = $event->description;
+            $this->class_type = $event->class_type;
+            $this->teams_link = $event->teams_link;
+            $this->onsite_address = $event->class_type === 'onsite' ? $event->onsite_address : null;
+            $this->is_paid = $event->is_paid;
+            $this->price = $event->price;
+            $this->capacity = $event->capacity;
+
+            $userTimezone = Auth::user()->timezone;
+            $this->booking_start_date = Carbon::parse($event->booking_start_date, 'UTC')->setTimezone($userTimezone)->toDateString();
+            $this->booking_end_date = Carbon::parse($event->booking_end_date, 'UTC')->setTimezone($userTimezone)->toDateString();
+            $this->date_range = $this->booking_start_date . ' to ' . $this->booking_end_date;
+            $this->class_date = Carbon::parse($event->class_date, 'UTC')->setTimezone($userTimezone)->toDateString();
+            $this->class_time = Carbon::parse($event->class_time, 'UTC')->setTimezone($userTimezone)->format('H:i');
+        }
+    }
+
     public function updateClass()
     {
         $this->validate([
-            'booking_start_date' => 'required|date|',
-            // Add other fields as necessary
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'class_date' => 'required|date',
+            'class_time' => 'required|date_format:H:i',
+            'booking_start_date' => 'required|date',
+            'booking_end_date' => 'required|date|after:booking_start_date|before:class_date',
+            'price' => 'nullable|numeric|min:0',
+            'capacity' => 'nullable|integer|min:1',
+            'class_type' => 'required|string|in:virtual,onsite,recorded',
+            'onsite_address' => 'nullable|string|max:255',
+            'teams_link' => 'nullable|url',
         ]);
-        $this->validate();
+        $userTimezone = Auth::user()->timezone;
 
-        $class = Classe::findOrFail($this->classId);
-        $class->update([
-            'course_id' => $this->course_id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'class_type' => $this->class_type,
-            'teams_link' => $this->teams_link,
-            'onsite_address' => $this->onsite_address,
-            'is_paid' => $this->is_paid,
-            'price' => $this->price,
-            'capacity' => $this->capacity,
-            'visibility' => $this->visibility,
-            'class_date' => $this->class_date,
-            'class_time' => $this->class_time,
-            'booking_start_date' => $this->booking_start_date,
-            'booking_end_date' => $this->booking_end_date,
-            // 'recorded_video_url' => $this->recorded_video_url,
-        ]);
+        $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
+        $utcClassDateTime = $classDateTime->setTimezone('UTC');
 
-        $this->alert('success', 'Class updated successfully!');
-        $this->redirect(route("dashboard.enrollments"));
+        $bookingStartDate = Carbon::parse($this->booking_start_date, $userTimezone)->setTimezone('UTC');
+        $bookingEndDate = Carbon::parse($this->booking_end_date, $userTimezone)->setTimezone('UTC');
+
+        if ($this->classId) {
+            $class = Classe::findOrFail($this->classId);
+            $class->update([
+                'course_id' => $this->course_id,
+                'title' => $this->title,
+                'description' => $this->description,
+                'class_type' => $this->class_type,
+                'teams_link' => $this->teams_link,
+                'onsite_address' => $this->onsite_address,
+                'is_paid' => $this->is_paid,
+                'price' => $this->price,
+                'capacity' => $this->capacity,
+                'visibility' => $this->visibility,
+                'class_date' => $utcClassDateTime->toDateString(),
+                'class_time' => $utcClassDateTime->toTimeString(),
+                'booking_start_date' => $bookingStartDate->toDateString(),
+                'booking_end_date' => $bookingEndDate->toDateString(),
+            ]);
+
+            $this->updateCalendarEvent($class->microsoft_event_id);
+
+            $this->alert('success', 'Class updated successfully!');
+            $this->redirect(route("dashboard.enrollments"));
+        } elseif ($this->eventId) {
+            $event = Events::findOrFail($this->eventId);
+            $event->update([
+                'course_id' => $this->course_id,
+                'title' => $this->title,
+                'description' => $this->description,
+                'class_type' => $this->class_type,
+                'teams_link' => $this->teams_link,
+                'onsite_address' => $this->onsite_address,
+                'is_paid' => $this->is_paid,
+                'price' => $this->price,
+                'capacity' => $this->capacity,
+                'visibility' => $this->visibility,
+                'class_date' => $utcClassDateTime->toDateString(),
+                'class_time' => $utcClassDateTime->toTimeString(),
+                'booking_start_date' => $bookingStartDate->toDateString(),
+                'booking_end_date' => $bookingEndDate->toDateString(),
+            ]);
+
+            $this->updateCalendarEvent($event->microsoft_event_id);
+
+            $this->alert('success', 'Event updated successfully!');
+            $this->redirect(route("dashboard.enrollments"));
+        }
     }
-    public function loadcources()
+
+    private function updateCalendarEvent($microsoftEventId)
+    {
+        if ($microsoftEventId) {
+            $attendees = [
+                [
+                    'email' => Auth::user()->email,
+                    'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
+                ]
+            ];
+
+            $this->microsoftGraphService->updateCalendarEvent(
+                $microsoftEventId,
+                $this->title,
+                $this->description,
+                $this->class_date . ' ' . $this->class_time,
+                Carbon::parse($this->class_date . ' ' . $this->class_time)->addHour()->toDateTimeString(),
+                $this->onsite_address,
+                $attendees,
+                $this->class_type === 'virtual'
+            );
+        }
+    }
+
+    public function loadCourses()
     {
         $this->courses = Course::with(['user', 'tutors'])
             ->where('is_published', true)
             ->where('is_drafted', false)
+            ->where('course_type', 'classtype')
             ->where('user_id', Auth::id())
             ->get();
-    }
-    public function updatedDateRange($value)
-    {
-        // Parse the date range string into start_date and end_date
-        $dates = explode(' to ', $value);
-        if (count($dates) === 2) {
-            $this->booking_start_date = $dates[0];
-            $this->booking_end_date = $dates[1];
-        }
-    }
-
-    public function dispatchClassTypeChanged()
-    {
-        switch ($this->class_type) {
-            case 'onsite':
-                $this->reset(['teams_link']);
-                break;
-            case 'virtual':
-                $this->reset(['onsite_address']);
-                break;
-                // case 'recorded':
-                //     $this->reset(['teams_link', 'onsite_address']);
-                //     break;
-        }
-    }
-
-
-    public function dispatchTypeChanged()
-    {
-        $this->dispatch('refreshComponent');
-    }
-
-    public function dispatchIsPaidChanged()
-    {
-        $this->dispatch('refreshComponent');
-    }
-
-    public function submit()
-    {
-        $this->validate();
-
-        if ($this->class_type == 'virtual' && !Auth::user()->microsoft_account) {
-            $this->alert('error', 'You must have a Microsoft account to create a virtual class.');
-            return;
-        }
-
-        if ($this->type === 'class') {
-            $this->createClass();
-            $this->loadcources();
-        } else {
-            $this->createEvent();
-            $this->loadcources();
-        }
-        // if ($this->classId) {
-        // }
-
-
-        $this->reset();
     }
 
     private function createClass()
     {
-
         $userTimezone = Auth::user()->timezone;
         $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
         $utcClassDateTime = $classDateTime->setTimezone('UTC');
@@ -198,7 +253,6 @@ class ClassForm extends Component
             'class_type' => $this->class_type,
             'teams_link' => $this->teams_link,
             'onsite_address' => $this->onsite_address,
-            // 'recorded_video_url' => $this->recorded_video_url,
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,
@@ -209,8 +263,6 @@ class ClassForm extends Component
             'booking_end_date' => $this->booking_end_date,
         ]);
 
-        // dd($class);
-
         CalendarEvent::create([
             'user_id' => Auth::id(),
             'class_id' => $class->id,
@@ -220,17 +272,13 @@ class ClassForm extends Component
             $attendees = [
                 ['email' => Auth::user()->email, 'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name],
             ];
-
             $graphService = new MicrosoftGraphService();
-
             $success = false;
-
             if ($class->class_type == 'virtual') {
                 $success = $graphService->createCalendarEventWithTeamsMeeting($class, $attendees) ? true : false;
             } else {
                 $success = $graphService->createCalendarEvent($class) ? true : false;
             }
-
             if ($success) {
                 $this->alert('success', 'Class created successfully!');
                 $this->redirect(route("dashboard.enrollments"));
@@ -238,20 +286,16 @@ class ClassForm extends Component
                 $this->alert('error', 'Failed to create class.');
             }
         } else {
-            alert('success', 'Class created successfully!');
+            $this->alert('success', 'Class created successfully!');
             $this->redirect(route("dashboard.enrollments"));
         }
     }
 
     private function createEvent()
     {
-
         $userTimezone = Auth::user()->timezone;
-        $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
-        $utcClassDateTime = $classDateTime->setTimezone('UTC');
-        $bookingStartDateTime = Carbon::parse($this->booking_start_date, $userTimezone)->setTimezone('UTC');
-        $bookingEndDateTime = Carbon::parse($this->booking_end_date, $userTimezone)->setTimezone('UTC');
-
+        $eventDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
+        $utcEventDateTime = $eventDateTime->setTimezone('UTC');
 
         $event = Events::create([
             'title' => $this->title,
@@ -263,25 +307,23 @@ class ClassForm extends Component
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'capacity' => $this->capacity,
-            'class_date' => $utcClassDateTime->toDateString(),
-            'class_time' => $utcClassDateTime->toTimeString(),
+            'visibility' => $this->visibility,
+            'class_date' => $utcEventDateTime->toDateString(),
+            'class_time' => $utcEventDateTime->toTimeString(),
             'booking_start_date' => $this->booking_start_date,
             'booking_end_date' => $this->booking_end_date,
         ]);
-
-        // dd($event);
 
         CalendarEvent::create([
             'user_id' => Auth::id(),
             'event_id' => $event->id,
         ]);
+
         if (Auth::user()->microsoft_account == true) {
             $attendees = [
                 ['email' => Auth::user()->email, 'name' => Auth::user()->first_name . ' ' . Auth::user()->last_name],
             ];
-
             $graphService = new MicrosoftGraphService();
-
             $success = false;
 
             if ($event->class_type == 'virtual') {
@@ -289,7 +331,6 @@ class ClassForm extends Component
             } else {
                 $success = $graphService->createCalendarEvent($event) ? true : false;
             }
-
             if ($success) {
                 $this->alert('success', 'Event created successfully!');
                 $this->redirect(route("calendar"));
@@ -297,10 +338,55 @@ class ClassForm extends Component
                 $this->alert('error', 'Failed to create class.');
             }
         } else {
-            alert('success', 'Event created successfully!');
+            $this->alert('success', 'Event created successfully!');
             $this->redirect(route("dashboard.enrollments"));
         }
     }
+
+    public function save()
+    {
+        if ($this->type === 'class') {
+            if ($this->classId) {
+                $this->updateClass();
+            } else {
+                $this->createClass();
+            }
+        } elseif ($this->type === 'event') {
+            if ($this->eventId) {
+                $this->updateClass();
+            } else {
+                $this->createEvent();
+            }
+        }
+    }
+
+    public function dispatchTypeChanged()
+    {
+        if ($this->type === 'class') {
+            $this->course_id = null;
+            $this->description = null;
+        } elseif ($this->type === 'event') {
+            $this->course_id = null;
+        }
+    }
+
+    public function dispatchClassTypeChanged()
+    {
+        if ($this->class_type === 'virtual') {
+            $this->onsite_address = null;
+        } elseif ($this->class_type === 'onsite') {
+            $this->date_range = null;
+        }
+    }
+
+    public function dispatchIsPaidChanged()
+    {
+        if ($this->is_paid === 'free') {
+            $this->price = null;
+        }
+    }
+
+
 
     public function render()
     {

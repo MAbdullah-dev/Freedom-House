@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->cascadeOnUpdate();
             $table->text('message');
-            $table->enum('type', ['booking', 'cancellation', 'grade', 'general']);
+            $table->enum('type', ['booking', 'cancellation', 'grade', 'general', 'congratulations']);
             $table->boolean('read_status')->default(false);
             $table->timestamps();
         });

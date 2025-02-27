@@ -15,7 +15,7 @@ class MicrosoftGraphService
     public function refreshAccessToken(User $user)
     {
         try {
-            $refreshToken = session('refresh_token');
+            $refreshToken = $user->refresh_token;
 
             if (!$refreshToken) {
                 throw new \Exception('No refresh token found in session.');
@@ -110,7 +110,7 @@ class MicrosoftGraphService
                     'address' => $attendee['email'],
                     'name' => $attendee['name'],
                 ],
-                'type' => 'required',
+                'type' => 'optional',
             ];
         }, $attendees);
     }
@@ -122,8 +122,8 @@ class MicrosoftGraphService
             $userTimezone = Auth::user()->timezone ?? 'UTC';
             $durationInHours = 1;
             $startDateTime = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $model->class_date . 'T' . $model->class_time, 'America/New_York');
-
             $endDateTime = $startDateTime->copy()->addHours($durationInHours);
+
             $eventData = [
                 'subject' => $model->title,
                 'body' => [
@@ -168,50 +168,215 @@ class MicrosoftGraphService
     public function addDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
     {
         try {
-            $accessToken = $this->refreshAccessToken(Auth::user());
+            $accessToken = $this->getAccessTokenWithPermissions();
 
-            // Ensure the model has a valid Microsoft Event ID
             if (!$model->microsoft_event_id) {
-                throw new \Exception('Microsoft Event ID not found.');
+                throw new \Exception('Microsoft Event ID not found for the class.');
             }
 
-            // Format attendees
             $attendeesData = $this->formatAttendees($attendees);
-            // dd($organizerId, $model->microsoft_event_id, $attendeesData, $accessToken);
-            // Add attendees to the event using the organizer's Microsoft ID
-            // Fetch the event to ensure it exists
-            $response = Http::withToken($accessToken)
-                ->get('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id);
 
-            // Check if the request failed
-            if ($response->failed()) {
-                // If the event doesn't exist, log or return the error message
-                dd('Event not found: ' . $response->body());  // Debugging the error response
-            } else {
-                // If the event exists, proceed with adding attendees
-                $event = $response->json();
-                // Optionally log the event details for debugging
-                Log::info('Event details: ', $event);
+            $updateResponse = Http::withToken($accessToken)
+                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
+                    'attendees' => $attendeesData,
+                ]);
 
-                // Now, you can safely proceed to update the event
-                $updateResponse = Http::withToken($accessToken)
-                    ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id, [
-                        'attendees' => $attendeesData,
-                    ]);
-
-                if ($updateResponse->failed()) {
-                    dd('Error updating event: ' . $updateResponse->body());
-                }
-
-                return true;  // Success
+            if ($updateResponse->failed()) {
+                Log::error('Error updating event: ' . $updateResponse->body());
+                throw new \Exception('Error updating event: ' . $updateResponse->body());
             }
 
+            Log::info('Event updated successfully with new attendees', ['response' => $updateResponse->json()]);
 
             return true;
         } catch (\Exception $e) {
             Log::error('Error adding dynamic attendees: ' . $e->getMessage());
             throw $e;
-            return false;
         }
     }
+    private function getAccessTokenWithPermissions()
+    {
+        $tenantId = env('AZURE_TENANT_ID');
+
+        $tokenResponse = Http::asForm()->post("https://login.microsoftonline.com/{$tenantId}/oauth2/v2.0/token", [
+            'client_id' => env('AZURE_CLIENT_ID'),
+            'client_secret' => env('AZURE_CLIENT_SECRET'),
+            'grant_type' => 'client_credentials',
+            'scope' => 'https://graph.microsoft.com/.default',
+        ]);
+
+        if ($tokenResponse->failed()) {
+            Log::error('Failed to retrieve access token: ' . $tokenResponse->body());
+            throw new \Exception('Failed to retrieve access token.');
+        }
+
+        Log::info('Access token retrieved successfully', ['response' => $tokenResponse->json()]);
+
+        return $tokenResponse->json('access_token');
+    }
+
+    public function createUserCalendarEvent($title, $description, $startDateTime, $endDateTime, $location, $attendees)
+    {
+        try {
+            $accessToken = $this->refreshAccessToken(Auth::user());
+
+            $userTimezone = Auth::user()->timezone ?? 'UTC';
+
+            $eventData = [
+                'subject' => $title,
+                'body' => [
+                    'contentType' => 'HTML',
+                    'content' => $description ?? 'No description provided.',
+                ],
+                'start' => [
+                    'dateTime' => Carbon::parse($startDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'end' => [
+                    'dateTime' => Carbon::parse($endDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'location' => [
+                    'displayName' => $location,
+                ],
+                'attendees' => $this->formatAttendees($attendees),
+                'allowNewTimeProposals' => true,
+                'isOnlineMeeting' => false,
+            ];
+
+            $response = Http::withToken($accessToken)->post('https://graph.microsoft.com/v1.0/me/events', $eventData);
+
+            if ($response->failed()) {
+                Log::error('Error creating calendar event: ' . $response->body());
+                throw new \Exception('Error creating calendar event: ' . $response->body());
+            }
+
+            Log::info('Calendar event created successfully', ['response' => $response->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error creating calendar event: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function updateCalendarEvent($eventId, $title, $description, $startDateTime, $endDateTime, $location, $attendees, $isOnlineMeeting = false)
+    {
+        try {
+            $accessToken = $this->refreshAccessToken(Auth::user());
+
+            $userTimezone = Auth::user()->timezone ?? 'UTC';
+
+            // Retrieve existing attendees
+            $existingEventResponse = Http::withToken($accessToken)->get('https://graph.microsoft.com/v1.0/me/events/' . $eventId);
+            if ($existingEventResponse->failed()) {
+                Log::error('Error retrieving existing event: ' . $existingEventResponse->body());
+                throw new \Exception('Error retrieving existing event: ' . $existingEventResponse->body());
+            }
+            $existingEvent = $existingEventResponse->json();
+            $existingAttendees = $existingEvent['attendees'] ?? [];
+
+            $eventData = [
+                'subject' => $title,
+                'body' => [
+                    'contentType' => 'HTML',
+                    'content' => $description ?? 'No description provided.',
+                ],
+                'start' => [
+                    'dateTime' => Carbon::parse($startDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'end' => [
+                    'dateTime' => Carbon::parse($endDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                    'timeZone' => $userTimezone,
+                ],
+                'location' => [
+                    'displayName' => $location,
+                ],
+                'attendees' => $existingAttendees,
+                'allowNewTimeProposals' => false,
+            ];
+
+            if ($isOnlineMeeting) {
+                $eventData['isOnlineMeeting'] = true;
+                $eventData['onlineMeetingProvider'] = 'teamsForBusiness';
+            }
+
+            $response = Http::withToken($accessToken)->patch('https://graph.microsoft.com/v1.0/me/events/' . $eventId . '?sendUpdates=all', $eventData);
+
+            if ($response->failed()) {
+                Log::error('Error updating calendar event: ' . $response->body());
+                throw new \Exception('Error updating calendar event: ' . $response->body());
+            }
+
+            Log::info('Calendar event updated successfully', ['response' => $response->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error updating calendar event: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function updateDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
+    {
+        try {
+            $accessToken = $this->getAccessTokenWithPermissions();
+
+            if (!$model->microsoft_event_id) {
+                throw new \Exception('Microsoft Event ID not found for the class.');
+            }
+
+            $attendeesData = $this->formatAttendees($attendees);
+
+            $updateResponse = Http::withToken($accessToken)
+                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
+                    'attendees' => $attendeesData,
+                ]);
+
+            if ($updateResponse->failed()) {
+                Log::error('Error updating event: ' . $updateResponse->body());
+                throw new \Exception('Error updating event: ' . $updateResponse->body());
+            }
+
+            Log::info('Event updated successfully with new attendees', ['response' => $updateResponse->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error updating dynamic attendees: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function deleteDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
+    {
+        try {
+            $accessToken = $this->getAccessTokenWithPermissions();
+
+            if (!$model->microsoft_event_id) {
+                throw new \Exception('Microsoft Event ID not found for the class.');
+            }
+
+            $attendeesData = $this->formatAttendees($attendees);
+
+            $updateResponse = Http::withToken($accessToken)
+                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
+                    'attendees' => $attendeesData,
+                ]);
+
+            if ($updateResponse->failed()) {
+                Log::error('Error deleting event attendees: ' . $updateResponse->body());
+                throw new \Exception('Error deleting event attendees: ' . $updateResponse->body());
+            }
+
+            Log::info('Event attendees deleted successfully', ['response' => $updateResponse->json()]);
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error deleting dynamic attendees: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+
 }

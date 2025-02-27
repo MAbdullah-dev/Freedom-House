@@ -1,4 +1,7 @@
 <div class="category px-4 py-5">
+    @push('title')
+        Category
+    @endpush
     <section>
         <div class="create-category">
             <form wire:submit.prevent="createCategory">
@@ -67,7 +70,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteCategoryModalLabel">Delete Category</h5>
+                    <h5 class="modal-title text-white" id="deleteCategoryModalLabel">Delete Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                         aria-label="Close"></button>
                 </div>
@@ -90,7 +93,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                    <h5 class="modal-title text-white" id="editCategoryModalLabel">Edit Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal"
                         aria-label="Close"></button>
                 </div>
@@ -105,7 +108,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" wire:click="closeModal"
                             data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="submit" class="button-primary">Save Changes</button>
                     </div>
                 </form>
             </div>

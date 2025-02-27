@@ -1,4 +1,7 @@
 <div class="course-analytics">
+    @push('title')
+        Course Analytics
+    @endpush
     <div x-data="{ tab: 'Overview' }" class="container mt-5">
 
         <!-- Tab Navigation -->

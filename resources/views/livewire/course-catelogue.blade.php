@@ -1,4 +1,10 @@
+@php
+    $user = Auth::user();
+@endphp
 <div class="course-catalogue">
+    @push('title')
+        Course Catalog
+    @endpush
     <section class="course-catelogue-main">
         <div class="container d-flex flex-column justify-content-center align-items-center">
             <div class="content-wrapper">
@@ -98,7 +104,7 @@
                                 <label for="substance-use">Substance Use Disorder</label>
                             </li>
                         </ul>
-                        <button class="btn filter-btn" @click="clearFilters()">
+                        <button class="btn filter-btn" wire:click="clearFilters">
                             <i class="fa-solid fa-xmark"></i> Clear All Filters
                         </button>
                     </div>
@@ -128,34 +134,36 @@
                 <div class="col-lg-12 col-xl-9">
                     <div class="row gy-4">
                         @foreach ($courses as $item)
+                            @php
+                                $averageRating = round($item->average_rating);
+                            @endphp
                             <div class="col-sm-6 col-lg-4 ">
                                 <div class="card shadow">
                                     <div class="card-img-top">
-                                        <img src="{{ asset('storage/' . $item->thumbnail) }}" class="card-img-top"
+                                        <img src="{{ asset('storage/' . $item->thumbnail) }}" class=""
                                             alt="...">
                                         @if (Auth::check())
-                                        <i class="{{ Auth::user()->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
-                                            data-course-id="{{ $item->id }}" style="cursor: pointer;">
-                                        </i>
+                                            <i class="{{ Auth::user()->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
+                                                data-course-id="{{ $item->id }}" style="cursor: pointer;">
+                                            </i>
                                         @else
-                                        <i class="fa-regular fa-bookmark" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#AuthCheckModal">
-                                        </i>
+                                            <i class="fa-regular fa-bookmark" style="cursor: pointer;"
+                                                data-bs-toggle="modal" data-bs-target="#AuthCheckModal">
+                                            </i>
                                         @endif
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $item->title }}</h5>
                                         <div class="tutor-ratings d-flex align-items-center gap-1">
                                             @for ($i = 1; $i <= 5; $i++)
-                                                @if ($i <= round($item->ratings_avg_rating))
-                                                    <i class="fa-solid fa-star" style="color: #eea015;"></i>
-                                                @else
-                                                    <i class="fa-regular fa-star" style="color: #eea015;"></i>
-                                                @endif
+                                                <i class="{{ $i <= $averageRating ? 'fa-solid' : 'fa-regular' }} fa-star"
+                                                    style="color: #eea015;"></i>
                                             @endfor
                                         </div>
                                         <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
                                             <div class="tutor-data d-flex align-items-center gap-1">
-                                                <img src="{{ asset('storage/' . $item->user->pfp) }}" alt="">
+                                                <img src="{{ $item->user->pfp ? asset('storage/' . $item->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                                                    alt="">
                                                 <small>by</small><span>{{ $item->user->first_name }}
                                                     {{ $item->user->last_name }}</span>
                                             </div>
@@ -187,14 +195,13 @@
             <div class="inner">
                 <h2>POPULAR INSTRUCTORS</h2>
                 <livewire:courses-cards.instructor-cards />
-
             </div>
         </div>
     </div>
 
     <style>
         .course-catelogue-main {
-            background-image: url('{{ asset('assets/images/course.png') }}');
+            background-image: url('{{ asset('assets/images/course.webp') }}');
         }
     </style>
 
@@ -227,6 +234,12 @@
                     spaceBetween: 0,
                 },
             }
+        });
+
+        document.addEventListener('clearCategoryFilters', () => {
+            document.querySelectorAll('.filter input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
         });
     </script>
 @endscript

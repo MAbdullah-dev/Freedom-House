@@ -1,4 +1,7 @@
 <div class="class_form">
+    @push('title')
+        {{ $type === 'class' ? 'Create Class' : 'Create Event' }}
+    @endpush
     <header class="custom-header">
         <div class="container-fluid px-5">
             <div class="header-wrapper d-flex justify-content-between align-items-center mb-2">
@@ -8,18 +11,18 @@
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
                     </button> --}}
                     {{-- <button type="button" class="btn button-preview me-2 custom-preview-button">Preview</button> --}}
-                    @if (!$classId)
-                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="submit"
+                    @if (!$classId && !$eventId)
+                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="save"
                             wire:loading.attr="disabled">
-                            <span wire:loading wire:target="submit" class="spinner-border spinner-border-sm"
+                            <span wire:loading wire:target="save" class="spinner-border spinner-border-sm"
                                 aria-hidden="true"></span>
                             <span wire:loading.remove
-                                wire:target="submit">{{ $type === 'class' ? 'Create Class' : 'Create Event' }}</span>
-                            <span wire:loading wire:target="submit">Loading...</span>
+                                wire:target="save">{{ $type === 'class' ? 'Create Class' : 'Create Event' }}</span>
+                            <span wire:loading wire:target="save">Loading...</span>
                         </button>
                     @endif
-                    @if ($classId)
-                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="updateClass"
+                    @if ($classId || $eventId)
+                        <button type="submit" class="btn button-submit custom-submit-button" wire:click="save"
                             wire:loading.attr="disabled">
                             <span wire:loading wire:target="updateClass" class="spinner-border spinner-border-sm"
                                 aria-hidden="true"></span>
@@ -123,7 +126,7 @@
                             @if ($class_type === 'onsite')
                                 <div class="">
                                     <label for="onsiteAddress" class="form-label">Onsite Address</label>
-                                    <input wire:model="onsite_address" id="onsiteAddress"
+                                    <input wire:model.defer="onsite_address" id="onsiteAddress"
                                         class="form-control @if ($errors->has('onsite_address')) is-invalid @elseif ($onsite_address) is-valid @endif"
                                         type="text" placeholder="Enter Onsite Address">
                                     @error('onsite_address')
@@ -174,7 +177,7 @@
                                     class="form-label">{{ $type === 'class' ? 'Class Date' : 'Event date' }}</label>
                                 <input wire:model="class_date" id="classDate"
                                     class="form-control @if ($errors->has('class_date')) is-invalid @elseif ($capacity) is-valid @endif"
-                                    type="date" placeholder="Enter class Date">
+                                    placeholder="Enter class Date">
                                 @error('class_date')
                                     <li class="text-danger"><span class="small">{{ $message }}</span></li>
                                 @enderror
@@ -182,10 +185,10 @@
                             {{-- class_time and event_time --}}
                             <div class="mb-3">
                                 <label for="classtime"
-                                    class="form-label">{{ $type === 'class' ? 'Class Date' : 'Event date' }}</label>
+                                    class="form-label">{{ $type === 'class' ? 'Class Time' : 'Event Time' }}</label>
                                 <input wire:model="class_time" id="classtime"
                                     class="form-control @if ($errors->has('class_time')) is-invalid @elseif ($capacity) is-valid @endif"
-                                    type="time" placeholder="Enter class Date">
+                                    placeholder="Enter class Date">
                                 @error('class_time')
                                     <li class="text-danger"><span class="small">{{ $message }}</span></li>
                                 @enderror
@@ -206,16 +209,20 @@
                             <div class="row">
                                 <div class="mb-3" wire:ignore>
                                     <label for="calendar-input" class="form-label">
-                                        {{ $type === 'class' ? 'Class Start Date to End Date' : 'Event Start Date to End Date' }}
+                                        {{ $type === 'class' ? 'Bookings Start Date to End Date' : 'Booking Start Date to End Date' }}
                                     </label>
                                     <input type="text" wire:model.lazy="date_range" id="calendar-input"
                                         class="form-control {{ $errors->has('date_range') ? 'is-invalid' : ($date_range ? 'is-valid' : '') }}"
                                         placeholder="@if ($date_range) {{ $date_range }} @else Select Date Range (e.g., YYYY-MM-DD to YYYY-MM-DD) @endif">
-                                    @error('date_range')
-                                        <li class="text-danger"><span class="small">{{ $message }}</span></li>
-                                    @enderror
                                 </div>
                             </div>
+                            @error('date_range')
+                                <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                            @enderror
+                            @error('booking_end_date')
+                                <li class="text-danger"><span class="small">{{ $message }}</span></li>
+                            @enderror
+
                         </form>
                     </div>
                 </div>
@@ -254,6 +261,19 @@
                 const endDate = selectedDates[1] ? selectedDates[1].toLocaleString('en-CA') : '';
                 @this.set('date_range', startDate + (endDate ? ' to ' + endDate : ''));
             }
+        });
+
+        flatpickr("#classDate", {
+            dateFormat: "Y-m-d",
+            altFormat: "F j, Y",
+            defaultDate: new Date(),
+        });
+
+        flatpickr("#classtime", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
         });
     </script>
 @endscript

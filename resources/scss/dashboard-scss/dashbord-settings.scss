@@ -60,7 +60,6 @@
         margin-top: 32px;
 
         .tab-pane {
-
             &.active,
             &.fade {
                 animation: fadeIn 0.5s ease-in-out;
@@ -97,7 +96,7 @@
                 border-radius: 10px;
                 max-height: 300px;
                 min-height: 200px;
-                object-fit: cover;
+                object-fit: fill;
                 transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
             }
 
@@ -147,16 +146,21 @@
                 transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
             }
 
-            .delete-profile-photo {}
+            .delete-profile-photo {
+            }
 
-            &:hover .profile-photo {}
+            &:hover .profile-photo {
+            }
 
-            &:hover .delete-profile-photo {}
+            &:hover .delete-profile-photo {
+            }
         }
 
-        .dropdown-menu {}
+        .dropdown-menu {
+        }
 
-        .profile-photo-wrapper:hover .dropdown-menu {}
+        .profile-photo-wrapper:hover .dropdown-menu {
+        }
 
         form {
             margin-top: 95px;

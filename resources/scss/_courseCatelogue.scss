@@ -20,6 +20,7 @@
                 padding: 10px;
                 max-width: 100%;
                 position: relative;
+                // height: 250px;
             }
 
             i {
@@ -59,7 +60,7 @@
                     img {
                         height: 36px;
                         width: 36px;
-                        object-fit: contain;
+                        object-fit: cover;
                         border-radius: 50%;
                     }
 
@@ -338,18 +339,21 @@
 
         .instructor-card {
             margin: 60px 5px;
-            // border-radius: 15px;
             border: 1px solid #d1d7dc;
 
             ul {
                 padding: 10px;
                 margin: 0;
+                display: flex;
+                gap: 4px;
 
                 .instructor-img {
+                    margin: 15px 0;
+
                     img {
                         height: 65px;
                         width: 65px;
-                        object-fit: contain;
+                        object-fit: cover;
                         border-radius: 50%;
                     }
                 }
@@ -362,34 +366,28 @@
                         color: #212327;
                     }
 
-                    p {
+                    .instructor-text {
+                        height: 30px;
                         font-size: 14px;
                         line-height: 16px;
                         font-weight: 400;
                         color: #2d2f31;
+                        margin: 10px 0;
                     }
 
-                    .instructor-rating {
-                        span {
-                            font-size: 14px;
+                    .instructor-data {
+                        display: flex;
+                        flex-direction: column;
+                        margin: 10px 0;
+
+                        .instructor-data-span {
+                            font-size: 12px;
                             font-weight: 400;
                             line-height: 14px;
-                            color: #4d3105;
-                        }
+                            color: #2d2f31 !important;
 
-                        .instructor-data {
-                            span {
-                                font-size: 12px;
-                                font-weight: 400;
-                                line-height: 14px;
-                                color: #2d2f31;
-
-                                strong {
-                                    font-size: 12px;
-                                    font-weight: 700;
-                                    line-height: 14px;
-                                    color: #2d2f31;
-                                }
+                            strong {
+                                font-weight: 700;
                             }
                         }
                     }

@@ -22,7 +22,8 @@ class CreateCourse extends Component
     public $tags = [];
     public $tutors = [];
     public $file;
-    public $videoUrl;
+    // public $ ;
+    public $videoFile; // New variable for video file upload
     public $learnDetails;
     public $audienceDetails;
     public $requirements;
@@ -37,6 +38,7 @@ class CreateCourse extends Component
     public $tutorList = [];
 
     public $existingThumbnail;
+    public $existingVideo;
 
     protected function rules()
     {
@@ -47,8 +49,10 @@ class CreateCourse extends Component
             'category.*' => 'exists:categories,id',
             'tags' => 'required|array|min:1',
             'tags.*' => 'exists:tags,id',
-            'file' => 'required|image|mimes:jpeg,png,jpg|max:1024',
-            'videoUrl' => 'required|url',
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',  // No condition needed here
+            'videoFile' => ($this->videoFile instanceof \Illuminate\Http\UploadedFile)
+                ? 'nullable|file|mimes:mp4,mov,avi|max:10240'
+                : 'nullable|string',
             'learnDetails' => 'required|string',
             'audienceDetails' => 'required|string',
             'requirements' => 'required|string',
@@ -57,6 +61,25 @@ class CreateCourse extends Component
             'price' => 'required_if:is_paid,Paid|min:0',
         ];
     }
+
+    public function uploadVideo()
+    {
+        if ($this->videoFile instanceof \Illuminate\Http\UploadedFile) {
+            return $this->videoFile->store('videos', 'public'); // Save video to the "public/videos" directory
+
+        }
+        return null;
+    }
+    public function uploadThumbnail()
+    {
+        if ($this->file instanceof \Illuminate\Http\UploadedFile) {
+            return $this->file->store('uploads', 'public');
+        }
+
+        return null;
+    }
+
+
 
     public function mount($courseId = null)
     {
@@ -85,10 +108,11 @@ class CreateCourse extends Component
         $this->category = $course->categories->pluck('id')->toArray();
         $this->tags = $course->tags->pluck('id')->toArray();
         $this->tutors = $course->tutors->pluck('user_id')->toArray();
+        $this->file = $course->thumbnail;
         $this->learnDetails = $course->learning_outcomes;
         $this->audienceDetails = $course->target_audience;
         $this->requirements = $course->requirements;
-        $this->videoUrl = $course->video_url;
+        $this->existingVideo = $course->video_path;
         $this->existingThumbnail = $course->thumbnail;
         $this->selectedTutors = $course->tutors;
         $this->is_paid = $course->is_paid;
@@ -111,14 +135,7 @@ class CreateCourse extends Component
             ->get();
     }
 
-    public function uploadThumbnail()
-    {
-        if ($this->file) {
-            return $this->file->store('uploads', 'public');
-        }
 
-        return $this->existingThumbnail;
-    }
 
     public function submitCourse()
     {
@@ -127,6 +144,7 @@ class CreateCourse extends Component
         } else {
             $this->createCourse();
         }
+        $this->redirect(route('dashboard.mycourses'));
     }
 
     public function createCourse()
@@ -134,13 +152,14 @@ class CreateCourse extends Component
         $this->validate();
 
         $filePath = $this->uploadThumbnail();
+        $videoPath = $this->uploadVideo(); // Upload video file and get the path
 
         $course = Course::create([
             'user_id' => Auth::id(),
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
-            'video_url' => $this->videoUrl,
+            'video_path' => $videoPath, // Save video path in the database
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
@@ -161,45 +180,45 @@ class CreateCourse extends Component
         $this->redirect(route('dashboard.mycourses'));
     }
 
-
     public function updateCourse()
     {
         $this->validate();
 
         $course = Course::findOrFail($this->courseId);
-        $filePath = $this->uploadThumbnail();
 
-        $course->update([
-            'title' => $this->courseTitle,
-            'description' => $this->description,
-            'thumbnail' => $filePath,
-            'video_url' => $this->videoUrl,
-            'learning_outcomes' => $this->learnDetails,
-            'requirements' => $this->requirements,
-            'target_audience' => $this->audienceDetails,
-            'is_paid' => $this->is_paid,
-            'price' => $this->price,
-            'course_type' => $this->courseType,
-        ]);
+        $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
+            ? $this->uploadThumbnail()
+            : $this->existingThumbnail;
+
+        $videoPath = $this->videoFile instanceof \Illuminate\Http\UploadedFile
+            ? $this->uploadVideo()
+            : $this->videoFile;
 
         $course->categories()->sync($this->category);
         $course->tags()->sync($this->tags);
         $course->tutors()->sync($this->tutors);
 
-        $this->alert('success', 'Course updated successfully.');
+        $this->videoFile = $videoPath;
+
+        $course->categories()->sync($this->category);
+        $course->tags()->sync($this->tags);
+        $course->tutors()->sync($this->tutors);
     }
+
     public function saveAsDraft()
     {
         $this->validate();
 
         $filePath = $this->uploadThumbnail();
+        $videoPath = $this->uploadVideo(); // Upload video file and get the path
+
 
         $course = Course::create([
             'user_id' => Auth::id(),
             'title' => $this->courseTitle,
             'description' => $this->description,
             'thumbnail' => $filePath,
-            'video_url' => $this->videoUrl,
+            'video_path' => $this->videoFile ? $videoPath : null,
             'learning_outcomes' => $this->learnDetails,
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
@@ -234,7 +253,36 @@ class CreateCourse extends Component
     {
         $this->dispatch('refreshComponent');
     }
+    public function previewCourse()
+    {
+        $this->validate();
 
+        // Store course data in the session for preview
+        session()->put('preview_course', [
+            'courseTitle' => $this->courseTitle,
+            'description' => $this->description,
+            // 'category' => $this->categorylist->whereIn('id', $this->category)->pluck('name')->toArray(),
+            // 'tags' => $this->tagslist->whereIn('id', $this->tags)->pluck('name')->toArray(),
+            // 'tutors' => $this->selectedTutors->pluck('user.name')->toArray(),
+            'learnDetails' => $this->learnDetails,
+            'audienceDetails' => $this->audienceDetails,
+            'requirements' => $this->requirements,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'courseType' => $this->courseType,
+            'thumbnail' => $this->file ? $this->uploadThumbnail() : $this->existingThumbnail,
+            'video' => $this->videoFile ? $this->uploadVideo() : $this->videoFile,
+        ]);
+
+        // Redirect to the preview page
+        return redirect()->route('dashboard.course.preview');
+    }
+    // public function updatedVideoFile()
+    // {
+    //     $this->validate([
+    //         'videoFile' => 'mimes:mp4,avi,mov|max:10240', // File validation
+    //     ]);
+    // }
     public function render()
     {
         return view('livewire.dashboard.create-course')->layout('components.layouts.createCourse');
