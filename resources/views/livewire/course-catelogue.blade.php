@@ -1,8 +1,10 @@
 <div class="course-catalogue">
     <section class="course-catelogue-main">
         <div class="container d-flex flex-column justify-content-center align-items-center">
+            <div class="content-wrapper">
             <h3>PROGRAMS WE OFFER</h3>
             <h1 class="my-5">ALL COURSES</h1>
+        </div>
         </div>
     </section>
     <section class="course-catelogue-list">

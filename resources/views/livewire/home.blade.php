@@ -1,6 +1,7 @@
 <div class="home">
     <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.png') }}');">
         <div class="container d-flex flex-column justify-content-center align-items-center">
+            <div class="content-wrapper">
             <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>
             <h1 class="my-5">FREEDOM HOUSE UNIVERSITY</h1>
             <div class="hero-cta-btn d-flex mt-2 gap-2 flex-wrap justify-content-center  ">
@@ -8,6 +9,7 @@
                 <a href="#">REGISTRATION</a>
                 <a href="#">RESOURCE LIBRARY</a>
             </div>
+        </div>
         </div>
     </section>
     <section class="featured-content">

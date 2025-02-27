@@ -1,12 +1,14 @@
 <div class="about-us">
     <section class="about-us-main" style="background-image: url('{{ asset('assets/images/Section.png') }}');">
         <div class="container">
+            <div class="content-wrapper">
             <div class="inner d-flex flex-column justify-content-center align-items-center">
                 <h3>FREEDOM HOUSE RECOVERY CENTER</h3>
                 <h1 class="my-3">WHO WE ARE</h1>
                 <div class="description mt-2">
                     <p>We envision our community becoming self-sustaining, healthy and productive. We believe people can
                         live full, enriched lives in recovery.</p>
+                </div>
                 </div>
             </div>
         </div>
