@@ -2,8 +2,7 @@
     border-left: 2px solid #b2b4b7;
     flex: 1;
 
-    @media(max-width: 465px) {
-
+    @media (max-width: 465px) {
         .page-head {
             flex-direction: column;
         }
@@ -11,7 +10,7 @@
 
     .nav-tabs {
         flex-wrap: nowrap;
-        overflow: scroll;
+        // overflow: scroll;
         overflow-y: hidden;
 
         &li {
@@ -27,7 +26,7 @@
                 max-width: 15%;
                 display: inline-block;
 
-                @media(max-width: 465px) {
+                @media (max-width: 465px) {
                     max-width: 10%;
                 }
             }
