@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Mail\TutorApprovalMail;
+use App\Mail\TutorRejectionMail;
 use App\Models\Notification;
 use App\Models\Tutor;
 use App\Models\TutorFile;
@@ -50,10 +52,7 @@ class TutorRequest extends Component
             $tutor->update(['is_verified' => 3]);
 
             // Send rejection email
-            Mail::raw("Your tutor request has been rejected ❌. Reason: {$this->rejectionReason}", function ($message) use ($tutor) {
-                $message->to($tutor->user->email)  // Send to tutor's email from user table
-                    ->subject('Your Tutor Request Has Been Rejected');
-            });
+            Mail::to($tutor->user->email)->send(new TutorRejectionMail($tutor, $this->rejectionReason));
 
             // Create a rejection notification
             Notification::create([
@@ -81,19 +80,15 @@ class TutorRequest extends Component
         $tutor = Tutor::find($this->tutorId);
         $user = $tutor->user;
 
-
         if ($tutor) {
             $tutor->update(['is_verified' => 1]);
             $user->update(['role_id' => '2']);
 
-            Mail::raw($this->approvalMessage ?: "Congratulations! Your tutor request has been approved 🎉", function ($message) use ($tutor) {
-                $message->to($tutor->user->email)
-                    ->subject('Your Tutor Request Has Been Approved');
-            });
+            Mail::to($tutor->user->email)->send(new TutorApprovalMail($tutor, $this->approvalMessage ?: "Congratulations! Your tutor request has been approved 🎉"));
 
             Notification::create([
                 'user_id' => $tutor->user_id,
-                'message' => "congratulations ! Your tutor request has been approved 🎉 . Please check your email for details.",
+                'message' => "Congratulations! Your tutor request has been approved 🎉. Please check your email for details.",
                 'type' => 'congratulations',
             ]);
 
@@ -107,6 +102,7 @@ class TutorRequest extends Component
         $this->loadTutors();
         $this->dispatch('hideApproveModal');
     }
+
     public function downloadFile($filePath)
     {
         if (Storage::disk('private')->exists($filePath)) {
