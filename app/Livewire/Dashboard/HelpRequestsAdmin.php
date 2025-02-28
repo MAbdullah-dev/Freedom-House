@@ -4,6 +4,8 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Notification;
 use App\Models\Request;
+use App\Mail\HelpRequestResponse;
+use App\Mail\HelpRequestRejection;
 use Illuminate\Support\Facades\Mail;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -27,7 +29,7 @@ class HelpRequestsAdmin extends Component
 
     public function loadRequest()
     {
-        // Ensure any request with a null status is marked as "Pending"
+
         Request::whereNull('status')->update(['status' => 'Pending']);
 
         $this->helprequests = Request::where('status', 'pending')->with('user')->get();
@@ -48,19 +50,13 @@ class HelpRequestsAdmin extends Component
         if ($this->selectedRequest) {
             $user = $this->selectedRequest->user;
 
-            Mail::raw("🎉 Admin Response: {$this->response}", function ($message) use ($user) {
-                $message->to($user->email)
-                    ->subject('Help Request Response');
-            });
-
-            $this->selectedRequest->update([
-                'status' => 'approved',
-            ]);
+            Mail::to($user->email)->send(new HelpRequestResponse($this->response));
+            Request::where('id', $this->selectedRequest->id)->update(['status' => 'approved']);
 
             Notification::create([
                 'user_id' => $user->id,
                 'message' => '🎉 Your help request has been approved! Check your email for more details.',
-                'type' => 'help request',
+                'type' => 'help-request',
             ]);
 
             $this->loadRequest();
@@ -72,7 +68,6 @@ class HelpRequestsAdmin extends Component
         }
     }
 
-
     public function rejectRequest()
     {
         // Validate the response field
@@ -82,33 +77,17 @@ class HelpRequestsAdmin extends Component
 
         if ($this->selectedRequest) {
             $user = $this->selectedRequest->user;
-
-            // Send an email notification to the user
-            Mail::raw("❌ Your help request has been rejected. Reason: {$this->response}", function ($message) use ($user) {
-                $message->to($user->email)
-                    ->subject('Help Request Rejected');
-            });
-
-            // Update the request status to rejected
-            $this->selectedRequest->update([
-                'status' => 'rejected',
-            ]);
-
-            // Create a notification for the user
+            Mail::to($user->email)->send(new HelpRequestRejection($this->response));
+            Request::where('id', $this->selectedRequest->id)->update(['status' => 'rejected']);
             Notification::create([
                 'user_id' => $user->id,
                 'message' => '❌ Your help request has been rejected. Check your email for more details.',
-                'type' => 'help request',
+                'type' => 'help-request',
             ]);
-
-            // Refresh the requests list and close the modal
             $this->loadRequest();
             $this->dispatch('close-modal');
-
-            // Show a success toast notification
             $this->alert('success', 'Request rejected successfully.');
         } else {
-            // If no request is selected, show an error message
             $this->alert('error', 'No request selected.');
         }
     }
