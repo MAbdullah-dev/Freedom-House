@@ -10,10 +10,16 @@
 
     .nav-tabs {
         flex-wrap: nowrap;
-        // overflow: scroll;
+        overflow: scroll;
         overflow-y: hidden;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
 
-        &li {
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        li {
             white-space: nowrap;
         }
     }
@@ -22,6 +28,7 @@
         .button-secondary {
             font-size: 14px !important;
             padding: 5px 15px !important;
+
             img {
                 max-width: 15%;
                 display: inline-block;
@@ -59,6 +66,7 @@
         margin-top: 32px;
 
         .tab-pane {
+
             &.active,
             &.fade {
                 animation: fadeIn 0.5s ease-in-out;
@@ -145,21 +153,16 @@
                 transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
             }
 
-            .delete-profile-photo {
-            }
+            .delete-profile-photo {}
 
-            &:hover .profile-photo {
-            }
+            &:hover .profile-photo {}
 
-            &:hover .delete-profile-photo {
-            }
+            &:hover .delete-profile-photo {}
         }
 
-        .dropdown-menu {
-        }
+        .dropdown-menu {}
 
-        .profile-photo-wrapper:hover .dropdown-menu {
-        }
+        .profile-photo-wrapper:hover .dropdown-menu {}
 
         form {
             margin-top: 95px;
