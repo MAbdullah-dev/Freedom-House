@@ -205,6 +205,12 @@
             overflow: auto;
             flex-wrap: nowrap;
             overflow-y: hidden;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
 
             li {
                 white-space: nowrap;
