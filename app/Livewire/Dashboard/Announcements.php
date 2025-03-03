@@ -91,9 +91,7 @@ class Announcements extends Component
     {
         try {
             foreach ($emails as $email) {
-                Mail::raw($this->message, function ($mail) use ($email) {
-                    $mail->to($email)->subject($this->subject);
-                });
+                Mail::to($email)->send(new \App\Mail\AnnouncementMail($this->subject, $this->message));
             }
         } catch (\Exception $e) {
             // Log the error for failed email sending

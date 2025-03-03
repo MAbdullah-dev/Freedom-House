@@ -388,18 +388,7 @@ class RecordedLecture extends Component
 
     private function sendCertificateEmail($user, $certificatePath)
     {
-        // Use public_path to get the absolute path for email attachment
-        $certificateFullPath = public_path($certificatePath);
-
-
-        Mail::raw("Congratulations on completing the course! Your certificate is attached.", function ($message) use ($user, $certificateFullPath) {
-            $message->to($user->email)
-                ->subject('Your Certificate of Completion')
-                ->attach($certificateFullPath, [
-                    'as' => 'Certificate.pdf',
-                    'mime' => 'application/pdf',
-                ]);
-        });
+        Mail::to($user->email)->send(new \App\Mail\CertificateMail($user, public_path($certificatePath)));
     }
 
     public function sendCertificate()
