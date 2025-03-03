@@ -2,14 +2,12 @@
 <html>
 
 <head>
-    <title>Your Tutor Request Has Been Approved</title>
+    <title>Tutor Approval</title>
 </head>
 
 <body>
-    <p>Dear {{ $tutor->user->name }},</p>
-    <p>{{ $message }}</p>
-    <p>Thank you,</p>
-    <p>The Team</p>
+    <h1>Congratulations, {{ $tutorName }}!</h1>
+    <p>{{ $approvalMessage }}</p>
 </body>
 
 </html>

@@ -2,41 +2,30 @@
 
 namespace App\Mail;
 
+use App\Models\Tutor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Tutor;
 
 class TutorApprovalMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $tutor;
-    public $message;
+    public $approvalMessage;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct(Tutor $tutor, $message)
+    public function __construct(Tutor $tutor, $approvalMessage)
     {
         $this->tutor = $tutor;
-        $this->message = $message;
+        $this->approvalMessage = $approvalMessage;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->subject('Your Tutor Request Has Been Approved')
-            ->view('emails.tutor-approval')
+        return $this->view('emails.tutor-approval')
             ->with([
-                'tutor' => $this->tutor,
-                'message' => $this->message,
+                'tutorName' => $this->tutor->user->name,
+                'approvalMessage' => $this->approvalMessage,
             ]);
     }
 }

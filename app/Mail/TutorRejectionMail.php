@@ -2,41 +2,30 @@
 
 namespace App\Mail;
 
+use App\Models\Tutor;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Tutor;
 
 class TutorRejectionMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $tutor;
-    public $reason;
+    public $rejectionReason;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct(Tutor $tutor, $reason)
+    public function __construct(Tutor $tutor, $rejectionReason)
     {
         $this->tutor = $tutor;
-        $this->reason = $reason;
+        $this->rejectionReason = $rejectionReason;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->subject('Your Tutor Request Has Been Rejected')
-            ->view('emails.tutor-rejection')
+        return $this->view('emails.tutor-rejection')
             ->with([
-                'tutor' => $this->tutor,
-                'reason' => $this->reason,
+                'tutorName' => $this->tutor->user->name,
+                'rejectionReason' => $this->rejectionReason,
             ]);
     }
 }

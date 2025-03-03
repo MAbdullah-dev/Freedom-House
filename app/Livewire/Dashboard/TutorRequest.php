@@ -84,7 +84,7 @@ class TutorRequest extends Component
             $tutor->update(['is_verified' => 1]);
             $user->update(['role_id' => '2']);
 
-            Mail::to($tutor->user->email)->send(new TutorApprovalMail($tutor, $this->approvalMessage ?: "Congratulations! Your tutor request has been approved 🎉"));
+            Mail::to($tutor->user->email)->send(new TutorApprovalMail($tutor, $this->approvalMessage));
 
             Notification::create([
                 'user_id' => $tutor->user_id,
