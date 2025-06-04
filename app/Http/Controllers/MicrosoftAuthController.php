@@ -66,6 +66,7 @@ class MicrosoftAuthController extends Controller
     }
 
     $microsoftUser = $userResponse->json();
+    // dd($microsoftUser);
 
 
     if (Auth::check()) {
@@ -104,14 +105,19 @@ class MicrosoftAuthController extends Controller
 
     // If no user exists, create a new user
     $user = User::create([
-        'email' => $microsoftUser['mail'] ?? $microsoftUser['userPrincipalName'],
-        'microsoft_id' => $microsoftUser['id'],
-        'microsoft_account' => true,
-        'password' => bcrypt(Str::random(16)),  // For local login setup
-        'role_id' => 3,  // Ensure a role is assigned if needed
-        'refresh_token' => $refreshToken,
-        'token_expires_at' => $tokenExpiresAt,
-    ]);
+    'email' => $microsoftUser['mail'] ?? $microsoftUser['userPrincipalName'],
+    'microsoft_id' => $microsoftUser['id'],
+    'microsoft_account' => true,
+    'password' => bcrypt(Str::random(16)),
+    'role_id' => 3,
+    'refresh_token' => $refreshToken,
+    'token_expires_at' => $tokenExpiresAt,
+    'first_name' => $microsoftUser['givenName'] ?? null,
+    'last_name' => $microsoftUser['surname'] ?? null,
+    'username' => $microsoftUser['userPrincipalName'] ?? null,
+    'timezone' => $microsoftUser['mailboxSettings']['timeZone'] ?? 'UTC',
+]);
+
 
     // Login the newly created user
     Auth::login($user);

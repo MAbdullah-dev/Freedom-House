@@ -101,6 +101,8 @@ class DashboardSettings extends Component
             $this->user->save();
 
             $this->alert('success', 'Cover photo deleted successfully!');
+        }else{
+            $this->alert('error', 'Cover photo does not exist!');
         }
     }
 

@@ -11,12 +11,13 @@ use App\Mail\EmailVerificationMail;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Illuminate\Validation\Rules\Password;
 
 class Register extends Component
 {
     use LivewireAlert;
 
-    public $first_name, $last_name, $email, $phone, $password, $confirm_password;
+    public $first_name, $last_name, $email, $phone, $password, $password_confirmation;
 
     public function register()
     {
@@ -26,7 +27,16 @@ class Register extends Component
             'last_name' => 'required|string|max:20',
             'email' => 'required|email|unique:users|max:100',
             'phone' => 'required|string|max:20',
-            'password' => 'required|min:8|same:confirm_password',
+            'password' => [
+            'required',
+            'confirmed',
+            Password::min(8)
+            ->mixedCase()
+            ->letters()
+            ->numbers()
+            ->symbols()
+            ->uncompromised(),
+         ],
         ]);
 
         try {

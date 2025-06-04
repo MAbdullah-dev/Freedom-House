@@ -55,10 +55,10 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6">
-                        <label for="confirm_password">Re-type Password</label>
-                        <input wire:model="confirm_password" class="form-control" type="password"
-                            name="confirm_password">
-                        @error('confirm_password')
+                        <label for="confirmed">Re-type Password</label>
+                        <input wire:model="password_confirmation" class="form-control" type="password"
+                            name="password_confirmation">
+                        @error('password_confirmation')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
