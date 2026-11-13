@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Tag;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TagSeeder extends Seeder
@@ -13,17 +12,18 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        $tags = [
-            ['name' => 'Featured'],
-            ['name' => 'New'],
-            ['name' => 'Most Popular'],
-            ['name' => 'Trending'],
-            ['name' => 'Top Rated'],
-            ['name' => 'Editor\'s Choice'],
-            ['name' => 'Best Seller'],
-        ];
-        foreach ($tags as $tag) {
-            Tag::create($tag);
+        foreach ([
+            'Featured',
+            'New',
+            'Most Popular',
+            'Trending',
+            'Top Rated',
+            'Editor\'s Choice',
+            'Best Seller',
+        ] as $tagName) {
+            Tag::query()->firstOrCreate([
+                'name' => $tagName,
+            ]);
         }
     }
 }
