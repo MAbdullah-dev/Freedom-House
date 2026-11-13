@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Livewire\Concerns\LivewireAlert;
 use App\Livewire\Concerns\RequiresRole;
 use App\Models\Role;
+use App\Services\ResourceAuthorizer;
 use Livewire\Component;
 
 class Announcements extends Component
@@ -48,6 +49,8 @@ class Announcements extends Component
 
     public function createAnnouncement()
     {
+        app(ResourceAuthorizer::class)->authorizeCourseId(Auth::user(), $this->selectedCourse);
+
         $this->validate();
 
         // Save the announcement
@@ -112,8 +115,13 @@ class Announcements extends Component
     {
         $announcements = Announcement::query();
 
+        if (! Auth::user()->hasRoleName(Role::ADMIN)) {
+            $announcements->whereIn('course_id', Course::query()->where('user_id', Auth::id())->select('id'));
+        }
+
         // Filter by selected course
         if ($this->courseFilter) {
+            app(ResourceAuthorizer::class)->authorizeCourseId(Auth::user(), $this->courseFilter);
             $announcements->where('course_id', $this->courseFilter);
         }
 

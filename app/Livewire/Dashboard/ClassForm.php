@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Livewire\Concerns\LivewireAlert;
 use App\Livewire\Concerns\RequiresRole;
 use App\Models\Role;
+use App\Services\ResourceAuthorizer;
 use Livewire\Component;
 
 class ClassForm extends Component
@@ -94,7 +95,10 @@ class ClassForm extends Component
 
     public function loadClassData()
     {
-        $class = Classe::find($this->classId);
+        $class = app(ResourceAuthorizer::class)->authorizeClass(
+            Auth::user(),
+            Classe::query()->find($this->classId)
+        );
         if ($class) {
             $this->type = 'class';
             $this->course_id = $class->course_id;
@@ -120,7 +124,10 @@ class ClassForm extends Component
     public function loadEventData()
     {
 
-        $event = Events::find($this->eventId);
+        $event = app(ResourceAuthorizer::class)->authorizeEvent(
+            Auth::user(),
+            Events::query()->find($this->eventId)
+        );
         if ($event) {
             $this->type = 'event';
             $this->course_id = $event->course_id;
@@ -144,6 +151,22 @@ class ClassForm extends Component
 
     public function updateClass()
     {
+        if ($this->classId) {
+            app(ResourceAuthorizer::class)->authorizeClass(
+                Auth::user(),
+                Classe::query()->find($this->classId)
+            );
+        } elseif ($this->eventId) {
+            app(ResourceAuthorizer::class)->authorizeEvent(
+                Auth::user(),
+                Events::query()->find($this->eventId)
+            );
+        } else {
+            abort(404);
+        }
+
+        app(ResourceAuthorizer::class)->authorizeParentCourse(Auth::user(), $this->course_id);
+
         $this->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -166,7 +189,11 @@ class ClassForm extends Component
         $bookingEndDate = Carbon::parse($this->booking_end_date, $userTimezone)->setTimezone('UTC');
 
         if ($this->classId) {
-            $class = Classe::findOrFail($this->classId);
+            $class = app(ResourceAuthorizer::class)->authorizeClass(
+                Auth::user(),
+                Classe::query()->find($this->classId)
+            );
+            app(ResourceAuthorizer::class)->authorizeParentCourse(Auth::user(), $this->course_id);
             $class->update([
                 'course_id' => $this->course_id,
                 'title' => $this->title,
@@ -189,9 +216,12 @@ class ClassForm extends Component
             $this->alert('success', 'Class updated successfully!');
             $this->redirect(route("dashboard.enrollments"));
         } elseif ($this->eventId) {
-            $event = Events::findOrFail($this->eventId);
+            $event = app(ResourceAuthorizer::class)->authorizeEvent(
+                Auth::user(),
+                Events::query()->find($this->eventId)
+            );
+            app(ResourceAuthorizer::class)->authorizeParentCourse(Auth::user(), $this->course_id);
             $event->update([
-                'course_id' => $this->course_id,
                 'title' => $this->title,
                 'description' => $this->description,
                 'class_type' => $this->class_type,
@@ -252,6 +282,8 @@ class ClassForm extends Component
         $userTimezone = Auth::user()->timezone;
         $classDateTime = Carbon::parse($this->class_date . ' ' . $this->class_time, $userTimezone);
         $utcClassDateTime = $classDateTime->setTimezone('UTC');
+
+        app(ResourceAuthorizer::class)->authorizeParentCourse(Auth::user(), $this->course_id);
 
         $class = Classe::create([
             'title' => $this->title,

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Livewire\Concerns\LivewireAlert;
 use App\Livewire\Concerns\RequiresRole;
 use App\Models\Role;
+use App\Services\ResourceAuthorizer;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -107,7 +108,11 @@ class CreateCourse extends Component
 
     public function loadCourseData()
     {
-        $course = Course::with(['categories', 'tags', 'tutors.user'])->findOrFail($this->courseId);
+        $course = app(ResourceAuthorizer::class)->authorizeCourse(
+            Auth::user(),
+            Course::query()->find($this->courseId)
+        );
+        $course->load(['categories', 'tags', 'tutors.user']);
 
         $this->courseTitle = $course->title;
         $this->description = $course->description;
@@ -156,9 +161,6 @@ class CreateCourse extends Component
         $filePath = $this->uploadThumbnail();
         $videoPath = $this->uploadVideo();
 
-        $role = Auth::user()->role_id;
-
-        // dd($this->tutors);
         $course = Course::create([
             'user_id' => Auth::id(),
             'title' => $this->courseTitle,
@@ -169,7 +171,7 @@ class CreateCourse extends Component
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
             'is_drafted' => false,
-            'is_published' => ($role == 1) ? true : false,
+            'is_published' => Auth::user()->hasRoleName(Role::ADMIN),
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'course_type' => $this->courseType,
@@ -189,9 +191,12 @@ class CreateCourse extends Component
 
     public function updateCourse()
     {
-        $this->validate();
+        $course = app(ResourceAuthorizer::class)->authorizeCourse(
+            Auth::user(),
+            Course::query()->find($this->courseId)
+        );
 
-        $course = Course::findOrFail($this->courseId);
+        $this->validate();
 
         $filePath = $this->file instanceof \Illuminate\Http\UploadedFile
             ? $this->uploadThumbnail()
@@ -210,6 +215,27 @@ class CreateCourse extends Component
         $course->categories()->sync($this->category);
         $course->tags()->sync($this->tags);
         $course->tutors()->sync($this->tutors);
+
+        $attributes = [
+            'title' => $this->courseTitle,
+            'description' => $this->description,
+            'learning_outcomes' => $this->learnDetails,
+            'requirements' => $this->requirements,
+            'target_audience' => $this->audienceDetails,
+            'is_paid' => $this->is_paid,
+            'price' => $this->price,
+            'course_type' => $this->courseType,
+        ];
+
+        if ($this->file instanceof \Illuminate\Http\UploadedFile) {
+            $attributes['thumbnail'] = $filePath;
+        }
+
+        if ($this->videoFile instanceof \Illuminate\Http\UploadedFile) {
+            $attributes['video_path'] = $videoPath;
+        }
+
+        $course->update($attributes);
     }
 
     public function saveAsDraft()
@@ -218,8 +244,6 @@ class CreateCourse extends Component
 
         $filePath = $this->uploadThumbnail();
         $videoPath = $this->uploadVideo();
-
-        $role = Auth::user()->role_id;
 
         $course = Course::create([
             'user_id' => Auth::id(),
@@ -231,7 +255,7 @@ class CreateCourse extends Component
             'requirements' => $this->requirements,
             'target_audience' => $this->audienceDetails,
             'is_drafted' => true,
-            'is_published' => ($role == 1) ? true : false,
+            'is_published' => Auth::user()->hasRoleName(Role::ADMIN),
             'is_paid' => $this->is_paid,
             'price' => $this->price,
             'course_type' => $this->courseType,

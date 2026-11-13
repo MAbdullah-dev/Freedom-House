@@ -12,6 +12,7 @@ use App\Livewire\Concerns\LivewireAlert;
 use App\Livewire\Concerns\RequiresRole;
 use App\Models\Role;
 use App\Services\MicrosoftGraphService;
+use App\Services\ResourceAuthorizer;
 
 class ViewEnrollments extends Component
 {
@@ -61,6 +62,7 @@ class ViewEnrollments extends Component
 
     public function loadAttendees($itemId, $modelType)
     {
+        $this->authorizeManagedResource($itemId, $modelType);
         $this->itemId = $itemId;
 
         if ($modelType === 'class') {
@@ -87,6 +89,7 @@ class ViewEnrollments extends Component
 
     public function openAttendeeModal($id, $modelType)
     {
+        $this->authorizeManagedResource($id, $modelType);
         $this->selectedModelId = $id;
         $this->selectedModelType = $modelType;
 
@@ -123,6 +126,7 @@ class ViewEnrollments extends Component
    public function saveAttendee($attendeeId)
     {
         $attendee = Booking::find($attendeeId);
+        $this->authorizeBookingResource($attendee);
 
         if ($attendee && $this->attendeeData) {
             $attendee->update([
@@ -175,6 +179,7 @@ class ViewEnrollments extends Component
     public function deleteAttendee($attendeeId)
     {
         $attendee = Booking::find($attendeeId);
+        $this->authorizeBookingResource($attendee);
         if ($attendee) {
             $attendee->delete();
         }
@@ -328,13 +333,19 @@ class ViewEnrollments extends Component
     public function selectItem($itemId, $modelType)
     {
         if ($modelType === 'class') {
-            $this->selectedClass = Classe::findOrFail($itemId);
+            $this->selectedClass = app(ResourceAuthorizer::class)->authorizeClass(
+                Auth::user(),
+                Classe::query()->find($itemId)
+            );
             $this->selectedEvent = null;
         } elseif ($modelType === 'event') {
-            $this->selectedEvent = Events::findOrFail($itemId);
+            $this->selectedEvent = app(ResourceAuthorizer::class)->authorizeEvent(
+                Auth::user(),
+                Events::query()->find($itemId)
+            );
             $this->selectedClass = null;
         } else {
-            session()->flash('error', 'Invalid model type selected.');
+            abort(403);
         }
     }
 
@@ -342,11 +353,15 @@ class ViewEnrollments extends Component
     {
 
         if ($this->selectedClass) {
+            $classId = is_object($this->selectedClass) ? $this->selectedClass->id : ($this->selectedClass['id'] ?? null);
+            $class = app(ResourceAuthorizer::class)->authorizeClass(Auth::user(), Classe::query()->find($classId));
 
-            return redirect()->route('dashboard.create.class', ['classId' => $this->selectedClass->id]);
+            return redirect()->route('dashboard.create.class', ['classId' => $class->id]);
         } elseif ($this->selectedEvent) {
+            $eventId = is_object($this->selectedEvent) ? $this->selectedEvent->id : ($this->selectedEvent['id'] ?? null);
+            $event = app(ResourceAuthorizer::class)->authorizeEvent(Auth::user(), Events::query()->find($eventId));
 
-            return redirect()->route('dashboard.create.event', ['eventId' => $this->selectedEvent->id]);
+            return redirect()->route('dashboard.create.event', ['eventId' => $event->id]);
         } else {
 
             session()->flash('error', 'No item selected for editing.');
@@ -356,16 +371,25 @@ class ViewEnrollments extends Component
 
     public function deleteItem()
     {
-
         if ($this->selectedClass) {
-            $this->selectedClass->delete();
-            $this->classes = Classe::all();
+            $classId = is_object($this->selectedClass) ? $this->selectedClass->id : ($this->selectedClass['id'] ?? null);
+            $class = app(ResourceAuthorizer::class)->authorizeClass(
+                Auth::user(),
+                Classe::query()->find($classId)
+            );
+            $class->delete();
+            $this->classes = Classe::query()->where('user_id', Auth::id())->get();
             $this->selectedClass = null;
             $this->alert('success', 'Class deleted successfully.');
             $this->dispatch('close-modal');
         } elseif ($this->selectedEvent) {
-            $this->selectedEvent->delete();
-            $this->events = Events::all();
+            $eventId = is_object($this->selectedEvent) ? $this->selectedEvent->id : ($this->selectedEvent['id'] ?? null);
+            $event = app(ResourceAuthorizer::class)->authorizeEvent(
+                Auth::user(),
+                Events::query()->find($eventId)
+            );
+            $event->delete();
+            $this->events = Events::query()->where('user_id', Auth::id())->get();
             $this->selectedEvent = null;
             $this->alert('success', 'Event deleted successfully.');
             $this->dispatch('close-modal');
@@ -376,7 +400,8 @@ class ViewEnrollments extends Component
 
     public function saveManualAttendees()
     {
-        // dd($this->selectedModelId);
+        $this->authorizeManagedResource($this->selectedModelId, $this->selectedModelType);
+
      foreach ($this->newAttendees as $newAttendee) {
                 $validatedData = \Validator::make($newAttendee, [
             'email' => 'required|email',
@@ -426,10 +451,54 @@ class ViewEnrollments extends Component
 
     public function createQuiz()
     {
-        if ($this->selectedClass && $this->selectedClass->class_type == 'recorded') {
-            $this->dispatch('close-modal');
-            return redirect()->route('quizzes.create', ['class_id' => $this->selectedClass->id]);
+        if ($this->selectedClass) {
+            $classId = is_object($this->selectedClass) ? $this->selectedClass->id : ($this->selectedClass['id'] ?? null);
+            $class = app(ResourceAuthorizer::class)->authorizeClass(Auth::user(), Classe::query()->find($classId));
+            if ($class->class_type == 'recorded') {
+                $this->dispatch('close-modal');
+                return redirect()->route('quizzes.create', ['class_id' => $class->id]);
+            }
         }
+    }
+
+    private function authorizeManagedResource(mixed $id, mixed $type): void
+    {
+        $authorizer = app(ResourceAuthorizer::class);
+
+        if ($type === 'class') {
+            $authorizer->authorizeClass(Auth::user(), Classe::query()->find($id));
+
+            return;
+        }
+
+        if ($type === 'event') {
+            $authorizer->authorizeEvent(Auth::user(), Events::query()->find($id));
+
+            return;
+        }
+
+        abort(403);
+    }
+
+    private function authorizeBookingResource(?Booking $booking): void
+    {
+        if ($booking === null) {
+            abort(404);
+        }
+
+        if ($booking->class_id) {
+            app(ResourceAuthorizer::class)->authorizeClass(Auth::user(), Classe::query()->find($booking->class_id));
+
+            return;
+        }
+
+        if ($booking->event_id) {
+            app(ResourceAuthorizer::class)->authorizeEvent(Auth::user(), Events::query()->find($booking->event_id));
+
+            return;
+        }
+
+        abort(403);
     }
 
     public function render()

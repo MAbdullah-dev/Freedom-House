@@ -8,7 +8,9 @@ use App\Models\QuizAnswer;
 use App\Models\QuizQuestion;
 use App\Livewire\Concerns\LivewireAlert;
 use App\Livewire\Concerns\RequiresRole;
+use App\Models\Lecture;
 use App\Models\Role;
+use App\Services\ResourceAuthorizer;
 use Livewire\Component;
 
 class QuizCreate extends Component
@@ -35,7 +37,11 @@ class QuizCreate extends Component
 
     public function mount($lectureId)
     {
-        $this->lecture_id = $lectureId;
+        $lecture = app(ResourceAuthorizer::class)->authorizeLecture(
+            auth()->user(),
+            Lecture::query()->find($lectureId)
+        );
+        $this->lecture_id = $lecture->id;
     }
 
 
@@ -84,6 +90,11 @@ class QuizCreate extends Component
 
     public function submit()
     {
+        app(ResourceAuthorizer::class)->authorizeLecture(
+            auth()->user(),
+            Lecture::query()->find($this->lecture_id)
+        );
+
         $this->validate(
             [
                 'title' => 'required|string|max:20',

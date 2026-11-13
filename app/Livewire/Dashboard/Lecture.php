@@ -6,10 +6,12 @@ use App\Jobs\FetchVimeoVideoDetailsJob;
 use App\Models\Course;
 use App\Models\Lecture as ModelsLecture;
 use Vimeo\Laravel\Facades\Vimeo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Livewire\Concerns\LivewireAlert;
 use App\Livewire\Concerns\RequiresRole;
 use App\Models\Role;
+use App\Services\ResourceAuthorizer;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -40,10 +42,16 @@ class Lecture extends Component
 
     public function mount()
     {
-        $this->courses = Course::where('is_published', true)
+        $courses = Course::query()
+            ->where('is_published', true)
             ->where('is_drafted', false)
-            ->where('course_type', 'recorded')
-            ->get();
+            ->where('course_type', 'recorded');
+
+        if (! Auth::user()->hasRoleName(Role::ADMIN)) {
+            $courses->where('user_id', Auth::id());
+        }
+
+        $this->courses = $courses->get();
 
         // Initialize with one lecture input block
         $this->initializeLectureBlock();
@@ -55,6 +63,7 @@ class Lecture extends Component
     public function updatedCourseId()
     {
         if ($this->course_id) {
+            app(ResourceAuthorizer::class)->authorizeCourseId(Auth::user(), $this->course_id);
             $this->alllectures = ModelsLecture::where('course_id', $this->course_id)->get();
             $this->totalLectures = $this->alllectures->count() + count($this->lectures);
             $this->usedOrders = $this->alllectures->pluck('order')->toArray();
@@ -86,6 +95,8 @@ class Lecture extends Component
 
     public function submit()
     {
+        app(ResourceAuthorizer::class)->authorizeCourseId(Auth::user(), $this->course_id);
+
         $this->validate();
 
         // Check for duplicate orders in the current lectures

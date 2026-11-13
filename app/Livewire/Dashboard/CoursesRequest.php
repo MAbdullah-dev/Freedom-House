@@ -34,7 +34,8 @@ class CoursesRequest extends Component
 
     public function approveCourse($courseId)
     {
-        $course = Course::findOrFail($courseId);
+        $this->requireRole(Role::ADMIN);
+        $course = Course::find($courseId) ?? abort(404);
         $course->update(['is_published' => true]); // Mark as approved
         // session()->flash('success', 'Course approved successfully.');
         $this->alert('success', 'Course approved successfully.');
@@ -43,7 +44,8 @@ class CoursesRequest extends Component
 
     public function rejectCourse($courseId)
     {
-        $course = Course::findOrFail($courseId);
+        $this->requireRole(Role::ADMIN);
+        $course = Course::find($courseId) ?? abort(404);
         $course->update(['is_published' => 3]); // Mark as rejected
         // session()->flash('success', 'Course rejected successfully.');
         $this->alert('success', 'Course rejected successfully.');

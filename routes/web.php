@@ -87,7 +87,7 @@ Route::middleware(['auth', 'checkrole:Tutor,Admin'])->group(function () {
     Route::get('/dashboard/course-analytics', CourseAnalytics::class)->name('dashboard.analytics');
     Route::get('/dashboard/courses/create/{courseId?}', CreateCourse::class)->name('dashboard.create.course');
     Route::get('/dashboard/create/class/{classId?}', ClassForm::class)->name('dashboard.create.class');
-    Route::get('/dashboard/create/class/{eventId?}', ClassForm::class)->name('dashboard.create.event');
+    Route::get('/dashboard/create/event/{eventId?}', ClassForm::class)->name('dashboard.create.event');
     Route::get('/dashboard/enrollments', ViewEnrollments::class)->name('dashboard.enrollments');
 });
 

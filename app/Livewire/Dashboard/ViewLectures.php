@@ -8,6 +8,7 @@ use App\Models\Lecture;
 use App\Livewire\Concerns\LivewireAlert;
 use App\Livewire\Concerns\RequiresRole;
 use App\Models\Role;
+use App\Services\ResourceAuthorizer;
 use Vimeo\Laravel\Facades\Vimeo;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -33,15 +34,20 @@ class ViewLectures extends Component
 
     public function mount($courseId)
     {
-        // Initialize the course and lectures
         $this->courseId = $courseId;
-        $this->course = Course::with('lectures')->findOrFail($this->courseId);
+        $course = app(ResourceAuthorizer::class)->authorizeCourse(
+            auth()->user(),
+            Course::query()->find($courseId)
+        );
+        $this->course = $course->load('lectures');
     }
 
     public function editLecture($lectureId)
     {
-        // Get the selected lecture details
-        $lecture = Lecture::findOrFail($lectureId);
+        $lecture = app(ResourceAuthorizer::class)->authorizeLecture(
+            auth()->user(),
+            Lecture::query()->find($lectureId)
+        );
         $this->selectedLectureId = $lecture->id;
         $this->lectureTitle = $lecture->title;
         $this->lectureDescription = $lecture->description;
@@ -49,9 +55,12 @@ class ViewLectures extends Component
 
     public function updateLecture()
     {
-        $this->loading = true;
+        $lecture = app(ResourceAuthorizer::class)->authorizeLecture(
+            auth()->user(),
+            Lecture::query()->find($this->selectedLectureId)
+        );
 
-        $lecture = Lecture::findOrFail($this->selectedLectureId);
+        $this->loading = true;
         if ($this->newVideo) {
             $videoFile = $this->uploadToVimeo($this->newVideo);
             $lecture->video_file = $videoFile;
@@ -84,7 +93,10 @@ class ViewLectures extends Component
     }
     public function deleteLecture()
     {
-        $lecture = Lecture::findOrFail($this->selectedLectureId);
+        $lecture = app(ResourceAuthorizer::class)->authorizeLecture(
+            auth()->user(),
+            Lecture::query()->find($this->selectedLectureId)
+        );
 
         if ($lecture->video_file) {
             $this->deleteVimeoVideo($lecture->video_file);
@@ -96,6 +108,9 @@ class ViewLectures extends Component
 
     public function deleteVimeoVideo($videoUri)
     {
+        $lecture = Lecture::query()->where('video_file', $videoUri)->first();
+        app(ResourceAuthorizer::class)->authorizeLecture(auth()->user(), $lecture);
+
         try {
             Vimeo::request($videoUri, [], 'DELETE');
         } catch (\Exception $e) {

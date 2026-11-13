@@ -5,6 +5,7 @@ namespace App\Livewire\CourseAnalytics;
 use App\Models\Booking;
 use App\Models\Course;
 use App\Models\CourseProgress;
+use App\Services\ResourceAuthorizer;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Carbon\Carbon;
@@ -58,7 +59,7 @@ class StudentsTab extends Component
 
         // Apply the course filter if selected
         if ($this->selectedCourse) {
-            // dd($this->selectedCourse);
+            app(ResourceAuthorizer::class)->authorizeCourseId(Auth::user(), $this->selectedCourse);
             $query->where('course_id', $this->selectedCourse);
         }
 

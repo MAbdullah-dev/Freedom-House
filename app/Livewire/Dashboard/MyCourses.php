@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Livewire\Concerns\RequiresRole;
 use App\Models\Course;
 use App\Models\Role;
+use App\Services\ResourceAuthorizer;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Livewire\Concerns\LivewireAlert;
@@ -62,7 +63,12 @@ class MyCourses extends Component
 
     public function destroyCourse()
     {
-        Course::findOrFail($this->courseId)->delete();
+        $course = app(ResourceAuthorizer::class)->authorizeCourse(
+            Auth::user(),
+            Course::query()->find($this->courseId)
+        );
+
+        $course->delete();
         $this->alert('success', 'Course deleted successfully.');
         $this->reset(['courseId']);
         $this->dispatch('close-modal'); // Close modal
