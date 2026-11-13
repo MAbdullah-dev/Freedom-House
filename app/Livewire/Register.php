@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use App\Mail\EmailVerificationMail;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 
 class Register extends Component
 {

@@ -5,7 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Jobs\FetchVimeoVideoDetailsJob;
 use App\Models\Course;
 use App\Models\Lecture;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Vimeo\Laravel\Facades\Vimeo;
 use Livewire\Component;
 use Livewire\WithFileUploads;

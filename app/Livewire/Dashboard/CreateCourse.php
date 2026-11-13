@@ -7,7 +7,7 @@ use App\Models\Tag;
 use App\Models\Tutor;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 

@@ -11,7 +11,7 @@ use App\Services\MicrosoftGraphService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;

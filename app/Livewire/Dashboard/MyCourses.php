@@ -5,7 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 
 class MyCourses extends Component
 {

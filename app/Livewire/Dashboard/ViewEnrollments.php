@@ -8,7 +8,7 @@ use App\Models\Events;
 use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use App\Services\MicrosoftGraphService;
 
 class ViewEnrollments extends Component

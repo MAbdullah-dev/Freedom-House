@@ -3,7 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Tag;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class Tags extends Component

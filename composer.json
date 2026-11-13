@@ -8,12 +8,12 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "barryvdh/laravel-dompdf": "^3.0",
-        "illuminate/support": "^12.0",
-        "jantinnerezo/livewire-alert": "^3.0",
-        "laravel/framework": "^12.69",
-        "laravel/tinker": "^2.9",
+        "illuminate/support": "^13.0",
+        "jantinnerezo/livewire-alert": "^4.0",
+        "laravel/framework": "^13.30",
+        "laravel/tinker": "^3.0",
         "laravel/ui": "^4.5",
         "livewire/livewire": "^3.5",
         "stripe/stripe-php": "^16.3",
@@ -21,14 +21,14 @@
         "vimeo/vimeo-api": "^3.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.14",
+        "barryvdh/laravel-debugbar": "^4.4",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.5.50"
+        "phpunit/phpunit": "^12.5"
     },
     "autoload": {
         "psr-4": {

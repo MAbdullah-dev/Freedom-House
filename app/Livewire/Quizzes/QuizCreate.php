@@ -6,7 +6,7 @@ use App\Models\Classe;
 use App\Models\Quiz;
 use App\Models\QuizAnswer;
 use App\Models\QuizQuestion;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class QuizCreate extends Component

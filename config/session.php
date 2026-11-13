@@ -214,4 +214,17 @@ return [
 
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Serialization
+    |--------------------------------------------------------------------------
+    |
+    | Laravel 13's new application skeleton sets this to "json". That format
+    | cannot read sessions already written by PHP's serializer, so this
+    | upgrade keeps the existing "php" format.
+    |
+    */
+
+    'serialization' => 'php',
+
 ];

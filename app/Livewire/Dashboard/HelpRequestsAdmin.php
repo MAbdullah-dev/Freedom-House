@@ -7,7 +7,7 @@ use App\Models\Request;
 use App\Mail\HelpRequestResponse;
 use App\Mail\HelpRequestRejection;
 use Illuminate\Support\Facades\Mail;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class HelpRequestsAdmin extends Component

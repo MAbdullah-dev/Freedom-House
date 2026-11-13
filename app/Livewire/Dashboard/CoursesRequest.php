@@ -3,7 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Course;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class CoursesRequest extends Component

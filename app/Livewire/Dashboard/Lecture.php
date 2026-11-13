@@ -7,7 +7,7 @@ use App\Models\Course;
 use App\Models\Lecture as ModelsLecture;
 use Vimeo\Laravel\Facades\Vimeo;
 use Illuminate\Support\Facades\Storage;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 

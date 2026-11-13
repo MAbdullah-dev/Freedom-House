@@ -9,7 +9,7 @@ use App\Models\Tutor;
 use App\Models\TutorFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class TutorRequest extends Component

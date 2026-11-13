@@ -27,7 +27,6 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireScripts
-    <x-livewire-alert::scripts />
     @stack('js')
 </body>
 

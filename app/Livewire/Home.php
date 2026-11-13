@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Course;
 use App\Models\Email;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class Home extends Component

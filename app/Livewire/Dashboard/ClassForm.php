@@ -9,7 +9,7 @@ use App\Models\Classe;
 use App\Models\Events;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class ClassForm extends Component

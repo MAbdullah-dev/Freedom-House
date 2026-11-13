@@ -4,7 +4,7 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Request;
 use Illuminate\Support\Facades\Auth;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
