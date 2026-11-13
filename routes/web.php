@@ -4,6 +4,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\MicrosoftAuthController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Livewire\CourseCatelogue;
 use App\Livewire\AboutUs;
 use App\Livewire\CourseAnalytics\CourseDetail;
@@ -103,5 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/enrolled-courses', DashboardEnrolledCourses::class)->name('dashboard.enrolledCourses');
     Route::get('/dashboard/settings', DashboardSettings::class)->name('dashboard.settings');
 });
+
+Route::post('/stripe/webhook', StripeWebhookController::class)->name('stripe.webhook');
 
 Route::get('/certificate', [PaymentController::class, 'certifictes'])->name('certificate.index');

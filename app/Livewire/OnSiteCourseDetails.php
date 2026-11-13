@@ -107,7 +107,7 @@ class OnSiteCourseDetails extends Component
         $this->courseTitle = $course->title;
 
         try {
-            $url = app(CheckoutSessionFactory::class)->forCourse($course);
+            $url = app(CheckoutSessionFactory::class)->forCourse($course, Auth::user());
 
             return redirect()->to($url);
         } catch (\Throwable $e) {

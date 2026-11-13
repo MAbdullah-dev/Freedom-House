@@ -9,6 +9,8 @@ class Booking extends Model
 {
     use HasFactory;
 
+    public const ACCESS_STATUSES = ['paid', 'free'];
+
     protected $fillable = [
         'event_id',
         'class_id',
@@ -42,5 +44,45 @@ class Booking extends Model
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    public static function enrollmentKey(mixed $userId, mixed $courseId, mixed $classId, mixed $eventId): ?string
+    {
+        if (! is_numeric($userId)) {
+            return null;
+        }
+
+        $parts = [];
+        if (is_numeric($courseId)) {
+            $parts[] = 'course:'.(int) $courseId;
+        }
+        if (is_numeric($classId)) {
+            $parts[] = 'class:'.(int) $classId;
+        }
+        if (is_numeric($eventId)) {
+            $parts[] = 'event:'.(int) $eventId;
+        }
+
+        if (count($parts) !== 1) {
+            return null;
+        }
+
+        return 'user:'.(int) $userId.':'.$parts[0];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Booking $booking) {
+            if (in_array($booking->payment_status, self::ACCESS_STATUSES, true)) {
+                $booking->active_enrollment_key = self::enrollmentKey(
+                    $booking->user_id,
+                    $booking->course_id,
+                    $booking->class_id,
+                    $booking->event_id
+                );
+            } else {
+                $booking->active_enrollment_key = null;
+            }
+        });
     }
 }

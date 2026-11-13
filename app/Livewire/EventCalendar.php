@@ -216,7 +216,7 @@ class EventCalendar extends Component
         $this->price = $event->price;
 
         try {
-            $url = app(CheckoutSessionFactory::class)->forEvent($event);
+            $url = app(CheckoutSessionFactory::class)->forEvent($event, Auth::user());
 
             return redirect()->to($url);
         } catch (\Throwable $e) {

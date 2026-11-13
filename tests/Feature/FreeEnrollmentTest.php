@@ -340,17 +340,17 @@ class RecordingCheckout extends CheckoutSessionFactory
 {
     public array $requests = [];
 
-    public function forClass(Classe $class): string
+    public function forClass(Classe $class, User $user): string
     {
         return $this->record('class', $class->id, $class->price);
     }
 
-    public function forCourse(Course $course): string
+    public function forCourse(Course $course, User $user): string
     {
         return $this->record('course', $course->id, $course->price);
     }
 
-    public function forEvent(Events $event): string
+    public function forEvent(Events $event, User $user): string
     {
         return $this->record('event', $event->id, $event->price);
     }

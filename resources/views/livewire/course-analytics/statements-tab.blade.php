@@ -28,7 +28,7 @@
             </thead>
             <tbody>
                 @foreach ($payments as $payment)
-                    {{-- @dd($payment->booking->course->title) --}}
+                    @continue(! $payment->booking)
                     <tr>
                         <td>
                             <div class="statement-info">

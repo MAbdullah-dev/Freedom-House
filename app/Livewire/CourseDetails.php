@@ -221,7 +221,7 @@ class CourseDetails extends Component
         $this->price = $class->price;
 
         try {
-            $url = app(CheckoutSessionFactory::class)->forClass($class);
+            $url = app(CheckoutSessionFactory::class)->forClass($class, Auth::user());
 
             return redirect()->to($url);
         } catch (\Throwable $e) {

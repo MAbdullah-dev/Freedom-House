@@ -9,6 +9,7 @@ use App\Models\Course;
 use App\Models\Events;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 
 class FreeEnrollment
@@ -116,14 +117,18 @@ class FreeEnrollment
                 return new EnrollmentResult(self::DUPLICATE, null, $item);
             }
 
-            $booking = Booking::query()->create([
-                $foreignKey => $item->id,
-                'user_id' => $user->id,
-                'phone' => $user->phone,
-                'payment_status' => 'free',
-                'type' => 'automated',
-                'order_number' => uniqid('FREE_', true),
-            ]);
+            try {
+                $booking = Booking::query()->create([
+                    $foreignKey => $item->id,
+                    'user_id' => $user->id,
+                    'phone' => $user->phone,
+                    'payment_status' => 'free',
+                    'type' => 'automated',
+                    'order_number' => uniqid('FREE_', true),
+                ]);
+            } catch (UniqueConstraintViolationException) {
+                return new EnrollmentResult(self::DUPLICATE, null, $item);
+            }
 
             if ($foreignKey !== 'course_id') {
                 CalendarEvent::query()->create([
@@ -133,7 +138,22 @@ class FreeEnrollment
             }
 
             if ($this->tracksCapacity($item) && $item->capacity !== null) {
-                $item->decrement('capacity');
+                $affected = DB::table($item->getTable())
+                    ->where('id', $item->id)
+                    ->where('capacity', '>', 0)
+                    ->decrement('capacity');
+
+                if ($affected !== 1) {
+                    if ($foreignKey !== 'course_id') {
+                        CalendarEvent::query()
+                            ->where('user_id', $user->id)
+                            ->where($foreignKey, $item->id)
+                            ->delete();
+                    }
+                    $booking->delete();
+
+                    return new EnrollmentResult(self::FULL, null, $item);
+                }
             }
 
             return new EnrollmentResult(self::ENROLLED, $booking, $item);
