@@ -2,13 +2,22 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Livewire\Concerns\RequiresRole;
 use App\Models\Email;
+use App\Models\Role;
 use Livewire\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Emails extends Component
 {
+    use RequiresRole;
+
     public $emails;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::ADMIN);
+    }
 
     public function mount()
     {

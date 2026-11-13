@@ -4,7 +4,9 @@ namespace App\Livewire\Dashboard;
 
 use App\Mail\TutorApprovalMail;
 use App\Mail\TutorRejectionMail;
+use App\Livewire\Concerns\RequiresRole;
 use App\Models\Notification;
+use App\Models\Role;
 use App\Models\Tutor;
 use App\Models\TutorFile;
 use Illuminate\Support\Facades\Mail;
@@ -14,12 +16,19 @@ use Livewire\Component;
 
 class TutorRequest extends Component
 {
+    use RequiresRole;
+
     public $tutors;
     public $rejectionReason = '';
     public $approvalMessage = '';
     public $tutorId = null;
 
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::ADMIN);
+    }
 
     public function mount()
     {
@@ -78,11 +87,15 @@ class TutorRequest extends Component
     public function submitApproval()
     {
         $tutor = Tutor::find($this->tutorId);
-        $user = $tutor->user;
+        $tutorRole = Role::findByName(Role::TUTOR);
 
-        if ($tutor) {
+        if ($tutorRole === null) {
+            abort(403);
+        }
+
+        if ($tutor && $tutor->user) {
             $tutor->update(['is_verified' => 1]);
-            $user->update(['role_id' => '2']);
+            $tutor->user->update(['role_id' => $tutorRole->id]);
 
             Mail::to($tutor->user->email)->send(new TutorApprovalMail($tutor, $this->approvalMessage));
 

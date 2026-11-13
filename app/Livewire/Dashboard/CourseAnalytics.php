@@ -2,11 +2,20 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Livewire\Component;
 
 class CourseAnalytics extends Component
 {
+    use RequiresRole;
+
     public $activeTab = 'overview';
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
 
     public  function mount()
     {

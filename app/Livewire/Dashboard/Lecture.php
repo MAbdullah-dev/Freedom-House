@@ -8,12 +8,20 @@ use App\Models\Lecture as ModelsLecture;
 use Vimeo\Laravel\Facades\Vimeo;
 use Illuminate\Support\Facades\Storage;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class Lecture extends Component
 {
+    use RequiresRole;
     use LivewireAlert, WithFileUploads;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
 
     public $courses = [];
     public $course_id; // Course selected once for all lectures

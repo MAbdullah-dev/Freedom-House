@@ -2,14 +2,22 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Livewire\Concerns\RequiresRole;
 use App\Models\Course;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Livewire\Concerns\LivewireAlert;
 
 class MyCourses extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
 
     public $publishedCourses;
     public $pendingCourses;

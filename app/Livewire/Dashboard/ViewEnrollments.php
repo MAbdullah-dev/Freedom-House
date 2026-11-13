@@ -9,11 +9,20 @@ use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use App\Services\MicrosoftGraphService;
 
 class ViewEnrollments extends Component
 {
+    use RequiresRole;
+
     protected $microsoftGraphService;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
 
     public function __construct()
     {

@@ -8,12 +8,20 @@ use App\Models\Tutor;
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class CreateCourse extends Component
 {
+    use RequiresRole;
     use WithFileUploads, LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
 
     public $courseId;
     public $courseTitle;

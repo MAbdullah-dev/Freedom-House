@@ -11,11 +11,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Livewire\Component;
 
 class Announcements extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
     public $courses;
     public $selectedCourse;
     public $subject;

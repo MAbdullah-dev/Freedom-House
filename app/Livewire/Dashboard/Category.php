@@ -2,13 +2,21 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Livewire\Concerns\RequiresRole;
 use App\Models\Category as ModelsCategory;
+use App\Models\Role;
 use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class Category extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::ADMIN);
+    }
 
     public $category_name;
     public $category_list;

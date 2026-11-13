@@ -2,13 +2,21 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class Tags extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::ADMIN);
+    }
 
     public $name;
     public $search = '';

@@ -6,14 +6,22 @@ use App\Jobs\FetchVimeoVideoDetailsJob;
 use App\Models\Course;
 use App\Models\Lecture;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Vimeo\Laravel\Facades\Vimeo;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class ViewLectures extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
     use WithFileUploads;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
 
     public $courseId;
     public $course;

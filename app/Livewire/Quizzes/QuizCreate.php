@@ -7,11 +7,19 @@ use App\Models\Quiz;
 use App\Models\QuizAnswer;
 use App\Models\QuizQuestion;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Livewire\Component;
 
 class QuizCreate extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
     public $title, $lecture_id, $timer, $description;
     public $questions = [];
 

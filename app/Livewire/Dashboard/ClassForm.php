@@ -10,11 +10,19 @@ use App\Models\Events;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Livewire\Component;
 
 class ClassForm extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::TUTOR, Role::ADMIN);
+    }
 
     protected $microsoftGraphService;
     public function __construct()

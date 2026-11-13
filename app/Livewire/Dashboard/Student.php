@@ -2,11 +2,15 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use App\Models\User;
 use Livewire\Component;
 
 class Student extends Component
 {
+    use RequiresRole;
+
     public $studentsWithEnrollments = [];
     public $selectedStudentId;
     public $selectedStudentData = [];
@@ -15,6 +19,11 @@ class Student extends Component
     public $originalStudentData = [];
     public $hasChanges = false;
 
+    public function boot(): void
+    {
+        $this->requireRole(Role::ADMIN);
+    }
+
     public function mount()
     {
         $this->loadStudentData();
@@ -22,9 +31,15 @@ class Student extends Component
 
     public function loadStudentData()
     {
+        $learnerRole = Role::findByName(Role::LEARNER);
+
         $students = User::withTrashed()
-            ->where('role_id', 3)
-            ->with('bookings.course')
+            ->with(['role', 'bookings.course'])
+            ->when(
+                $learnerRole,
+                fn ($query) => $query->where('role_id', $learnerRole->id),
+                fn ($query) => $query->whereRaw('0 = 1')
+            )
             ->get();
 
         $this->studentsWithEnrollments = [];
@@ -62,12 +77,18 @@ class Student extends Component
         $this->loadStudentData();
     }
 
-    public function promoteUser($userId, $newRoleId)
+    public function promoteUser($userId, $roleName)
     {
+        $role = is_string($roleName) ? Role::findByName($roleName) : null;
+
+        if ($role === null || ! in_array($role->role_name, [Role::ADMIN, Role::TUTOR], true)) {
+            abort(403);
+        }
+
         $user = User::withTrashed()->find($userId);
 
         if ($user) {
-            $user->role_id = $newRoleId;
+            $user->role_id = $role->id;
             $user->save();
         }
 
@@ -107,7 +128,11 @@ class Student extends Component
     {
         $user = User::withTrashed()->findOrFail($this->selectedStudentId);
 
-        $user->update($this->selectedStudentData);
+        $user->update(collect($this->selectedStudentData)->except([
+            'role_id',
+            'password',
+            'remember_token',
+        ])->all());
 
         if (!empty($this->newPassword)) {
             $user->password = bcrypt($this->newPassword);

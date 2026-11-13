@@ -8,11 +8,19 @@ use App\Mail\HelpRequestResponse;
 use App\Mail\HelpRequestRejection;
 use Illuminate\Support\Facades\Mail;
 use App\Livewire\Concerns\LivewireAlert;
+use App\Livewire\Concerns\RequiresRole;
+use App\Models\Role;
 use Livewire\Component;
 
 class HelpRequestsAdmin extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::ADMIN);
+    }
 
     public $helprequests;
     public $selectedRequest;

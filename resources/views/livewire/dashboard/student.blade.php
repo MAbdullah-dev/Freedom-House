@@ -60,18 +60,18 @@
                                             Promote To
                                         </button>
                                         <ul class="dropdown-menu shadow-sm">
-                                            @if ($user->role_id !== 2)
+                                            @if ($user->role?->role_name !== \App\Models\Role::TUTOR)
                                                 <li>
                                                     <a href="#" class="dropdown-item text-primary fw-semibold"
-                                                        wire:click.prevent="promoteUser({{ $user->id }}, 2)">
+                                                        wire:click.prevent="promoteUser({{ $user->id }}, '{{ \App\Models\Role::TUTOR }}')">
                                                         <i class="bi bi-person-gear me-2"></i> Instructor
                                                     </a>
                                                 </li>
                                             @endif
-                                            @if ($user->role_id !== 1)
+                                            @if ($user->role?->role_name !== \App\Models\Role::ADMIN)
                                                 <li>
                                                     <a href="#" class="dropdown-item text-primary fw-semibold"
-                                                        wire:click.prevent="promoteUser({{ $user->id }}, 1)">
+                                                        wire:click.prevent="promoteUser({{ $user->id }}, '{{ \App\Models\Role::ADMIN }}')">
                                                         <i class="fa-solid fa-user-tie me-2"></i> Admin
                                                     </a>
                                                 </li>

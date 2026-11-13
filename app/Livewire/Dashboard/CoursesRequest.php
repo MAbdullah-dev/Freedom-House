@@ -2,13 +2,21 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Livewire\Concerns\RequiresRole;
 use App\Models\Course;
+use App\Models\Role;
 use App\Livewire\Concerns\LivewireAlert;
 use Livewire\Component;
 
 class CoursesRequest extends Component
 {
+    use RequiresRole;
     use LivewireAlert;
+
+    public function boot(): void
+    {
+        $this->requireRole(Role::ADMIN);
+    }
     public $courses;
 
     public function mount()
