@@ -3,14 +3,16 @@
 namespace App\Livewire;
 
 use App\Models\Booking;
+use App\Services\CheckoutSessionFactory;
 use App\Services\ContentAccess;
+use App\Services\FreeEnrollment;
 use App\Models\Lecture; // Make sure to import the Lecture model
 use App\Models\Course;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
-use Stripe\Stripe;
 
 class OnSiteCourseDetails extends Component
 {
@@ -69,58 +71,49 @@ class OnSiteCourseDetails extends Component
 
     public function enrollCourse()
     {
-        if ($this->isPaid) {
-            $this->redirectToStripeCheckout();
-        } else {
-            $this->processFreeEnrollment();
+        $user = Auth::user();
+        if ($user === null) {
+            abort(403);
         }
+
+        $outcome = app(FreeEnrollment::class)->enrollCourse($user, $this->courseId);
+
+        if ($outcome->status === FreeEnrollment::PAID) {
+            return $this->redirectToStripeCheckout($outcome->item);
+        }
+
+        if ($outcome->status === FreeEnrollment::ENROLLED) {
+            Notification::create([
+                'user_id' => $user->id,
+                'message' => 'You successfully Enrolled in the free course: '.$outcome->item->title.' 😊.',
+                'type' => 'booking',
+            ]);
+            session()->flash('success', 'You have successfully enrolled in the free course!');
+
+            return redirect()->to(route('onsite.course.details', ['id' => $outcome->item->id]));
+        }
+
+        session()->flash('error', match ($outcome->status) {
+            FreeEnrollment::DUPLICATE => 'You are already enrolled in this course.',
+            FreeEnrollment::UNPRICED => 'This course is not available for enrollment.',
+            default => 'Course not found.',
+        });
     }
 
-    private function processFreeEnrollment()
+    private function redirectToStripeCheckout(Course $course)
     {
-        Booking::create([
-            'course_id' => $this->courseId,
-            'class_id' => null,
-            'phone_number' => Auth::user()->phone,
-            'user_id' => Auth::id(),
-            'payment_status' => 'free',
-            'order_number' => uniqid('FREE_'),
-        ]);
-        Notification::create([
-            'user_id' => Auth::id(),
-            'message' => 'You successfully Enrolled in the free course: ' . $this->courseTitle . ' 😊.',
-            'type' => 'booking',
-        ]);
-        session()->flash('success', 'You have successfully enrolled in the free course!');
-        return redirect()->to(route('onsite.course.details', ['id' => $this->courseId]));
-    }
-
-    private function redirectToStripeCheckout()
-    {
-        session()->put('stripe_payment_amount', $this->price);
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $this->courseId = $course->id;
+        $this->price = $course->price;
+        $this->courseTitle = $course->title;
 
         try {
-            $session = \Stripe\Checkout\Session::create([
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'product_data' => [
-                            'name' => $this->courseTitle,
-                        ],
-                        'unit_amount' => intval($this->price * 100), // Convert to cents
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&course_id=' . $this->courseId,
-                'cancel_url' => route('payment.cancel') . '?course_id=' . $this->courseId,
-            ]);
+            $url = app(CheckoutSessionFactory::class)->forCourse($course);
 
-            return redirect()->to($session->url);
-        } catch (\Exception $e) {
-            session()->flash('error', 'There was an error processing your payment: ' . $e->getMessage());
+            return redirect()->to($url);
+        } catch (\Throwable $e) {
+            Log::error('Unable to create Stripe Checkout session: '.$e->getMessage());
+            session()->flash('error', 'There was an error processing your payment.');
+
             return redirect()->back();
         }
     }

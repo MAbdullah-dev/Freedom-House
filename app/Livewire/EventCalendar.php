@@ -2,17 +2,17 @@
 
 namespace App\Livewire;
 
-use App\Models\Booking;
 use App\Models\CalendarEvent;
 use App\Models\Events;
 use App\Models\Notification;
+use App\Services\CheckoutSessionFactory;
+use App\Services\FreeEnrollment;
 use App\Services\MicrosoftGraphService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
-use Stripe\Stripe;
 use App\Livewire\Concerns\LivewireAlert;
 
 class EventCalendar extends Component
@@ -122,75 +122,67 @@ class EventCalendar extends Component
 
     public function enroll()
     {
-        if ($this->isPaid == 'paid') {
-            $this->redirectToStripeCheckout();
-        } else {
-            $this->enrollFreeEvent();
-        }
-    }
-
-    private function enrollFreeEvent()
-    {
-        if ($this->slots <= 0) {
-            $this->alert('error', 'No slot available for this event!');
-            return;
-        }
-
         $user = Auth::user();
-        $event = Events::find($this->selectedEventId);
+        if ($user === null) {
+            abort(403);
+        }
 
-        try {
-            if ($event->microsoft_event_id) {
-                $attendees = [
-                    [
-                        'email' => $user->email,
-                        'name' => $user->first_name . ' ' . $user->last_name,
-                    ]
-                ];
+        $outcome = app(FreeEnrollment::class)->enrollEvent($user, $this->selectedEventId);
 
-                $organizerId = $event->user->microsoft_id ?? null;
-                if ($organizerId) {
-                    $this->microsoftGraphService->addDynamicAttendees($event, $attendees, $organizerId);
-                } else {
-                    throw new \Exception('Organizer Microsoft ID is missing.');
-                }
-            } elseif ($user->microsoft_account && !$event->microsoft_event_id) {
-                $this->createCalendarEventForUser($event, $user);
+        if ($outcome->status === FreeEnrollment::PAID) {
+            return $this->redirectToStripeCheckout($outcome->item);
+        }
+
+        if ($outcome->status === FreeEnrollment::ENROLLED) {
+            try {
+                $this->completeFreeEventEnrollment($outcome->item, $user);
+            } catch (\Throwable $e) {
+                app(FreeEnrollment::class)->release($outcome->booking);
+                Log::error('Failed to enroll user in event: '.$e->getMessage());
+                $this->alert('error', 'Failed to enroll in the event.');
+
+                return;
             }
 
-            Notification::create([
-                'user_id' => $user->id,
-                'message' => 'You successfully enrolled in the event: ' . $event->title . ' 😊.',
-                'type' => 'booking',
-            ]);
-
             $this->alert('success', 'Successfully enrolled in the event!');
-        } catch (\Exception $e) {
-            Log::error('Failed to enroll user in event: ' . $e->getMessage());
-            $this->alert('error', 'Failed to enroll in the event.');
+            $this->dispatch('close-modal');
+
             return;
         }
 
-        Booking::create([
-            'event_id' => $this->selectedEventId,
-            'user_id' => $user->id,
-            'phone' => $user->phone,
-            'payment_status' => 'free',
-            'order_number' => uniqid('FREE_'),
-        ]);
+        $this->alert('error', match ($outcome->status) {
+            FreeEnrollment::FULL => 'No slot available for this event!',
+            FreeEnrollment::DUPLICATE => 'You are already enrolled in this event!',
+            FreeEnrollment::UNPRICED => 'This event is not available for enrollment.',
+            default => 'Event not found!',
+        });
+    }
 
-        CalendarEvent::create([
-            'event_id' => $this->selectedEventId,
-            'user_id' => $user->id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+    private function completeFreeEventEnrollment(Events $event, $user): void
+    {
+        if ($event->microsoft_event_id) {
+            $attendees = [
+                [
+                    'email' => $user->email,
+                    'name' => $user->first_name.' '.$user->last_name,
+                ],
+            ];
 
-        if ($event && $event->capacity > 0) {
-            $event->decrement('capacity');
+            $organizerId = $event->users->microsoft_id ?? null;
+            if ($organizerId) {
+                $this->microsoftGraphService->addDynamicAttendees($event, $attendees, $organizerId);
+            } else {
+                throw new \Exception('Organizer Microsoft ID is missing.');
+            }
+        } elseif ($user->microsoft_account && ! $event->microsoft_event_id) {
+            $this->createCalendarEventForUser($event, $user);
         }
 
-        $this->dispatch('close-modal');
+        Notification::create([
+            'user_id' => $user->id,
+            'message' => 'You successfully enrolled in the event: '.$event->title.' 😊.',
+            'type' => 'booking',
+        ]);
     }
 
     private function createCalendarEventForUser($event, $user)
@@ -218,37 +210,19 @@ class EventCalendar extends Component
         }
     }
 
-    private function redirectToStripeCheckout()
+    private function redirectToStripeCheckout(Events $event)
     {
-        if ($this->slots <= 0) {
-            $this->alert('error', 'No slot available for this event!');
-            return;
-        }
-
-        session()->put('stripe_payment_amount', $this->price);
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $this->selectedEventId = $event->id;
+        $this->price = $event->price;
 
         try {
-            $session = \Stripe\Checkout\Session::create([
-                'payment_method_types' => ['card'],
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'product_data' => [
-                            'name' => 'Event Enrollment',
-                        ],
-                        'unit_amount' => $this->price * 100,
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&event_id=' . $this->selectedEventId,
-                'cancel_url' => route('payment.cancel') . '?event_id=' . $this->selectedEventId,
-            ]);
+            $url = app(CheckoutSessionFactory::class)->forEvent($event);
 
-            return redirect($session->url);
-        } catch (\Exception $e) {
-            session()->flash('error', 'Unable to create Stripe Checkout session: ' . $e->getMessage());
+            return redirect()->to($url);
+        } catch (\Throwable $e) {
+            Log::error('Unable to create Stripe Checkout session: '.$e->getMessage());
+            session()->flash('error', 'Unable to create Stripe Checkout session.');
+
             return redirect()->back();
         }
     }
