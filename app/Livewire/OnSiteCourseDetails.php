@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Booking;
+use App\Services\ContentAccess;
 use App\Models\Lecture; // Make sure to import the Lecture model
 use App\Models\Course;
 use App\Models\Notification;
@@ -35,7 +36,13 @@ class OnSiteCourseDetails extends Component
             $this->loadLectures();
             $this->checkEnrollment();
         }
-        $this->course = Course::findOrFail($this->courseId)->with('lectures', 'bookings', 'reviews')->first();
+        $this->course = Course::query()
+            ->with([
+                'lectures' => fn ($query) => $query->select('id', 'course_id', 'title', 'order', 'video_duration'),
+                'bookings' => fn ($query) => $query->select('id', 'course_id'),
+                'reviews',
+            ])
+            ->findOrFail($this->courseId);
     }
 
     public function loadCourseData()
@@ -54,7 +61,10 @@ class OnSiteCourseDetails extends Component
 
     public function loadLectures()
     {
-        $this->lectures = Lecture::where('course_id', $this->courseId)->get();
+        $this->lectures = Lecture::query()
+            ->where('course_id', $this->courseId)
+            ->orderBy('order')
+            ->get(['id', 'course_id', 'title', 'order', 'video_duration']);
     }
 
     public function enrollCourse()
@@ -116,8 +126,10 @@ class OnSiteCourseDetails extends Component
     }
     public function checkEnrollment()
     {
-        $this->isEnrolled = Booking::where('user_id', Auth::id())
+        $this->isEnrolled = Auth::check() && Booking::query()
+            ->where('user_id', Auth::id())
             ->where('course_id', $this->courseId)
+            ->whereIn('payment_status', ContentAccess::GRANTED_STATUSES)
             ->exists();
     }
 

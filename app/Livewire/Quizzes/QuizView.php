@@ -4,6 +4,8 @@ namespace App\Livewire\Quizzes;
 
 use App\Models\Quiz;
 use App\Models\QuizSubmission;
+use App\Services\ContentAccess;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class QuizView extends Component
@@ -13,12 +15,12 @@ class QuizView extends Component
 
     public function mount($quizId)
     {
-        $this->quiz = Quiz::with('questions.answers')->findOrFail($quizId);
+        $this->quiz = $this->guardQuiz($quizId);
     }
 
     public function submit()
     {
-        // Handle the quiz submission logic (e.g., calculate the score)
+        $this->quiz = $this->guardQuiz($this->quizId());
         $score = 0;
 
         foreach ($this->quiz->questions as $index => $question) {
@@ -39,6 +41,32 @@ class QuizView extends Component
 
     public function render()
     {
+        $this->quiz = $this->guardQuiz($this->quizId());
+
         return view('livewire.quizzes.quiz-view');
+    }
+
+    private function guardQuiz(mixed $quizId): Quiz
+    {
+        $quiz = app(ContentAccess::class)->authorizeQuiz(Auth::user(), $quizId);
+        $quiz->load('questions.answers');
+        $quiz->questions->each(function ($question) {
+            $question->answers->each->makeHidden('is_correct');
+        });
+
+        return $quiz;
+    }
+
+    private function quizId(): mixed
+    {
+        if (is_object($this->quiz)) {
+            return $this->quiz->id ?? null;
+        }
+
+        if (is_array($this->quiz)) {
+            return $this->quiz['id'] ?? null;
+        }
+
+        return $this->quiz;
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Notification;
 use App\Models\Quiz;
 use App\Models\Review;
 use App\Models\VideoActivity;
+use App\Services\ContentAccess;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -41,27 +42,18 @@ class RecordedLecture extends Component
 
     public function mount($courseId, $lectureId = null)
     {
-        $this->courseId = $courseId;
-        $this->currentLectureId = $lectureId;
+        $authorized = $this->guardLecture($lectureId, $courseId);
+        $this->currentLectureId = $authorized->id;
 
-        // Fetch all lectures for the given course, ordered by 'order'
-        $this->lectures = Lecture::where('course_id', $this->courseId)->orderBy('order')->get();
-        $this->quiz = Quiz::where('lecture_id', $this->currentLectureId)->first();
-        // Set the current lecture based on passed lectureId or default to the first lecture
-        if ($this->currentLectureId) {
-            $this->currentLecture = $this->lectures->firstWhere('id', $this->currentLectureId);
-        } else {
-            $this->currentLecture = $this->lectures->first();
-        }
+        // Fetch all lectures for the authorized course, ordered by 'order'
+        $this->lectures = Lecture::where('course_id', $authorized->course_id)->orderBy('order')->get();
+        $this->quiz = Quiz::where('lecture_id', $authorized->id)->first();
+        $this->currentLecture = $this->lectures->firstWhere('id', $authorized->id);
 
         // Assign the current lecture's order to the lecturescountcurrent
         if ($this->currentLecture) {
             $this->lecturescountcurrent = $this->currentLecture->order;
-        }
-
-        // Fetch video details for the current lecture
-        if ($this->currentLecture) {
-            $this->fetchVideoDetails($this->currentLecture->video_file);
+            $this->fetchVideoDetails($authorized->video_file);
         }
 
         // Check if the user has watched each lecture
@@ -72,11 +64,12 @@ class RecordedLecture extends Component
                 ->exists();
         }
 
-        $this->progressPercentage = $this->getCourseProgress($courseId);
+        $this->progressPercentage = $this->getCourseProgress($authorized->course_id);
     }
 
     public function setRating($value)
     {
+        $this->guardLecture();
         $this->rating = $value;
         $user = Auth::user();
         foreach ($this->lectures as $lecture) {
@@ -89,17 +82,18 @@ class RecordedLecture extends Component
     // Mark the video as watched for the user
     public function markAsWatched($lectureId)
     {
+        $authorized = $this->guardLecture($lectureId);
         $user = Auth::user();
 
         // Mark the lecture as watched
         $activity = VideoActivity::where('user_id', $user->id)
-            ->where('lecture_id', $lectureId)
+            ->where('lecture_id', $authorized->id)
             ->first();
 
         if (!$activity) {
             VideoActivity::create([
                 'user_id' => $user->id,
-                'lecture_id' => $lectureId,
+                'lecture_id' => $authorized->id,
                 'watched' => 1,
             ]);
         } else {
@@ -117,7 +111,7 @@ class RecordedLecture extends Component
         }
 
         // Update the course progress
-        $this->progressPercentage = $this->getCourseProgress($this->courseId);
+        $this->progressPercentage = $this->getCourseProgress($authorized->course_id);
 
         // Trigger certificate generation only if the user is on the last lecture and progress is 100%
         if ($this->isLastLecture() && $this->progressPercentage == 100) {
@@ -139,6 +133,8 @@ class RecordedLecture extends Component
     // Method to open the modal when the user completes all lectures
     public function checkCompletionAndRequestReview()
     {
+        $authorized = $this->guardLecture();
+        $this->lectures = Lecture::where('course_id', $authorized->course_id)->orderBy('order')->get();
         $user = Auth::user();
 
         // Check if the user has already reviewed this course
@@ -169,6 +165,7 @@ class RecordedLecture extends Component
 
     public function submitReview()
     {
+        $lecture = $this->guardLecture();
         $this->validate([
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'required|string|min:5|max:50',
@@ -177,7 +174,7 @@ class RecordedLecture extends Component
         // Save review to the database
         \App\Models\Review::create([
             'user_id' => Auth::id(),
-            'course_id' => $this->courseId,
+            'course_id' => $lecture->course_id,
             'rating' => $this->rating,
             'review' => $this->review,
         ]);
@@ -202,6 +199,9 @@ class RecordedLecture extends Component
     // Change to the next lecture
     public function nextLecture()
     {
+        $current = $this->guardLecture();
+        $this->lectures = Lecture::where('course_id', $current->course_id)->orderBy('order')->get();
+        $this->lecturescountcurrent = $current->order;
         $nextLecture = $this->lectures->where('order', '>', $this->lecturescountcurrent)->sortBy('order')->first();
 
         if ($nextLecture) {
@@ -212,6 +212,9 @@ class RecordedLecture extends Component
     // Change to the previous lecture
     public function previousLecture()
     {
+        $current = $this->guardLecture();
+        $this->lectures = Lecture::where('course_id', $current->course_id)->orderBy('order')->get();
+        $this->lecturescountcurrent = $current->order;
         $previousLecture = $this->lectures->where('order', '<', $this->lecturescountcurrent)->sortByDesc('order')->first();
 
         if ($previousLecture) {
@@ -222,11 +225,13 @@ class RecordedLecture extends Component
     // Change the current lecture and fetch its video details
     public function changeLecture($lectureId)
     {
-        $this->currentLectureId = $lectureId;
-        $this->currentLecture = $this->lectures->firstWhere('id', $lectureId);
+        $authorized = $this->guardLecture($lectureId);
+        $this->currentLectureId = $authorized->id;
+        $this->lectures = Lecture::where('course_id', $authorized->course_id)->orderBy('order')->get();
+        $this->currentLecture = $this->lectures->firstWhere('id', $authorized->id);
 
         if ($this->currentLecture) {
-            $this->fetchVideoDetails($this->currentLecture->video_file);
+            $this->fetchVideoDetails($authorized->video_file);
             $this->lecturescountcurrent = $this->currentLecture->order;
         }
     }
@@ -244,10 +249,16 @@ class RecordedLecture extends Component
     }
     public function pollVideoDuration()
     {
+        $this->guardLecture();
         $this->lecture->refresh(); // Reload the model
     }
     public function getCourseProgress($courseId)
     {
+        $lecture = $this->guardLecture();
+        if (! is_numeric($courseId) || (int) $courseId !== (int) $lecture->course_id) {
+            abort(403);
+        }
+        $courseId = $lecture->course_id;
         $user = Auth::user();
 
         // Get the total number of lectures in the course
@@ -286,6 +297,8 @@ class RecordedLecture extends Component
 
     public function checkCompletionAndGenerateCertificate()
     {
+        $authorized = $this->guardLecture();
+        $this->lectures = Lecture::where('course_id', $authorized->course_id)->orderBy('order')->get();
         $user = Auth::user();
 
         if (!$user) {
@@ -373,6 +386,7 @@ class RecordedLecture extends Component
 
     public function showcertificate()
     {
+        $this->guardLecture();
         $this->cetificatepathformodal = Certificate::where('user_id', Auth::id())->pluck('certificate_path');
         $this->cetificatepathformodal = $this->cetificatepathformodal->first();
         $this->dispatch('showCertificateModal');
@@ -380,6 +394,7 @@ class RecordedLecture extends Component
     }
     public function assigncertificate()
     {
+        $this->guardLecture();
         $this->cetificatepathformodal = Certificate::where('user_id', Auth::id())->pluck('certificate_path');
         $this->cetificatepathformodal = $this->cetificatepathformodal->first();
         $this->dispatch('close-review-modal');
@@ -393,6 +408,7 @@ class RecordedLecture extends Component
 
     public function sendCertificate()
     {
+        $this->guardLecture();
         $user = Auth::user();
         foreach ($this->lectures as $lecture) {
             $lecture->watched = VideoActivity::where('user_id', $user->id)
@@ -405,6 +421,35 @@ class RecordedLecture extends Component
     // Render the view
     public function render()
     {
+        $this->guardLecture();
+
         return view('livewire.recorded-lecture');
+    }
+
+    private function guardLecture(mixed $lectureId = null, mixed $courseId = null): Lecture
+    {
+        $lecture = app(ContentAccess::class)->authorizeRecordedLecture(
+            Auth::user(),
+            $courseId,
+            $lectureId ?? $this->currentLectureId
+        );
+        $this->courseId = $lecture->course_id;
+        $this->currentLectureId = $lecture->id;
+        $this->lectures = Lecture::query()
+            ->where('course_id', $lecture->course_id)
+            ->orderBy('order')
+            ->get();
+        $userId = Auth::id();
+        foreach ($this->lectures as $item) {
+            $item->watched = VideoActivity::query()
+                ->where('user_id', $userId)
+                ->where('lecture_id', $item->id)
+                ->exists();
+        }
+        $this->currentLecture = $this->lectures->firstWhere('id', $lecture->id) ?? $lecture;
+        $this->lecturescountcurrent = $this->currentLecture->order;
+        $this->fetchVideoDetails($lecture->video_file);
+
+        return $lecture;
     }
 }
