@@ -114,7 +114,7 @@ window.addEventListener("calendarEventSelected", (event) => {
     $("#calendarEventModal").modal("show");
 });
 
-document.addEventListener("livewire:load", () => {
+document.addEventListener("livewire:init", () => {
     initCalendar([]);
     Livewire.on("updateCalendar", (events) => {
         initCalendar(events);
