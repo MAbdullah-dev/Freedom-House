@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Livewire\Login;
 use App\Models\Role;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
@@ -44,19 +43,9 @@ class SmokeTest extends TestCase
         $this->assertSame('array', config('mail.default'));
     }
 
-    public function test_role_table_uses_role_name_and_mass_assignment_does_not_write_it(): void
+    public function test_role_model_mass_assigns_role_name(): void
     {
         $this->assertTrue(Schema::hasColumn('roles', 'role_name'));
-        $this->assertSame(['name'], (new Role)->getFillable());
-        $this->assertSame(0, DB::table('roles')->count());
-
-        try {
-            Role::create(['role_name' => 'Learner']);
-            $this->fail('Role::create accepted role_name.');
-        } catch (QueryException $exception) {
-            $this->assertStringContainsString('role_name', $exception->getMessage());
-        }
-
-        $this->assertSame(0, DB::table('roles')->count());
+        $this->assertSame(['role_name'], (new Role)->getFillable());
     }
 }

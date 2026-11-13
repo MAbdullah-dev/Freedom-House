@@ -44,6 +44,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return !is_null($this->email_verified_at);
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRoleName(string $roleName): bool
+    {
+        return $this->role?->role_name === $roleName;
+    }
+
     public function courses()
     {
         return $this->hasMany(Course::class);

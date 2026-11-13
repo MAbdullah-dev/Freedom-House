@@ -9,13 +9,21 @@ class Role extends Model
 {
     use HasFactory;
 
-    public const LEARNER_ROLE = 3; 
-    public const TUTOR_ROLE = 2;   
+    public const ADMIN = 'Admin';
 
-    protected $fillable = ['name'];
+    public const TUTOR = 'Tutor';
+
+    public const LEARNER = 'Learner';
+
+    protected $fillable = ['role_name'];
+
+    public static function findByName(string $roleName): ?self
+    {
+        return static::query()->where('role_name', $roleName)->first();
+    }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'roles_users');
+        return $this->hasMany(User::class);
     }
 }
