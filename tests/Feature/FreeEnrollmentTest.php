@@ -56,7 +56,7 @@ class FreeEnrollmentTest extends TestCase
             ->test(CourseDetails::class, ['id' => $class->course_id])
             ->set('isPaid', false)
             ->set('price', 0)
-            ->set('slots', 99)
+            ->set('seatCapacity', 99)
             ->call('enroll', $class->id, false, 0)
             ->assertRedirect('https://checkout.test/session');
 
@@ -96,7 +96,7 @@ class FreeEnrollmentTest extends TestCase
             ->set('selectedEventId', $event->id)
             ->set('isPaid', 'free')
             ->set('price', 0)
-            ->set('slots', 99)
+            ->set('seatCapacity', 99)
             ->call('enroll')
             ->assertRedirect('https://checkout.test/session');
 
@@ -163,7 +163,7 @@ class FreeEnrollmentTest extends TestCase
             ->set('selectedEventId', $event->id)
             ->set('isPaid', 'paid')
             ->set('price', 90)
-            ->set('slots', 0)
+            ->set('seatCapacity', 0)
             ->call('enroll');
 
         $this->assertSame(['free'], $this->bookingStatuses('event_id', $event->id));

@@ -42,7 +42,7 @@ class CourseDetails extends Component
     public $selectedClassTitle;
     public $isPaid;
     public $price;
-    public $slots;
+    public $seatCapacity;
     public $userTimezone;
     public $coursePhoto;
     public $courseVideo;
@@ -70,7 +70,7 @@ class CourseDetails extends Component
             $this->selectedClassTitle = $class->title;
             $this->isPaid = $class->is_paid === 'paid';
             $this->price = $class->price;
-            $this->slots = $class->capacity;
+            $this->seatCapacity = $class->capacity;
         }
     }
     private function loadCourseData()

@@ -36,7 +36,7 @@ class EventCalendar extends Component
     public $selectedEventId;
     public $isPaid;
     public $price;
-    public $slots;
+    public $seatCapacity;
 
     public function mount()
     {
@@ -116,7 +116,7 @@ class EventCalendar extends Component
         $this->selectedEventId = $event['id'];
         $this->isPaid = $event['is_paid'];
         $this->price = $event['price'];
-        $this->slots = $event['capacity'];
+        $this->seatCapacity = $event['capacity'];
         $this->eventCards = Events::with('users')->get();
     }
 

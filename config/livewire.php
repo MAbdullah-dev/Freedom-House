@@ -30,7 +30,7 @@ return [
 
     /*
     |---------------------------------------------------------------------------
-    | Layout
+    | Page layout
     |---------------------------------------------------------------------------
     | The view that will be used as the layout when rendering a single component
     | as an entire page via `Route::get('/post/create', CreatePost::class);`.
@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'layout' => 'components.layouts.app',
+    'component_layout' => 'components.layouts.app',
 
     /*
     |---------------------------------------------------------------------------
@@ -50,7 +50,7 @@ return [
     |
     */
 
-    'lazy_placeholder' => null,
+    'component_placeholder' => null,
 
     /*
     |---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
     |
     */
 
-    'inject_assets' => true,
+    'inject_assets' => false,
 
     /*
     |---------------------------------------------------------------------------
@@ -170,4 +170,52 @@ return [
     */
 
     'pagination_theme' => 'tailwind',
+
+    /*
+    |---------------------------------------------------------------------------
+    | Livewire 4 additions
+    |---------------------------------------------------------------------------
+    |
+    | Class components stay the default. Smart wire keys stay off so nested
+    | dashboard, calendar, and card components keep their Livewire 3 identity.
+    | CSP-safe Alpine stays off because the layouts use standard Livewire
+    | directives and third-party scripts. Payload limits match the framework
+    | defaults. Upload rules above are unchanged.
+    |
+    */
+
+    'component_locations' => [
+        resource_path('views/components'),
+        resource_path('views/livewire'),
+    ],
+
+    'component_namespaces' => [
+        'layouts' => resource_path('views/layouts'),
+        'pages' => resource_path('views/pages'),
+    ],
+
+    'class_path' => app_path('Livewire'),
+
+    'make_command' => [
+        'type' => 'class',
+        'emoji' => false,
+        'with' => [
+            'js' => false,
+            'css' => false,
+            'test' => false,
+        ],
+    ],
+
+    'smart_wire_keys' => false,
+
+    'csp_safe' => false,
+
+    'release_token' => 'a',
+
+    'payload' => [
+        'max_size' => 1024 * 1024,
+        'max_nesting_depth' => 10,
+        'max_calls' => 50,
+        'max_components' => 200,
+    ],
 ];
