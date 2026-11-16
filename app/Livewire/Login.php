@@ -2,14 +2,13 @@
 
 namespace App\Livewire;
 
-use App\Mail\PasswordResetMail;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use App\Livewire\Concerns\LivewireAlert;
 
 class Login extends Component
@@ -20,61 +19,67 @@ class Login extends Component
 
     public function login()
     {
-        $validatedData = $this->validate([
+        $this->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
+
+        $key = 'login:'.Str::lower($this->email).'|'.request()->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $this->reset('password');
+            $this->alert('warning', 'Too many login attempts. Please try again later.');
+
+            return;
+        }
 
         $user = User::where('email', $this->email)->first();
 
         if ($user && Hash::check($this->password, $user->password)) {
-            if ($user->hasVerifiedEmail()) {
-                Auth::login($user);
-
-                session([
-                    'user_id' => $user->id,
-                    // 'role_ids' => $user->roles()->pluck('id')->toArray(),
-                ]);
-
-
-                return redirect()->route('dashboard.settings');
-            } else {
+            if (! $user->hasVerifiedEmail()) {
+                $this->reset('password');
                 $this->alert('warning', 'Please verify your email address before logging in.');
 
                 return;
             }
+
+            RateLimiter::clear($key);
+            Auth::login($user);
+            session()->regenerate();
+            session(['user_id' => $user->id]);
+            $this->reset('password');
+
+            return redirect()->route('dashboard.settings');
         }
 
+        RateLimiter::hit($key, 60);
+        $this->reset('password');
         $this->alert('warning', 'Invalid email or password. Please try again.');
     }
 
-
-    public function sendPasswordResetLink(Request $request)
+    public function sendPasswordResetLink()
     {
         $this->validate([
-            'reset_email' => 'required|email|exists:users,email',
+            'reset_email' => 'required|email',
         ]);
 
-        $user = User::where('email', $this->reset_email)->first();
+        $key = 'password-reset:'.request()->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $this->alert('warning', 'Please wait before requesting another password reset.');
 
-        if (!$user) {
-            $this->alert('error', 'No user found with this email address.');
             return;
         }
 
-        $token = bin2hex(random_bytes(32));
-        $user->password_reset_token = $token;
-        $user->password_token_created_at = now();
-        $user->save();
+        RateLimiter::hit($key, 60);
+        $status = Password::sendResetLink(['email' => $this->reset_email]);
 
+        if ($status === Password::RESET_LINK_SENT) {
+            User::query()->where('email', $this->reset_email)->update([
+                'password_reset_token' => null,
+                'password_token_created_at' => null,
+            ]);
+        }
 
-        $resetUrl = route('password.reset', ['token' => $token, 'email' => $user->email]);
-
-
-        // Send email (customized)
-        Mail::to($user->email)->send(new PasswordResetMail($resetUrl));
-
-        $this->alert('success', 'Password reset link sent!');
+        $this->alert('success', 'If that email is registered, a reset link has been sent.');
         $this->dispatch('close-modal');
         $this->reset('reset_email');
     }

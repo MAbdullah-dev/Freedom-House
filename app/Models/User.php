@@ -3,7 +3,9 @@
 namespace App\Models;
 
 
+use App\Mail\PasswordResetMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,8 +35,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'refresh_token',
         'token_expires_at',
         'email_verified_at',
-        'password_reset_token',
-        'password_token_created_at',
         'role_id',
         'timezone'
     ];
@@ -50,6 +50,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasVerifiedEmail()
     {
         return !is_null($this->email_verified_at);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $url = route('password.reset', [
+            'token' => $token,
+            'email' => $this->getEmailForPasswordReset(),
+        ]);
+
+        Mail::to($this->getEmailForPasswordReset())->send(new PasswordResetMail($url));
     }
 
     public function role()

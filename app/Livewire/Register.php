@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
 use App\Mail\EmailVerificationMail;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use App\Livewire\Concerns\LivewireAlert;
 
 class Register extends Component
@@ -20,21 +22,36 @@ class Register extends Component
 
     public function register()
     {
-        // dd(request()->all());
+        $key = 'register:'.request()->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $this->reset('password', 'confirm_password');
+            $this->alert('warning', 'Too many registration attempts. Please try again later.');
+
+            return;
+        }
+
         $this->validate([
             'first_name' => 'required|string|max:20',
             'last_name' => 'required|string|max:20',
-            'email' => 'required|email|unique:users|max:100',
-            'phone' => 'required|string|max:20',
+            'email' => 'required|email|unique:users,email|max:100',
+            'phone' => 'required|string|max:20|unique:users,phone',
             'password' => 'required|min:8|same:confirm_password',
         ]);
+
+        RateLimiter::hit($key, 60);
+
+        $role = Role::findByName(Role::LEARNER);
+        if ($role === null) {
+            $this->reset('password', 'confirm_password');
+            $this->alert('error', 'Registration is unavailable.');
+
+            return;
+        }
 
         try {
             DB::beginTransaction();
 
             $verificationToken = Str::random(60);
-
-            $role_id = 3;
 
             $user = User::create([
                 'first_name' => $this->first_name,
@@ -44,7 +61,7 @@ class Register extends Component
                 'password' => Hash::make($this->password),
                 'verification_token' => $verificationToken,
                 'microsoft_account' => false,
-                'role_id' => 3,
+                'role_id' => $role->id,
                 'timezone' => 'UTC',
             ]);
 
@@ -61,6 +78,7 @@ class Register extends Component
             $this->resetForm();
         } catch (\Exception $e) {
             DB::rollBack();
+            $this->reset('password', 'confirm_password');
             $this->alert('error', 'Something went wrong. Please try again.');
             return;
         }
