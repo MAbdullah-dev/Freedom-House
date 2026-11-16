@@ -71,12 +71,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <div class="input-group d-flex align-items-center justify-content-end gap-2 position-relative">
-                        <input type="text" class="form-control" placeholder="Search">
-                        <i class="fa-solid fa-magnifying-glass position-absolute"></i>
-                    </div>
-                </div>
+                <div class="col-md-5"></div>
             </div>
         </div>
         <div class="help-request-body mb-5">

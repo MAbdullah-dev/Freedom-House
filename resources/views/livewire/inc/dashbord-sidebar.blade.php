@@ -6,7 +6,8 @@
         <div class="nav d-flex flex-column">
             <ul>
                 <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}" aria-current="page"
+                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}"
+                        @if (Route::currentRouteName() == 'dashboard') aria-current="page" @endif
                         href="{{ route('dashboard') }}" wire:navigate>
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
@@ -37,12 +38,6 @@
                         </a>
                     </li>
                 @endif
-                <li class="nav-item">
-                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrollments' ? 'active' : '' }}"
-                        href="{{ route('dashboard.enrollments') }}" wire:navigate>
-                        <i class="fas fa-list"></i> View Enrollments
-                    </a>
-                </li>
                 {{-- <li class="nav-item">
                     <a class="nav-link {{ Route::currentRouteName() == 'dashboard.scehedule-classes' ? 'active' : '' }}"
                         href="{{ route('dashboard.scehedule-classes') }}" wire:navigate>
@@ -50,6 +45,12 @@
                     </a>
                 </li> --}}
                 @if (Auth::user()->hasAnyRoleName(\App\Models\Role::TUTOR, \App\Models\Role::ADMIN))
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.enrollments' ? 'active' : '' }}"
+                            href="{{ route('dashboard.enrollments') }}" wire:navigate>
+                            <i class="fas fa-list"></i> View Enrollments
+                        </a>
+                    </li>
                     <li class="tutor-dashboard-menu-divider-header">
                         Instructor
                     </li>
@@ -103,18 +104,6 @@
                                         <i class="fas fa-user-graduate"></i> Students
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.users.instructors' ? 'active' : '' }}"
-                                        href="" wire:navigate>
-                                        <i class="fas fa-chalkboard-teacher"></i> Instructors
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'dashboard.users.admins' ? 'active' : '' }}"
-                                        href="" wire:navigate>
-                                        <i class="fa-solid fa-user-tie"></i> Admins
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </li>
@@ -163,9 +152,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" wire:click="logout">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
+                    <button type="button" class="nav-link" wire:click="logout">
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout
+                    </button>
                 </li>
             </ul>
         </div>

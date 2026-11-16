@@ -1,0 +1,138 @@
+.dashboard-main {
+    align-items: flex-start;
+    gap: 1.25rem;
+    max-width: 100%;
+
+    > :not(.dashboard-sidebar) {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+.dashboard-sidebar {
+    background: $stellix-surface;
+    border: 1px solid $stellix-border;
+    border-radius: $stellix-radius;
+
+    .sidebar {
+        width: 16.5rem;
+        max-width: 100%;
+    }
+
+    button.nav-link {
+        width: calc(100% - 1.5rem);
+        text-align: left;
+        background: transparent;
+        border: 0;
+    }
+
+    .nav-link {
+        display: block;
+        margin: 0.15rem 0.75rem;
+        color: $stellix-navy;
+        border-radius: $stellix-radius;
+
+        &:focus-visible {
+            outline: 2px solid $stellix-focus;
+            outline-offset: 2px;
+        }
+
+        &.active {
+            background: $stellix-navy;
+            color: #fff;
+        }
+
+        &[aria-disabled="true"] {
+            color: $stellix-muted;
+        }
+    }
+
+    .tutor-dashboard-menu-divider-header {
+        margin-top: 0.5rem;
+        color: $stellix-teal-dark;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+}
+
+.dashboard,
+.course-analytics,
+.student-view,
+.wishlist,
+.settings,
+.profile,
+.help-request,
+.view-enrollments,
+.my-courses {
+    color: $stellix-ink;
+}
+
+.dashboard h4,
+.dashboard-page-head h1,
+.course-analytics h1,
+.student-view h1 {
+    color: $stellix-navy;
+    font-weight: 600;
+}
+
+.dashboard .course-box,
+.dashboard .tutor-course-info .course-box,
+.dashboard .course-detail .course-box {
+    width: auto;
+    min-width: 11rem;
+    padding: 1.25rem 1.5rem !important;
+    background: $stellix-surface;
+    border: 1px solid $stellix-border !important;
+    border-radius: $stellix-radius;
+    box-shadow: $stellix-shadow;
+}
+
+.dashboard .course-progress .inner,
+.dashboard-main .table-responsive,
+.help-request-head,
+.help-request-body {
+    background: $stellix-surface;
+    border: 1px solid $stellix-border;
+    border-radius: $stellix-radius;
+}
+
+.dashboard-main .table {
+    margin-bottom: 0;
+}
+
+.dashboard-main .table thead th {
+    color: $stellix-navy;
+    background: #eef3f4;
+    white-space: nowrap;
+}
+
+.dashboard-main .form-label {
+    color: $stellix-navy;
+    font-weight: 600;
+}
+
+.dashboard-main .alert {
+    border-radius: $stellix-radius;
+}
+
+.dashboard-main .badge {
+    border-radius: 999px;
+}
+
+@media (max-width: 767.98px) {
+    .dashboard,
+    .student-view,
+    .course-analytics {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+
+    .dashboard .course-box,
+    .dashboard .tutor-course-info .course-box,
+    .dashboard .course-detail .course-box {
+        width: 100%;
+    }
+}

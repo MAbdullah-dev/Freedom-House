@@ -87,7 +87,7 @@ try {
     exit(1);
 }
 
-say('Freedom House read-only preflight', $forbidden);
+say('Stellix Soft read-only preflight', $forbidden);
 say('writes: none', $forbidden);
 say('target: '.($localHost ? 'local' : 'remote'), $forbidden);
 say('host: '.$config['host'], $forbidden);

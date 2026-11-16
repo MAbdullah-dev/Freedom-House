@@ -5,7 +5,7 @@
     <header class="custom-header">
         <div class="container-fluid px-5">
             <div class="header-wrapper d-flex justify-content-between align-items-center mb-2">
-                <img src="{{ asset('assets/svgs/Brand-NameHeader.png.svg') }}" alt="Logo" class="logo">
+                <x-stellix-wordmark class="logo" href="{{ route('dashboard') }}" />
                 <div class="actions">
                     {{-- <button type="button" class="btn button-draft custom-draft-button" wire:click="saveAsDraft">
                         <i class="fa-regular fa-floppy-disk me-1"></i>Save as Draft
