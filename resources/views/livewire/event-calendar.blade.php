@@ -10,7 +10,10 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="event-cards">
-                        <input type="text" class="form-control mb-4" placeholder="Search">
+                        <h2 class="h5">Scheduled classes</h2>
+                        <ul class="calendar-legend" aria-label="Calendar legend">
+                            <li><span class="calendar-legend__swatch"></span> Open a date to see class details</li>
+                        </ul>
                         @foreach ($eventCards as $event)
                             <button type="button" class="event-card mb-3 btn"
                                 wire:click="selectEvent({{ json_encode($event) }}, 'eventCard')" data-bs-toggle="modal"
@@ -99,8 +102,7 @@
                                         <img src="{{ asset('storage/' . $selectedEvent['users']['pfp']) }}"
                                             alt="profile">
                                     @else
-                                        <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}"
-                                            alt="profile">
+                                        <span class="public-empty">Photo not available</span>
                                     @endif
                                     <p class="m-0"> {{ $selectedEvent['users']['first_name'] ?? 'N/A' }}
                                         {{ $selectedEvent['users']['last_name'] ?? '' }}</p>

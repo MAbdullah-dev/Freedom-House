@@ -1,7 +1,8 @@
 <section class="login">
-    <div class="container-fluid">
-        <h1>Login</h1>
-        <form wire:submit.prevent="login" class="form position-relative w-50">
+    <div class="container">
+        <h1>Sign in</h1>
+        <p class="auth-lead">Use the email and password for your Stellix Soft LMS account.</p>
+        <form wire:submit.prevent="login" class="form position-relative">
             <div class="login_form">
                 <div wire:loading wire:target="login" class="loading-spinner">
                     <div class="spinner"></div>
@@ -35,7 +36,8 @@
                 <div class="row pt-3 mb-2">
                     <div class="col mt-4">
                         <label for="email">Email</label>
-                        <input wire:model="email" class="form-control mt-2" type="text" name="email">
+                        <input id="email" wire:model="email" class="form-control mt-2" type="email" name="email"
+                            autocomplete="username" required>
                         @error('email')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -44,7 +46,12 @@
                 <div class="row">
                     <div class="col">
                         <label for="password">Password</label>
-                        <input wire:model="password" class="form-control mt-2" type="password" name="password">
+                        <div class="password-field">
+                            <input id="password" wire:model="password" class="form-control mt-2" type="password"
+                                name="password" autocomplete="current-password" required>
+                            <button type="button" class="password-toggle" data-target="password"
+                                aria-controls="password" aria-pressed="false">Show password</button>
+                        </div>
                         @error('password')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -59,10 +66,11 @@
                 <div class="row">
                     <div class="col d-flex flex-column py-3 gap-3">
                         <button type="submit" class="button-primary">Login</button>
-                        <a href='{{ route('microsoft.redirect') }}' type="button" class="button-secondary text-center">
+                        <a href="{{ route('microsoft.redirect') }}" class="button-secondary text-center">
                             <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
                             <span class="ms-2">Continue with Microsoft</span>
                         </a>
+                        <a href="{{ route('register') }}" wire:navigate>Create an account</a>
                     </div>
                 </div>
             </div>
@@ -105,5 +113,19 @@
 
             $('#forgotPasswordModal').modal('hide');
         })
+
+        document.querySelectorAll('.password-toggle').forEach((button) => {
+            if (button.dataset.bound === '1') {
+                return;
+            }
+            button.dataset.bound = '1';
+            button.addEventListener('click', () => {
+                const input = document.getElementById(button.dataset.target);
+                const showing = input.type === 'text';
+                input.type = showing ? 'password' : 'text';
+                button.textContent = showing ? 'Show password' : 'Hide password';
+                button.setAttribute('aria-pressed', showing ? 'false' : 'true');
+            });
+        });
     </script>
 @endscript

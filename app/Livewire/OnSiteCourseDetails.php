@@ -43,6 +43,7 @@ class OnSiteCourseDetails extends Component
                 'lectures' => fn ($query) => $query->select('id', 'course_id', 'title', 'order', 'video_duration'),
                 'bookings' => fn ($query) => $query->select('id', 'course_id'),
                 'reviews',
+                'categories',
             ])
             ->findOrFail($this->courseId);
     }

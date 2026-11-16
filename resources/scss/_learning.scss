@@ -1,0 +1,189 @@
+.login,
+.register,
+.reset-password {
+    padding: 3rem 0 4rem;
+
+    h1 {
+        color: $stellix-navy;
+        font-weight: 600;
+    }
+
+    .form,
+    form.form {
+        max-width: 40rem;
+        margin-inline: auto;
+        background: $stellix-surface;
+        border: 1px solid $stellix-border;
+        border-radius: $stellix-radius;
+        box-shadow: $stellix-shadow;
+        padding: 1.5rem;
+    }
+
+    label {
+        color: $stellix-navy;
+        font-weight: 600;
+    }
+}
+
+.auth-lead {
+    color: $stellix-muted;
+    margin-bottom: 1.5rem;
+}
+
+.password-field {
+    position: relative;
+}
+
+.password-toggle {
+    margin-top: 0.5rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $stellix-teal-dark;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.course-details,
+.onsite-course-page,
+.recorded-lecture,
+.quiz-view,
+.event-calendar {
+    color: $stellix-ink;
+
+    h1,
+    h2,
+    h3 {
+        color: $stellix-navy;
+        font-weight: 600;
+    }
+}
+
+.onsite-course-header,
+.course-details .hero {
+    background: $stellix-navy;
+    color: #fff;
+    padding: 3rem 0;
+
+    h1,
+    h3,
+    p {
+        color: #fff;
+    }
+}
+
+.onsite-course-info,
+.course-details .course-classes,
+.recorded-lecture .lectures-detail,
+.quiz-view__question,
+.event-calendar .event-cards {
+    background: $stellix-surface;
+    border: 1px solid $stellix-border;
+    border-radius: $stellix-radius;
+    padding: 1.25rem;
+}
+
+.onsite-price,
+.course-details .price {
+    color: $stellix-navy;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.course-details .enroll-btn,
+.event-calendar .event-card {
+    border-radius: $stellix-radius;
+}
+
+.recorded-lecture {
+    .iframe-container {
+        background: $stellix-navy;
+        border-radius: $stellix-radius;
+        overflow: hidden;
+    }
+
+    iframe {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        height: auto;
+    }
+
+    .top-bar {
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    progress {
+        accent-color: $stellix-teal;
+        height: 0.75rem;
+    }
+}
+
+.quiz-view__intro {
+    margin-bottom: 1.5rem;
+}
+
+.quiz-view__question {
+    margin-bottom: 1rem;
+
+    legend {
+        font-weight: 600;
+        color: $stellix-navy;
+    }
+}
+
+.quiz-view__points {
+    color: $stellix-muted;
+}
+
+.calendar-legend {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    color: $stellix-muted;
+}
+
+.calendar-legend__swatch {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.4rem;
+    border-radius: 999px;
+    background: $stellix-teal;
+}
+
+.event-calendar {
+    max-width: 100%;
+}
+
+.event-calendar #calendar {
+    min-height: 28rem;
+    max-width: 100%;
+    overflow-x: auto;
+    background: $stellix-surface;
+    border: 1px solid $stellix-border;
+    border-radius: $stellix-radius;
+    padding: 0.75rem;
+}
+
+.event-calendar .fc-scrollgrid {
+    min-width: 36rem;
+}
+
+@media (max-width: 767.98px) {
+    .login .form,
+    .register .form,
+    .reset-password form.form {
+        padding: 1rem;
+    }
+
+    .recorded-lecture .controll-btn,
+    .course-details .event-card__actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .course-details .event-card {
+        display: block;
+    }
+}

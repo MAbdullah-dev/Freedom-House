@@ -5,11 +5,7 @@
                 <h3>Course Description</h3>
                 <h1 class="onsite-course-title mb-5">{{ $course->title }}</h1>
                 <p class="onsite-course-subdescription">
-                    This course offers an introduction into personality disorders. There is discussion around each
-                    personality disorder cluster,
-                    how their characteristics can present in an escalated situation, and suggest strategies for
-                    de-escalation.
-                    This course also offers a 1 CEU credit for individuals licensed with the NC LCAS board.
+                    {{ $courseDescription !== '' ? $courseDescription : 'No description has been added for this course.' }}
                 </p>
             </div>
         </div>
@@ -23,27 +19,20 @@
                         @if ($price == 0)
                             <span class="onsite-price">FREE</span>
                         @else
-                            <span class="onsite-price">{{ $price }}$</span>
+                            <span class="onsite-price">${{ number_format($price, 2) }}</span>
                         @endif
                         @if ($isEnrolled)
-                            <!-- Show 'Enrolled' Button -->
-                            <button type="button" class="btn btn-success">Enrolled</button>
+                            <button type="button" class="btn btn-success" disabled>Enrolled</button>
                         @else
-                            <!-- Show 'Enroll NOW' Button -->
                             <button type="button" class="onsite-add-to-cart button-primary" data-bs-toggle="modal"
-                                data-bs-target="#courseEnrollment">
-                                Enroll NOW
+                                data-bs-target="#courseEnrollment" aria-haspopup="dialog">
+                                Enroll now
                             </button>
                         @endif
                     </div>
-                    <div class="onsite-enrollment">
-                        <span class="onsite-validity my-2"><i class="bi bi-calendar4"></i> Enrollment
-                            validity:
-                            Lifetime</span>
-                    </div>
-                    <div class="onsite-subject">
-                        <span>Subject</span> </span>Understanding Personality Disorders</span>
-                    </div>
+                    @if ($course->categories->isNotEmpty())
+                        <p class="onsite-subject mb-0">{{ $course->categories->pluck('category_name')->join(', ') }}</p>
+                    @endif
                 </div>
 
                 <div class="col-md-6 onsite-course-meta">
@@ -208,32 +197,18 @@
     </section>
 
 
-    <section class="news-letter">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-7 m-auto">
-                    <div class="news-letter-content d-flex flex-column text-center">
-                        <h6 class="mb-3">Join our list to learn more</h6>
-                        <p>Sign up to get updates on courses and events.</p>
-                        <form action="" class="d-flex flex-column gap-3">
-                            <input type="text" placeholder="Enter Your Email">
-                            <button type="submit" class="button-primary my-3">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-    </section>
     <!-- Modal -->
     <div wire:ignore.self class="modal fade" id="courseEnrollment" tabindex="-1"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title text-white fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title text-white fs-5" id="exampleModalLabel">Confirm enrollment</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure want to enroll in this course ?
+                    <p class="mb-2">Enroll in {{ $course->title }}.</p>
+                    <p class="mb-0">{{ $price == 0 ? 'This course is free.' : 'Price: $'.number_format($price, 2) }}</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="button-secondary" data-bs-dismiss="modal">Close</button>

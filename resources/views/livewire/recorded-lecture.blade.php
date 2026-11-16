@@ -2,7 +2,11 @@
     <div class="container">
         <div class="top-bar d-flex align-items-center justify-content-between mt-5">
             <ul class="d-flex align-items-end gap-3 gap-md-4">
-                <li class="back align-self-center"><i class="fa-solid fa-arrow-left fa-2xl"></i></li>
+                <li class="back align-self-center">
+                    <a href="{{ route('onsite.course.details', $courseId) }}" wire:navigate aria-label="Back to course">
+                        <i class="fa-solid fa-arrow-left fa-2xl" aria-hidden="true"></i>
+                    </a>
+                </li>
                 <li>
                     <span class="d-block fs-4">{{ $currentLecture->title }}</span>
                     <i class="fa-regular fa-folder-closed fa-sm"></i>
@@ -62,7 +66,7 @@
                                 <p>{{ $progressPercentage }}% completed</p>
                             </div>
                             <progress class="w-100" id="file" value="{{ $progressPercentage }}"
-                                max="100">{{ $progressPercentage }}%</progress>
+                                max="100" aria-label="Course progress">{{ $progressPercentage }}%</progress>
                             <div class="accordion mb-4" id="accordionPanelsStayOpenExample">
                                 @foreach ($lectures as $lecture)
                                     <div class="accordion-item">
@@ -191,7 +195,9 @@
                                 <div class="course-details__widget">
                                     <h4 class="mb-5">Exercise Files</h4>
                                     @if ($quiz)
-                                        <a href="{{ route('quiz.take', ['quizId' => $quiz->id]) }}">Create Quiz</a>
+                                        <a class="button-primary" href="{{ route('quiz.take', ['quizId' => $quiz->id]) }}">Take quiz</a>
+                                    @else
+                                        <p class="public-empty">No quiz is attached to this lecture.</p>
                                     @endif
                                 </div>
                             </div>
@@ -200,22 +206,8 @@
                             <div class="tab-pane fade" id="comments" role="tabpanel"
                                 aria-labelledby="comments-tab">
                                 <div class="course-details__comments">
-                                    <h4 class="mb-5">Comments</h4>
-                                    <form action="#" method="post" class="w-100">
-                                        <div class="d-flex align-items-start gap-3 w-100">
-                                            <div class="comment-avatar">
-                                                <img src="{{ asset('assets/images/autumn-150x150.webp.webp') }}"
-                                                    alt="User Avatar">
-                                            </div>
-                                            <div class="comment-textarea">
-                                                <label for="commentTextarea" class="visually-hidden">Write your
-                                                    comment</label>
-                                                <textarea id="commentTextarea" name="comment" class="form-control" placeholder="Write your comment here…"
-                                                    style="height: 100px;"></textarea>
-                                                <button class="button-primary mt-3">Submit</button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    <h4 class="mb-3">Comments</h4>
+                                    <p class="public-empty">Comments are not available for this lecture.</p>
                                 </div>
                             </div>
                         </div>

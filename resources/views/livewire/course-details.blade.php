@@ -19,8 +19,9 @@
 
             <div class="search-container">
                 <div class="search-bar">
-                    <img src="{{ asset('assets/svgs/search-icon.svg') }}" alt="Search icon" />
-                    <input type="text" wire:model.live="searchKeyword" placeholder="Search classes by keyword" />
+                    <label class="visually-hidden" for="class-search">Search classes by keyword</label>
+                    <img src="{{ asset('assets/svgs/search-icon.svg') }}" alt="" />
+                    <input id="class-search" type="text" wire:model.live="searchKeyword" placeholder="Search classes by keyword" />
                 </div>
 
                 <button type="button" class="filter-btn">
@@ -187,20 +188,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="news-letter">
-        <div class="row">
-            <div class="col-lg-7 m-auto">
-                <div class="news-letter-content d-flex flex-column text-center">
-                    <h6 class="mb-3">Join our list to learn more</h6>
-                    <p>Sign up to get updates on courses and events.</p>
-                    <form action="" class="d-flex flex-column gap-3">
-                        <input type="text" placeholder="Enter Your Email">
-                        <button type="submit" class="button-primary my-3">Submit</button>
-                    </form>
                 </div>
             </div>
         </div>
