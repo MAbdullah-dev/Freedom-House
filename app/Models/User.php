@@ -26,6 +26,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'bio',
         'phone',
         'microsoft_id',
+        'microsoft_tenant_id',
+        'microsoft_identity_key',
         'microsoft_account',
         'verification_token',
         'refresh_token',
@@ -37,7 +39,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'timezone'
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'refresh_token'];
+
+    protected $casts = [
+        'refresh_token' => 'encrypted',
+        'email_verified_at' => 'datetime',
+        'token_expires_at' => 'datetime',
+    ];
 
     public function hasVerifiedEmail()
     {

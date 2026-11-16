@@ -64,6 +64,7 @@ Route::get('reset-password/{token}', [PasswordResetController::class, 'showReset
 //microsoft
 Route::get('/auth/microsoft/callback', [MicrosoftAuthController::class, 'callback'])->name('microsoft.callback');
 Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicrosoft'])->name('microsoft.redirect');
+Route::post('/auth/microsoft/link', [MicrosoftAuthController::class, 'link'])->middleware('auth')->name('microsoft.link');
 
 
 

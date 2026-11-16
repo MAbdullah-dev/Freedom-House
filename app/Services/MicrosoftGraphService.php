@@ -29,7 +29,7 @@ class MicrosoftGraphService
             ]);
 
             if ($response->failed()) {
-                Log::error('Failed to refresh access token', ['response' => $response->json()]);
+                Log::error('Failed to refresh Microsoft access token.', ['status' => $response->status()]);
                 throw new \Exception('Failed to refresh access token.');
             }
 
@@ -39,8 +39,6 @@ class MicrosoftGraphService
             $user->update([
                 'token_expires_at' => $newExpiryTime,
             ]);
-
-            session(['access_token' => $newAccessToken]);
 
             return $newAccessToken;
         } catch (\Exception $e) {
@@ -196,21 +194,19 @@ class MicrosoftGraphService
     }
     private function getAccessTokenWithPermissions()
     {
-        $tenantId = env('AZURE_TENANT_ID');
+        $tenantId = (string) config('services.microsoft.tenant');
 
         $tokenResponse = Http::asForm()->post("https://login.microsoftonline.com/{$tenantId}/oauth2/v2.0/token", [
-            'client_id' => env('AZURE_CLIENT_ID'),
-            'client_secret' => env('AZURE_CLIENT_SECRET'),
+            'client_id' => config('services.microsoft.client_id'),
+            'client_secret' => config('services.microsoft.client_secret'),
             'grant_type' => 'client_credentials',
             'scope' => 'https://graph.microsoft.com/.default',
         ]);
 
         if ($tokenResponse->failed()) {
-            Log::error('Failed to retrieve access token: ' . $tokenResponse->body());
+            Log::error('Failed to retrieve Microsoft application token.', ['status' => $tokenResponse->status()]);
             throw new \Exception('Failed to retrieve access token.');
         }
-
-        Log::info('Access token retrieved successfully', ['response' => $tokenResponse->json()]);
 
         return $tokenResponse->json('access_token');
     }

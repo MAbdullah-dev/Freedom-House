@@ -2,15 +2,24 @@
     @push('title')
         Settings
     @endpush
+    @if ($errors->any())
+        <div class="alert alert-danger">{{ $errors->first() }}</div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
     <div class="page-head d-flex justify-content-between">
         <h2 class="mb-4">Settings</h2>
         @if (!Auth::user()->microsoft_account)
             <div class="ms-button">
-                <a type="button" href='{{ route('microsoft.redirect') }}'
-                    class="button-secondary d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
-                    <span class="ms-2">Connect with Microsoft</span>
-                </a>
+                <form method="POST" action="{{ route('microsoft.link') }}">
+                    @csrf
+                    <button type="submit"
+                        class="button-secondary d-flex align-items-center justify-content-center">
+                        <img src="{{ asset('assets/svgs/microsift-icon.svg') }}" alt="">
+                        <span class="ms-2">Connect with Microsoft</span>
+                    </button>
+                </form>
             </div>
         @endif
     </div>
