@@ -402,6 +402,7 @@ class ViewEnrollments extends Component
     {
         $this->authorizeManagedResource($this->selectedModelId, $this->selectedModelType);
 
+     $calendarFailed = false;
      foreach ($this->newAttendees as $newAttendee) {
                 $validatedData = \Validator::make($newAttendee, [
             'email' => 'required|email',
@@ -415,9 +416,10 @@ class ViewEnrollments extends Component
             'phone' => $newAttendee['phone'],
             'payment_status' => $newAttendee['payment_status'],
             'type' => 'manual',
-            'order_number' => 'MAN_' . strtoupper(uniqid()), // Generate order number
+            'order_number' => 'MAN_' . strtoupper(uniqid()),
             'created_by' => Auth::id(),
         ]);
+        try {
         if ($this->selectedModelType == 'class') {
                 $class = Classe::find($this->selectedModelId);
                 if ($class && $class->microsoft_event_id) {
@@ -441,10 +443,19 @@ class ViewEnrollments extends Component
                     $this->microsoftGraphService->addDynamicAttendees($event, $attendees, Auth::user()->microsoft_id);
                 }
             }
+        } catch (\Throwable $exception) {
+            \Illuminate\Support\Facades\Log::error('Manual attendance calendar sync failed.', ['exception' => $exception::class]);
+            $calendarFailed = true;
+        }
      }
 
      $this->newAttendees = [];
-     $this->alert('success', 'Manual attendees saved successfully.');
+     $this->alert(
+         $calendarFailed ? 'warning' : 'success',
+         $calendarFailed
+             ? 'Attendance was saved, but the calendar could not be updated.'
+             : 'Manual attendees saved successfully.'
+     );
      $this->loadAttendees($this->selectedModelId, $this->selectedModelType);
 
     }

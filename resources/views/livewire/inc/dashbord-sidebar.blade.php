@@ -26,7 +26,7 @@
                         <i class="fas fa-heart"></i> Wishlist
                     </a>
                 </li>
-                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
+                @if (Auth::user()->hasAnyRoleName(\App\Models\Role::TUTOR, \App\Models\Role::LEARNER))
                     <li class="nav-item">
                         <a class="nav-link {{ Route::currentRouteName() == 'dashboard.help' ? 'active' : '' }}"
                             href="{{ route('dashboard.help') }}" wire:navigate>
@@ -46,7 +46,7 @@
                         <i class="fa-solid fa-list"></i> Schedule Classes
                     </a>
                 </li> --}}
-                @if (Auth::user()->role_id == 2 || Auth::user()->role_id == 1)
+                @if (Auth::user()->hasAnyRoleName(\App\Models\Role::TUTOR, \App\Models\Role::ADMIN))
                     <li class="tutor-dashboard-menu-divider-header">
                         Instructor
                     </li>
@@ -75,9 +75,15 @@
                         </a>
                     </li>
                 @endif
-                @if (Auth::user()->role_id == 1)
+                @if (Auth::user()->hasRoleName(\App\Models\Role::ADMIN))
                     <li class="tutor-dashboard-menu-divider-header">
                         Admin
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::currentRouteName() == 'dashboard.payments.reconciliation' ? 'active' : '' }}"
+                            href="{{ route('dashboard.payments.reconciliation') }}">
+                            <i class="fa-solid fa-receipt"></i> Payment reconciliation
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('dashboard/users*') ? 'active' : '' }}"

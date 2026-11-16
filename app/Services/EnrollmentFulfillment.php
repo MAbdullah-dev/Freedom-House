@@ -13,6 +13,7 @@ use App\Models\Payment;
 use App\Models\StripeEvent;
 use App\Models\StripeRefundNotice;
 use App\Models\User;
+use App\Services\Microsoft\GraphSyncProcessor;
 use App\Services\Stripe\StripeGateway;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -595,7 +596,7 @@ class EnrollmentFulfillment
                 'type' => 'booking',
             ]);
         } catch (Throwable $exception) {
-            Log::error('Enrollment notification failed: '.$exception->getMessage());
+            Log::error('Enrollment notification failed.', ['exception' => $exception::class]);
         }
 
         $this->syncMicrosoft($user, $booking);
@@ -612,19 +613,9 @@ class EnrollmentFulfillment
         }
 
         try {
-            $graph = app(\App\Services\MicrosoftGraphService::class);
-            $attendees = [[
-                'email' => $user->email,
-                'name' => trim(($user->first_name ?? '').' '.($user->last_name ?? '')),
-            ]];
-            $organizer = $item instanceof Events
-                ? $item->users?->microsoft_id
-                : $item->user?->microsoft_id;
-            if ($item->microsoft_event_id && $organizer) {
-                $graph->addDynamicAttendees($item, $attendees, $organizer);
-            }
+            app(GraphSyncProcessor::class)->enqueueAttendee($user, $booking);
         } catch (Throwable $exception) {
-            Log::error('Paid enrollment calendar sync failed: '.$exception->getMessage());
+            Log::error('Paid enrollment calendar sync failed.', ['exception' => $exception::class]);
         }
     }
 }

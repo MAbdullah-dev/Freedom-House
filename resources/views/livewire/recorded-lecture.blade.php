@@ -43,7 +43,7 @@
                 <div class="col-12 col-xl-8">
                     <div class="iframe-container">
                         <iframe id="vimeo-player"
-                            src="https://player.vimeo.com/video/{{ $videoDetails['uri'] ? explode('/', $videoDetails['uri'])[2] : '' }}"
+                            src="https://player.vimeo.com/video/{{ ! empty($videoDetails['uri']) ? explode('/', $videoDetails['uri'])[2] : '' }}"
                             width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
                         </iframe>
 

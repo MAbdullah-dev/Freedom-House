@@ -2,7 +2,7 @@
     @push('title')
         View Enrollments
     @endpush
-    @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+    @if (Auth::user()->hasAnyRoleName(\App\Models\Role::TUTOR, \App\Models\Role::ADMIN))
         <section class="enrollments mx-4">
             <div class="tutor-avatar d-flex align-items-center gap-2 mb-5">
                 <img src=" {{ Auth::user()->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
@@ -13,7 +13,7 @@
                 <div class="col-xl-9 mb-3" wire:ignore>
                     <input type="text" class="mb-3" id="calendar-input" placeholder="Select date" />
                 </div>
-                @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+                @if (Auth::user()->hasAnyRoleName(\App\Models\Role::TUTOR, \App\Models\Role::ADMIN))
                     <div class="col-xl-3 mb-3">
                         <a href="{{ route('dashboard.create.class') }}" type="button" class="button-primary w-100">
                             <i class="fa-solid fa-plus"></i> New

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Classe;
 use App\Models\Events;
 use App\Models\User;
+use App\Services\Microsoft\GraphAttendeeSync;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -42,8 +43,12 @@ class MicrosoftGraphService
 
             return $newAccessToken;
         } catch (\Exception $e) {
-            Log::error('Error refreshing access token: ' . $e->getMessage());
-            throw $e;
+            Log::error('Microsoft access token refresh failed.', ['exception' => $e::class]);
+            if (in_array($e->getMessage(), ['No refresh token found in session.', 'Failed to refresh access token.'], true)) {
+                throw $e;
+            }
+
+            throw new \RuntimeException('Failed to refresh access token.');
         }
     }
     public function createCalendarEventWithTeamsMeeting(Classe|Events $model, array $attendees)
@@ -79,9 +84,8 @@ class MicrosoftGraphService
             ];
 
             $response = Http::withToken($accessToken)->post('https://graph.microsoft.com/v1.0/me/events', $eventData);
-            // dd($response);
             if ($response->failed()) {
-                dd($response->body());
+                $this->failCalendar('created', $response->status());
             }
 
 
@@ -93,10 +97,10 @@ class MicrosoftGraphService
             ]);
 
             return true;
-        } catch (\Exception $e) {
-            Log::error('Error creating calendar event with Teams meeting: ' . $e->getMessage());
+        } catch (\RuntimeException $e) {
             throw $e;
-            return false;
+        } catch (\Throwable $e) {
+            $this->failCalendar('created');
         }
     }
 
@@ -144,7 +148,7 @@ class MicrosoftGraphService
             $response = Http::withToken($accessToken)->post('https://graph.microsoft.com/v1.0/me/events', $eventData);
 
             if ($response->failed()) {
-                dd($response->body());
+                $this->failCalendar('created', $response->status());
             }
 
             $microsoft_event_id = $response->json('id');
@@ -152,45 +156,21 @@ class MicrosoftGraphService
                 'microsoft_event_id' => $microsoft_event_id,
             ]);
 
-            // dd($response);
-
-
-
             return true;
-        } catch (\Exception $e) {
-            Log::error('Error creating calendar event: ' . $e->getMessage());
+        } catch (\RuntimeException $e) {
             throw $e;
-            return false;
+        } catch (\Throwable $e) {
+            $this->failCalendar('created');
         }
     }
     public function addDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
     {
-        try {
-            $accessToken = $this->getAccessTokenWithPermissions();
+        return $this->syncAttendees($model, $attendees, $organizerId, 'append');
+    }
 
-            if (!$model->microsoft_event_id) {
-                throw new \Exception('Microsoft Event ID not found for the class.');
-            }
-
-            $attendeesData = $this->formatAttendees($attendees);
-
-            $updateResponse = Http::withToken($accessToken)
-                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
-                    'attendees' => $attendeesData,
-                ]);
-
-            if ($updateResponse->failed()) {
-                Log::error('Error updating event: ' . $updateResponse->body());
-                throw new \Exception('Error updating event: ' . $updateResponse->body());
-            }
-
-            Log::info('Event updated successfully with new attendees', ['response' => $updateResponse->json()]);
-
-            return true;
-        } catch (\Exception $e) {
-            Log::error('Error adding dynamic attendees: ' . $e->getMessage());
-            throw $e;
-        }
+    public function applicationAccessToken(): string
+    {
+        return $this->getAccessTokenWithPermissions();
     }
     private function getAccessTokenWithPermissions()
     {
@@ -243,136 +223,130 @@ class MicrosoftGraphService
             $response = Http::withToken($accessToken)->post('https://graph.microsoft.com/v1.0/me/events', $eventData);
 
             if ($response->failed()) {
-                Log::error('Error creating calendar event: ' . $response->body());
-                throw new \Exception('Error creating calendar event: ' . $response->body());
+                $this->failCalendar('created', $response->status());
             }
 
-            Log::info('Calendar event created successfully', ['response' => $response->json()]);
-
             return true;
-        } catch (\Exception $e) {
-            Log::error('Error creating calendar event: ' . $e->getMessage());
+        } catch (\RuntimeException $e) {
             throw $e;
+        } catch (\Throwable $e) {
+            $this->failCalendar('created');
         }
     }
 
     public function updateCalendarEvent($eventId, $title, $description, $startDateTime, $endDateTime, $location, $attendees, $isOnlineMeeting = false)
     {
         try {
+            if (! is_string($eventId) || $eventId === '' || preg_match('/[\s?#\\\\]/', $eventId) || str_contains($eventId, '..')) {
+                $this->failCalendar('updated');
+            }
+
             $accessToken = $this->refreshAccessToken(Auth::user());
-
             $userTimezone = Auth::user()->timezone ?? 'UTC';
+            $url = 'https://graph.microsoft.com/v1.0/me/events/'.rawurlencode($eventId);
 
-            // Retrieve existing attendees
-            $existingEventResponse = Http::withToken($accessToken)->get('https://graph.microsoft.com/v1.0/me/events/' . $eventId);
-            if ($existingEventResponse->failed()) {
-                Log::error('Error retrieving existing event: ' . $existingEventResponse->body());
-                throw new \Exception('Error retrieving existing event: ' . $existingEventResponse->body());
+            for ($attempt = 0; $attempt < 3; $attempt++) {
+                $existingEventResponse = Http::withToken($accessToken)->get($url);
+                if ($existingEventResponse->failed()) {
+                    $this->failCalendar('updated', $existingEventResponse->status());
+                }
+
+                $existingEvent = $existingEventResponse->json();
+                $etag = is_array($existingEvent) ? ($existingEvent['@odata.etag'] ?? null) : null;
+                if (! is_string($etag) || $etag === '') {
+                    Log::error('Microsoft event is missing an etag.');
+                    $this->failCalendar('updated');
+                }
+
+                $existingAttendees = is_array($existingEvent['attendees'] ?? null) ? $existingEvent['attendees'] : [];
+                $eventData = [
+                    'subject' => $title,
+                    'body' => [
+                        'contentType' => 'HTML',
+                        'content' => $description ?? 'No description provided.',
+                    ],
+                    'start' => [
+                        'dateTime' => Carbon::parse($startDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                        'timeZone' => $userTimezone,
+                    ],
+                    'end' => [
+                        'dateTime' => Carbon::parse($endDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
+                        'timeZone' => $userTimezone,
+                    ],
+                    'location' => [
+                        'displayName' => $location,
+                    ],
+                    'attendees' => app(GraphAttendeeSync::class)->mergeAttendees($existingAttendees, is_array($attendees) ? $attendees : []),
+                    'allowNewTimeProposals' => false,
+                ];
+
+                if ($isOnlineMeeting) {
+                    $eventData['isOnlineMeeting'] = true;
+                    $eventData['onlineMeetingProvider'] = 'teamsForBusiness';
+                }
+
+                $response = Http::withToken($accessToken)
+                    ->withHeaders(['If-Match' => $etag])
+                    ->patch($url.'?sendUpdates=all', $eventData);
+
+                if ($response->status() === 412) {
+                    continue;
+                }
+
+                if ($response->failed()) {
+                    $this->failCalendar('updated', $response->status());
+                }
+
+                return true;
             }
-            $existingEvent = $existingEventResponse->json();
-            $existingAttendees = $existingEvent['attendees'] ?? [];
 
-            $eventData = [
-                'subject' => $title,
-                'body' => [
-                    'contentType' => 'HTML',
-                    'content' => $description ?? 'No description provided.',
-                ],
-                'start' => [
-                    'dateTime' => Carbon::parse($startDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
-                    'timeZone' => $userTimezone,
-                ],
-                'end' => [
-                    'dateTime' => Carbon::parse($endDateTime, 'UTC')->setTimezone($userTimezone)->toIso8601String(),
-                    'timeZone' => $userTimezone,
-                ],
-                'location' => [
-                    'displayName' => $location,
-                ],
-                'attendees' => $existingAttendees,
-                'allowNewTimeProposals' => false,
-            ];
-
-            if ($isOnlineMeeting) {
-                $eventData['isOnlineMeeting'] = true;
-                $eventData['onlineMeetingProvider'] = 'teamsForBusiness';
-            }
-
-            $response = Http::withToken($accessToken)->patch('https://graph.microsoft.com/v1.0/me/events/' . $eventId . '?sendUpdates=all', $eventData);
-
-            if ($response->failed()) {
-                Log::error('Error updating calendar event: ' . $response->body());
-                throw new \Exception('Error updating calendar event: ' . $response->body());
-            }
-
-            Log::info('Calendar event updated successfully', ['response' => $response->json()]);
-
-            return true;
-        } catch (\Exception $e) {
-            Log::error('Error updating calendar event: ' . $e->getMessage());
+            $this->failCalendar('updated', 412);
+        } catch (\RuntimeException $e) {
             throw $e;
+        } catch (\Throwable $e) {
+            $this->failCalendar('updated');
         }
     }
 
     public function updateDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
     {
-        try {
-            $accessToken = $this->getAccessTokenWithPermissions();
-
-            if (!$model->microsoft_event_id) {
-                throw new \Exception('Microsoft Event ID not found for the class.');
-            }
-
-            $attendeesData = $this->formatAttendees($attendees);
-
-            $updateResponse = Http::withToken($accessToken)
-                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
-                    'attendees' => $attendeesData,
-                ]);
-
-            if ($updateResponse->failed()) {
-                Log::error('Error updating event: ' . $updateResponse->body());
-                throw new \Exception('Error updating event: ' . $updateResponse->body());
-            }
-
-            Log::info('Event updated successfully with new attendees', ['response' => $updateResponse->json()]);
-
-            return true;
-        } catch (\Exception $e) {
-            Log::error('Error updating dynamic attendees: ' . $e->getMessage());
-            throw $e;
-        }
+        return $this->syncAttendees($model, $attendees, $organizerId, 'append');
     }
 
     public function deleteDynamicAttendees(Classe|Events $model, array $attendees, $organizerId)
     {
-        try {
-            $accessToken = $this->getAccessTokenWithPermissions();
-
-            if (!$model->microsoft_event_id) {
-                throw new \Exception('Microsoft Event ID not found for the class.');
-            }
-
-            $attendeesData = $this->formatAttendees($attendees);
-
-            $updateResponse = Http::withToken($accessToken)
-                ->patch('https://graph.microsoft.com/v1.0/users/' . $organizerId . '/events/' . $model->microsoft_event_id . '?sendUpdates=all', [
-                    'attendees' => $attendeesData,
-                ]);
-
-            if ($updateResponse->failed()) {
-                Log::error('Error deleting event attendees: ' . $updateResponse->body());
-                throw new \Exception('Error deleting event attendees: ' . $updateResponse->body());
-            }
-
-            Log::info('Event attendees deleted successfully', ['response' => $updateResponse->json()]);
-
-            return true;
-        } catch (\Exception $e) {
-            Log::error('Error deleting dynamic attendees: ' . $e->getMessage());
-            throw $e;
-        }
+        return $this->syncAttendees($model, $attendees, $organizerId, 'remove');
     }
 
+    private function syncAttendees(Classe|Events $model, array $attendees, mixed $organizerId, string $mode): bool
+    {
+        if (! is_string($model->microsoft_event_id) || $model->microsoft_event_id === '' || ! is_string($organizerId) || $organizerId === '') {
+            $this->failCalendar('updated');
+        }
 
+        $result = $mode === 'remove'
+            ? app(GraphAttendeeSync::class)->remove($organizerId, $model->microsoft_event_id, $attendees, $this->getAccessTokenWithPermissions())
+            : app(GraphAttendeeSync::class)->append($organizerId, $model->microsoft_event_id, $attendees, $this->getAccessTokenWithPermissions());
+
+        if (! $result->ok) {
+            Log::error('Microsoft attendee sync failed.', ['code' => $result->code]);
+            $this->failCalendar('updated');
+        }
+
+        return true;
+    }
+
+    private function failCalendar(string $action, ?int $status = null): never
+    {
+        Log::error('Microsoft calendar request failed.', [
+            'action' => $action,
+            'status' => $status,
+        ]);
+
+        throw new \RuntimeException(
+            $action === 'created'
+                ? 'The calendar event could not be created.'
+                : 'The calendar event could not be updated.'
+        );
+    }
 }

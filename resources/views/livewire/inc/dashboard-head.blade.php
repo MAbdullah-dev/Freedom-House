@@ -2,7 +2,7 @@
     $user = auth()->user();
     $tutorRequest = $user->tutor ?? null;
     $isTutorVerified = $tutorRequest ? $user->tutor->is_verified : false;
-    $isAdmin = $user->role_id == 1;
+    $isAdmin = $user->hasRoleName(\App\Models\Role::ADMIN);
 @endphp
 
 <div class="dashboard-head mt-5">

@@ -72,6 +72,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role?->role_name === $roleName;
     }
 
+    public function hasAnyRoleName(string ...$roleNames): bool
+    {
+        $name = $this->role?->role_name;
+
+        return is_string($name) && in_array($name, $roleNames, true);
+    }
+
     public function courses()
     {
         return $this->hasMany(Course::class);

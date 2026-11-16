@@ -6,7 +6,7 @@
         <div class="inner">
             <h4 class="mb-4">Dashboard</h4>
 
-            @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+            @if (Auth::user()->hasAnyRoleName(\App\Models\Role::TUTOR, \App\Models\Role::ADMIN))
                 <div class="tutor-course-info d-flex align-items-center justify-content-center gap-3 flex-wrap">
                     <div class="course-box d-flex align-items-center justify-content-center flex-column mb-3">
                         <div class="course-box-icon">
@@ -108,7 +108,7 @@
         @endif
     </section>
 
-    @if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1')
+    @if (Auth::user()->hasAnyRoleName(\App\Models\Role::TUTOR, \App\Models\Role::ADMIN))
         <section class="tutor-course-detail py-3 mt-3">
             <div class="inner">
                 <h4 class="mb-4">My Courses</h4>

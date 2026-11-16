@@ -241,10 +241,11 @@ class RecordedLecture extends Component
     {
         try {
             $response = Vimeo::request("{$videoId}", [], 'GET');
-            $this->videoDetails = $response['body'];
-            // dd($this->videoDetails);
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+            $this->videoDetails = is_array($response['body'] ?? null) ? $response['body'] : [];
+        } catch (\Throwable $e) {
+            Log::warning('Recorded lecture video details could not be loaded.', ['exception' => $e::class]);
+            $this->videoDetails = [];
+            $this->alert('warning', 'The video details could not be loaded.');
         }
     }
     public function pollVideoDuration()

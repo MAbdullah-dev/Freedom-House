@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('pfp')->nullable();
             $table->string('cover_photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->integer('role_id')->default(3);
+            $table->integer('role_id')->nullable();
             $table->string('verification_token', 100)->nullable();
             $table->string('password_reset_token', 100)->nullable();
             $table->timestamp('password_token_created_at')->nullable();

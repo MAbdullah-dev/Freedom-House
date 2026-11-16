@@ -4,6 +4,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\MicrosoftAuthController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentReconciliationController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Livewire\CourseCatelogue;
 use App\Livewire\AboutUs;
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'checkrole:Admin'])->group(function () {
     Route::get('dashboard/tags', Tags::class)->name('dashboard.tags');
     Route::get('dashboard/coursesRequest', CoursesRequest::class)->name('dashboard.coursesRequest');
     Route::get('dashboard/emails', Emails::class)->name('dashboard.emails');
+    Route::get('/dashboard/payments/reconciliation', [PaymentReconciliationController::class, 'index'])->name('dashboard.payments.reconciliation');
     Route::get('/dashboard/students', Student::class)->name('dashboard.students');
     Route::get('/dashboard/student/view/{id?}', StudentView::class)->name('dashboard.student.view');
 });
@@ -107,5 +109,3 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/stripe/webhook', StripeWebhookController::class)->name('stripe.webhook');
-
-Route::get('/certificate', [PaymentController::class, 'certifictes'])->name('certificate.index');
