@@ -1,0 +1,63 @@
+.stellix-wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: $stellix-navy;
+    text-decoration: none;
+    max-width: 100%;
+
+    &__letters {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: $stellix-radius;
+        background: $stellix-navy;
+        color: $stellix-surface;
+        font-weight: 700;
+        flex: 0 0 auto;
+    }
+
+    &__copy {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+        min-width: 0;
+    }
+
+    &__name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: $stellix-navy;
+    }
+
+    &__product {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $stellix-teal;
+    }
+}
+
+.builder-bar {
+    background: $stellix-surface;
+    border-bottom: 1px solid $stellix-border;
+}
+
+.sidebar-dismiss {
+    display: none;
+}
+
+header a:focus-visible,
+header button:focus-visible,
+footer a:focus-visible,
+.dashboard-sidebar a:focus-visible,
+.dashboard-sidebar button:focus-visible,
+.dashboard-footer-mobile a:focus-visible,
+.dashboard-footer-mobile button:focus-visible,
+.builder-bar a:focus-visible {
+    outline: 2px solid $stellix-focus;
+    outline-offset: 3px;
+}

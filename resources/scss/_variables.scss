@@ -1,5 +1,38 @@
-$primary-color: #104627;
-$secondary-color: #41463e;
-$primary-color-v1: #102033;
-$background-color: #ffffff;
-$text-color: #000000;
+// Provisional Stellix Soft interface tokens. Not official corporate brand standards.
+$stellix-navy: #14253d;
+$stellix-teal: #087f8c;
+$stellix-teal-dark: #066270;
+$stellix-bg: #f7f5f0;
+$stellix-surface: #ffffff;
+$stellix-ink: #14253d;
+$stellix-muted: #5c6b7a;
+$stellix-border: #d9e0e6;
+$stellix-radius: 0.5rem;
+$stellix-shadow: 0 8px 24px rgba(20, 37, 61, 0.08);
+$stellix-focus: #087f8c;
+
+$primary: $stellix-teal;
+$secondary: $stellix-navy;
+$success: #1f7a4d;
+$danger: #b42318;
+$warning: #b54708;
+$info: $stellix-teal;
+$body-bg: $stellix-bg;
+$body-color: $stellix-ink;
+$headings-color: $stellix-navy;
+$link-color: $stellix-teal;
+$link-hover-color: $stellix-teal-dark;
+$font-family-sans-serif: "Poppins", "Segoe UI", sans-serif;
+$border-radius: $stellix-radius;
+$border-color: $stellix-border;
+$box-shadow: $stellix-shadow;
+$input-focus-border-color: $stellix-teal;
+$input-btn-focus-color: rgba(8, 127, 140, 0.35);
+$input-focus-box-shadow: 0 0 0 0.2rem rgba(8, 127, 140, 0.35);
+$input-btn-focus-box-shadow: 0 0 0 0.2rem rgba(8, 127, 140, 0.35);
+
+$primary-color: $stellix-teal;
+$secondary-color: $stellix-navy;
+$primary-color-v1: $stellix-navy;
+$background-color: $stellix-bg;
+$text-color: $stellix-ink;

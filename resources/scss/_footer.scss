@@ -1,6 +1,9 @@
 footer {
     position: relative;
     padding: 40px 20px;
+    background: $stellix-surface;
+    border-top: 1px solid $stellix-border;
+    color: $stellix-ink;
 
     .footer-background {
         position: absolute;
@@ -68,27 +71,23 @@ footer {
     }
 
     .copywrite {
-        border-top: 1px solid #2b3d51;
+        border-top: 1px solid $stellix-border;
         padding: 20px 0;
         text-align: center;
     }
 
     .copywrite-text {
         p,
-        .policy a {
+        .policy span {
             font-size: 14px;
-            color: #575150;
+            color: $stellix-muted;
         }
     }
 
     .policy {
-        a {
+        span {
             margin: 0 15px;
-            text-decoration: none;
-            color: #000;
-            &:hover {
-                color: $primary-color;
-            }
+            color: $stellix-navy;
         }
     }
 

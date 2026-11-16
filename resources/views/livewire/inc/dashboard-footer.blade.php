@@ -11,10 +11,11 @@
                     <i class="fa-solid fa-person-circle-question"></i>
                     <span>Q&amp;A</span>
                 </a>
-                <a class="col-4 d-flex flex-column text-secondary" id="hamburger-icon-footer">
-                    <i class="fa-solid fa-bars" ></i>
+                <button class="col-4 d-flex flex-column text-secondary border-0 bg-transparent" id="hamburger-icon-footer"
+                    type="button" aria-controls="dashboard-sidebar" aria-expanded="false">
+                    <i class="fa-solid fa-bars" aria-hidden="true"></i>
                     <span>Menu</span>
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -22,11 +23,14 @@
 @script
 @push('js')
 <script>
-$(document).ready(function() {
-    $('#hamburger-icon-footer').click(function() {
-        $('#dashboard-sidebar').toggleClass('visible'); // Toggle the "visible" class
-    });
-})
+$(document).off('click.stellixSidebar', '#hamburger-icon-footer, #dashboard-sidebar-close');
+$(document).on('click.stellixSidebar', '#hamburger-icon-footer, #dashboard-sidebar-close', function(event) {
+    event.preventDefault();
+    var sidebar = $('#dashboard-sidebar');
+    var open = !sidebar.hasClass('visible');
+    sidebar.toggleClass('visible', open);
+    $('#hamburger-icon-footer').attr('aria-expanded', open ? 'true' : 'false');
+});
 </script>
 @endpush
 @endscript

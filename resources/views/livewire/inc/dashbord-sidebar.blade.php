@@ -1,5 +1,8 @@
 <div class="dashboard-sidebar" id="dashboard-sidebar">
     <div class="sidebar">
+        <button class="button-secondary sidebar-dismiss" id="dashboard-sidebar-close" type="button">
+            Close menu
+        </button>
         <div class="nav d-flex flex-column">
             <ul>
                 <li class="nav-item">

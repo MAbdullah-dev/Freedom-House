@@ -9,10 +9,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/Font_Awesome/css/all.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="icon" href="{{ asset('assets/images/fav-icon.webp') }}" type="image/webp">
+    @include('components.layouts.partials.document-title')
     @livewireStyles
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
-    <title>@stack('title', 'Page Title')</title>
 </head>
 
 <body>

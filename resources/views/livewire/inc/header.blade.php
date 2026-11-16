@@ -3,19 +3,18 @@
 ?>
 <header>
     <div class="container nav-bar d-flex align-items-center justify-content-between">
-        <a href="{{ route('home') }}">
-            <img class="site-logo" src="{{ asset('assets/svgs/header_logo.svg') }}" alt="">
-        </a>
+        <x-stellix-wordmark />
         <div class="d-flex align-items-center gap-3 d-block d-xl-none">
-            <div class="d-block d-xl-none" id="hamburger-icon">
-                <i class="fa-solid fa-bars-staggered fa-xl"></i>
-            </div>
+            <button class="d-block d-xl-none" id="hamburger-icon" type="button" aria-controls="mobile-nav"
+                aria-expanded="false" aria-label="Open menu">
+                <i class="fa-solid fa-bars-staggered fa-xl" aria-hidden="true"></i>
+            </button>
             <div class="user-login">
                 @if (Auth::check())
                     <div class="login-icon">
                         <img class="login-icon-img"
                             src="{{ Auth::user()->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
-                            alt="">
+                            alt="Account menu">
                     </div>
                     <div class="user-dropdown">
                         <span class="fs-5 mb-3 d-block">{{ Auth::user()->first_name }}</span>
@@ -112,7 +111,7 @@
                     <div class="login-icon">
                         <img class="login-icon-img"
                             src="{{ Auth::user()->pfp ? asset('storage/' . Auth::user()->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
-                            alt="">
+                            alt="Account menu">
                     </div>
                     <div class="user-dropdown">
                         <span class="fs-5 mb-3 d-block">{{ Auth::user()->first_name }}</span>
@@ -212,10 +211,10 @@
         </ul>
         <div class="nav-btn mb-4 d-flex gap-2">
             @if (Auth::check())
-                <button class="button-primary">Logout</button>
+                <button class="button-primary" type="button" wire:click="logout">Logout</button>
             @else
-                <a class="text-danger" href="{{ asset('/login') }}">Login</a>
-                <a class="button-primary" href="{{ asset('/register') }}">Register</a>
+                <a class="button-secondary" href="{{ route('login') }}" wire:navigate>Login</a>
+                <a class="button-primary" href="{{ route('register') }}" wire:navigate>Register</a>
             @endif
         </div>
 
@@ -224,10 +223,13 @@
 
 @push('js')
     <script>
-        $(document).ready(function() {
-            $('#hamburger-icon').on('click', function() {
-                $('#mobile-nav').toggleClass('show');
-            });
+        $(document).off('click.stellixMenu', '#hamburger-icon');
+        $(document).on('click.stellixMenu', '#hamburger-icon', function() {
+            var menu = $('#mobile-nav');
+            var open = !menu.hasClass('show');
+            menu.toggleClass('show', open);
+            $(this).attr('aria-expanded', open ? 'true' : 'false');
+            $(this).attr('aria-label', open ? 'Close menu' : 'Open menu');
         });
     </script>
 @endpush

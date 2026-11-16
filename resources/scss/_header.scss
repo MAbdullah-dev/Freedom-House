@@ -1,17 +1,22 @@
 header {
     padding: 10px 0;
+    background: $stellix-surface;
+    border-bottom: 1px solid $stellix-border;
 
-    .site-logo {
-        width: 18vw;
-        min-width: 180px;
-        object-fit: contain;
+    .site-logo,
+    .stellix-wordmark {
+        width: auto;
+        min-width: 0;
+        max-width: 220px;
     }
 
     #hamburger-icon {
-        background-color: #fff;
+        background-color: $stellix-surface;
         padding: 8px;
-        border-radius: 7px;
-        border: 1px solid #2222;
+        border-radius: $stellix-radius;
+        border: 1px solid $stellix-border;
+        cursor: pointer;
+        line-height: 1;
 
         i {
             color: $primary-color;
@@ -87,7 +92,8 @@ header {
                 transition: opacity 0.3s ease-in-out;
             }
 
-            &:hover .menu-dropdown {
+            &:hover .menu-dropdown,
+            &:focus-within .menu-dropdown {
                 display: block;
                 opacity: 1;
             }
@@ -178,7 +184,8 @@ header {
                         z-index: 999;
                     }
 
-                    &:hover .menu-dropdown {
+                    &:hover .menu-dropdown,
+                    &:focus-within .menu-dropdown {
                         display: block;
                         opacity: 1;
                     }

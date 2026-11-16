@@ -9,16 +9,23 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="{{ asset('assets/Font_Awesome/css/all.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="icon" href="{{ asset('assets/images/fav-icon.webp') }}" type="image/webp">
+    @include('components.layouts.partials.document-title')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.tiny.cloud/1/5iv0e4vx3nzuwf3ya5c4epexxpn19n8bs4mnku7wvh2598qz/tinymce/7/tinymce.min.js"
         referrerpolicy="origin"></script>
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
     @livewireStyles
-    <title>@stack('title', 'Page Title')</title>
 </head>
 
 <body>
+    <header class="builder-bar">
+        <div class="container d-flex align-items-center justify-content-between gap-3 py-3">
+            <x-stellix-wordmark />
+            @auth
+                <a class="button-secondary" href="{{ route('dashboard') }}">Dashboard</a>
+            @endauth
+        </div>
+    </header>
     <main>
         {{ $slot }}
     </main>

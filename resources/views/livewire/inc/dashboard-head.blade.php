@@ -13,7 +13,8 @@
                 <ul class="tutor-avatar d-flex align-items-center gap-3">
                     <li>
                         <img
-                            src="{{ $user->pfp ? asset('storage/' . $user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}">
+                            src="{{ $user->pfp ? asset('storage/' . $user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
+                            alt="Profile photo">
                     </li>
                     <li>
                         <span>Hello,</span>

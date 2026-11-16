@@ -2,15 +2,25 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+}
+
+body {
+    font-family: $font-family-sans-serif;
+    background: $stellix-bg;
+    color: $stellix-ink;
 }
 
 .form-select,
-.form-control {
+.form-control,
+.login input,
+.register input,
+.login select,
+.register select {
     &:focus {
-        outline: none !important;
-        box-shadow: none !important;
-        border-color: #000 !important;
+        outline: 2px solid $stellix-focus !important;
+        outline-offset: 2px;
+        border-color: $stellix-teal !important;
+        box-shadow: 0 0 0 0.2rem rgba(8, 127, 140, 0.28) !important;
     }
 }
 
@@ -28,38 +38,47 @@ a {
     margin: 0 auto;
 }
 
-.button-primary {
-    background: $primary-color;
-    color: #fff;
+.button-primary,
+.button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 600;
-    line-height: 20.59px;
-    font-size: 13px;
-    border-radius: 5px;
-    padding: 12px 47px;
-    border: none;
+    line-height: 1.4;
+    font-size: 0.875rem;
+    border-radius: $stellix-radius;
+    padding: 0.7rem 1.4rem;
+    text-decoration: none;
+
+    &:focus-visible {
+        outline: 2px solid $stellix-focus;
+        outline-offset: 3px;
+    }
 
     &.disabled {
         cursor: not-allowed;
     }
+}
+
+.button-primary {
+    background: $stellix-teal;
+    color: $stellix-surface;
+    border: 1px solid $stellix-teal;
 
     &:hover {
-        background-color: #156636;
-        transition: all 0.3s ease-in-out;
+        background-color: $stellix-teal-dark;
+        color: $stellix-surface;
     }
 }
 
 .button-secondary {
-    background: transparent;
-    border: 1px solid $primary-color;
-    color: $primary-color;
-    font-weight: 600;
-    line-height: 20.59px;
-    font-size: 13px;
-    border-radius: 5px;
-    padding: 12px 47px;
+    background: $stellix-surface;
+    border: 1px solid $stellix-navy;
+    color: $stellix-navy;
 
-    &.disabled {
-        cursor: not-allowed;
+    &:hover {
+        background: $stellix-navy;
+        color: $stellix-surface;
     }
 }
 
