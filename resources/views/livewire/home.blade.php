@@ -2,151 +2,80 @@
     @push('title')
         Home
     @endpush
-    <section class="hero-section" style="background-image: url('{{ asset('assets/images/home-hero-img.webp') }}');">
-        <div class="container d-flex flex-column justify-content-center align-items-center">
-            <div class="content-wrapper">
-            <h3>FREEDOM HOUSE TRAINING SYSYTEM</h3>
-            <h1 class="my-5">FREEDOM HOUSE UNIVERSITY</h1>
-            <div class="hero-cta-btn d-flex mt-2 gap-2 flex-wrap justify-content-center  ">
-                <a href="#">Upcoming TRAINING</a>
-                <a href="#">REGISTRATION</a>
-                <a href="#">RESOURCE LIBRARY</a>
+    <section class="public-hero">
+        <div class="container">
+            <p class="public-hero__kicker">Stellix Soft LMS</p>
+            <h1>Software training, in one place</h1>
+            <p class="public-hero__lead">Browse published courses, open a class calendar, and continue learning from recorded or scheduled sessions.</p>
+            <div class="public-hero__actions">
+                <a class="button-primary" href="{{ route('course.catalogue') }}" wire:navigate>Browse courses</a>
+                <a class="button-secondary" href="{{ route('calendar') }}" wire:navigate>Class calendar</a>
+                @guest
+                    <a class="button-secondary" href="{{ route('register') }}" wire:navigate>Create an account</a>
+                @endguest
             </div>
         </div>
-        </div>
     </section>
+
     <section class="featured-content">
         <div class="container">
-            <h2><span>FEATURED</span> TRAINING</h2>
-            <div class="featured-cards swiper">
-                <div class="arrows d-flex align-items-center justify-content-end gap-2">
-                    <div class="swiper-button-prev position-relative"></div>
-                    <div class="swiper-button-next position-relative"></div>
+            <h2>Published courses</h2>
+            @if ($courses->isEmpty())
+                <p class="public-empty">No published courses are available yet.</p>
+            @else
+                <div class="featured-cards swiper">
+                    <div class="arrows d-flex align-items-center justify-content-end gap-2">
+                        <button class="swiper-button-prev position-relative" type="button" aria-label="Previous courses"></button>
+                        <button class="swiper-button-next position-relative" type="button" aria-label="Next courses"></button>
+                    </div>
+                    <div class="swiper-wrapper">
+                        @foreach ($courses as $course)
+                            <div class="swiper-slide">
+                                <x-public-course-card :course="$course" />
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-                <div class="swiper-wrapper">
-                    @foreach ($courses as $course)
-                        <div class="swiper-slide">
-                            <div class="card shadow">
-                                <div class="card-img-top">
-                                    <img src="{{ asset('storage/' . $course->thumbnail) ?? asset('assets/images/dummy-cover-photo.webp') }}"
-                                        class="" alt="...">
-                                </div>
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">{{ $course->title }}</h5>
-                                    <p class="card-text my-3">{{ $course->description }}</p>
-                                    <div class="card-btn">
-                                        @if ($course->course_type == 'recorded')
-                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
-                                                href="{{ route('onsite.course.details', $course->id) }}">Learn
-                                                more...</a>
-                                        @else
-                                            <a class="button-primary mt-3 d-block w-100 text-center" target="_blank"
-                                                href="{{ route('course.details', $course->id) }}">Learn
-                                                more...</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-
-                    {{-- <div class="swiper-slide">
-                        <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-2.png') }}" class="card-img-top"
-                                alt="...">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Maintaining Professional Boundaries</h5>
-                                <p class="card-text my-3">Maintaining Professional Boundaries is a training for helping
-                                    professionals focusing on the importance of professional boundary setting, common
-                                    types of boundary crossing.</p>
-                                <div class="card--btn">
-                                    <a class="button-primary mt-3" href="" wire:navigate
-                                        class="btn btn-primary">Learn more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-                    {{-- <div class="swiper-slide">
-                        <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top"
-                                alt="...">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Question. Persuade. Refer. Refer.</h5>
-                                <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on
-                                    suicide prevention techniques and conversation strategies. This training also
-                                    provides resources to help your.</p>
-                                <div class="card-btn">
-                                    <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-                    {{-- <div class="swiper-slide">
-                        <div class="card shadow">
-                            <img src="{{ asset('assets/images/featured-card-3.png') }}" class="card-img-top"
-                                alt="...">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">Question. Persuade. Refer. Refer.</h5>
-                                <p class="card-text my-3">QPR or Question, Persuade and Refer is a training focused on
-                                    suicide prevention techniques and conversation strategies. This training also
-                                    provides resources to help your.</p>
-                                <div class="card-btn">
-                                    <a class="button-primary mt-3" href="#" class="btn btn-primary">Learn more</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-                </div>
-            </div>
+            @endif
         </div>
     </section>
-    <section class="Learning-Benefits">
-        <div class="container d-flex align-items-center justify-content-center flex-wrap">
-            <div class="benifits">
-                <h6>Learn how you want, where you want</h6>
-                <h2 class="mb-3">The Best selection of online courses</h2>
-                <p class="mb-5">Lorem ipsum dolor sit amet consectetur. Sagittis posuere morbi nec pellentesque.
-                    Turpis pulvinar non
-                    vitae at vestibulum habitasse morbi eu. Nunc nunc dui scelerisque sit condimentum</p>
-                <div class="sub-beifits">
-                    <div class="row">
-                        <div class="col flex-wrap">
-                            <div class="d-flex align-items-center gap-2 mb-4">
-                                <img src="{{ asset('assets/svgs/benifit-img-1.svg') }}" alt=""><span>Private
-                                    Class</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 mb-4">
-                                <img src="{{ asset('assets/svgs/benifit-img-2.svg') }}" alt=""><span>Small
-                                    Group</span>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="d-flex align-items-center gap-2 mb-4">
-                                <img src="{{ asset('assets/svgs/benifit-img-3.svg') }}" alt=""><span>Lifetime
-                                    Access</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 mb-4">
-                                <img src="{{ asset('assets/svgs/benifit-img-4.svg') }}" alt=""><span>Online
-                                    Tutoring</span>
-                            </div>
-                        </div>
+
+    <section class="public-points">
+        <div class="container">
+            <h2>How learning is organized</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="public-point">
+                        <h3>Course catalog</h3>
+                        <p>Search published courses and open the matching course page.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="public-point">
+                        <h3>Class calendar</h3>
+                        <p>See scheduled classes and events that are already on the calendar.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="public-point">
+                        <h3>Recorded sessions</h3>
+                        <p>Recorded courses open in the recorded learning view.</p>
                     </div>
                 </div>
             </div>
-            <div class="benifit-img">
-                <img src="{{ asset('assets/images/benifit-img.webp') }}" alt="">
-            </div>
         </div>
     </section>
+
     <section class="news-letter">
         <div class="container">
             <div class="row">
                 <div class="col-lg-7 m-auto">
                     <div class="news-letter-content d-flex flex-column text-center">
-                        <h6 class="mb-3">Join our list to learn more</h6>
-                        <p>Sign up to get updates on courses and events.</p>
+                        <h2 class="mb-3">Course updates</h2>
+                        <p>Leave an email address to hear about courses and events.</p>
                         <form wire:submit.prevent="submitEmail" class="d-flex flex-column gap-3">
-                            <input type="email" wire:model="email" placeholder="Enter Your Email" required>
+                            <label class="visually-hidden" for="home-updates-email">Email address</label>
+                            <input id="home-updates-email" type="email" wire:model="email" placeholder="Enter your email" required>
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -155,30 +84,26 @@
                     </div>
                 </div>
             </div>
-
+        </div>
     </section>
 </div>
 @script
     <script type="text/javascript">
-        const swiper = new Swiper('.swiper', {
-            loop: true,
-            grabCursor: true,
-            spaceBetween: 30,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            breakpoints: {
-                0: {
-                    slidesPerView: 1
+        if (document.querySelector('.featured-cards .swiper-slide')) {
+            new Swiper('.featured-cards', {
+                loop: false,
+                grabCursor: true,
+                spaceBetween: 24,
+                navigation: {
+                    nextEl: '.featured-cards .swiper-button-next',
+                    prevEl: '.featured-cards .swiper-button-prev',
                 },
-                768: {
-                    slidesPerView: 2
-                },
-                1024: {
-                    slidesPerView: 3
+                breakpoints: {
+                    0: { slidesPerView: 1 },
+                    768: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 }
                 }
-            }
-        });
+            });
+        }
     </script>
 @endscript

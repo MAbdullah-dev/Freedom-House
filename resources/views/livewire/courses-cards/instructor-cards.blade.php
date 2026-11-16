@@ -1,4 +1,7 @@
-<div class="swiper">
+<div class="swiper instructor-cards">
+    @if ($featuredTutors->isEmpty())
+        <p class="public-empty">No tutor profiles are available yet.</p>
+    @else
     <div class="arrows d-flex align-items-center justify-content-end gap-2">
         <div class="swiper-button-prev position-relative"></div>
         <div class="swiper-button-next position-relative"></div>
@@ -10,8 +13,11 @@
                     <div class="instructor-card shadow">
                         <ul class="d-flex gap-4">
                             <li class="instructor-img my-3">
-                                <img src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
-                                    alt="Instructor Image">
+                                @if ($tutor->user->pfp)
+                                    <img src="{{ asset('storage/' . $tutor->user->pfp) }}" alt="{{ $tutor->user->first_name }} {{ $tutor->user->last_name }}">
+                                @else
+                                    <div class="public-course-card__placeholder" role="img" aria-label="Tutor photo not available">Photo not available</div>
+                                @endif
                             </li>
                             <li class="card-details">
                                 <h5>{{ $tutor->user->first_name }} {{ $tutor->user->last_name }}</h5>
@@ -34,4 +40,5 @@
             </div>
         @endforeach
     </div>
+    @endif
 </div>

@@ -5,45 +5,35 @@
     @push('title')
         Course Catalog
     @endpush
-    <section class="course-catelogue-main">
-        <div class="container d-flex flex-column justify-content-center align-items-center">
-            <div class="content-wrapper">
-            <h3>PROGRAMS WE OFFER</h3>
-            <h1 class="my-5">ALL COURSES</h1>
-        </div>
+    <section class="public-hero">
+        <div class="container">
+            <p class="public-hero__kicker">Stellix Soft LMS</p>
+            <h1>Course catalog</h1>
+            <p class="public-hero__lead">Search published courses and filter them by the categories stored in the catalog.</p>
         </div>
     </section>
     <section class="course-catelogue-list">
         <div class="container mt-5">
-            <div x-data="{ tab: 'mostPopular' }" class="container mt-5">
-
-                <!-- Tab Navigation -->
-                <ul class="nav nav-tabs">
+            <div x-data="{ tab: 'mostPopular' }">
+                <ul class="nav nav-tabs public-tabs">
                     <li class="nav-item">
-                        <a class="nav-link" :class="{ 'active': tab === 'mostPopular' }"
-                            @click="tab = 'mostPopular'">Most Popular</a>
+                        <button class="nav-link" type="button" :class="{ 'active': tab === 'mostPopular' }" @click="tab = 'mostPopular'">Most popular</button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" :class="{ 'active': tab === 'new' }" @click="tab = 'new'">New</a>
+                        <button class="nav-link" type="button" :class="{ 'active': tab === 'new' }" @click="tab = 'new'">New</button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" :class="{ 'active': tab === 'trending' }"
-                            @click="tab = 'trending'">Trending</a>
+                        <button class="nav-link" type="button" :class="{ 'active': tab === 'trending' }" @click="tab = 'trending'">Trending</button>
                     </li>
                 </ul>
-
-                <!-- Tab Content -->
                 <div class="tab-content mt-4">
-                    <!-- Most Popular Tab -->
-                    <div x-show="tab === 'mostPopular'">
+                    <div x-show="tab === 'mostPopular'" x-cloak>
                         <livewire:courses-cards.most-popular-cards />
                     </div>
-                    <!-- New Tab -->
-                    <div x-show="tab === 'new'">
+                    <div x-show="tab === 'new'" x-cloak>
                         <livewire:courses-cards.new-cards />
                     </div>
-                    <!-- Trending Tab -->
-                    <div x-show="tab === 'trending'">
+                    <div x-show="tab === 'trending'" x-cloak>
                         <livewire:courses-cards.trending-cards />
                     </div>
                 </div>
@@ -52,139 +42,79 @@
     </section>
     <section class="course-catelogue pt-3">
         <div class="container">
-            <h2 class="my-5">Category</h2>
-            <div class="filters d-flex justify-content-between align-items-center mb-4">
-                <!-- Search Input -->
-                <div class="input-group w-50 position-relative filter-search">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text position-absolute" id="search-icon">
-                            <i class="fas fa-search"></i>
-                        </span>
-                    </div>
-                    <input type="text" placeholder="Search courses by title..." wire:model.live="search"
-                        class="form-control mb-3" />
+            <div class="filters d-flex justify-content-between align-items-center gap-3 mb-4">
+                <div class="input-group filter-search">
+                    <label class="visually-hidden" for="catalog-search">Search courses by title</label>
+                    <input id="catalog-search" type="search" placeholder="Search courses by title" wire:model.live="search" class="form-control" />
                 </div>
-                <button class="offcanvas-btn d-block d-flex d-xl-none" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                    <i class="fa-solid fa-sliders"></i>
+                <button class="button-secondary d-xl-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#catalogFilters" aria-controls="catalogFilters">
+                    Filters
                 </button>
             </div>
 
-            <!-- Offcanvas component -->
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="catalogFilters" aria-labelledby="catalogFiltersLabel">
                 <div class="offcanvas-header">
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
+                    <h2 class="offcanvas-title h5" id="catalogFiltersLabel">Filters</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <div class="filter">
-                        <!-- Search Input -->
-                        <div class="input-group position-relative filter-search">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text position-absolute" id="search-icon">
-                                    <i class="fas fa-search"></i>
-                                </span>
-                            </div>
-                            <input type="text" class="form-control" placeholder="Search" aria-label="Search"
-                                aria-describedby="search-icon">
-                        </div>
-                        <ul class="my-4">
-                            <h4>Category</h4>
+                    <label class="visually-hidden" for="catalog-search-mobile">Search courses by title</label>
+                    <input id="catalog-search-mobile" type="search" class="form-control mb-3" placeholder="Search courses by title" wire:model.live="search">
+                    <h3 class="h6">Category</h3>
+                    <ul class="public-filter-list">
+                        @forelse ($categories as $category)
                             <li>
-                                <input type="checkbox" id="ethics">
-                                <label for="ethics">Ethics</label>
+                                <input type="checkbox" id="mobile-category-{{ $category->id }}" value="{{ $category->id }}" wire:change="selectedCategorieschanged({{ $category->id }})">
+                                <label for="mobile-category-{{ $category->id }}">{{ $category->category_name }}</label>
                             </li>
-                            <li>
-                                <input type="checkbox" id="mental-health">
-                                <label for="mental-health">Mental Health</label>
-                            </li>
-                            <li>
-                                <input type="checkbox" id="substance-use">
-                                <label for="substance-use">Substance Use Disorder</label>
-                            </li>
-                        </ul>
-                        <button class="btn filter-btn" wire:click="clearFilters">
-                            <i class="fa-solid fa-xmark"></i> Clear All Filters
-                        </button>
-                    </div>
+                        @empty
+                            <li>No categories are available.</li>
+                        @endforelse
+                    </ul>
+                    <button class="button-secondary" type="button" wire:click="clearFilters">Clear filters</button>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xl-3 d-none d-xl-block">
-                    <div class="filter d-none d-xl-block">
-                        <ul class="my-4">
-                            <h4>Category</h4>
-                            @foreach ($categories as $category)
+                    <div class="filter public-filter">
+                        <h2 class="h5">Category</h2>
+                        <ul class="public-filter-list">
+                            @forelse ($categories as $category)
                                 <li>
-                                    <input type="checkbox" id="category-{{ $category->id }}" value="{{ $category->id }}"
-                                        wire:change="selectedCategorieschanged({{ $category->id }})">
+                                    <input type="checkbox" id="category-{{ $category->id }}" value="{{ $category->id }}" wire:change="selectedCategorieschanged({{ $category->id }})">
                                     <label for="category-{{ $category->id }}">{{ $category->category_name }}</label>
                                 </li>
-                            @endforeach
-                            {{-- @dump($selectedCategories) --}}
+                            @empty
+                                <li>No categories are available.</li>
+                            @endforelse
                         </ul>
-                        <button class="btn filter-btn" wire:click="clearFilters">
-                            <i class="fa-solid fa-xmark"></i> Clear All Filters
-                        </button>
+                        <button class="button-secondary" type="button" wire:click="clearFilters">Clear filters</button>
                     </div>
-
                 </div>
-                <div class="col-lg-12 col-xl-9">
+                <div class="col-xl-9">
                     <div class="row gy-4">
-                        @foreach ($courses as $item)
-                            @php
-                                $averageRating = round($item->average_rating);
-                            @endphp
-                            <div class="col-sm-6 col-lg-4 ">
-                                <div class="card shadow">
-                                    <div class="card-img-top">
-                                        <img src="{{ asset('storage/' . $item->thumbnail) }}" class=""
-                                            alt="...">
-                                        @if (Auth::check())
-                                            <i class="{{ Auth::user()->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark wishlist-icon"
-                                                data-course-id="{{ $item->id }}" style="cursor: pointer;">
-                                            </i>
+                        @forelse ($courses as $item)
+                            <div class="col-sm-6 col-lg-4">
+                                <x-public-course-card :course="$item">
+                                    <x-slot:bookmark>
+                                        @if ($user)
+                                            <button class="wishlist-toggle" type="button" wire:click="toggleWishlist({{ $item->id }})" aria-label="Save {{ $item->title }}">
+                                                <i class="{{ $user->wishlist->contains($item) ? 'fa-solid' : 'fa-regular' }} fa-bookmark" aria-hidden="true"></i>
+                                            </button>
                                         @else
-                                            <i class="fa-regular fa-bookmark" style="cursor: pointer;"
-                                                data-bs-toggle="modal" data-bs-target="#AuthCheckModal">
-                                            </i>
+                                            <button class="wishlist-toggle" type="button" data-bs-toggle="modal" data-bs-target="#AuthCheckModal" aria-label="Sign in to save this course">
+                                                <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+                                            </button>
                                         @endif
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $item->title }}</h5>
-                                        <div class="tutor-ratings d-flex align-items-center gap-1">
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <i class="{{ $i <= $averageRating ? 'fa-solid' : 'fa-regular' }} fa-star"
-                                                    style="color: #eea015;"></i>
-                                            @endfor
-                                        </div>
-                                        <div class="tutor-meta-wrapper d-flex align-items-center gap-5">
-                                            <div class="tutor-data d-flex align-items-center gap-1">
-                                                <img src="{{ $item->user->pfp ? asset('storage/' . $item->user->pfp) : asset('assets/images/dummy-profile-photo.webp') }}"
-                                                    alt="">
-                                                <small>by</small><span>{{ $item->user->first_name }}
-                                                    {{ $item->user->last_name }}</span>
-                                            </div>
-                                            <div class="tutor-meta-icon d-flex align-items-center gap-2">
-
-                                            </div>
-                                        </div>
-                                        <p class="card-text">{{ $item->description }}
-                                        </p>
-                                        <div class="post-details">
-                                            <div>
-                                                <span class="date">Published:
-                                                    {{ $item->created_at->diffForHumans() }}</span>
-                                            </div>
-                                        </div>
-                                        <a class="button-primary mt-3 d-block w-100 text-center" href="#">More
-                                            Details...</a>
-                                    </div>
-                                </div>
+                                    </x-slot:bookmark>
+                                </x-public-course-card>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="col-12">
+                                <p class="public-empty">No published courses match this search.</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -192,52 +122,34 @@
     </section>
     <div class="instructor-slider">
         <div class="container">
-            <div class="inner">
-                <h2>POPULAR INSTRUCTORS</h2>
-                <livewire:courses-cards.instructor-cards />
-            </div>
+            <h2>Tutors</h2>
+            <livewire:courses-cards.instructor-cards />
         </div>
     </div>
-
-    <style>
-        .course-catelogue-main {
-            background-image: url('{{ asset('assets/images/course.webp') }}');
-        }
-    </style>
-
 </div>
 @script
     <script type="text/javascript">
-        const swiper = new Swiper('.swiper', {
-            loop: true,
-            grabCursor: true,
-            // spaceBetween: 30, // Adjust the spacing between slides
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            breakpoints: {
-                320: {
-                    slidesPerView: 1,
-                    spaceBetween: 0,
-                },
-                768: {
-                    slidesPerView: 2,
-                    spaceBetween: 0,
-                },
-                1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 0,
-                },
-                1440: {
-                    slidesPerView: 4,
-                    spaceBetween: 0,
-                },
+        document.querySelectorAll('.course-catalogue .swiper').forEach(function(element) {
+            if (!element.querySelector('.swiper-slide')) {
+                return;
             }
+            new Swiper(element, {
+                loop: false,
+                grabCursor: true,
+                navigation: {
+                    nextEl: element.querySelector('.swiper-button-next'),
+                    prevEl: element.querySelector('.swiper-button-prev'),
+                },
+                breakpoints: {
+                    320: { slidesPerView: 1, spaceBetween: 16 },
+                    768: { slidesPerView: 2, spaceBetween: 16 },
+                    1024: { slidesPerView: 3, spaceBetween: 16 }
+                }
+            });
         });
 
         document.addEventListener('clearCategoryFilters', () => {
-            document.querySelectorAll('.filter input[type="checkbox"]').forEach(checkbox => {
+            document.querySelectorAll('.course-catalogue .filter input[type="checkbox"], #catalogFilters input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = false;
             });
         });

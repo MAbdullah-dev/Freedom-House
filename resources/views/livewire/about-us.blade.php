@@ -1,114 +1,50 @@
 <div class="about-us">
     @push('title')
-        About-us
+        About
     @endpush
-    <section class="about-us-main" style="background-image: url('{{ asset('assets/images/Section.webp') }}');">
+    <section class="public-hero">
         <div class="container">
-            <div class="content-wrapper">
-            <div class="inner d-flex flex-column justify-content-center align-items-center">
-                <h3>FREEDOM HOUSE RECOVERY CENTER</h3>
-                <h1 class="my-3">WHO WE ARE</h1>
-                <div class="description mt-2">
-                    <p>We envision our community becoming self-sustaining, healthy and productive. We believe people can
-                        live full, enriched lives in recovery.</p>
-                </div>
-                </div>
-            </div>
+            <p class="public-hero__kicker">Stellix Soft LMS</p>
+            <h1>About this learning platform</h1>
+            <p class="public-hero__lead">Stellix Soft LMS is the place to browse courses, meet the tutors who publish them, and open a class from the catalog.</p>
         </div>
     </section>
     <section class="about-us-body">
         <div class="container">
-            <div class="inner">
-                <div class="col">
-                    <div class="row">
-                        <h2>ABOUT US</h2>
-                    </div>
-                    <div class="row">
-                        <div class="description">
-                            <p>Freedom House Recovery Center is committed to a person-centered, strengths-based approach
-                                to behavioral health programs and services. We promote a philosophy of respect for and
-                                recognition of the individuality of each person. Our mission is to promote, enhance, and
-                                support recovery for men, women and children affected by mental illness and substance
-                                use by utilizing an evidence-based, comprehensive, and person-centered approach. Our
-                                strategy is dedicated to the enhancement of personal growth and betterment. Freedom
-                                House provides a full array of behavioral health services to support individuals on
-                                their journey to living their best life. We are a non-profit organization that serves as
-                                a “safety net” clinic. We are a Certified Community Behavioral Health Clinic (CCBHC)
-                                certified by the Substance Abuse and Mental Health Services Administration (SAMHSA).</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h2>What you can do here</h2>
+            <p>Use the catalog to find a published course, the calendar to see scheduled classes, and your account to keep a wishlist. Tutor profiles show the name, biography, and courses stored for that tutor.</p>
         </div>
     </section>
     <section class="training-team-section">
         <div class="container">
-            <div class="row text-center">
-                <div class="col">
-                    <h3>MEET THE TRAINING TEAM</h3>
-                    <p>Meet our trainers of Freedom House</p>
+            <h2>Tutors</h2>
+            @if ($tutors->isEmpty())
+                <p class="public-empty">No tutor profiles are available yet.</p>
+            @else
+                <div class="card-container">
+                    @foreach ($tutors as $tutor)
+                        <article class="card public-tutor-card">
+                            <div class="card-img-top">
+                                @if ($tutor->user->pfp)
+                                    <img src="{{ asset('storage/'.$tutor->user->pfp) }}" alt="{{ $tutor->user->first_name }} {{ $tutor->user->last_name }}">
+                                @else
+                                    <div class="public-course-card__placeholder" role="img" aria-label="Tutor photo not available">Photo not available</div>
+                                @endif
+                            </div>
+                            <div class="card-body">
+                                <h3 class="h5">{{ $tutor->user->first_name }} {{ $tutor->user->last_name }}</h3>
+                                @if ($tutor->specialization)
+                                    <p class="public-tutor-card__role">{{ $tutor->specialization }}</p>
+                                @endif
+                                @if ($tutor->user->bio)
+                                    <p>{{ $tutor->user->bio }}</p>
+                                @endif
+                                <a href="{{ route('tutor.profile', $tutor->user_id) }}" wire:navigate>View profile</a>
+                            </div>
+                        </article>
+                    @endforeach
                 </div>
-            </div>
-
-            <div class="card-container">
-                @foreach ($tutors as $tutor)
-                    <div class="card">
-                        <div class="card-img-top">
-                            {{-- <img
-                                src="{{ $tutor->user->pfp ? asset('storage/' . $tutor->user->pfp) : asset('assets/images/image (3).webp') }}"> --}}
-                            <img src="{{ asset('assets/images/dummy-profile-photo.webp') }}" alt="">
-                        </div>
-                        <div class="card-body text-center">
-                            <h5>{{ $tutor->user->first_name . ' ' . $tutor->user->last_name }}</h5>
-                            <span>{{ $tutor->specialization }}</span>
-                            <p>{{ $tutor->user->bio }}</p>
-                            <a href="{{ route('tutor.profile', $tutor->user_id) }}" class="" wire:navigate>Show
-                                More</a>
-                        </div>
-                    </div>
-                @endforeach
-                {{-- <div class="card">
-                    <img src="{{ asset('assets/images/image (1).assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
-                    <div class="card-body text-center">
-                        <h5>Autumn Green</h5>
-                        <span>Behavioral Health Trainer</span>
-                        <p>Autumn has worked as a mental health clinician for over 3 years. She began her career within
-                            mental health 15 years ago.</p>
-                        <a href="#" class="">Show More</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="{{ asset('assets/images/image.assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
-                    <div class="card-body text-center">
-                        <h5>Autumn Green</h5>
-                        <span>Behavioral Health Trainer</span>
-                        <p>Autumn has worked as a mental health clinician for over 3 years. She began her career within
-                            mental health 15 years ago.</p>
-                        <a href="#" class="">Show More</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="{{ asset('assets/images/image (1).assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
-                    <div class="card-body text-center">
-                        <h5>Autumn Green</h5>
-                        <span>Behavioral Health Trainer</span>
-                        <p>Autumn has worked as a mental health clinician for over 3 years. She began her career within
-                            mental health 15 years ago.</p>
-                        <a href="#" class="">Show More</a>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="{{ asset('assets/images/image (2).assets/images/Section.webp') }}" alt="" class="card-img-top img-fluid">
-                    <div class="card-body text-center">
-                        <h5>Autumn Green</h5>
-                        <span>Behavioral Health Trainer</span>
-                        <p>Autumn has worked as a mental health clinician for over 3 years. She began her career within
-                            mental health 15 years ago.</p>
-                        <a href="#" class="">Show More</a>
-                    </div>
-                </div> --}}
-
-            </div>
+            @endif
         </div>
     </section>
 </div>

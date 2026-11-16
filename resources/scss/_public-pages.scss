@@ -1,0 +1,221 @@
+[x-cloak] {
+    display: none !important;
+}
+
+.public-hero {
+    background: linear-gradient(160deg, $stellix-navy 0%, #1d4e63 100%);
+    color: $stellix-surface;
+    padding: 4.5rem 0 3.5rem;
+
+    h1 {
+        max-width: 16ch;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        font-weight: 600;
+        line-height: 1.15;
+        color: $stellix-surface;
+        margin-bottom: 1rem;
+    }
+}
+
+.public-hero__kicker {
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #b7ece8;
+}
+
+.public-hero__lead {
+    max-width: 42rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.public-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+
+    .button-secondary {
+        background: transparent;
+        color: $stellix-surface;
+        border-color: $stellix-surface;
+    }
+}
+
+.public-empty {
+    padding: 1.25rem;
+    border: 1px dashed $stellix-border;
+    border-radius: $stellix-radius;
+    background: $stellix-surface;
+    color: $stellix-muted;
+}
+
+.public-points,
+.featured-content,
+.about-us-body,
+.training-team-section,
+.course-catelogue,
+.instructor-slider,
+.tutor-profile-content {
+    padding: 3rem 0;
+}
+
+.public-point,
+.public-tutor-card,
+.instructor-card {
+    height: 100%;
+    padding: 1.25rem;
+    background: $stellix-surface;
+    border: 1px solid $stellix-border;
+    border-radius: $stellix-radius;
+}
+
+.public-course-card {
+    border: 1px solid $stellix-border;
+    border-radius: $stellix-radius;
+    background: $stellix-surface;
+    overflow: hidden;
+    transform: none;
+
+    .card-img-top {
+        position: relative;
+        height: 180px;
+        background: #e7eef2;
+
+        img,
+        .public-course-card__placeholder {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+    }
+
+    .card-title {
+        min-height: 2.6em;
+    }
+
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: $stellix-muted;
+    }
+
+    .button-primary {
+        width: 100%;
+    }
+}
+
+.public-course-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    color: $stellix-muted;
+    background: #e7eef2;
+}
+
+.public-course-card__by {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $stellix-navy;
+
+    img {
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.wishlist-toggle,
+.public-course-card .wishlist-icon,
+.public-course-card [data-bs-target="#AuthCheckModal"] {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 50%;
+    background: $stellix-surface;
+    color: $stellix-navy;
+    cursor: pointer;
+}
+
+.public-filter,
+.public-tabs {
+    background: $stellix-surface;
+    border: 1px solid $stellix-border;
+    border-radius: $stellix-radius;
+}
+
+.public-tabs {
+    padding: 0.35rem;
+    gap: 0.35rem;
+
+    .nav-link {
+        border: 0;
+        border-radius: $stellix-radius;
+        color: $stellix-navy;
+
+        &.active {
+            background: $stellix-navy;
+            color: $stellix-surface;
+        }
+    }
+}
+
+.public-filter-list {
+    display: grid;
+    gap: 0.6rem;
+    margin: 1rem 0;
+
+    li {
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.tutor-profile__photo {
+    width: 96px;
+    height: 96px;
+    margin-top: 1rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.tutor-ratings .fa-star {
+    color: #b7791f;
+}
+
+.news-letter {
+    padding-bottom: 3rem;
+}
+
+@media (max-width: 767px) {
+    .public-hero {
+        padding: 3rem 0 2.5rem;
+    }
+
+    .featured-cards .swiper-slide,
+    .course-catalogue .swiper-slide {
+        height: auto;
+    }
+}
