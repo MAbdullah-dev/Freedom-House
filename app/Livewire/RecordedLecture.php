@@ -364,7 +364,7 @@ class RecordedLecture extends Component
 
         try {
             // Generate PDF and save it in storage
-            $pdf = Pdf::loadView('certificates.dummy', compact('user', 'course'))
+            $pdf = Pdf::loadView('certificates.stellix', compact('user', 'course'))
                 ->setPaper('a4', 'landscape') // Set the paper size and orientation
                 ->setOptions([
                     'margin-left' => 10,
