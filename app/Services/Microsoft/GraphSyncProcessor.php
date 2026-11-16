@@ -13,14 +13,14 @@ use Throwable;
 
 class GraphSyncProcessor
 {
-    public function enqueueAttendee(User $user, Booking $booking): void
+    public function recordAttendee(User $user, Booking $booking): ?GraphSyncOutbox
     {
         $item = $booking->class_id
             ? Classe::query()->find($booking->class_id)
             : ($booking->event_id ? Events::query()->find($booking->event_id) : null);
 
         if ($item === null || ! is_string($item->microsoft_event_id) || $item->microsoft_event_id === '') {
-            return;
+            return null;
         }
 
         $organizer = $item instanceof Events
@@ -29,7 +29,7 @@ class GraphSyncProcessor
 
         $email = strtolower(trim((string) $user->email));
         if (! is_string($organizer) || $organizer === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return;
+            return null;
         }
 
         $key = hash('sha256', 'append:'.$item->microsoft_event_id.':'.$email);
@@ -53,6 +53,13 @@ class GraphSyncProcessor
             $row = GraphSyncOutbox::query()->where('idempotency_key', $key)->first();
         }
 
+        return $row;
+    }
+
+    public function enqueueAttendee(User $user, Booking $booking): void
+    {
+        $row = $this->recordAttendee($user, $booking);
+
         if ($row === null || $row->status === GraphSyncOutbox::STATUS_SUCCEEDED) {
             return;
         }
@@ -65,6 +72,20 @@ class GraphSyncProcessor
         if ($row->status === GraphSyncOutbox::STATUS_SUCCEEDED || $row->operation !== GraphSyncOutbox::OPERATION_APPEND) {
             return;
         }
+
+        $claimed = GraphSyncOutbox::query()
+            ->whereKey($row->id)
+            ->where('status', '!=', GraphSyncOutbox::STATUS_SUCCEEDED)
+            ->where(function ($query) {
+                $query->whereNull('available_at')->orWhere('available_at', '<=', now());
+            })
+            ->update(['available_at' => now()->addMinutes(5)]);
+
+        if ($claimed !== 1) {
+            return;
+        }
+
+        $row->refresh();
 
         try {
             $token = app(MicrosoftGraphService::class)->applicationAccessToken();

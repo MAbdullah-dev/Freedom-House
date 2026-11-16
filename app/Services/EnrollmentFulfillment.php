@@ -339,6 +339,11 @@ class EnrollmentFulfillment
         $snapshot->state = $partial ? CheckoutSnapshot::PARTIALLY_REFUNDED : CheckoutSnapshot::FULFILLED;
         $snapshot->save();
 
+        $enrolledUser = User::query()->find($snapshot->user_id);
+        if ($enrolledUser !== null) {
+            app(GraphSyncProcessor::class)->recordAttendee($enrolledUser, $booking);
+        }
+
         return new FulfillmentResult(
             $partial ? self::PARTIALLY_REFUNDED : self::FULFILLED,
             $payment,

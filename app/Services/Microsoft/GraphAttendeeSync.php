@@ -60,7 +60,7 @@ class GraphAttendeeSync
 
         $patch = Http::withToken($token)
             ->withHeaders(['If-Match' => $etag])
-            ->patch($url.'?sendUpdates=all', ['attendees' => $merged]);
+            ->patch($url, ['attendees' => $merged]);
 
         if ($patch->status() === 412) {
             return new GraphSyncResult(false, 'conflict');
