@@ -148,7 +148,7 @@
                                                 <label class="form-label"><strong>Course Thumbnail</strong></label>
                                                 <div class="image-placeholder mb-3">
                                                     <!-- Display the uploaded image or fallback to a placeholder -->
-                                                    <img src="{{ $file && method_exists($file, 'temporaryUrl') ? $file->temporaryUrl() : ($file ? asset('storage/' . $file) : asset('assets/images/dummy-course-img.webp')) }}"
+                                                    <img src="{{ $file instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile && $file->isPreviewable() ? $file->temporaryUrl() : (is_string($file) && $file !== '' ? asset('storage/' . $file) : asset('assets/images/dummy-course-img.webp')) }}"
                                                         style="width: 250px; height: 150px; object-fit: cover;"
                                                         alt="Course Thumbnail" id="previewImage">
 

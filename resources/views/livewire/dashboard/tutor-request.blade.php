@@ -2,7 +2,7 @@
     @push('title')
         Tutor Requests
     @endpush
-    <h2 class="mb-4">Course Requests</h2>
+    <h2 class="mb-4">Tutor Requests</h2>
     <section class="tag-list mt-5">
         <div class="table-responsive">
             <table class="table">
