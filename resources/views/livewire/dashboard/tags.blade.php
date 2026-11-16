@@ -43,16 +43,16 @@
                             <td>{{ $tag->id }}</td>
                             <td>{{ $tag->name }}</td>
                             <td>
-                                <a href="#" wire:click.prevent="confirmUpdate({{ $tag->id }})"
-                                    data-bs-toggle="modal" data-bs-target="#updateTagModal">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                <button type="button" class="btn btn-link p-0" wire:click="confirmUpdate({{ $tag->id }})"
+                                    data-bs-toggle="modal" data-bs-target="#updateTagModal" aria-label="Edit tag">
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                </button>
                             </td>
                             <td>
-                                <a href="#" wire:click.prevent="confirmDelete({{ $tag->id }})"
-                                    data-bs-toggle="modal" data-bs-target="#deleteTagModal">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </a>
+                                <button type="button" class="btn btn-link p-0" wire:click="confirmDelete({{ $tag->id }})"
+                                    data-bs-toggle="modal" data-bs-target="#deleteTagModal" aria-label="Delete tag">
+                                    <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach

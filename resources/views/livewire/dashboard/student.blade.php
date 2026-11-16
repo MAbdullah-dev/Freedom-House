@@ -35,17 +35,17 @@
                                         <ul class="dropdown-menu shadow-sm">
                                             @if ($user->trashed())
                                                 <li>
-                                                    <a href="#" class="dropdown-item text-success fw-semibold"
-                                                        wire:click.prevent="unblockUser({{ $user->id }})">
+                                                    <button type="button" class="dropdown-item text-success fw-semibold"
+                                                        wire:click="unblockUser({{ $user->id }})">
                                                         <i class="bi bi-unlock me-2"></i> Unblock User
-                                                    </a>
+                                                    </button>
                                                 </li>
                                             @else
                                                 <li>
-                                                    <a href="#" class="dropdown-item text-danger fw-semibold"
-                                                        wire:click.prevent="blockUser({{ $user->id }})">
+                                                    <button type="button" class="dropdown-item text-danger fw-semibold"
+                                                        wire:click="blockUser({{ $user->id }})">
                                                         <i class="bi bi-lock me-2"></i> Block User
-                                                    </a>
+                                                    </button>
                                                 </li>
                                             @endif
                                         </ul>
@@ -62,18 +62,18 @@
                                         <ul class="dropdown-menu shadow-sm">
                                             @if ($user->role?->role_name !== \App\Models\Role::TUTOR)
                                                 <li>
-                                                    <a href="#" class="dropdown-item text-primary fw-semibold"
-                                                        wire:click.prevent="promoteUser({{ $user->id }}, '{{ \App\Models\Role::TUTOR }}')">
+                                                    <button type="button" class="dropdown-item text-primary fw-semibold"
+                                                        wire:click="promoteUser({{ $user->id }}, '{{ \App\Models\Role::TUTOR }}')">
                                                         <i class="bi bi-person-gear me-2"></i> Instructor
-                                                    </a>
+                                                    </button>
                                                 </li>
                                             @endif
                                             @if ($user->role?->role_name !== \App\Models\Role::ADMIN)
                                                 <li>
-                                                    <a href="#" class="dropdown-item text-primary fw-semibold"
-                                                        wire:click.prevent="promoteUser({{ $user->id }}, '{{ \App\Models\Role::ADMIN }}')">
+                                                    <button type="button" class="dropdown-item text-primary fw-semibold"
+                                                        wire:click="promoteUser({{ $user->id }}, '{{ \App\Models\Role::ADMIN }}')">
                                                         <i class="fa-solid fa-user-tie me-2"></i> Admin
-                                                    </a>
+                                                    </button>
                                                 </li>
                                             @endif
                                         </ul>

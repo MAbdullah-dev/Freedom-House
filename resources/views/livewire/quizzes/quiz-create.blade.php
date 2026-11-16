@@ -10,7 +10,7 @@
                             aria-hidden="true"></span>
                         <span wire:loading.remove wire:target="submit">Create Quiz</span>
                     </button>
-                    <a href="" class="custom-close-link ms-1">
+                    <a href="{{ route('dashboard') }}" class="custom-close-link ms-1" aria-label="Close and return to the dashboard">
                         <i class="fa-solid fa-xmark fa-2xl text-secondary"></i>
                     </a>
                 </div>

@@ -48,14 +48,14 @@
                                 <p>Price: <span>{{ $publishedCourse->price ?? 'Free' }}</span></p>
                                 <p>
                                     <a href="{{ route('dashboard.create.course', ['courseId' => $publishedCourse->id]) }}"
-                                        class="edit-link">
-                                        <i class="fa-regular fa-pen-to-square"></i>
+                                        class="edit-link" aria-label="Edit course">
+                                        <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
                                     </a>
-                                    <a href="#" class="delete-link" data-bs-toggle="modal"
+                                    <button type="button" class="delete-link" data-bs-toggle="modal" aria-label="Delete course"
                                         data-bs-target="#deleteCourseModal"
                                         wire:click.prevent="confirmDelete({{ $publishedCourse->id }})">
-                                        <i class="fa-regular fa-trash-can"></i>
-                                    </a>
+                                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                                    </button>
                                 </p>
                             </div>
                             @if ($publishedCourse->course_type == 'recorded')
@@ -88,14 +88,14 @@
                                 <p>Price: <span>{{ $pendingCourse->price ?? 'Free' }}</span></p>
                                 <p>
                                     <a href="{{ route('dashboard.create.course', ['courseId' => $pendingCourse->id]) }}"
-                                        class="edit-link">
-                                        <i class="fa-regular fa-pen-to-square"></i>
+                                        class="edit-link" aria-label="Edit course">
+                                        <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
                                     </a>
-                                    <a href="#" class="delete-link" data-bs-toggle="modal"
+                                    <button type="button" class="delete-link" data-bs-toggle="modal" aria-label="Delete course"
                                         data-bs-target="#deleteCourseModal"
                                         wire:click.prevent="confirmDelete({{ $pendingCourse->id }})">
-                                        <i class="fa-regular fa-trash-can"></i>
-                                    </a>
+                                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                                    </button>
                                 </p>
                             </div>
                         </div>
@@ -121,14 +121,14 @@
                                 <p>Price: <span>{{ $draftedCourse->price ?? 'Free' }}</span></p>
                                 <p>
                                     <a href="{{ route('dashboard.create.course', ['courseId' => $publishedCourse->id]) }}"
-                                        class="edit-link">
-                                        <i class="fa-regular fa-pen-to-square"></i>
+                                        class="edit-link" aria-label="Edit course">
+                                        <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
                                     </a>
-                                    <a href="#" class="delete-link" data-bs-toggle="modal"
+                                    <button type="button" class="delete-link" data-bs-toggle="modal" aria-label="Delete course"
                                         data-bs-target="#deleteCourseModal"
                                         wire:click.prevent="confirmDelete({{ $publishedCourse->id }})">
-                                        <i class="fa-regular fa-trash-can"></i>
-                                    </a>
+                                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                                    </button>
                                 </p>
                             </div>
                         </div>

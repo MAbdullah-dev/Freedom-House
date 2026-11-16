@@ -47,16 +47,15 @@
                         <tr>
                             <td scope="col">{{ $category->id }}</td>
                             <td>{{ $category->category_name }}</td>
-                            <td><a href="#" wire:click.prevent="editCategory({{ $category->id }})"
-                                    data-bs-toggle="modal" data-bs-target="#editCategoryModal">
-                                    <i class="fas fa-edit"></i>
-                                </a></td>
+                            <td><button type="button" class="btn btn-link p-0" wire:click="editCategory({{ $category->id }})"
+                                    data-bs-toggle="modal" data-bs-target="#editCategoryModal" aria-label="Edit category">
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                </button></td>
                             <td>
-                                <!-- Trigger delete modal and set category ID -->
-                                <a href="#" wire:click.prevent="confirmDelete({{ $category->id }})"
-                                    data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </a>
+                                <button type="button" class="btn btn-link p-0" wire:click="confirmDelete({{ $category->id }})"
+                                    data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" aria-label="Delete category">
+                                    <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach

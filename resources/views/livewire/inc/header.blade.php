@@ -43,9 +43,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" wire:click="logout">
-                                    <i class="fa-solid fa-right-from-bracket cursor-pointer"></i> Log Out
-                                </a>
+                                <button type="button" wire:click="logout">
+                                    <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -64,7 +64,7 @@
                         href="{{ route('calendar') }}" wire:navigate>Class
                         Calendar</a></li>
                 <li class="category-dropdown ">
-                    <a href="#">Category <i class="fa-solid fa-angle-down fa-xs"></i></a>
+                    <button type="button" aria-expanded="false" aria-controls="course-category-menu">Category <i class="fa-solid fa-angle-down fa-xs" aria-hidden="true"></i></button>
                     <div class="menu-dropdown">
                         <h4>Course Categories</h4>
                         <hr>
@@ -140,9 +140,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" wire:click="logout">
-                                    <i class="fa-solid fa-right-from-bracket cursor-pointer"></i> Log Out
-                                </a>
+                                <button type="button" wire:click="logout">
+                                    <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Log Out
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -169,7 +169,7 @@
                     href="{{ route('calendar') }}" wire:navigate>Class
                     Calendar</a></li>
             <li class="category-dropdown ">
-                <a href="#">Category <i class="fa-solid fa-angle-down fa-xs"></i></a>
+                <button type="button" aria-expanded="false">Category <i class="fa-solid fa-angle-down fa-xs" aria-hidden="true"></i></button>
                 <div class="menu-dropdown">
                     <h4>Course Categories</h4>
                     <hr>

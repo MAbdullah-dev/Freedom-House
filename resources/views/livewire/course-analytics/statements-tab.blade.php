@@ -35,8 +35,8 @@
                                 <span class="text-muted">{{ $payment->booking->created_at->format('Y-m-d') }} ·
                                     {{ $payment->booking->course->title }}</span><br />
                                 <h4>{{ $payment->booking->course->title }}</h4><br />
-                                <a href="#" class="text-secondary">Order ID:
-                                    #{{ $payment->booking->order_id }}</a>
+                                <span class="text-secondary">Order ID:
+                                    #{{ $payment->booking->order_id }}</span>
                             </div>
                         </td>
                         <td>

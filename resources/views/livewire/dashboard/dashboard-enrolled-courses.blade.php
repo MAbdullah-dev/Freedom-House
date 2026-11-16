@@ -41,7 +41,7 @@
                             <p>{{ $course['course']->description }}</p>
 
                             <!-- Progress Bar with percentage inside -->
-                            <p class="d-flex justify-content-end">Compelete {{ $course['progress'] }}%</p>
+                            <p class="d-flex justify-content-end">Complete {{ $course['progress'] }}%</p>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" style="width: {{ $course['progress'] }}%"
                                     aria-valuenow="{{ $course['progress'] }}" aria-valuemin="0" aria-valuemax="100">
@@ -50,7 +50,7 @@
                             </div>
 
                             <div class="text-center">
-                                <a href="#" class="button-primary mt-3">Start Learning</a>
+                                <a href="{{ $course['course']->course_type === 'recorded' ? route('onsite.course.details', $course['course']->id) : route('course.details', $course['course']->id) }}" class="button-primary mt-3" wire:navigate>Start learning</a>
                             </div>
                         </div>
                     </div>
@@ -72,14 +72,14 @@
                             <p>{{ $course['course']->description }}</p>
 
                             <!-- Progress Bar with percentage inside -->
-                            <p class="d-flex justify-content-end">Compelete {{ $course['progress'] }}%</p>
+                            <p class="d-flex justify-content-end">Complete {{ $course['progress'] }}%</p>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" style="width: {{ $course['progress'] }}%"
                                     aria-valuenow="{{ $course['progress'] }}" aria-valuemin="0" aria-valuemax="100">
                                 </div>
                             </div>
                             <div class="text-center">
-                                <a href="#" class="button-primary mt-3">Continue Learning</a>
+                                <a href="{{ $course['course']->course_type === 'recorded' ? route('onsite.course.details', $course['course']->id) : route('course.details', $course['course']->id) }}" class="button-primary mt-3" wire:navigate>Continue learning</a>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             <p>{{ $course['course']->description }}</p>
 
                             <!-- Progress Bar with percentage inside -->
-                            <p class="d-flex justify-content-end">Compelete {{ $course['progress'] }}%</p>
+                            <p class="d-flex justify-content-end">Complete {{ $course['progress'] }}%</p>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" style="width: {{ $course['progress'] }}%"
                                     aria-valuenow="{{ $course['progress'] }}" aria-valuemin="0" aria-valuemax="100">
@@ -110,7 +110,7 @@
                             </div>
 
                             <div class="text-center">
-                                <a href="#" class="button-primary mt-3">View Certificate</a>
+                                <a href="{{ $course['course']->course_type === 'recorded' ? route('onsite.course.details', $course['course']->id) : route('course.details', $course['course']->id) }}" class="button-primary mt-3" wire:navigate>Open course</a>
                             </div>
                         </div>
                     </div>

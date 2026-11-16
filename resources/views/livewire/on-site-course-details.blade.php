@@ -132,11 +132,8 @@
                                                     <div class="accordion-body d-flex align-items-center justify-content-between text-muted opacity-50"
                                                         style="pointer-events: none;">
                                                         <div class="class-name d-flex align-items-center">
-                                                            <i class="fa-brands fa-youtube mx-2"></i>
-                                                            <a href="#" onclick="return false;"
-                                                                style="text-decoration: none; color: inherit;">
-                                                                <span>{{ $lecture->title }}</span>
-                                                            </a>
+                                                            <i class="fa-brands fa-youtube mx-2" aria-hidden="true"></i>
+                                                            <span>{{ $lecture->title }}</span>
                                                         </div>
                                                         <div>
                                                             <span class="class-duration">Duration:</span>

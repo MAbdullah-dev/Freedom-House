@@ -85,6 +85,14 @@ header {
         .category-dropdown {
             position: relative;
 
+            > button {
+                background: transparent;
+                border: 0;
+                color: inherit;
+                font: inherit;
+                padding: 0;
+            }
+
             .menu-dropdown {
                 display: none;
                 padding: 30px;
@@ -169,6 +177,14 @@ header {
                 .category-dropdown {
                     position: relative;
 
+                    > button {
+                        background: transparent;
+                        border: 0;
+                        color: inherit;
+                        font: inherit;
+                        padding: 0;
+                    }
+
                     .menu-dropdown {
                         display: none;
                         position: absolute;
@@ -176,7 +192,9 @@ header {
                         padding: 30px;
                         opacity: 0;
                         transition: opacity 0.3s ease-in-out;
-                        min-width: 880px;
+                        min-width: min(880px, calc(100vw - 2rem));
+                        max-width: calc(100vw - 2rem);
+                        overflow-x: auto;
                         right: -150px;
                         top: 45px;
                         box-shadow: 0 0 10px 0 #00000021;

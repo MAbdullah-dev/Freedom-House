@@ -70,6 +70,15 @@
     color: $stellix-ink;
 }
 
+.dashboard-main .card-title,
+.dashboard-main .card-text {
+    overflow-wrap: anywhere;
+}
+
+.dashboard-main img {
+    max-width: 100%;
+}
+
 .dashboard h4,
 .dashboard-page-head h1,
 .course-analytics h1,
